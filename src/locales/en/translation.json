@@ -1,0 +1,554 @@
+{
+  "header": {
+    "advertisement": "Contact for advertisement"
+  },
+  "navBar": [
+    {
+      "name": "Trending",
+      "path": "/trending"
+    },
+    {
+      "name": "Country",
+      "path": "/country"
+    },
+    {
+      "name": "World",
+      "path": "/world"
+    },
+    {
+      "name": "Utter Pradesh",
+      "path": "/uttar-pradesh",
+      "icon": true,
+      "subItems": [
+        {
+          "name": "Lucknow",
+          "path": "/uttar-pradesh/lucknow"
+        },
+        {
+          "name": "Kanpur",
+          "path": "/uttar-pradesh/kanpur"
+        },
+        {
+          "name": "Varanashi",
+          "path": "/uttar-pradesh/varanasi"
+        },
+        {
+          "name": "Agra",
+          "path": "/uttar-pradesh/agra"
+        },
+        {
+          "name": "Merath",
+          "path": "/uttar-pradesh/meerut"
+        },
+        {
+          "name": "Gorakhpur",
+          "path": "/uttar-pradesh/gorakhpur"
+        },
+        {
+          "name": "Chhansi",
+          "path": "/uttar-pradesh/jhansi"
+        },
+        {
+          "name": "Shanranpur",
+          "path": "/uttar-pradesh/saharanpur"
+        },
+        {
+          "name": "Aligan",
+          "path": "/uttar-pradesh/aligarh"
+        },
+        {
+          "name": "Muradabad",
+          "path": "/uttar-pradesh/moradabad"
+        },
+        {
+          "name": "Noada",
+          "path": "/uttar-pradesh/noida"
+        },
+        {
+          "name": "फिरोजाबाद",
+          "path": "/uttar-pradesh/firozabad"
+        },
+        {
+          "name": "मथुरा-वृंदावन",
+          "path": "/uttar-pradesh/mathura-vrindavan"
+        },
+        {
+          "name": "बदायूं",
+          "path": "/uttar-pradesh/budaun"
+        },
+        {
+          "name": "रामपुर",
+          "path": "/uttar-pradesh/rampur"
+        },
+        {
+          "name": "शाहजहांपुर",
+          "path": "/uttar-pradesh/shahjahanpur"
+        },
+        {
+          "name": "फर्रुखाबाद-फतेहगढ़",
+          "path": "/uttar-pradesh/farrukhabad-fatehgarh"
+        },
+        {
+          "name": "अयोध्या",
+          "path": "/uttar-pradesh/ayodhya"
+        },
+        {
+          "name": "मऊनाथ भंजन",
+          "path": "/uttar-pradesh/maunath-bhanjan"
+        },
+        {
+          "name": "हापुड़",
+          "path": "/uttar-pradesh/hapur"
+        },
+        {
+          "name": "इटावा",
+          "path": "/uttar-pradesh/etawah"
+        },
+        {
+          "name": "मिर्जापुर-विंध्याचल",
+          "path": "/uttar-pradesh/mirzapur-vindhyachal"
+        },
+        {
+          "name": "बुलंदशहर",
+          "path": "/uttar-pradesh/bulandshahr"
+        },
+        {
+          "name": "संभल",
+          "path": "/uttar-pradesh/sambhal"
+        },
+        {
+          "name": "अमरोहा",
+          "path": "/uttar-pradesh/amroha"
+        },
+        {
+          "name": "हरदोई",
+          "path": "/uttar-pradesh/hardoi"
+        }
+      ]
+    },
+    {
+      "name": "मध्य प्रदेश",
+      "path": "/madhya-pradesh",
+      "icon": true,
+      "subItems": [
+        {
+          "name": "भोपाल",
+          "path": "/madhya-pradesh/bhopal"
+        },
+        {
+          "name": "इंदौर",
+          "path": "/madhya-pradesh/indore"
+        },
+        {
+          "name": "ग्वालियर",
+          "path": "/madhya-pradesh/gwalior"
+        },
+        {
+          "name": "जबलपुर",
+          "path": "/madhya-pradesh/jabalpur"
+        },
+        {
+          "name": "उज्जैन",
+          "path": "/madhya-pradesh/ujjain"
+        },
+        {
+          "name": "सागर",
+          "path": "/madhya-pradesh/sagar"
+        },
+        {
+          "name": "रतलाम",
+          "path": "/madhya-pradesh/ratlam"
+        },
+        {
+          "name": "रीवा",
+          "path": "/madhya-pradesh/rewa"
+        },
+        {
+          "name": "छिंदवाड़ा",
+          "path": "/madhya-pradesh/chhindwara"
+        },
+        {
+          "name": "खजुराहो",
+          "path": "/madhya-pradesh/khajuraho"
+        },
+        {
+          "name": "देवास",
+          "path": "/madhya-pradesh/dewas"
+        },
+        {
+          "name": "सतना",
+          "path": "/madhya-pradesh/satna"
+        },
+        {
+          "name": "मुरवारा (कटनी)",
+          "path": "/madhya-pradesh/katni"
+        },
+        {
+          "name": "सिंगरौली",
+          "path": "/madhya-pradesh/singrauli"
+        },
+        {
+          "name": "शाजापुर",
+          "path": "/madhya-pradesh/shajapur"
+        },
+        {
+          "name": "खंडवा",
+          "path": "/madhya-pradesh/khandwa"
+        },
+        {
+          "name": "भिंड",
+          "path": "/madhya-pradesh/bhind"
+        },
+        {
+          "name": "गुना",
+          "path": "/madhya-pradesh/guna"
+        },
+        {
+          "name": "शिवपुरी",
+          "path": "/madhya-pradesh/shivpuri"
+        },
+        {
+          "name": "विदिशा",
+          "path": "/madhya-pradesh/vidisha"
+        },
+        {
+          "name": "छतरपुर",
+          "path": "/madhya-pradesh/chhatarpur"
+        },
+        {
+          "name": "दमोह",
+          "path": "/madhya-pradesh/damoh"
+        },
+        {
+          "name": "मंदसौर",
+          "path": "/madhya-pradesh/mandsaur"
+        },
+        {
+          "name": "खरगोन",
+          "path": "/madhya-pradesh/khargone"
+        },
+        {
+          "name": "नीमच",
+          "path": "/madhya-pradesh/neemuch"
+        },
+        {
+          "name": "पीथमपुर",
+          "path": "/madhya-pradesh/pithampur"
+        },
+        {
+          "name": "होशंगाबाद",
+          "path": "/madhya-pradesh/hoshangabad"
+        },
+        {
+          "name": "इटारसी",
+          "path": "/madhya-pradesh/itarsi"
+        },
+        {
+          "name": "सीहोर",
+          "path": "/madhya-pradesh/sehore"
+        },
+        {
+          "name": "बैतूल",
+          "path": "/madhya-pradesh/betul"
+        },
+        {
+          "name": "सिवनी",
+          "path": "/madhya-pradesh/seoni"
+        },
+        {
+          "name": "दतिया",
+          "path": "/madhya-pradesh/datia"
+        }
+      ]
+    },
+    {
+      "name": "राज्य",
+      "path": "/state",
+      "icon": true,
+      "subItems": [
+        {
+          "name": "आंध्र प्रदेश",
+          "path": "/state/andhra-pradesh"
+        },
+        {
+          "name": "अरुणाचल प्रदेश",
+          "path": "/state/arunachal-pradesh"
+        },
+        {
+          "name": "असम",
+          "path": "/state/assam"
+        },
+        {
+          "name": "बिहार",
+          "path": "/state/bihar"
+        },
+        {
+          "name": "छत्तीसगढ़",
+          "path": "/state/chhattisgarh"
+        },
+        {
+          "name": "गोवा",
+          "path": "/state/goa"
+        },
+        {
+          "name": "गुजरात",
+          "path": "/state/gujarat"
+        },
+        {
+          "name": "हरियाणा",
+          "path": "/state/haryana"
+        },
+        {
+          "name": "हिमाचल प्रदेश",
+          "path": "/state/himachal-pradesh"
+        },
+        {
+          "name": "झारखंड",
+          "path": "/state/jharkhand"
+        },
+        {
+          "name": "कर्नाटक",
+          "path": "/state/karnataka"
+        },
+        {
+          "name": "केरल",
+          "path": "/state/kerala"
+        },
+        {
+          "name": "मध्य प्रदेश",
+          "path": "/state/madhya-pradesh"
+        },
+        {
+          "name": "महाराष्ट्र",
+          "path": "/state/maharashtra"
+        },
+        {
+          "name": "मणिपुर",
+          "path": "/state/manipur"
+        },
+        {
+          "name": "मेघालय",
+          "path": "/state/meghalaya"
+        },
+        {
+          "name": "मिजोरम",
+          "path": "/state/mizoram"
+        },
+        {
+          "name": "नागालैंड",
+          "path": "/state/nagaland"
+        },
+        {
+          "name": "ओडिशा",
+          "path": "/state/odisha"
+        },
+        {
+          "name": "पंजाब",
+          "path": "/state/punjab"
+        },
+        {
+          "name": "राजस्थान",
+          "path": "/state/rajasthan"
+        },
+        {
+          "name": "सिक्किम",
+          "path": "/state/sikkim"
+        },
+        {
+          "name": "तमिलनाडु",
+          "path": "/state/tamil-nadu"
+        },
+        {
+          "name": "तेलंगाना",
+          "path": "/state/telangana"
+        },
+        {
+          "name": "उत्तर प्रदेश",
+          "path": "/state/uttar-pradesh"
+        },
+        {
+          "name": "उत्तराखंड",
+          "path": "/state/uttarakhand"
+        },
+        {
+          "name": "पश्चिम बंगाल",
+          "path": "/state/west-bengal"
+        },
+        {
+          "name": "अंडमान और निकोबार द्वीप समूह",
+          "path": "/state/andaman-and-nicobar"
+        },
+        {
+          "name": "चंडीगढ़",
+          "path": "/state/chandigarh"
+        },
+        {
+          "name": "दादरा और नगर हवेली और दमन और दीव",
+          "path": "/state/dadra-and-nagar-haveli-daman-and-diu"
+        },
+        {
+          "name": "लक्षद्वीप",
+          "path": "/state/lakshadweep"
+        },
+        {
+          "name": "दिल्ली",
+          "path": "/state/delhi"
+        },
+        {
+          "name": "पुडुचेरी",
+          "path": "/state/ Puducherry"
+        }
+      ]
+    },
+    {
+      "name": "हेल्थ",
+      "path": "/health",
+      "icon": true,
+      "subItems": [
+        {
+          "name": "फिटनेस",
+          "path": "/health/fitness"
+        },
+        {
+          "name": "डाइट",
+          "path": "/health/diet"
+        },
+        {
+          "name": "मेडिकल टिप्स",
+          "path": "/health/medical-tips"
+        },
+        {
+          "name": "मानसिक स्वास्थ्य",
+          "path": "/health/mental-health"
+        },
+        {
+          "name": "योग",
+          "path": "/health/yoga"
+        },
+        {
+          "name": "वजन कम करना",
+          "path": "/health/weight-loss"
+        },
+        {
+          "name": "स्वस्थ त्वचा",
+          "path": "/health/healthy-skin"
+        },
+        {
+          "name": "आयुर्वेद",
+          "path": "/health/ayurveda"
+        },
+        {
+          "name": "प्राकृतिक चिकित्सा",
+          "path": "/health/natural-healing"
+        },
+        {
+          "name": "बच्चों का स्वास्थ्य",
+          "path": "/health/child-health"
+        },
+        {
+          "name": "पुराने रोगों का इलाज",
+          "path": "/health/chronic-diseases-treatment"
+        },
+        {
+          "name": "स्वास्थ्य देखभाल",
+          "path": "/health/healthcare"
+        },
+        {
+          "name": "स्वस्थ आहार",
+          "path": "/health/healthy-eating"
+        },
+        {
+          "name": "दवाइयां",
+          "path": "/health/medicines"
+        },
+        {
+          "name": "प्राकृतिक आहार",
+          "path": "/health/natural-diet"
+        },
+        {
+          "name": "हाइड्रेशन",
+          "path": "/health/hydration"
+        },
+        {
+          "name": "स्ट्रेस मैनेजमेंट",
+          "path": "/health/stress-management"
+        }
+      ]
+    },
+    {
+      "name": "खेल",
+      "path": "/sports"
+    },
+    {
+      "name": "बिजनेस",
+      "path": "/business"
+    },
+    {
+      "name": "मनोरंजन",
+      "path": "/entertainment"
+    },
+    {
+      "name": "विविध",
+      "path": "/misc",
+      "icon": true,
+      "subItems": [
+        {
+          "name": "अपराध",
+          "path": "/misc/Apradh"
+        },
+        {
+          "name": "हेल्थ",
+          "path": "/misc/health"
+        },
+        {
+          "name": "टेक्नोलॉजी",
+          "path": "/misc/technology"
+        },
+        {
+          "name": "राजनीति",
+          "path": "/misc/politics"
+        },
+        {
+          "name": "मनोरंजन",
+          "path": "/misc/entertainment"
+        },
+        {
+          "name": "खेल",
+          "path": "/misc/sports"
+        },
+        {
+          "name": "सांस्कृतिक",
+          "path": "/misc/culture"
+        },
+        {
+          "name": "समाज सेवा",
+          "path": "/misc/social-service"
+        },
+        {
+          "name": "आध्यात्मिक",
+          "path": "/misc/spiritual"
+        },
+        {
+          "name": "विज्ञान",
+          "path": "/misc/science"
+        },
+        {
+          "name": "समाचार",
+          "path": "/misc/news"
+        },
+        {
+          "name": "यात्रा",
+          "path": "/misc/travel"
+        }
+      ]
+    },
+    {
+      "name": "वीडियो",
+      "path": "/videos"
+    },
+    {
+      "name": "महाभारत 2024",
+      "path": "/mahabharat2024"
+    }
+  ]
+}
