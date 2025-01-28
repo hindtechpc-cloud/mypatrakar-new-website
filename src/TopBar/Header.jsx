@@ -10,7 +10,10 @@ import {
 } from "react-icons/fa";
 import { TbBrandThreads } from "react-icons/tb";
 import { LanguageContext } from "../context/LanguageContext";
+// import { useLocation } from "react-router-dom";
 
+import logo1 from "../assets/Ellipse.svg";
+import logo2 from "../assets/Mypatrakar2.png";
 const languages = [
   { code: "hi", label: "हिंदी" },
   { code: "en", label: "English" },
@@ -23,6 +26,15 @@ const languages = [
 ];
 
 const Header = () => {
+  // const location = useLocation();
+  const urls = [
+    "/about-us",
+    "/terms-and-condition",
+    "/privacy-policy",
+    "/contact-us",
+    "/our-reporters",
+    "/advertise-with-us"
+  ];
   const { setLanguage } = useContext(LanguageContext);
   useEffect(() => {
     const loadGoogleTranslate = () => {
@@ -71,29 +83,43 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-red-800 text-white py-2 px-4 flex flex-wrap justify-around items-center">
-      {/* Language Selection */}
-      <div className="flex flex-wrap space-x-4 text-sm mb-2 md:mb-0">
-        {languages.map(({ code, label }) => (
-          <span
-            key={code}
-            onClick={() => changeLanguage(code)}
-            className="cursor-pointer hover:underline"
-          >
-            {label}
-          </span>
-        ))}
-      </div>
+    <div className="bg-red-800 text-white py-2 px-4">
+      {urls.includes(location.pathname) && (
+        <div className=" flex flex-wrap justify-between  items-center">
+          <div className="w-14">
+            <img src={logo1} alt={"MyPatrakar Logo"} className="w-full" />
+          </div>
+          <div className="w-28">
+            <img src={logo2} alt={"MyPatrakar Logo"} className="w-full" />
+          </div>
+        </div>
+      )}
+      <div className=" flex flex-wrap justify-between items-center">
+        {/* Language Selection */}
+        <div className="flex flex-wrap space-x-4 text-sm mb-2 md:mb-0">
+          {languages.map(({ code, label }) => (
+            <span
+              key={code}
+              onClick={() => changeLanguage(code)}
+              className="cursor-pointer hover:underline hover:text-yellow-300"
+            >
+              {label}
+            </span>
+          ))}
+        </div>
 
-      {/* Google Translate Widget (Hidden) */}
-      <div id="google_translate_element" className="hidden "></div>
+        {/* Google Translate Widget (Hidden) */}
+        <div id="google_translate_element" className="hidden "></div>
 
-      {/* Social Media & Advertisement */}
-      <div className="flex flex-wrap items-center space-x-8">
-        <SocialIcons />
-        <span className="text-sm mt-2 md:mt-0 cursor-pointer hover:underline">
-          विज्ञापन के लिए संपर्क करें
-        </span>
+        {/* Social Media & Advertisement */}
+        <div className="flex flex-wrap items-center space-x-8">
+          <SocialIcons />
+          {!urls.includes(location.pathname) && (
+            <span className="text-sm mt-2 md:mt-0 cursor-pointer hover:underline">
+              विज्ञापन के लिए संपर्क करें
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

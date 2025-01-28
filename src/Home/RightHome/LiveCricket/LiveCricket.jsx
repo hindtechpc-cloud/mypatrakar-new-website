@@ -43,10 +43,8 @@ export default function LiveCricket() {
   return (
   <div className="my-2 mt-5 font-sans">
     <Header text="Live Cricket" />
-      <div className="overflow-y-auto ">
-      <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">
-        Live Cricket Scores
-      </h1>
+      <div className="overflow-y-auto h-[500px]">
+      
 
       {/* Error Handling */}
       {error && (
@@ -70,7 +68,7 @@ export default function LiveCricket() {
         score.map((item) => (
           <div
             key={item.id}
-            className="bg-white rounded-lg shadow-md p-2 mb-5  mx-auto"
+            className="bg-white rounded-lg border shadow-md p-2 mb-5  mx-auto"
           >
             {/* Match Details */}
             <h2 className="text-xl font-semibold text-gray-800">

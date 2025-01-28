@@ -1,6 +1,6 @@
 import React from "react";
 import TopResultTable from "./TopResultTable";
-
+import image from "../../../assets/election.svg";
 export default function ElectionResults({ results }) {
   const { red, green, orange } = results;
 
@@ -40,8 +40,10 @@ export default function ElectionResults({ results }) {
 
         {/* Center Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-center bg-white rounded-full w-32 h-32 m-auto shadow-md">
-          <p className="text-red-600 font-bold text-xs">ELECTION RESULTS</p>
-          <p className="text-gray-800 font-semibold text-lg">
+          <div>
+            <img src={image} alt="Election related image" />
+          </div>
+          <p className="text-gray-800 font-semibold text-md">
             Target: <span className="text-black font-bold">100</span>
           </p>
         </div>

@@ -164,4 +164,7 @@ export const menuItems = [
   },
   // { name: "वीडियो", path: "/videos" },
   { name: "महाभारत 2024", path: "/mahabharat2024" },
+  { name: "search", path: "/search",
+    icon: true,
+   },
 ];

@@ -1,28 +1,34 @@
 import { useContext, useEffect, useState } from "react";
-import { FaBars, FaHome, FaTimes } from "react-icons/fa";
+import { FaBars, FaHome, FaSearch, FaTimes } from "react-icons/fa";
 import { CgChevronUp } from "react-icons/cg";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { menuItems } from "./menuItems";
 import { news } from "./news";
 import { t } from "i18next";
 import { LanguageContext } from "../context/LanguageContext";
 import image from "../assets/MyPatrakarLogo1.png";
+import { NewsContext } from "../context/NewsContext";
 const Navbar = () => {
+  const { setNews } = useContext(NewsContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activePath, setActivePath] = useState(window.location.pathname);
   const [dropdownOpen, setDropdownOpen] = useState(""); // For desktop
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(""); // For mobile
   const [isFixed, setIsFixed] = useState(false);
-  const [News, setNews] = useState(news); // For mobile
+  const [News, setLocalNews] = useState(news); // For mobile
   const location = useLocation();
   const navigate = useNavigate();
 
+  const handleNewsContent = (news) => {
+    setNews(news);
+    navigate(`/readNews/${news.title}`);
+  };
   const { language } = useContext(LanguageContext);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >150) {
+      if (window.scrollY > 150) {
         setIsFixed(true);
       } else {
         setIsFixed(false);
@@ -42,7 +48,7 @@ const Navbar = () => {
     setActivePath(path);
     setMenuOpen(false);
     document.body.style.overflow = "auto";
-    navigate(`/${path}`);
+    navigate(`${path}`);
   };
 
   const toggleDropdown = (menu) => {
@@ -58,7 +64,7 @@ const Navbar = () => {
     console.log(News);
     if (!searchTerm.trim()) {
       // Reset to original news list if search term is empty
-      setNews(news);
+      setLocalNews(news);
       return;
     }
     const filteredNews = news.filter((newsItem) =>
@@ -67,7 +73,7 @@ const Navbar = () => {
       )
     );
 
-    setNews(filteredNews);
+    setLocalNews(filteredNews);
   };
 
   const renderMenuItems = (isMobile = false) =>
@@ -86,13 +92,21 @@ const Navbar = () => {
               ? toggleMobileDropdown(item.name)
               : handleMenuClick(item.path)
           }
-          className={`flex justify-between items-center px-3 lg:py-5 py-2 cursor-pointer ${
+          className={`flex justify-between items-center ${
+            item.name === "search" ? "px-0" : "px-3"
+          } lg:py-5 py-2 cursor-pointer ${
             activePath === item.path
               ? "bg-gray-200 text-black "
               : "hover:bg-gray-200 hover:text-black lg:py-5 py-3"
           }`}
         >
-          {item.name}
+          {item.name === "search" ? (
+            <div className="p-0">
+              <FaSearch className="text-xl text-black font-bold p-0" />{" "}
+            </div>
+          ) : (
+            item.name
+          )}
           {item.subItems && (
             <CgChevronUp
               className={`text-lg transition-transform ${
@@ -129,14 +143,14 @@ const Navbar = () => {
                 }
               >
                 {item.subItems.map((subItem) => (
-                  <a
+                  <span
                     key={subItem.name}
-                    href={subItem.path}
+                    // to={subItem.path}
                     onClick={() => handleMenuClick(subItem.path)}
                     className="block py-1"
                   >
                     {subItem.name}
-                  </a>
+                  </span>
                 ))}
               </div>
               <div className="">
@@ -147,7 +161,7 @@ const Navbar = () => {
                       className="py-2 px-2 bg-red-800 text-white hover:bg-gray-100 hover:text-gray-900"
                       onClick={() => handleMenuClick("/")}
                       onMouseEnter={
-                        !isMobile ? () => setNews(() => [...news]) : null
+                        !isMobile ? () => setLocalNews(() => [...news]) : null
                       }
                     >
                       All
@@ -172,15 +186,16 @@ const Navbar = () => {
               {News && item.name !== "विविध" && (
                 <div className="mt-2 flex items-center justify-start gap-4">
                   {News?.map((newsItem, index) => (
-                    <a
-                      href={newsItem.title}
+                    <span
+                      // to={newsItem.title}
                       key={index}
-                      className="text-sm text-gray-200 grid gap-1"
+                      className="text-sm text-gray-200 grid gap-1 hover:underline"
+                      onClick={() => handleNewsContent(newsItem)}
                     >
                       {/*news  image  */}
                       <div className="w-48 h-32 rounded">
                         <img
-                          src={newsItem.image}
+                          src={newsItem.urlToImage}
                           alt={newsItem.title}
                           className="object-cover w-full h-full rounded"
                         />
@@ -200,7 +215,7 @@ const Navbar = () => {
                           {newsItem.date}
                         </span>
                       </div>
-                    </a>
+                    </span>
                   ))}
                 </div>
               )}
@@ -212,14 +227,14 @@ const Navbar = () => {
         {isMobile && item.subItems && mobileDropdownOpen === item.name && (
           <div className="bg-red-700 px-4  pb-2 overflow-y-scroll h-96 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 border-r-2">
             {item.subItems.map((subItem) => (
-              <a
+              <Link
                 key={subItem.name}
-                href={subItem.path}
+                to={subItem.path}
                 onClick={() => handleMenuClick(subItem.path)}
                 className="block px-3 text-white hover:bg-red-900 py-1"
               >
                 {subItem.name}
-              </a>
+              </Link>
             ))}
           </div>
         )}
@@ -259,11 +274,11 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div
           className={`hidden lg:flex items-center justify-center ${
-            isFixed ? 'lg:gap-5' : 'lg:gap-36'
+            isFixed ? "lg:gap-5" : "lg:gap-36"
           }`}
         >
           <div className="flex items-center justify-center  px-4 py-0 md:px-5">
-            <a
+            <Link
               href="/"
               className={`absolute flex items-start p-5 md:p-5 hover:bg-gray-200 hover:text-black ${
                 location.pathname === "/"
@@ -272,7 +287,7 @@ const Navbar = () => {
               }`}
             >
               <FaHome className="md:text-2xl" aria-label="Home" />
-            </a>
+            </Link>
           </div>
           <div className="hidden lg:flex items-center justify-between space-x-2">
             {renderMenuItems()}
@@ -287,9 +302,9 @@ const Navbar = () => {
         }`}
       >
         <div className="flex justify-between items-center px-4 py-1 me-2">
-          <a href="/" className="text-lg font-semibold">
+          <Link to="/" className="text-lg font-semibold">
             <FaHome className="text-2xl" aria-label="Home" />
-          </a>
+          </Link>
           <button
             onClick={toggleMenu}
             className="text-2xl focus:outline-none"
