@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { FaMinimize } from "react-icons/fa6";
 import { MdOutlineEmail, MdTextDecrease, MdTextIncrease } from "react-icons/md";
-import * as Dialog from '@radix-ui/react-dialog';
+import * as Dialog from "@radix-ui/react-dialog";
 
 function getDateDifference(dateString) {
   if (!dateString) return null;
@@ -55,13 +55,15 @@ const socialIcons = {
   email: <MdOutlineEmail className="text-orange-400 hover:text-orange-600" />,
 };
 
-const UserProfile = ({ user, setZoomText, zoomText }) => {
+const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleZoomOut = () => {
     if (zoomText <= 7) {
-      setModalMessage("Minimum zoom level reached! You cannot decrease further.");
+      setModalMessage(
+        "Minimum zoom level reached! You cannot decrease further."
+      );
       setIsModalOpen(true);
       return;
     }
@@ -70,16 +72,18 @@ const UserProfile = ({ user, setZoomText, zoomText }) => {
 
   const handleZoomIn = () => {
     if (zoomText >= 25) {
-      setModalMessage("Maximum zoom level reached! You cannot increase further.");
+      setModalMessage(
+        "Maximum zoom level reached! You cannot increase further."
+      );
       setIsModalOpen(true);
       return;
     }
     setZoomText((prev) => Math.min(prev + 1, 25));
   };
 
-  const handleClose=()=>{
+  const handleClose = () => {
     setIsModalOpen(false);
-  }
+  };
   const dateDifference = getDateDifference(user?.date);
 
   const formattedTime = dateDifference
@@ -99,9 +103,12 @@ const UserProfile = ({ user, setZoomText, zoomText }) => {
       />
       <div className="flex items-center justify-between w-full">
         <div>
-          <h2 className="font-semibold text-md">{user?.name || "Unknown User"}</h2>
+          <h2 className="font-semibold text-md">
+            {user?.name || "Unknown User"}
+          </h2>
           <p className="text-gray-500 text-xs">
-            {user?.date ? new Date(user.date).toDateString() : "No Date"} • {formattedTime}
+            {user?.date ? new Date(user.date).toDateString() : "No Date"} •{" "}
+            {formattedTime}
           </p>
         </div>
 
@@ -121,7 +128,11 @@ const UserProfile = ({ user, setZoomText, zoomText }) => {
           </div>
 
           <div className="flex items-start justify-start left-0 space-x-2 ml-auto">
-            <div className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full" title="Print News">
+            <div
+              className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full"
+              title="Print News"
+              onClick={handleDownloadPDF}
+            >
               <FaPrint className="" title="Print this news" />
             </div>
             <div
@@ -153,24 +164,26 @@ const UserProfile = ({ user, setZoomText, zoomText }) => {
 
       {/* Popup Modal */}
       <Dialog.Root open={isModalOpen} onOpenChange={handleClose}>
-      <Dialog.Overlay className="fixed inset-0 bg-black/50 z-auto" />
-      <Dialog.Content className="fixed inset-0 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-lg">
-          <Dialog.Title className="font-bold text-xl">Zoom Limit Reached</Dialog.Title>
-          <Dialog.Description className="text-sm text-gray-600 mt-2">
-            {modalMessage}
-          </Dialog.Description>
-          <div className="mt-4">
-            <Dialog.Close
-              className="bg-blue-500 text-white px-4 py-2 rounded-md"
-              onClick={handleClose}
-            >
-              Close
-            </Dialog.Close>
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-auto" />
+        <Dialog.Content className="fixed inset-0 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg">
+            <Dialog.Title className="font-bold text-xl">
+              Zoom Limit Reached
+            </Dialog.Title>
+            <Dialog.Description className="text-sm text-gray-600 mt-2">
+              {modalMessage}
+            </Dialog.Description>
+            <div className="mt-4">
+              <Dialog.Close
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                onClick={handleClose}
+              >
+                Close
+              </Dialog.Close>
+            </div>
           </div>
-        </div>
-      </Dialog.Content>
-    </Dialog.Root>
+        </Dialog.Content>
+      </Dialog.Root>
     </div>
   );
 };

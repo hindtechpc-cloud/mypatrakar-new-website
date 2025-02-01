@@ -8,7 +8,7 @@ const BreakingNewsBar = () => {
   ];
 
   return (
-    <div className="bg-red-700 rounded-l-lg rounded-r-lg text-white mx-0 sm:mx-2 md:mx-14 my-2">
+    <div className="bg-red-700 rounded-l-lg rounded-r-lg text-white mx-0 sm:mx-2 md:mx-10 my-2">
       <div className="flex items-center space-x-4 ">
         {/* Breaking Label */}
         {/* <div className="flex items-center rounded-r-sm bg-black px-3 py-1 text-xs md:text-sm font-bold rounded">

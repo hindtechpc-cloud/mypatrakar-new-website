@@ -45,6 +45,7 @@ const NewsCard = ({
   news,
   className,
   classNameToImage,
+  classNameForContent = "",
   image,
   ctaText,
   title,
@@ -59,11 +60,12 @@ const NewsCard = ({
   return (
     <div className={`relative ${className}`}>
       {/* Image Section */}
-      <div className={`relative overflow-hidden ${classNameToImage}`}>
+      <div className={classNameToImage}>
         <img
           src={image}
           alt="News"
           className="rounded-lg w-full h-full object-cover"
+          // className={classNameToImage}
         />
         {/* CTA Button Stuck to Image Bottom-Right */}
         <button className="absolute bottom-2 right-2 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded shadow-md">
@@ -72,7 +74,10 @@ const NewsCard = ({
       </div>
 
       {/* Content Section */}
-      <div className="flex-grow mt-3">
+      <div
+        className={classNameForContent}
+       
+      >
         {/* Title */}
         <h2
           className="text-lg md:text-xl font-semibold text-gray-800 mb-2 cursor-pointer hover:underline"
@@ -82,7 +87,9 @@ const NewsCard = ({
         </h2>
 
         {/* Description */}
-        <p className="text-sm md:text-sm text-gray-600 mb-3">{description}</p>
+        <p className="text-sm md:text-sm text-gray-600 mb-3 ">
+          {description?.slice(0, 300)}...
+        </p>
       </div>
     </div>
   );

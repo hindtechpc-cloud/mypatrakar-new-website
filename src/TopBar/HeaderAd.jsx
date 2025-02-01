@@ -2,7 +2,7 @@ import MypatrakarLogo1 from "../assets/MyPatrakarLogo1.png";
 
 const HeaderAd = () => {
   return (
-    <div className="bg-white flex flex-col md:flex-row justify-around items-center  py-3 ">
+    <div className="bg-white flex flex-col lg:flex-row justify-around items-center  py-3 ">
       {/* Left Section - Logo */}
       <div className="flex items-center mb-4 md:mb-0">
         <img

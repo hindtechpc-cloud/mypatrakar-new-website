@@ -2,7 +2,7 @@ import { FaArrowUp, FaArrowDown, FaShareAlt } from "react-icons/fa";
 import logo from "../../../assets/Ellipse.svg";
 import { useContext, useRef } from "react";
 import { NewsContext } from "../../../context/NewsContext";
-import { shorts } from "./shorts";
+import { short } from "./short.js";
 import { useNavigate } from "react-router-dom";
 
 const ShortsPages = () => {
@@ -37,7 +37,7 @@ const ShortsPages = () => {
         className="overflow-y-auto h-[500px] flex flex-col gap-5 hide-scroll"
         ref={scrollContainer} // Attach the ref to the scroll container
       >
-        {shorts.map((short, index) => {
+        {short?.map((short, index) => {
           return (
             <div
               key={index}

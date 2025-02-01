@@ -3,9 +3,9 @@ import image2 from "../assets/logoG.jpg";
 import play from "../assets/play.png";
 import apple from "../assets/apple.jpeg";
 
-export default function SourceWidget() {
+export default function SourceWidget(props) {
   return (
-    <div className="mx-auto  text-white shadow-lg w-[300px]">
+    <div className={props.className}>
       {/* Logo */}
       <div className="flex justify-center">
         <img src={image} alt="Company logo" className="w-20" />

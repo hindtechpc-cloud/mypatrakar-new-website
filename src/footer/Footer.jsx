@@ -16,7 +16,7 @@ export default function Footer() {
           <FooterFaceBook />
           <FooterTwitter />
           <PostsListWidget />
-          <SourceWidget />
+          <SourceWidget className="mx-auto  text-white shadow-lg w-[300px] `"/>
         </div>
       </div>
       <FooterBottom />

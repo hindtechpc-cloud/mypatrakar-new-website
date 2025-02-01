@@ -9,12 +9,18 @@ import JoinChannels from "./JoinChannels";
 import { PollWidget } from "./poll/PollWidget";
 import { WeatherWidget } from "./weather/WeatherWidget";
 import StockMarcket from "./stockmarcket/StockMarcket";
+import SourceWidget from "../../footer/SourceWidget";
+import { useLocation } from "react-router-dom";
+import Youtube from "./Youtube";
 
 export default function RightHome() {
+  const location=useLocation();
+  const url=location.pathname;
   return (
     <div>
-      <LiveTv />
+     {url==='/'&& <LiveTv />}
       <Trending />
+      <Youtube/>
       <OwnState />
       <AddRightHome1 />
       <LiveCricket />
@@ -23,9 +29,10 @@ export default function RightHome() {
       <Rashiphal />
       <JoinChannels />
       <StockMarcket />
+      <SourceWidget className="bg-red-900 mx-auto  text-white shadow-lg w-full my-4 p-4 rounded-lg"/>
       <PollWidget />
       <WeatherWidget />
-      <AddRightHome1 />
+      {/* <AddRightHome1 /> */}
     </div>
   );
 }

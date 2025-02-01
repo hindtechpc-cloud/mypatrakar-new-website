@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-const MenuBar = ({ menuText, menuItems }) => {
+const MenuBar = ({ menuText,setSubcategory, menuItems }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  // const handleSubcategory=(item)=>{
+  //   setSubcategory(item);
+  // }
   return (
     <div className="bg-blue-600 text-gray-50 my-2 py-2 rounded-md px-2 mt-5">
       {/* Menu Header */}
@@ -28,10 +31,11 @@ const MenuBar = ({ menuText, menuItems }) => {
             isOpen ? "block" : "hidden md:flex"
           }`}
         >
-          {menuItems.map((item, index) => (
+          {menuItems?.map((item, index) => (
             <div
               key={index}
               className="px-2 py-1 text-sm hover:text-red-600 font-semibold cursor-pointer hover:bg-gray-50 rounded-lg transition-all"
+              onClick={()=>setSubcategory(item)}
             >
               {item}
             </div>
@@ -42,10 +46,10 @@ const MenuBar = ({ menuText, menuItems }) => {
   );
 };
 
-export default function Menu({ menuText, menu }) {
+export default function Menu({ menuText,setSubcategory, menu }) {
   return (
     <div className="w-full">
-      <MenuBar menuItems={menu} menuText={menuText} />
+      <MenuBar menuItems={menu} menuText={menuText} setSubcategory={setSubcategory} />
     </div>
   );
 }

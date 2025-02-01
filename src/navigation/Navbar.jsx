@@ -55,8 +55,9 @@ const Navbar = () => {
     setDropdownOpen((prev) => (prev === menu ? "" : menu));
   };
 
-  const toggleMobileDropdown = (menu) => {
+  const toggleMobileDropdown = (menu,path) => {
     setMobileDropdownOpen((prev) => (prev === menu ? "" : menu));
+    navigate(path)
   };
 
   // FilteredNews function
@@ -83,13 +84,14 @@ const Navbar = () => {
         className={`relative group text-xs  font-semibold ${
           isMobile ? "border-b border-gray-600" : ""
         }`}
-        onMouseEnter={!isMobile ? () => toggleDropdown(item.name) : null} // For hover behavior on desktop
+        onMouseEnter={!isMobile ? () => toggleDropdown(item.name,item.path) : null} // For hover behavior on desktop
         onMouseLeave={!isMobile ? () => toggleDropdown("") : null} // For hover behavior on desktop
       >
         <div
           onClick={() =>
             isMobile
-              ? toggleMobileDropdown(item.name)
+              ? toggleMobileDropdown(item.name,item.path
+              )
               : handleMenuClick(item.path)
           }
           className={`flex justify-between items-center ${
@@ -185,7 +187,7 @@ const Navbar = () => {
               {/* News Section */}
               {News && item.name !== "विविध" && (
                 <div className="mt-2 flex items-center justify-start gap-4">
-                  {News?.map((newsItem, index) => (
+                  {News?.slice(0, 4).map((newsItem, index) => (
                     <span
                       // to={newsItem.title}
                       key={index}
@@ -279,7 +281,7 @@ const Navbar = () => {
         >
           <div className="flex items-center justify-center  px-4 py-0 md:px-5">
             <Link
-              href="/"
+              to="/"
               className={`absolute flex items-start p-5 md:p-5 hover:bg-gray-200 hover:text-black ${
                 location.pathname === "/"
                   ? "bg-gray-200 text-black p-5 md:p-5 shadow-xl shadow-gray-500"

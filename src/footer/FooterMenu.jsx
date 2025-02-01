@@ -8,6 +8,7 @@ import {
   FaFire,
 } from "react-icons/fa";
 import { MdLiveTv } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export default function FooterMenu() {
   const menu = [
@@ -15,7 +16,7 @@ export default function FooterMenu() {
     { name: "About", link: "/about-us", icon: <FaInfoCircle /> },
     { name: "Contact Us", link: "/contact-us", icon: <FaEnvelope /> },
     { name: "Live Stream", link: "/services", icon: <MdLiveTv /> },
-    { name: "Videos", link: "/portfolio", icon: <FaVideo /> },
+    { name: "Videos", link: "/videos", icon: <FaVideo /> },
     { name: "Privacy Policy", link: "/privacy-policy", icon: <FaShieldAlt /> },
     {
       name: "Terms & Conditions",
@@ -33,13 +34,13 @@ export default function FooterMenu() {
       <ul className="text-gray-300 font-noto space-y-4">
         {menu.map((item, index) => (
           <li key={index} className="group">
-            <a
-              href={item.link}
+            <Link
+              to={item.link}
               className="flex items-center space-x-3 text-sm  hover:text-yellow-400 "
             >
               <span className="  text-sm ">{item.icon}</span>
               <span>{item.name}</span>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

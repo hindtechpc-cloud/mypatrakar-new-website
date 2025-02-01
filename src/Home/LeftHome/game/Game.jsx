@@ -1,97 +1,27 @@
 import React from "react";
 import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
+import {articlesCard} from "../../search/news.js";
 
 export default function Game() {
   return (
     <div>
       <Menu menuText={"खेल"} menu={[]}></Menu>
       <div className="flex  flex-col items-center gap-4">
-        <NewsCard
-          className="md:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/300"}
-          ctaText={"खेल"}
-          title={
-            "Mumbai: चैंपियंस ट्रॉफी के लिए भारतीय टीम का ऐलान, रोहित शर्मा होंगे कप्तान"
-          }
-          description={
-            "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/300",
-          }}
-        />
-        <NewsCard
-          className="md:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/500"}
-          ctaText={"खेल"}
-          title={
-            "Mumbai: चैंपियंस ट्रॉफी के लिए भारतीय टीम का ऐलान, रोहित शर्मा होंगे कप्तान"
-          }
-          description={
-            "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/500",
-          }}
-        />
-        <NewsCard
-          className="md:flex flex-1 items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/800"}
-          ctaText={"खेल"}
-          title={
-            "Mumbai: चैंपियंस ट्रॉफी के लिए भारतीय टीम का ऐलान, रोहित शर्मा होंगे कप्तान"
-          }
-          description={
-            "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/800",
-          }}
-        />
-        <NewsCard
-          className="md:flex flex-1 items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/600"}
-          ctaText={"खेल"}
-          title={
-            "Mumbai: चैंपियंस ट्रॉफी के लिए भारतीय टीम का ऐलान, रोहित शर्मा होंगे कप्तान"
-          }
-          description={
-            "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/600",
-          }}
-        />
-        <NewsCard
-          className="md:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/500"}
-          ctaText={"खेल"}
-          title={
-            "Mumbai: चैंपियंस ट्रॉफी के लिए भारतीय टीम का ऐलान, रोहित शर्मा होंगे कप्तान"
-          }
-          description={
-            "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/500",
-          }}
-        />
+        {articlesCard.map((item, index) => (
+          <NewsCard
+            key={index}
+            className="md:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
+            classNameToImage="md:w-80 md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
+            classNameForContent="md:w-5/6 w-full"
+            title={item.title}
+            // image={item.image}
+            ctaText={item.category}
+            image={item.urlToImage}
+            description={item.content}
+            news={item}
+          />
+        ))}
       </div>
     </div>
   );

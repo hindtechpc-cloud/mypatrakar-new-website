@@ -51,21 +51,21 @@ export default function TopNewsItems({ topNewsItems, className }) {
   };
   return (
     <div className={className}>
-      {topNewsItems?.map((item, index) => {
+      {topNewsItems?.slice(0,6).map((item, index) => {
         return (
           <div key={index} className="flex items-start gap-2">
-            <div className="w-80">
+            <div className="w-48">
               <img
                 src={item.urlToImage}
                 alt="news"
-                className="w-full h-20 rounded-xl object-cover"
+                className="w-full h-24 rounded-xl object-cover"
               />
             </div>
             <p
-              className="text-gray-800 text-sm font-semibold cursor-pointer hover:underline"
+              className="text-gray-800 text-sm font-semibold cursor-pointer hover:underline w-5/6"
               onClick={() => handleNewsContent(item)}
             >
-              {item.description.slice(0, 130)}...
+              {item?.title?.slice(0, 130)}...
             </p>
           </div>
         );

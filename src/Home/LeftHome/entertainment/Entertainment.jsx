@@ -1,40 +1,15 @@
 import React from "react";
 import Menu from "../shared/MenuBar";
 import TopNewsItems from "../TopNews/TopNewsItems";
-
+import { news } from "../../../navigation/news";
 export default function Entertainment() {
-  const topNewsItems = [
-    {
-      title: "Top News",
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      urlToImage: "https://picsum.photos/200/400",
-    },
-    {
-      title: "Top News",
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      urlToImage: "https://picsum.photos/200/400",
-    },
-    {
-      title: "Top News",
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      urlToImage: "https://picsum.photos/200/400",
-    },
-    {
-      title: "Top News",
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      urlToImage: "https://picsum.photos/200/400",
-    },
-  ];
+ 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-start justify-start">
       <Menu menuText={"मनोरंजन"} menu={[]} />
 
-      <div className="md:flex flex-1  items-center gap-8">
-        <div className="relative md:w-5/6 w-full h-96 rounded-lg overflow-hidden shadow-xl my">
+      <div className="md:flex flex-1  items-start gap-8">
+        <div className="relative md:w-96 w-full h-96 rounded-lg overflow-hidden shadow-xl my">
           {/* Background Image */}
           <img
             src="https://picsum.photos/400/600"
@@ -56,8 +31,9 @@ export default function Entertainment() {
           </div>
         </div>
         
-        <div className="sm:my-0 my-3">
-          <TopNewsItems topNewsItems={topNewsItems} className={"grid gap-4"} />
+        <div className="sm:my-0 my-3 w-full flex items-start">
+          
+          <TopNewsItems topNewsItems={news} className={"flex gap-4 flex-col items-start justify-between"} />
         </div>
       </div>
     </div>

@@ -6,10 +6,13 @@ export default function Feedback() {
     email: "",
     comments: "",
   });
+  const [success, setSuccess] = useState(false);
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
+    // set success false onChange
+    setSuccess(false);
     // empty all error
     setErrors({
       name: "",
@@ -56,6 +59,7 @@ export default function Feedback() {
       email: "",
       comments: "",
     });
+    setSuccess(true);
   };
 
   return (
@@ -114,12 +118,18 @@ export default function Feedback() {
           )}
         </div>
         <div>
-          <button
-            type="submit"
-            className="w-full sm:w-1/4 bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition"
-          >
-            Post Comment
-          </button>
+          {!success ? (
+            <button
+              type="submit"
+              className="w-full sm:w-1/4 bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition"
+            >
+              Post Comment
+            </button>
+          ) : (
+            <p className="bg-green-500 text-sm w-full  text-center shadow-xl shadow-white sm:w-1/4 text-black py-2 rounded-md hover:bg-green-600 transition ">
+              Comment posted successfully!
+            </p>
+          )}
         </div>
       </form>
     </div>

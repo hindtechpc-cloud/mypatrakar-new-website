@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import Header from "../Home/RightHome/shared/Header";
+import { useContext, useState } from "react";
+import { IoHandLeft } from "react-icons/io5";
+import { NewsContext } from "../context/NewsContext";
+import { useNavigate } from "react-router-dom";
 
 const PostsListWidget = () => {
   const articles = [
@@ -7,22 +9,30 @@ const PostsListWidget = () => {
       title:
         "The Privacy Policy and any additional privacy information made available to you, govern the use of your personal",
       date: "March 6, 2024",
+      urlToImage:'https://picsum.photos/200/500'
     },
     {
       title:
         "The Privacy Policy and any additional privacy information made available to you, govern the use of your personal",
       date: "March 6, 2024",
+      urlToImage:'https://picsum.photos/200/800'
+
     },
     {
       title:
         "The Privacy Policy and any additional privacy information made available to you, govern the use of your personal",
       date: "March 6, 2024",
+      urlToImage:'https://picsum.photos/200/100'
+
     },
-  
-   
   ];
   const [hoverIndex, setHoverIndex] = useState(null); // State to track the hovered index
-
+  const { setNews } = useContext(NewsContext);
+  const navigate = useNavigate();
+  const handleNewsContent = (news) => {
+    setNews(news);
+    navigate(`/readNews/${news.title}`);
+  };
   return (
     <div className="w-[300px] ">
       <div className="  flex items-start justify-center   ">
@@ -67,6 +77,7 @@ const PostsListWidget = () => {
                   className={`text-xs font-semibold transition duration-300 cursor-pointer ${
                     hoverIndex === index ? "text-yellow-500" : "text-gray-200"
                   }`}
+                  onClick={() => handleNewsContent(article)}
                 >
                   {article.title}
                 </h3>
