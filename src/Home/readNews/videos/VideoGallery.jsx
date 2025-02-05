@@ -38,7 +38,7 @@ const VideoGallery = () => {
       <Menu menuText={"🎥 Latest Videos"} setSubcategory={"setCurrentState"} menu={[]} />
 
       {/* Video Grid */}
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-6">
         {videos.slice(0, visibleVideos).map((video) => (
           <div key={video.guid} className="bg-white shadow-xl rounded-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl">
             <iframe

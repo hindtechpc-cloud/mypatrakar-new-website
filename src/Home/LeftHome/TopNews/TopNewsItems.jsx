@@ -65,7 +65,7 @@ export default function TopNewsItems({ topNewsItems, className }) {
               className="text-gray-800 text-sm font-semibold cursor-pointer hover:underline w-5/6"
               onClick={() => handleNewsContent(item)}
             >
-              {item?.title?.slice(0, 130)}...
+              {item?.title ?.slice(0, 100)}...
             </p>
           </div>
         );

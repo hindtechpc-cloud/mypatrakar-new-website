@@ -9,9 +9,6 @@ import translationTA from "./locales/ta/translation.json";
 import translationTE from "./locales/te/translation.json";
 import translationBN from "./locales/bn/translation.json";
 import translationGR from "./locales/gr/translation.json";
-// import translationHI from "./locales/hi/translation.json";
-// import translationHI from "./locales/hi/translation.json";
-// Import other languages as needed
 
 const resources = {
 

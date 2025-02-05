@@ -55,9 +55,9 @@ const Navbar = () => {
     setDropdownOpen((prev) => (prev === menu ? "" : menu));
   };
 
-  const toggleMobileDropdown = (menu,path) => {
+  const toggleMobileDropdown = (menu, path) => {
     setMobileDropdownOpen((prev) => (prev === menu ? "" : menu));
-    navigate(path)
+    navigate(path);
   };
 
   // FilteredNews function
@@ -84,14 +84,15 @@ const Navbar = () => {
         className={`relative group text-xs  font-semibold ${
           isMobile ? "border-b border-gray-600" : ""
         }`}
-        onMouseEnter={!isMobile ? () => toggleDropdown(item.name,item.path) : null} // For hover behavior on desktop
+        onMouseEnter={
+          !isMobile ? () => toggleDropdown(item.name, item.path) : null
+        } // For hover behavior on desktop
         onMouseLeave={!isMobile ? () => toggleDropdown("") : null} // For hover behavior on desktop
       >
         <div
           onClick={() =>
             isMobile
-              ? toggleMobileDropdown(item.name,item.path
-              )
+              ? toggleMobileDropdown(item.name, item.path)
               : handleMenuClick(item.path)
           }
           className={`flex justify-between items-center ${
@@ -209,12 +210,15 @@ const Navbar = () => {
                         </p>
                       </div>
                       {/* news date  */}
-                      <div className="flex items-start justify-start gap-1">
+                      <div className="flex items-start justify-center gap-1">
                         <span>
-                          <MdOutlineAccessTime className="inline-block font-bold text-md text-gray-300" />
+                          <MdOutlineAccessTime className="inline-block font-bold text-lg mb-2 text-gray-300" />
                         </span>
-                        <span className="text-gray-300 text-sm">
-                          {newsItem.date}
+                        <span className="text-gray-300 text-xs">
+                          {newsItem?.publishedAt
+                            ? new Date(newsItem.publishedAt).toDateString()
+                            : "No Date"}{" "}
+                        
                         </span>
                       </div>
                     </span>

@@ -41,5 +41,7 @@ iframe.skiptranslate {
     height: 100%;
     border: none;
   }
-  
+  body::-webkit-scrollbar {
+    display: none;
+  }
   

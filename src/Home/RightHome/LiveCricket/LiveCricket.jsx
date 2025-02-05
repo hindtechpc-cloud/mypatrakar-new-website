@@ -31,13 +31,13 @@ export default function LiveCricket() {
 
   // Fetch scores on component mount and set an interval for updates
   useEffect(() => {
-    fetchScore(); // Initial fetch
+    // fetchScore(); // Initial fetch
 
-    const interval = setInterval(() => {
-      fetchScore();
-    }, 200000); // Fetch every 20 seconds
+    const timeout = setTimeout(() => {
+      // fetchScore();
+    }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
 
-    return () => clearInterval(interval); // Clear interval on component unmount
+    return () => clearTimeout(timeout); // Cleanup on unmount
   }, []);
 
   return (

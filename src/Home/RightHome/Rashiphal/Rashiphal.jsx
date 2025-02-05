@@ -3,6 +3,7 @@ import Header from "../shared/Header";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from "../../../utils/Loader";
 
 // const posts = [
 //   {
@@ -34,7 +35,7 @@ import axios from "axios";
 //   },
 // ];
 export default function Rashiphal() {
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
   const [error, setError] = useState("");
   const { setNews } = useContext(NewsContext);
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ export default function Rashiphal() {
         console.error("Error fetching data:", error);
         setError(error?.response?.data || "An error occurred");
       }
+     
     };
 
     fetchData();
@@ -70,39 +72,43 @@ export default function Rashiphal() {
   return (
     <div className="my-2 mt-5 font-sans">
       <Header text="Rashiphal" />
-      <ul className="flex flex-wrap gap-4 overflow-y-auto hide-scroll h-[500px]">
+      <ul className="flex flex-wrap gap-4 items-center justify-center overflow-y-auto hide-scroll h-[500px]">
         {error !== null ||
           (error !== "" && (
             <p className="text-red-500 font-semibold">{error}</p>
           ))}
-        {posts?.map((post) => (
-          <li key={post.rashi} className=" ">
-            <article className="flex">
-              <img
-                src={
-                  "https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg"
-                }
-                alt={post.rashifal}
-                className="w-32 h-20 object-cover rounded shadow-lg"
-              />
-              <div className="px-2">
-                <h3
-                  className="text-xs font-semibold text-gray-800 hover:text-blue-500"
-                  onClick={() =>
-                    handleNewsContent({
-                      title: post.rashifal,
-                      urlToImage:
-                        "https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg",
-                    })
+        {posts ? (
+          posts?.map((post) => (
+            <li key={post.rashi} className=" ">
+              <article className="flex">
+                <img
+                  src={
+                    "https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg"
                   }
-                >
-                  {post.rashifal}
-                </h3>
-                <p className="text-xs text-gray-500">{post.rashi}</p>
-              </div>
-            </article>
-          </li>
-        ))}
+                  alt={post.rashifal}
+                  className="w-32 h-20 object-cover rounded shadow-lg"
+                />
+                <div className="px-2">
+                  <h3
+                    className="text-xs font-semibold text-gray-800 hover:text-blue-500"
+                    onClick={() =>
+                      handleNewsContent({
+                        title: post.rashifal,
+                        urlToImage:
+                          "https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg",
+                      })
+                    }
+                  >
+                    {post.rashifal}
+                  </h3>
+                  <p className="text-xs text-gray-500">{post.rashi}</p>
+                </div>
+              </article>
+            </li>
+          ))
+        ) : (
+          <Loader />
+        )}
       </ul>
     </div>
   );

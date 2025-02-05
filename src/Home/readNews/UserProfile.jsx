@@ -46,13 +46,13 @@ function getDateDifference(dateString) {
 }
 
 const socialIcons = {
-  facebook: <FaFacebookF className="text-blue-400 hover:text-blue-600" />,
-  linkedin: <FaLinkedinIn className="text-blue-400 hover:text-blue-600" />,
-  twitter: <FaTwitter className="text-blue-400 hover:text-blue-600" />,
-  youtube: <FaYoutube className="text-red-400 hover:text-red-600" />,
-  instagram: <FaInstagram className="text-pink-400 hover:text-pink-600" />,
-  whatsapp: <FaWhatsapp className="text-green-400 hover:text-green-600" />,
-  email: <MdOutlineEmail className="text-orange-400 hover:text-orange-600" />,
+  facebook: <FaFacebookF className="text-blue-600 hover:text-blue-700" />,
+  linkedin: <FaLinkedinIn className="text-blue-600 hover:text-blue-700" />,
+  twitter: <FaTwitter className="text-blue-600 hover:text-blue-700" />,
+  youtube: <FaYoutube className="text-red-600 hover:text-red-700" />,
+  instagram: <FaInstagram className="text-pink-600 hover:text-pink-700" />,
+  whatsapp: <FaWhatsapp className="text-green-600 hover:text-green-700" />,
+  email: <MdOutlineEmail className="text-orange-600 hover:text-orange-700" />,
 };
 
 const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {

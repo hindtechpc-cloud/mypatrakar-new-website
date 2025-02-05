@@ -13,6 +13,7 @@ import ScrollToTop from "./utils/ScrollToTop";
 import Category from "./Home/category/Category";
 import Subcategory from "./Home/subcategory/Subcategory";
 import VideoGallery from "./Home/readNews/videos/VideoGallery";
+import { useTranslation } from "react-i18next";
 
 const Home = lazy(() => import("./Home/Home"));
 const ShortsPages = lazy(() => import("./Home/RightHome/shorts/ShortsPages"));
@@ -38,9 +39,12 @@ const AdvertiseWithUs = lazy(() =>
 );
 const OurReporters = lazy(() => import("./Home/ourRporters/OurReporters"));
 const Feedback = lazy(() => import("./Home/readNews/feedback/Feedback"));
-
+import './i18n'
 function Layout() {
   const location = useLocation();
+  const { t, i18n } = useTranslation();
+
+
   const urls = [
     "/contact-us",
     "/our-reporters",
@@ -99,7 +103,6 @@ function Layout() {
 export default function App() {
   const [language, setLanguage] = useState("hi");
   const [news, setNews] = useState({});
-
   return (
     <Router>
       <ScrollToTop /> {/* Add this component here */}
