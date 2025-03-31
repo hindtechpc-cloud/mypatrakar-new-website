@@ -214,7 +214,6 @@ import speaker from "../../assets/speaker.svg";
 export default function News() {
   const { news } = useContext(NewsContext);
   const { language } = useContext(LanguageContext); // Get selected language
-
   const [zoomText, setZoomText] = useState(15);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voices, setVoices] = useState([]);
@@ -328,9 +327,7 @@ export default function News() {
         {news?.title}
       </div>
       <div>
-        <p style={{ fontSize: `${zoomText}px` }}>
-          {news?.content}
-        </p>
+        <p style={{ fontSize: `${zoomText}px` }}>{news?.content}</p>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-export const short = [
+export const shorts= [
     {
         source: {
             id: null,

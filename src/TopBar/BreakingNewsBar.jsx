@@ -1,6 +1,16 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
 const BreakingNewsBar = () => {
+  const [time, setTime] = useState(new Date().toLocaleTimeString());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date().toLocaleTimeString());
+    }, 1000);
+
+    // Clean up interval when component unmounts
+    return () => clearInterval(interval);
+  }, []);
   const newsItems = [
     "सीनियर गेंदबाज का खेलना मुश्किल",
     "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'",
@@ -14,19 +24,18 @@ const BreakingNewsBar = () => {
         {/* <div className="flex items-center rounded-r-sm bg-black px-3 py-1 text-xs md:text-sm font-bold rounded">
           BREAKING
         </div> */}
-       <div className="relative flex items-center rounded-l-lg bg-black h-full px-3 py-2 text-xs md:text-sm font-bold text-white rounded-r-sm">
-  <span>BREAKING</span>
+        <div className="relative flex items-center rounded-l-lg bg-black h-full px-3 py-2 text-xs md:text-sm font-bold text-white rounded-r-sm">
+          <span>BREAKING</span>
 
-  {/* Right Arrow */}
-  <div
-    className="absolute h-full w-4 bg-black"
-    style={{
-      clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-      right: "-16px", // Adjust positioning to align with the button
-    }}
-  ></div>
-</div>
-
+          {/* Right Arrow */}
+          <div
+            className="absolute h-full w-4 bg-black"
+            style={{
+              clipPath: "polygon(0 0, 100% 50%, 0 100%)",
+              right: "-16px", // Adjust positioning to align with the button
+            }}
+          ></div>
+        </div>
 
         {/* News Ticker */}
         <div className="flex-1 overflow-hidden">
@@ -40,8 +49,8 @@ const BreakingNewsBar = () => {
         </div>
 
         {/* Clock */}
-        <div className="bg-black px-3 rounded-r-lg py-2 text-xs md:text-sm font-bold rounded">
-          {new Date().toLocaleTimeString()}
+        <div className="bg-black px-3 rounded-r-lg py-2 text-xs md:text-sm font-bold text-white">
+          {time}
         </div>
       </div>
     </div>

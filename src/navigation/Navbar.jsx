@@ -46,7 +46,7 @@ const Navbar = () => {
 
   const handleMenuClick = (path) => {
     setActivePath(path);
-    setMenuOpen(false);
+    setMenuOpen(!menuOpen);
     document.body.style.overflow = "auto";
     navigate(`${path}`);
   };
@@ -105,7 +105,7 @@ const Navbar = () => {
         >
           {item.name === "search" ? (
             <div className="p-0">
-              <FaSearch className="text-xl text-black font-bold p-0" />{" "}
+              <FaSearch className="text-xl text-white hover:text-black font-bold p-0" />{" "}
             </div>
           ) : (
             item.name
@@ -129,8 +129,8 @@ const Navbar = () => {
                 ? `absolute z-50 top-full bg-red-700  text-white shadow-md px-5 py-2 `
                 : `absolute z-50 top-full  mt-1 transform ${
                     language == "en" || language == "ta"
-                      ? "left-[-300px]"
-                      : "left-[-375px]"
+                      ? "left-[-280px] "
+                      : "left-[-375px] "
                   } bg-red-700 text-white shadow-md p-4 ${
                     News.length > 3 ? "w-auto" : "w-[850px]"
                   }`
@@ -218,7 +218,6 @@ const Navbar = () => {
                           {newsItem?.publishedAt
                             ? new Date(newsItem.publishedAt).toDateString()
                             : "No Date"}{" "}
-                        
                         </span>
                       </div>
                     </span>
@@ -231,13 +230,23 @@ const Navbar = () => {
 
         {/* Mobile Dropdown */}
         {isMobile && item.subItems && mobileDropdownOpen === item.name && (
-          <div className="bg-red-700 px-4  pb-2 overflow-y-scroll h-96 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 border-r-2">
+          <div
+            className={
+              language == "en" || language == "ta"
+                ? "bg-red-700 px-0  pb-2 overflow-y-scroll h-96 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 border-r-2"
+                : `bg-red-700 px-4  pb-2 overflow-y-scroll h-96 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 border-r-2`
+            }
+          >
             {item.subItems.map((subItem) => (
               <Link
                 key={subItem.name}
                 to={subItem.path}
                 onClick={() => handleMenuClick(subItem.path)}
-                className="block px-3 text-white hover:bg-red-900 py-1"
+                className={
+                  language == "en" || language == "ta"
+                    ? "block px-0 text-white hover:bg-red-900 py-1"
+                    : `block px-3 text-white hover:bg-red-900 py-1`
+                }
               >
                 {subItem.name}
               </Link>
