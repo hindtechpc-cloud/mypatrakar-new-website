@@ -38,7 +38,7 @@ const PostsListWidget = () => {
       <div className="  flex items-start justify-center   ">
         {/* Root Section */}
         <div className="flex flex-col items-start relative">
-          <span className="text-lg text-gray-50 font-sans">#BS_Exclusive</span>
+          <span className="text-lg font-semibold text-yellow-400 font-sans">#BS_Exclusive</span>
           {articles.map((article, index) => (
             <div
               key={index}

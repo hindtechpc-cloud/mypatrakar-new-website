@@ -22,7 +22,7 @@ const Navbar = () => {
 
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/readNews/${news.title}`);
+    navigate(`/read-news/${news.title}`);
   };
   const { language } = useContext(LanguageContext);
 

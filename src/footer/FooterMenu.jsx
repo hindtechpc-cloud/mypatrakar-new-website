@@ -15,7 +15,7 @@ export default function FooterMenu() {
     { name: "Home", link: "/", icon: <FaHome /> },
     { name: "About", link: "/about-us", icon: <FaInfoCircle /> },
     { name: "Contact Us", link: "/contact-us", icon: <FaEnvelope /> },
-    { name: "Live Stream", link: "/services", icon: <MdLiveTv /> },
+    // { name: "Live Stream", link: "/services", icon: <MdLiveTv /> },
     { name: "Videos", link: "/videos", icon: <FaVideo /> },
     { name: "Privacy Policy", link: "/privacy-policy", icon: <FaShieldAlt /> },
     {

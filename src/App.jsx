@@ -86,9 +86,10 @@ function Layout() {
         <Route path="/advertise-with-us" element={<AdvertiseWithUs />} />
         <Route path="/our-reporters" element={<OurReporters />} />
         <Route path="/terms-and-conditions" element={<TermsAndCondition />} />
-        <Route path="/readNews/:title" element={<ReadNews />} />
+        <Route path="/read-news/:title" element={<ReadNews />} />
         <Route path="/shorts/:title" element={<ShortsPages />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/bharat-trending" element={<Search />} />
         <Route path="/videos" element={<VideoGallery />} />
         <Route path="/topic/:category" element={<Category />} />
         <Route path="/topic/:category/:subcategory" element={<Subcategory />} />

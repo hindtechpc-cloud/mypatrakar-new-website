@@ -55,7 +55,7 @@ const NewsCard = ({
   const { setNews } = useContext(NewsContext);
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/readNews/${title}`);
+    navigate(`/read-news/${title}`);
   };
   return (
     <div className={`relative ${className}`}>

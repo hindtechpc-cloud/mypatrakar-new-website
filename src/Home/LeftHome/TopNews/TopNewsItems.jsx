@@ -47,7 +47,7 @@ export default function TopNewsItems({ topNewsItems, className }) {
   const { setNews } = useContext(NewsContext);
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/readNews/${news?.title}`);
+    navigate(`/read-news/${news?.title}`);
   };
   return (
     <div className={className}>
