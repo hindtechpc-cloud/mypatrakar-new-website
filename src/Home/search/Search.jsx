@@ -4,6 +4,7 @@ import DropdownFilters from "./DropdownFilters";
 import TagsScroll from "./TagsScroll";
 import NewsFeed from "../readNews/newsfeed/NewsFeed";
 import { articlesCard } from "./news";
+import HeaderAd from "../../TopBar/HeaderAd";
 
 export default function Search() {
   const [articles, setArticles] = useState(articlesCard);
@@ -82,6 +83,10 @@ export default function Search() {
 
   return (
     <div className="">
+      {/* <div className=" flex items-center justify-center mx-auto">
+        {" "}
+        <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 md:w-5/6 w-full sm:mx-0 mx-2 rounded" />
+      </div> */}
       <form className="bg-red-600 py-2 w-full" onSubmit={handleSubmit}>
         <div
           className={`${
@@ -133,7 +138,12 @@ export default function Search() {
           Clear
         </button>
       </div>
+     
 
+         <div className=" flex items-center justify-center mx-auto">
+        {" "}
+        <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 md:w-5/6 w-full sm:mx-0 mx-2 rounded" />
+      </div>
       <div className="flex items-center flex-wrap justify-center gap-5 my-2 md:mx-14 sm:mx-8 mx-2">
         <NewsFeed newsCard={articles} />
       </div>

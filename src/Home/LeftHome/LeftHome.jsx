@@ -7,15 +7,18 @@ import Game from "./game/Game";
 import EnterTainment from "./enterTainment/EnterTainment";
 import Country from "./Country/Country";
 import Election from "./election/Election";
+import HeaderAd from "../../TopBar/HeaderAd";
 
 export default function LeftHome() {
   return (
     <div className="w-full">
-      <AddLeftHome1 />
+      {/* <AddLeftHome1 /> */}
+      <HeaderAd className={"my-4 flex justify-center items-center bg-gray-300 rounded"} height={"200px"}/>
       <TopNews />
       <OwnState />
       <div className="my-2">
-        <AddLeftHome1 />
+        {/* <AddLeftHome1 /> */}
+        <HeaderAd className={"my-4 flex justify-center items-center bg-gray-300 rounded"} height={"200px"}/>
       </div>
       <State />
       <Game />

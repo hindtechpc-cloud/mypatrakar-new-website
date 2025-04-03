@@ -1,26 +1,41 @@
-import MypatrakarLogo1 from "../assets/MyPatrakarLogo1.png";
 
-const HeaderAd = () => {
+import { useEffect, useRef } from "react";
+
+const HeaderAd = ({ adSlot = "3965429761", className, height }) => {
+  const adRef = useRef(null);
+
+  useEffect(() => {
+    if (window.adsbygoogle && adRef.current) {
+      try {
+        // Only push if the ad hasn't been loaded before
+        if (!adRef.current.hasLoaded) {
+          console.log("Loading ad with slot:", adSlot); // Log ad slot for debugging
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          adRef.current.hasLoaded = true;
+        }
+      } catch (e) {
+        console.error("AdSense Error:", e);
+      }
+    }
+  }, [adSlot]);
+  // "my-4 flex justify-center items-center bg-gray-200 w-full rounded"
   return (
-    <div className="bg-white flex flex-col lg:flex-row justify-around items-center  py-3 ">
-      {/* Left Section - Logo */}
-      <div className="flex items-center mb-4 md:mb-0">
-        <img
-          src={MypatrakarLogo1}
-          alt="MyPatrakar Logo"
-          className="w-32 sm:w-40 md:w-48 lg:w-52 xl:w-56 object-contain"
-        />
-      </div>
-
-      {/* Right Section - Advertisement */}
-      <div className="flex flex-col items-center w-full md:w-auto">
-      
-        <div className="bg-gray-200 w-full md:w-[728px] h-[120px] flex items-center justify-center">
-          <span className="text-sm text-gray-700 text-center px-2">
-            Home Page Leaderboard: 728px * 120px
-          </span>
-        </div>
-      </div>
+    <div className={className}>
+      <ins
+        ref={adRef}
+        className="adsbygoogle"
+        style={{
+          display: "block",
+          width: "100%",
+          maxWidth: "728px",
+          minHeight: "90px",
+          height: height || "200px",
+        }}
+        data-ad-client="ca-pub-3716384259878681" // Your AdSense client ID
+        data-ad-slot={adSlot} // Your AdSlot ID
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
     </div>
   );
 };

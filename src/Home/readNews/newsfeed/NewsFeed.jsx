@@ -15,7 +15,7 @@ export default function NewsFeed({ newsCard }) {
   return (
     <div>
       <div className="flex flex-col mt-10 items-start justify-center gap-5">
-        {newsCard?.slice(start, end)?.map((card, index) => (
+        {newsCard.length>0?newsCard?.slice(start, end)?.map((card, index) => (
           <div key={index} className={card.className}>
             <NewsCard
               className="md:flex flex-1 items-start gap-4 max-w-4xl mx-auto"
@@ -28,7 +28,7 @@ export default function NewsFeed({ newsCard }) {
               news={card}
             />
           </div>
-        ))}
+        )):<div className="text-xl w-full font-medium text-center"> Nothing to show</div>}
       </div>
       {end < newsCard?.length && (
         <div

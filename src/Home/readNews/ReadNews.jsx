@@ -1,13 +1,14 @@
 import React from "react";
 import RightHome from "../RightHome/RightHome";
 import News from "./News";
-import AddLeftHome1 from "../LeftHome/AddLeftHome1";
+// import AddLeftHome1 from "../LeftHome/AddLeftHome1";
 import Feedback from "./feedback/Feedback";
 import NewsFeed from "./newsfeed/NewsFeed";
 import NewsAppAd from "./NewsAppAd";
 import OwnState from "../LeftHome/OwnState/OwnState";
 import VideoGallery from "./videos/VideoGallery";
 import { articlesCard } from "../search/news";
+import HeaderAd from "../../TopBar/HeaderAd";
 
 export default function ReadNews() {
   return (
@@ -15,7 +16,10 @@ export default function ReadNews() {
       {/* Left Section */}
       <div className="w-full lg:w-8/12">
         <News />
-        <AddLeftHome1 />
+        <HeaderAd
+          className="my-4 flex justify-center items-center bg-gray-300  w-full rounded"
+          height={"200px"}
+        />
         <Feedback />
 
         <NewsFeed newsCard={articlesCard} />

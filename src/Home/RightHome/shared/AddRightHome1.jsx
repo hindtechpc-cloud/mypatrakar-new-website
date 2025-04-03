@@ -1,7 +1,7 @@
 // import image from '../../../assets/ad.png';
 export default function AddRightHome1() {
   return (
-    <div className="max-w-sm mx-auto py-4 px-4 bg rounded-2xl border  border-gray-700 bg-cover bg-center shadow-lg bg-gradient-to-br from-red-300  via-blue-100 to-purple-300">
+    <div className="md:max-w-sm  w-[300px] mx-auto py-4 px-4 bg rounded-2xl border  border-gray-700 bg-cover bg-center shadow-lg bg-gradient-to-br from-red-300  via-blue-100 to-purple-300">
       <div className="text-center bg-cover bg-center">
         <p className="mt-2 text-xl font-bold text-red-600">
           लाखों रीडर्स/व्यूअर्स तक

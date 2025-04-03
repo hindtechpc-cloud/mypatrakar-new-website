@@ -96,7 +96,9 @@ const Navbar = () => {
               : handleMenuClick(item.path)
           }
           className={`flex justify-between items-center ${
-            item.name === "search" ? "px-0" : "px-3"
+            item.name === "search"
+              ? "px-3 hover:text-black  focus:text-black"
+              : "px-3"
           } lg:py-5 py-2 cursor-pointer ${
             activePath === item.path
               ? "bg-gray-200 text-black "
@@ -105,7 +107,7 @@ const Navbar = () => {
         >
           {item.name === "search" ? (
             <div className="p-0">
-              <FaSearch className="text-xl text-white hover:text-black font-bold p-0" />{" "}
+              <FaSearch className="text-xl  hover:text-black font-bold p-0" />{" "}
             </div>
           ) : (
             item.name

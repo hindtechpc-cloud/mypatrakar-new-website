@@ -17,7 +17,7 @@ export default function Shorts() {
       <Header text="Shorts" />
       <div className="flex items-center justify-center relative">
         {/* Mobile Frame */}
-        <div className="relative w-[280px] h-[550px] bg-gradient-to-b from-gray-900 to-gray-800 rounded-[3rem] shadow-[0_8px_16px_rgba(0,0,0,0.4)] border-[10px] border-black overflow-hidden transition-transform transform ">
+        <div className="relative w-[300px] h-[550px] bg-gradient-to-b from-gray-900 to-gray-800 rounded-[3rem] shadow-[0_8px_16px_rgba(0,0,0,0.4)] border-[10px] border-black overflow-hidden transition-transform transform ">
       {/* Notch (Realistic mobile look) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[25px] bg-black rounded-b-2xl"></div>
 

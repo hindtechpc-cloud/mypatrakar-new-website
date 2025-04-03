@@ -32,7 +32,7 @@ export default function RightHome() {
       <SourceWidget className="bg-red-900 mx-auto  text-white shadow-lg w-full my-4 p-4 rounded-lg"/>
       <PollWidget />
       <WeatherWidget />
-      {/* <AddRightHome1 /> */}
+      <AddRightHome1 />
     </div>
   );
 }

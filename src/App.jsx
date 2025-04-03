@@ -12,11 +12,11 @@ import ScrollToTopButton from "./ScrollToTopButton";
 import ScrollToTop from "./utils/ScrollToTop";
 import Category from "./Home/category/Category";
 import Subcategory from "./Home/subcategory/Subcategory";
-import VideoGallery from "./Home/readNews/videos/VideoGallery";
 import { useTranslation } from "react-i18next";
 
 const Home = lazy(() => import("./Home/Home"));
-const ShortsPages = lazy(() => import("./Home/RightHome/shorts/ShortsPages"));
+const VideoGallery = lazy(() => import("./Home/Home"));
+const ShortsPages = lazy(() => import("./Home/readNews/videos/VideoGallery"));
 const BreakingNewsBar = lazy(() => import("./TopBar/BreakingNewsBar"));
 const Header = lazy(() => import("./TopBar/Header"));
 const HeaderAd = lazy(() => import("./TopBar/HeaderAd"));
@@ -39,11 +39,11 @@ const AdvertiseWithUs = lazy(() =>
 );
 const OurReporters = lazy(() => import("./Home/ourRporters/OurReporters"));
 const Feedback = lazy(() => import("./Home/readNews/feedback/Feedback"));
-import './i18n'
+import "./i18n";
+// import Horoscope from "./Horoscope";
 function Layout() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
-
 
   const urls = [
     "/contact-us",
@@ -64,7 +64,11 @@ function Layout() {
       {!urls.includes(location.pathname) &&
         !location.pathname.startsWith("/shorts") && (
           <>
-            <HeaderAd />
+            <div className=" flex items-center justify-center mx-auto">
+              {" "}
+              <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 md:w-5/6 w-full sm:mx-0 mx-2 rounded" />
+              {/* <Horoscope/> */}
+            </div>
             <Navbar />
           </>
         )}
