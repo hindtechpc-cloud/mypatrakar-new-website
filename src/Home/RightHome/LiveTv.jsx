@@ -4,7 +4,7 @@ import Header from "./shared/Header";
 
 const LiveTv = ({ videoId }) => {
   return (
-   <div>
+   <div className="md:max-w-sm  w-[300px] mx-auto py-4">
     <Header text="Live TV" />
      <div className="flex-1 items-center justify-center w-full h-full p-4 bg-gray-300">
       <div className="flex items-center justify-start gap-2 text-red-600 text-2xl font-bold">

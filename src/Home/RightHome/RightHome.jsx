@@ -29,7 +29,7 @@ export default function RightHome() {
       <Rashiphal />
       <JoinChannels />
       <StockMarcket />
-      <SourceWidget className="bg-red-900 mx-auto  text-white shadow-lg w-full my-4 p-4 rounded-lg"/>
+      <SourceWidget className="bg-red-900 mx-auto md:max-w-sm  w-[300px]  py-4 text-white shadow-lg  my-4 p-4 rounded-lg"/>
       <PollWidget />
       <WeatherWidget />
       <AddRightHome1 />

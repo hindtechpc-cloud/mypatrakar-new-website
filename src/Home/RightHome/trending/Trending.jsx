@@ -38,10 +38,10 @@ const Trending = () => {
   const navigate = useNavigate();
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/readNews/${news.title}`);
+    navigate(`/read-news/${news.title}`);
   };
   return (
-    <div className="my-2 mt-5 font-sans">
+    <div className="my-2 mt-5 font-sans  md:max-w-sm  w-[300px] mx-auto py-4">
       <Header text={"TopNews"} />
       <div className="  flex items-start justify-center   ">
         {/* Root Section */}

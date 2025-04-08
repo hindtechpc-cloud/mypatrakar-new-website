@@ -22,7 +22,7 @@ const YouTube = () => {
     }, []);
 
     return (
-        <div className="my-2 mt-5 font-sans">
+        <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
              <Header text=" 🎥 Latest Videos" />
             {/* <h2 className="text-3xl font-bold text-center text-gray-800 mb-6"></h2> */}
             <div className="flex flex-wrap items-center justify-center gap-5 w-full overflow-y-auto h-[500px] hide-scroll">

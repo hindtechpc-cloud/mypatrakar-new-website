@@ -70,7 +70,7 @@ export default function Rashiphal() {
 
   // console.log(posts)
   return (
-    <div className="my-2 mt-5 font-sans">
+    <div className="my-2 mt-5  md:max-w-sm  w-[300px] mx-auto py-4">
       <Header text="Rashiphal" />
       <ul className="flex flex-wrap gap-4 items-center justify-center overflow-y-auto hide-scroll h-[500px]">
         {error !== null ||

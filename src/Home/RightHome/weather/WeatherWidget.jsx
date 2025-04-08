@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import Header from "../shared/Header";
-import Loader from '../../../utils/Loader'
+import Loader from "../../../utils/Loader";
 
 const WeatherWidget = () => {
   const [error, setError] = useState(true);
   const [weatherData, setWeatherData] = useState(null);
-  const [location, setLocation] = useState('Lucknow');
+  const [location, setLocation] = useState("Lucknow");
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
@@ -16,11 +16,11 @@ const WeatherWidget = () => {
           `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=9857ae27919fb1f4e30d14a0bdc145c6`
         );
         const data = await response.json();
-    
+
         // if (!data || data.code !== 200) {
         //   setError(true); // If no data or error code, set error state
         // } else {
-          setWeatherData(data); // If data is valid, update weather state
+        setWeatherData(data); // If data is valid, update weather state
         // }
       } catch (error) {
         console.log(error);
@@ -39,7 +39,7 @@ const WeatherWidget = () => {
   };
 
   return (
-    <div className="my-2 mt-5 font-sans">
+    <div className="my-2 mt-5 font-sans font-sans md:max-w-sm  w-[300px] mx-auto py-4">
       <Header text="Weather" />
       <div className="bg-gray-800 text-white rounded-lg shadow-lg p-4 w-full">
         {weatherData ? (
@@ -104,7 +104,7 @@ const WeatherWidget = () => {
             </p>
           </>
         ) : (
-          <Loader/>
+          <Loader />
           // <p>Loading...</p>
         )}
       </div>

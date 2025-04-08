@@ -102,7 +102,7 @@ const Navbar = () => {
           } lg:py-5 py-2 cursor-pointer ${
             activePath === item.path
               ? "bg-gray-200 text-black "
-              : "hover:bg-gray-200 hover:text-black lg:py-5 py-3"
+              : "hover:bg-gray-200 hover:text-black  lg:py-5 py-3"
           }`}
         >
           {item.name === "search" ? (

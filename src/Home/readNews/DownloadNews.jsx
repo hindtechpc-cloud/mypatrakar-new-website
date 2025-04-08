@@ -1,6 +1,6 @@
 import { jsPDF } from "jspdf";
 
-export default function DownloadNews() {
+export default function DownloadNews({news}) {
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
 

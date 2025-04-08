@@ -55,7 +55,7 @@ const socialIcons = {
   email: <MdOutlineEmail className="text-orange-600 hover:text-orange-700" />,
 };
 
-const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
+const UserProfile = ({ user, setZoomText, zoomText,handleDownloadPDF }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 

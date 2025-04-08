@@ -279,6 +279,87 @@ export default function News() {
 
       speechSynthesis.speak(utterance);
     }
+  };const handleDownloadPDF = async () => {
+    const doc = new jsPDF("p", "mm", "a4"); // A4 portrait
+    const pageWidth = doc.internal.pageSize.getWidth();
+    let currentY = 20;
+  
+    const toDataURL = (url) =>
+      fetch(url)
+        .then((response) => response.blob())
+        .then(
+          (blob) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            })
+        );
+  
+    // Header Title
+    doc.setFont("times", "bold");
+    doc.setFontSize(20);
+    doc.text(news.title, 10, currentY);
+    currentY += 10;
+  
+    // Meta Info: Author, Date, Location
+    doc.setFont("times", "italic");
+    doc.setFontSize(10);
+    doc.text(`By ${news.author.name} | ${new Date(news.publishedAt).toLocaleString()} | ${news.location}`, 10, currentY);
+    currentY += 8;
+  
+    // Category & Subcategory
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text(`Category: ${news.category} | Subcategory: ${news.subcategory}`, 10, currentY);
+    currentY += 10;
+  
+    // Add Image
+    if (news.urlToImage) {
+      try {
+        const imageData = await toDataURL(news.urlToImage);
+        doc.addImage(imageData, "JPEG", 10, currentY, pageWidth - 20, 60);
+        currentY += 65;
+      } catch (error) {
+        console.error("Image load error:", error);
+      }
+    }
+  
+    // Content
+    doc.setFont("times", "normal");
+    doc.setFontSize(12);
+    const contentLines = doc.splitTextToSize(news.content, pageWidth - 20);
+    doc.text(contentLines, 10, currentY);
+    currentY += contentLines.length * 6;
+  
+    // Views and Comments
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(10);
+    doc.text(`👁️ ${news.views} views | 💬 ${news.comments} comments`, 10, currentY);
+    currentY += 10;
+  
+    // External Links
+    if (news.links && news.links.length) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text("Follow the author:", 10, currentY);
+      currentY += 7;
+  
+      doc.setFont("helvetica", "normal");
+      news.links.forEach((link) => {
+        doc.textWithLink(link.name, 12, currentY, { url: link.url });
+        currentY += 6;
+      });
+    }
+  
+    // Footer - Source
+    doc.setFontSize(10);
+    doc.setFont("times", "italic");
+    doc.text(`Source: ${news.source?.name || "Unknown"}`, 10, 290);
+  
+    // Save the file
+    doc.save(`${news.title}.pdf`);
   };
 
   return (
@@ -318,6 +399,7 @@ export default function News() {
         }}
         setZoomText={setZoomText}
         zoomText={zoomText}
+        handleDownloadPDF={handleDownloadPDF}
       />
 
       <div

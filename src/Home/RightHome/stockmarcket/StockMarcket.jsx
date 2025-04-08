@@ -30,7 +30,7 @@ export default function StockMarcket() {
   
    
     return (
-    <div className="my-2 mt-5 font-sans">
+    <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
         <Header text="Stock Market" />
           <div className="max-w-4xl mx-auto p-4 shadow-lg rounded-xl bg-gray-300" >
         

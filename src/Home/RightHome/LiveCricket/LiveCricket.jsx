@@ -41,7 +41,7 @@ export default function LiveCricket() {
   }, []);
 
   return (
-  <div className="my-2 mt-5 font-sans">
+  <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
     <Header text="Live Cricket" />
       <div className="overflow-y-auto h-[500px]">
       

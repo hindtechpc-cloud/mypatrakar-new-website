@@ -13,7 +13,7 @@ export default function Shorts() {
   };
 
   return (
-    <div className="my-2 mt-5 font-sans">
+    <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
       <Header text="Shorts" />
       <div className="flex items-center justify-center relative">
         {/* Mobile Frame */}

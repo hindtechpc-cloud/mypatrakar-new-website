@@ -15,8 +15,6 @@ import Subcategory from "./Home/subcategory/Subcategory";
 import { useTranslation } from "react-i18next";
 
 const Home = lazy(() => import("./Home/Home"));
-const VideoGallery = lazy(() => import("./Home/Home"));
-const ShortsPages = lazy(() => import("./Home/readNews/videos/VideoGallery"));
 const BreakingNewsBar = lazy(() => import("./TopBar/BreakingNewsBar"));
 const Header = lazy(() => import("./TopBar/Header"));
 const HeaderAd = lazy(() => import("./TopBar/HeaderAd"));
@@ -40,6 +38,8 @@ const AdvertiseWithUs = lazy(() =>
 const OurReporters = lazy(() => import("./Home/ourRporters/OurReporters"));
 const Feedback = lazy(() => import("./Home/readNews/feedback/Feedback"));
 import "./i18n";
+import ShortsPages from "./Home/RightHome/shorts/ShortsPages";
+import VideoGallery from "./Home/readNews/videos/VideoGallery";
 // import Horoscope from "./Horoscope";
 function Layout() {
   const location = useLocation();
