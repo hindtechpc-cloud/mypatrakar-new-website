@@ -4,7 +4,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, useEffect } from "react";
 import { LanguageContext } from "./context/LanguageContext";
 import { NewsContext } from "./context/NewsContext";
 import Loader from "./utils/Loader";
@@ -40,7 +40,7 @@ const Feedback = lazy(() => import("./Home/readNews/feedback/Feedback"));
 import "./i18n";
 import ShortsPages from "./Home/RightHome/shorts/ShortsPages";
 import VideoGallery from "./Home/readNews/videos/VideoGallery";
-// import Horoscope from "./Horoscope";
+import Horoscope from "./Horoscope";
 function Layout() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
@@ -67,7 +67,7 @@ function Layout() {
             <div className=" flex items-center justify-center mx-auto">
               {" "}
               <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 md:w-5/6 w-full sm:mx-0 mx-2 rounded" />
-              {/* <Horoscope/> */}
+              {/* <Horoscope /> */}
             </div>
             <Navbar />
           </>
@@ -108,6 +108,10 @@ function Layout() {
 export default function App() {
   const [language, setLanguage] = useState("hi");
   const [news, setNews] = useState({});
+  // useEffect(() => {
+  //   let newsData = JSON.parse(localStorage.getItem("news"));
+  //   setNews(newsData);
+  // }, [news, setNews]);
   return (
     <Router>
       <ScrollToTop /> {/* Add this component here */}

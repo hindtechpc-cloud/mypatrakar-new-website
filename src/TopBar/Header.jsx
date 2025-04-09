@@ -33,7 +33,7 @@ const Header = () => {
     "/privacy-policy",
     "/contact-us",
     "/our-reporters",
-    "/advertise-with-us"
+    "/advertise-with-us",
   ];
   const { setLanguage } = useContext(LanguageContext);
   useEffect(() => {

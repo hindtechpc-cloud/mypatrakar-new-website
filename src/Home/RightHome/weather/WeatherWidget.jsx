@@ -8,6 +8,7 @@ const WeatherWidget = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState("Lucknow");
   const [inputValue, setInputValue] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
@@ -16,15 +17,11 @@ const WeatherWidget = () => {
           `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=9857ae27919fb1f4e30d14a0bdc145c6`
         );
         const data = await response.json();
-
-        // if (!data || data.code !== 200) {
-        //   setError(true); // If no data or error code, set error state
-        // } else {
-        setWeatherData(data); // If data is valid, update weather state
-        // }
+        setWeatherData(data);
+        setError(false);
       } catch (error) {
         console.log(error);
-        setError(true); // If there's an error in fetching, set error state
+        setError(true);
       }
     };
     fetchWeatherData();
@@ -39,7 +36,7 @@ const WeatherWidget = () => {
   };
 
   return (
-    <div className="my-2 mt-5 font-sans font-sans md:max-w-sm  w-[300px] mx-auto py-4">
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[300px] mx-auto py-4">
       <Header text="Weather" />
       <div className="bg-gray-800 text-white rounded-lg shadow-lg p-4 w-full">
         {weatherData ? (
@@ -73,7 +70,7 @@ const WeatherWidget = () => {
 
             <form
               onSubmit={handleSearch}
-              className="flex items-center rounded-lg  bg-white mb-4"
+              className="flex items-center rounded-lg bg-white mb-4"
             >
               <input
                 type="text"
@@ -89,15 +86,13 @@ const WeatherWidget = () => {
                 <FaSearch />
               </button>
             </form>
-            {error ? (
-              <button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg">
-                देखें आज का मौसम
-              </button>
-            ) : (
-              <button className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg">
-                {error}
-              </button>
-            )}
+
+            <button
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg"
+              onClick={() => setShowModal(true)}
+            >
+              देखें आज का मौसम
+            </button>
 
             <p className="text-xs text-gray-400 mt-4 text-center">
               Powered By: <span className="font-bold">OpenWeather</span>
@@ -105,9 +100,43 @@ const WeatherWidget = () => {
           </>
         ) : (
           <Loader />
-          // <p>Loading...</p>
         )}
       </div>
+
+      {/* Modal */}
+      {showModal && weatherData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-md">
+            <h2 className="text-xl font-bold mb-2 text-center text-gray-800">
+              {weatherData.name} Weather
+            </h2>
+            <p className="text-gray-700 mb-2">
+              🌡️ तापमान: {weatherData.main.temp}°C
+            </p>
+            <p className="text-gray-700 mb-2">
+              💧 नमी: {weatherData.main.humidity}%
+            </p>
+            <p className="text-gray-700 mb-2">
+              🌬️ हवा की गति: {weatherData.wind.speed} km/h
+            </p>
+            <p className="text-gray-700 mb-2">
+              🌞 सूर्योदय:{" "}
+              {new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString()}
+            </p>
+            <p className="text-gray-700 mb-4">
+              🌇 सूर्यास्त:{" "}
+              {new Date(weatherData.sys.sunset * 1000).toLocaleTimeString()}
+            </p>
+
+            <button
+              className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
+              onClick={() => setShowModal(false)}
+            >
+              बंद करें
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

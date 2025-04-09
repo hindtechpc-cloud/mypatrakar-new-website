@@ -11,7 +11,7 @@ const ShortsPages = () => {
 
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/readNews/${news.title}`);
+    navigate(`/read-news/${news.title}`);
   };
 
   // Use useRef to reference the scroll container
