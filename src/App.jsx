@@ -66,7 +66,11 @@ function Layout() {
           <>
             <div className=" flex items-center justify-center mx-auto">
               {" "}
-              <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 md:w-5/6 w-full sm:mx-0 mx-2 rounded" />
+              <HeaderAd
+  className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 mx-2 rounded 
+  sm:w-[728px] sm:h-[90px] w-[320px] h-[100px]"
+/>
+
               {/* <Horoscope /> */}
             </div>
             <Navbar />

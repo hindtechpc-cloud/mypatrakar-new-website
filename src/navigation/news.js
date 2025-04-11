@@ -54,7 +54,8 @@ export const news = [
     category: "Business",
     location: 'lucknow',
     content: "🎶 Title Chasing Dreams 🎶 (Genre: Pop/Rock – Inspirational Vibes) [Verse 1] oke up with a fire, urning in my soul, Tired of the silence, time to take control.Got a million voices, telling me to stay,But I’m stepping orward, gonna find my way.[Pre-Chorus] No more waiting, no more fear, Gotta chase the light, it’s crystal clear.Every roadblock, every fall,Only makes me stand up tall. [Chorus]I’m chasing dreams, I won’t back down, Rising higher, won’t touch the ground. Through the thunder, through the rain, I’ll keep running, I’ll break the chain! [Verse 2] Falling ain’t failing, it’s part of the ride, Every scar’s a lesson, I wear with pride. Mountains may se, but I’ll find a way, Turn the dark into brighter days. [Pre-Chorus] No more waiting, no more fear, Gotta hase the light, it’s crystal clear. Every roadblock, every fall, Only makes me stand up tall. [Chorus] I’m chasing reams, I won’t back down,Rising higher, won’t touch the ground. Through the thunder, through the rain,I’ll keep running, I’ll break the chain! [Bridge] Every heartbeat, every fight, Brings me closer to the light. I won’t top, I won’t fade, This is the life that I have made! [Outro] So I’ll chase my dreams, I’ll touch the sky, No more doubts, it’s time to fly. Through the fire, through the pain, I’ll keep moving—I’ll break the chain!",
-  }, {
+  },
+   {
     source: {
       id: null,
       name: "The Guardian",

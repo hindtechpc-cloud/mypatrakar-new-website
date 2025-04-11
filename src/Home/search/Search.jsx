@@ -117,32 +117,32 @@ export default function Search() {
       />
       <TagsScroll />
 
-      <div className="flex items-center justify-center gap-10 my-2 md:mx-14 sm:mx-8 mx-2">
+      <div className="flex items-center justify-center gap-10 my-4 md:mx-14 sm:mx-8 mx-2">
         <button
-          className="bg-blue-600 text-white py-2 w-1/4 px-4 rounded-lg"
           onClick={handleSubmit}
+          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95 w-1/4"
         >
           Filter
         </button>
+
         <button
-          className="bg-red-600 text-white py-2 w-1/4 px-4 rounded-lg"
           onClick={() => {
             setSearchTerm("");
             setCategory("");
             setSubcategory("");
             setLocation("");
             setSortBy("");
-            setArticles(articlesCard); // Reset to all articles
+            setArticles(articlesCard);
           }}
+          className="flex items-center justify-center  w-1/4 gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95"
         >
           Clear
         </button>
       </div>
-     
 
-         <div className=" flex items-center justify-center mx-auto">
+      <div className=" flex items-center justify-center mx-auto">
         {" "}
-        <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 md:w-5/6 w-full sm:mx-0 mx-2 rounded" />
+        <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 sm:w-[728px] sm:h-[90px] w-[320px] h-[100px] sm:mx-0 mx-2 rounded" />
       </div>
       <div className="flex items-center flex-wrap justify-center gap-5 my-2 md:mx-14 sm:mx-8 mx-2">
         <NewsFeed newsCard={articles} />
