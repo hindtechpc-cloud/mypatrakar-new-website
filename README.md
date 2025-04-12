@@ -1,4 +1,5 @@
 # 📰 MyPatrakar - News Website
+## Live demo [https://mypatrakar.com/](https://mypatrakar.com/)
 
 MyPatrakar is a modern, full-featured news publishing platform designed for journalists, publishers, and media organizations. It features a React-based frontend and a Laravel-powered backend to deliver a seamless user experience and robust content management.
 
