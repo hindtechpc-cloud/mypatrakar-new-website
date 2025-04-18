@@ -8,8 +8,8 @@ export default function LeftHome() {
     const fetchedLayout = [
       "ad",
       "topNews",
-      "ownState",
       "ad",
+      "ownState",
       "state",
       "game",
       "entertainment",

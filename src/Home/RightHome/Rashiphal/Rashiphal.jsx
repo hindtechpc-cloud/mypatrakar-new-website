@@ -1,107 +1,72 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../shared/Header";
-import { NewsContext } from "../../../context/NewsContext";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../../utils/Loader";
+import generateRandomRashiphal from "./staticRashiphal";
 
-// const posts = [
-//   {
-//     id: 1,
-//     title:
-//       "Horoscope: इन 3 राशियों का भाग्य चमकेगा, मेहनत लाएगी रंग, पढ़ें आज का राशिफल",
-//     link: "",
-//     date: "January 25, 2025",
-//     urlToImage:
-//       "https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg",
-//   },
-//   {
-//     id: 2,
-//     title:
-//       "Aaj Ka Rashifal: इन 5 राशियों के लिए आज का दिन है शुभ, आएगा पैसा ही पैसा!",
-//     link: "",
-//     date: "January 23, 2025",
-//     urlToImage:
-//       "https://bharatsamachartv.in/wp-content/uploads/2025/01/Untitled-design-5-1-220x150.png",
-//   },
-//   {
-//     id: 3,
-//     title:
-//       "Aaj Ka Rashifal: मेष, वृषभ और वृश्चिक को मिलेगा सफलता का तोहफा, जानें आपके लिए क्या है खास!",
-//     link: "",
-//     date: "January 22, 2025",
-//     urlToImage:
-//       "https://bharatsamachartv.in/wp-content/uploads/2025/01/Horoscope-3-220x150.png",
-//   },
-// ];
 export default function Rashiphal() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState("");
-  const { setNews } = useContext(NewsContext);
-  const navigate = useNavigate();
-  const handleNewsContent = (post) => {
-    setNews(post);
-    navigate(`/readNews/${post.title}`);
-  };
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRashiphal = async () => {
       try {
-        const res = await axios.get(
-          "https://daily-rashifal-api.p.rapidapi.com/all",
+        const res = await axios.post(
+          "https://corsproxy.io/?https://json.freeastrologyapi.com/astrology/v1/horoscope/today",
+          {
+            day: "18",
+            month: "04",
+            year: "2000",
+            hour: "12",
+            min: "00",
+            lat: "28.6139",
+            lon: "77.2090",
+            tzone: "5.5",
+          },
           {
             headers: {
-              "x-rapidapi-key":
-                "1c77ef24a3msh65eb631c17b05e6p1a135bjsn29cbd848fe1a",
-              "x-rapidapi-host": "daily-rashifal-api.p.rapidapi.com",
+              Authorization:
+                "Bearer N8Y8g2w4NI3oAbBzkIAuK9phJhfRU9m66obIulOQ",
+              "Content-Type": "application/json",
             },
           }
         );
-        console.log(res.data.result);
-        setPosts(res.data.result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error?.response?.data || "An error occurred");
+
+        const result = res.data?.data || [];
+        if (result.length === 0) throw new Error("Empty result");
+        setPosts(result);
+      } catch (err) {
+        console.warn("Falling back to static rashiphal due to error:", err.message);
+        const randomRashi = generateRandomRashiphal();
+        setPosts(randomRashi);
+        setError("Showing randomly generated rashiphal due to network issue.");
       }
-     
     };
 
-    fetchData();
+    fetchRashiphal();
   }, []);
 
-  // console.log(posts)
   return (
-    <div className="my-2 mt-5  md:max-w-sm  w-[300px] mx-auto py-4">
+    <div className="my-2 mt-5 md:max-w-sm w-[300px] mx-auto py-4">
       <Header text="Rashiphal" />
-      <ul className="flex flex-wrap gap-4 items-center justify-center overflow-y-auto hide-scroll h-[500px]">
-        {error !== null ||
-          (error !== "" && (
-            <p className="text-red-500 font-semibold">{error}</p>
-          ))}
-        {posts ? (
-          posts?.map((post) => (
-            <li key={post.rashi} className=" ">
-              <article className="flex">
+      {error && (
+        <p className="text-center text-xs text-yellow-600 mb-2">{error}</p>
+      )}
+      <ul className="flex flex-col gap-4 items-center justify-center overflow-y-auto py-2 hide-scroll h-[500px]">
+        {posts.length > 0 ? (
+          posts.map((item, index) => (
+            <li key={index} className="w-full">
+              <article className="flex items-start gap-3 bg-white p-2 rounded-lg shadow">
                 <img
-                  src={
-                    "https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg"
-                  }
-                  alt={post.rashifal}
-                  className="w-32 h-20 object-cover rounded shadow-lg"
+                  src="https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg"
+                  alt="rashifal"
+                  className="w-20 h-20 object-cover rounded"
                 />
-                <div className="px-2">
-                  <h3
-                    className="text-xs font-semibold text-gray-800 hover:text-blue-500"
-                    onClick={() =>
-                      handleNewsContent({
-                        title: post.rashifal,
-                        urlToImage:
-                          "https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg",
-                      })
-                    }
-                  >
-                    {post.rashifal}
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-800">
+                    {item.rashi}
                   </h3>
-                  <p className="text-xs text-gray-500">{post.rashi}</p>
+                  <p className="text-xs text-gray-600">{item.rashifal}</p>
                 </div>
               </article>
             </li>

@@ -4,7 +4,6 @@ import OwnState from "./OwnState/OwnState";
 import AddRightHome1 from "./shared/AddRightHome1";
 import LiveCricket from "./LiveCricket/LiveCricket";
 import Shorts from "./shorts/Shorts";
-import Rashiphal from "./Rashiphal/Rashiphal";
 import JoinChannels from "./JoinChannels";
 import { PollWidget } from "./poll/PollWidget";
 import { WeatherWidget } from "./weather/WeatherWidget";
@@ -12,15 +11,17 @@ import StockMarcket from "./stockmarcket/StockMarcket";
 import SourceWidget from "../../footer/SourceWidget";
 import { useLocation } from "react-router-dom";
 import Youtube from "./Youtube";
-
+import CorporateActions from "./stockmarcket/CorporateActions";
+import StockInfo from "./stockmarcket/StockInfo";
+import Rashiphal from "./Rashiphal/Rashiphal";
 export default function RightHome() {
-  const location=useLocation();
-  const url=location.pathname;
+  const location = useLocation();
+  const url = location.pathname;
   return (
     <div>
-     {url==='/'&& <LiveTv />}
+      {url === "/" && <LiveTv />}
       <Trending />
-      <Youtube/>
+      <Youtube />
       <OwnState />
       <AddRightHome1 />
       <LiveCricket />
@@ -28,8 +29,10 @@ export default function RightHome() {
       <AddRightHome1 />
       <Rashiphal />
       <JoinChannels />
-      <StockMarcket />
-      <SourceWidget className="bg-red-900 mx-auto md:max-w-sm  w-[300px]  py-4 text-white shadow-lg  my-4 p-4 rounded-lg"/>
+      {/* <StockMarcket /> */}
+      {/* <CorporateActions/> */}
+      <StockInfo/>
+      <SourceWidget className="bg-red-900 mx-auto md:max-w-sm  w-[300px]  py-4 text-white shadow-lg  my-4 p-4 rounded-lg" />
       <PollWidget />
       <WeatherWidget />
       <AddRightHome1 />

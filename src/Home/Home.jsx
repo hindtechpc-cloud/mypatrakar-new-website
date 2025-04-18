@@ -1,4 +1,5 @@
 import LeftHome from "./LeftHome/LeftHome";
+import Right from "./RightHome/Right";
 import RightHome from "./RightHome/RightHome";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
         {/* Right Section */}
         <div className="w-full  lg:w-4/12">
           <RightHome />
+          {/* <Right/> */}
         </div>
       </div>
     </div>
