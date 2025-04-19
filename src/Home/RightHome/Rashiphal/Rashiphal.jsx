@@ -25,8 +25,7 @@ export default function Rashiphal() {
           },
           {
             headers: {
-              Authorization:
-                "Bearer N8Y8g2w4NI3oAbBzkIAuK9phJhfRU9m66obIulOQ",
+              Authorization: "Bearer N8Y8g2w4NI3oAbBzkIAuK9phJhfRU9m66obIulOQ",
               "Content-Type": "application/json",
             },
           }
@@ -36,7 +35,10 @@ export default function Rashiphal() {
         if (result.length === 0) throw new Error("Empty result");
         setPosts(result);
       } catch (err) {
-        console.warn("Falling back to static rashiphal due to error:", err.message);
+        console.warn(
+          "Falling back to static rashiphal due to error:",
+          err.message
+        );
         const randomRashi = generateRandomRashiphal();
         setPosts(randomRashi);
         setError("Showing randomly generated rashiphal due to network issue.");
