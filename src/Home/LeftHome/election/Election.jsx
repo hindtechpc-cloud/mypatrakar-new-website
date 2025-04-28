@@ -47,7 +47,7 @@ export default function Election() {
       <Menu
         menuText={"चुनाव"}
         setSubcategory={setCurrentState}
-        menu={["All", "मध्य प्रदेश", "उत्तर प्रदेश", "बिहार", "छत्तीसगढ़"]}
+        menu={[]}
       />
       <div className="flex justify-between items-start">
         <div>

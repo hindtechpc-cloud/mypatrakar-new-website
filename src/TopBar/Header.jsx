@@ -36,42 +36,42 @@ const Header = () => {
     "/advertise-with-us",
   ];
   const { setLanguage } = useContext(LanguageContext);
-  useEffect(() => {
-    const loadGoogleTranslate = () => {
-      if (!window.googleTranslateElementInit) {
-        window.googleTranslateElementInit = () => {
-          if (window.google && window.google.translate) {
-            new window.google.translate.TranslateElement(
-              {
-                pageLanguage: "en",
-                includedLanguages: "hi,en,mr,pa,bn,gu,ta,te",
-                autoDisplay: false,
-              },
-              "google_translate_element"
-            );
-          }
-        };
-      }
+  // useEffect(() => {
+  //   const loadGoogleTranslate = () => {
+  //     if (!window.googleTranslateElementInit) {
+  //       window.googleTranslateElementInit = () => {
+  //         if (window.google && window.google.translate) {
+  //           new window.google.translate.TranslateElement(
+  //             {
+  //               pageLanguage: "en",
+  //               includedLanguages: "hi,en,mr,pa,bn,gu,ta,te",
+  //               autoDisplay: false,
+  //             },
+  //             "google_translate_element"
+  //           );
+  //         }
+  //       };
+  //     }
 
-      const scriptExists = document.getElementById("google-translate-script");
-      if (!scriptExists) {
-        const script = document.createElement("script");
-        script.id = "google-translate-script";
-        script.src =
-          "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-        script.classList = "hidden";
-        script.async = true;
-        script.onload = () => {
-          if (window.googleTranslateElementInit) {
-            window.googleTranslateElementInit();
-          }
-        };
-        document.body.appendChild(script);
-      }
-    };
+  //     const scriptExists = document.getElementById("google-translate-script");
+  //     if (!scriptExists) {
+  //       const script = document.createElement("script");
+  //       script.id = "google-translate-script";
+  //       script.src =
+  //         "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  //       script.classList = "hidden";
+  //       script.async = true;
+  //       script.onload = () => {
+  //         if (window.googleTranslateElementInit) {
+  //           window.googleTranslateElementInit();
+  //         }
+  //       };
+  //       document.body.appendChild(script);
+  //     }
+  //   };
 
-    loadGoogleTranslate();
-  }, []);
+  //   loadGoogleTranslate();
+  // }, []);
 
   const changeLanguage = (langCode) => {
     const selectField = document.querySelector(".goog-te-combo");
@@ -100,7 +100,7 @@ const Header = () => {
           {languages.map(({ code, label }) => (
             <span
               key={code}
-              onClick={() => changeLanguage(code)}
+              // onClick={() => changeLanguage(code)}
               className="cursor-pointer hover:underline hover:text-yellow-300"
             >
               {label}
@@ -109,7 +109,7 @@ const Header = () => {
         </div>
 
         {/* Google Translate Widget (Hidden) */}
-        <div id="google_translate_element" className="hidden "></div>
+        {/* <div id="google_translate_element" className="hidden "></div> */}
 
         {/* Social Media & Advertisement */}
         <div className="flex flex-wrap items-center space-x-8">

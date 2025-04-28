@@ -11,7 +11,7 @@ import HeaderAd from "../../TopBar/HeaderAd";
 export const componentsMap = {
   topNews: TopNews,
   ownState: OwnState,
-  state: State,
+  state : State,
   game: Game,
   entertainment: EnterTainment,
   country: Country,
