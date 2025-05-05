@@ -6,7 +6,7 @@ import "./i18n"; //
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor } from "./redux/app/store.js";
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("news-app")).render(
   <StrictMode>
     <PersistGate loading={null} persistor={persistor}>
       <App />

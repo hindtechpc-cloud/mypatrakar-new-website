@@ -25,6 +25,15 @@ iframe.skiptranslate {
   .hide-scroll::-webkit-scrollbar {
     display: none;
   }
+  /* Add this to your global styles (e.g., index.css) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 
   .phone-frame {
     width: 375px; /* iPhone width */

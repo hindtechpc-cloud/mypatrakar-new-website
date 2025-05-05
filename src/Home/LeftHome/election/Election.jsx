@@ -5,7 +5,7 @@ import { GrPrevious } from "react-icons/gr";
 import WonParty from "./WonParty";
 
 export default function Election() {
-  const [currentState,setCurrentState]=useState("")
+  const [currentState, setCurrentState] = useState("");
   const years = Array.from(
     { length: Math.floor((2024 - 1957) / 5) + 1 },
     (_, i) => 1957 + i * 5
@@ -44,47 +44,53 @@ export default function Election() {
 
   return (
     <div>
-      <Menu
-        menuText={"चुनाव"}
-        setSubcategory={setCurrentState}
-        menu={[]}
-      />
-      <div className="flex justify-between items-start">
-        <div>
-          <h2 className="text-gray-800 font-semibold text-xl">
-            {currentState} Lok Sabha Election Result {" "}{activeYear}
+      <Menu menuText={"चुनाव"} setSubcategory={setCurrentState} menu={[]} />
+
+      <div className="my-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-4">
+          {/* Title */}
+          <h2 className="text-gray-800 font-bold text-lg sm:text-xl md:text-2xl">
+            {currentState} Lok Sabha Election Result {activeYear}
           </h2>
+
+          {/* Navigation Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-sm transition"
+              onClick={handleScrollLeft}
+              aria-label="Scroll left"
+            >
+              <GrPrevious className="text-base rotate-180" />
+            </button>
+            <button
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-sm transition"
+              onClick={handleScrollRight}
+              aria-label="Scroll right"
+            >
+              <GrPrevious className="text-base" />
+            </button>
+          </div>
         </div>
-        <div className="flex items-center justify-center gap-5">
-          <button
-            className="bg-gray-300 text-gray-500 text-sm font-semibold p-2 rounded-full shadow-md hover:bg-gray-400 transition-all hover:text-gray-600"
-            onClick={handleScrollLeft}
-          >
-            <GrPrevious className="text-lg rotate-180" />
-          </button>
-          <button
-            className="bg-gray-300 text-gray-500 text-sm font-semibold p-2 rounded-full shadow-md hover:bg-gray-400 transition-all hover:text-gray-600"
-            onClick={handleScrollRight}
-          >
-            <GrPrevious className="text-lg" />
-          </button>
+
+        {/* Year Scroll */}
+        <div
+          className="flex items-center overflow-x-auto gap-3 py-2 scrollbar-hide"
+          id="won-party"
+        >
+          {years.map((year, i) => (
+            <button
+              key={i}
+              className={`whitespace-nowrap border px-4 py-1 rounded-full text-sm font-medium transition duration-200 ${
+                activeYear === year
+                  ? "bg-blue-600 text-white border-blue-600 shadow"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+              }`}
+              onClick={() => setActiveYear(year)}
+            >
+              {year}
+            </button>
+          ))}
         </div>
-      </div>
-      <div
-        className="flex items-center justify-between overflow-x-auto gap-5 hide-scroll my-2"
-        id="won-party"
-      >
-        {years.map((year, i) => (
-          <p
-            key={i}
-            className={`text-gray-800 border rounded-full py-1 px-4 cursor-pointer ${
-              activeYear === year ? "bg-blue-500 text-white" : ""
-            }`}
-            onClick={() => setActiveYear(year)}
-          >
-            {year}
-          </p>
-        ))}
       </div>
 
       <ElectionResults
