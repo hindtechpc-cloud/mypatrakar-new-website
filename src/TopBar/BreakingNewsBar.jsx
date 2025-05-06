@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { WebThemeContext } from "../context/ThemeContext";
 
 const BreakingNewsBar = () => {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
-
+const {webTheme}=useContext(WebThemeContext);
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date().toLocaleTimeString());
@@ -18,7 +19,9 @@ const BreakingNewsBar = () => {
   ];
 
   return (
-    <div className="bg-red-700 rounded-l-lg rounded-r-lg text-white mx-0 sm:mx-2 md:mx-10 my-2">
+    <div
+      className={`bg-${webTheme["bg-color"] == "#e60000" ? "red-700" : webTheme["bg-color"]} rounded-l-lg rounded-r-lg text-white mx-0 sm:mx-2 md:mx-10 my-2`}
+    >
       <div className="flex items-center space-x-4 ">
         {/* Breaking Label */}
         {/* <div className="flex items-center rounded-r-sm bg-black px-3 py-1 text-xs md:text-sm font-bold rounded">

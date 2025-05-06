@@ -41,6 +41,8 @@ import "./i18n";
 import ShortsPages from "./Home/RightHome/shorts/ShortsPages";
 import VideoGallery from "./Home/readNews/videos/VideoGallery";
 import Horoscope from "./Horoscope";
+import { GetWebTheme } from "../api";
+import { WebThemeContext } from "./context/ThemeContext";
 function Layout() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
@@ -67,10 +69,9 @@ function Layout() {
             <div className=" flex items-center justify-center mx-auto">
               {" "}
               <HeaderAd
-  className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 mx-2 rounded 
+                className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 mx-2 rounded 
   sm:w-[728px] sm:h-[90px] w-[320px] h-[100px]"
-/>
-
+              />
               {/* <Horoscope /> */}
             </div>
             <Navbar />
@@ -112,13 +113,24 @@ function Layout() {
 export default function App() {
   const [language, setLanguage] = useState("hi");
   const [news, setNews] = useState({});
+  const [webTheme, setWebTheme] = useState({});
   // useEffect(() => {
   //   let newsData = JSON.parse(localStorage.getItem("news"));
   //   setNews(newsData);
   // }, [news, setNews]);
+
+  const loadWebTheme = async () => {
+    const res = await GetWebTheme("MYAWR241227001");
+    console.log(res.data.response);
+    setWebTheme(res.data.response)
+  };
+  useEffect(() => {
+    loadWebTheme();
+  }, []);
   return (
     <Router>
       <ScrollToTop /> {/* Add this component here */}
+      <WebThemeContext.Provider value={{webTheme,setWebTheme}}>
       <LanguageContext.Provider value={{ language, setLanguage }}>
         <NewsContext.Provider value={{ news, setNews }}>
           <Suspense fallback={<Loader />}>
@@ -126,6 +138,7 @@ export default function App() {
           </Suspense>
         </NewsContext.Provider>
       </LanguageContext.Provider>
+      </WebThemeContext.Provider>
     </Router>
   );
 }

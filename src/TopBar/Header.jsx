@@ -1,19 +1,11 @@
-import { useContext, useEffect } from "react";
-import {
-  FaCopyright,
-  FaFacebookF,
-  FaInstagram,
-  FaTelegram,
-  FaTwitter,
-  FaWhatsapp,
-  FaYoutube,
-} from "react-icons/fa";
-import { TbBrandThreads } from "react-icons/tb";
-import { LanguageContext } from "../context/LanguageContext";
+// import { LanguageContext } from "../context/LanguageContext";
 // import { useLocation } from "react-router-dom";
+import React, { useContext, useState } from "react";
 
 import logo1 from "../assets/Ellipse.svg";
 import logo2 from "../assets/Mypatrakar2.png";
+import SocialIcons from "./SocialIcons";
+import { WebThemeContext } from "../context/ThemeContext";
 const languages = [
   { code: "hi", label: "हिंदी" },
   { code: "en", label: "English" },
@@ -27,6 +19,7 @@ const languages = [
 
 const Header = () => {
   // const location = useLocation();
+  const {webTheme}=useContext(WebThemeContext);
   const urls = [
     "/about-us",
     "/terms-and-condition",
@@ -35,7 +28,7 @@ const Header = () => {
     "/our-reporters",
     "/advertise-with-us",
   ];
-  const { setLanguage } = useContext(LanguageContext);
+  // const { setLanguage } = useContext(LanguageContext);
   // useEffect(() => {
   //   const loadGoogleTranslate = () => {
   //     if (!window.googleTranslateElementInit) {
@@ -73,17 +66,19 @@ const Header = () => {
   //   loadGoogleTranslate();
   // }, []);
 
-  const changeLanguage = (langCode) => {
-    const selectField = document.querySelector(".goog-te-combo");
-    if (selectField) {
-      selectField.value = langCode;
-      setLanguage(langCode);
-      selectField.dispatchEvent(new Event("change", { bubbles: false }));
-    }
-  };
+  // const changeLanguage = (langCode) => {
+  //   const selectField = document.querySelector(".goog-te-combo");
+  //   if (selectField) {
+  //     selectField.value = langCode;
+  //     setLanguage(langCode);
+  //     selectField.dispatchEvent(new Event("change", { bubbles: false }));
+  //   }
+  // };
 
   return (
-    <div className="bg-red-800 text-white py-2 px-4">
+    <div
+      className={`bg-${webTheme["bg-color"] == "#e60000" ? "red-700" : webTheme["bg-color"]} text-white py-2 px-4`}
+    >
       {urls.includes(location.pathname) && (
         <div className=" flex flex-wrap justify-between  items-center">
           <div className="w-14">
@@ -126,17 +121,5 @@ const Header = () => {
 };
 
 // Extracted Social Icons Component
-const SocialIcons = () => (
-  <div className="flex space-x-2 text-lg">
-    <FaFacebookF className="cursor-pointer hover:opacity-75" />
-    <FaInstagram className="cursor-pointer hover:opacity-75" />
-    <FaYoutube className="cursor-pointer hover:opacity-75" />
-    <FaTelegram className="cursor-pointer hover:opacity-75" />
-    <FaWhatsapp className="cursor-pointer hover:opacity-75" />
-    <FaTwitter className="cursor-pointer hover:opacity-75" />
-    <TbBrandThreads className="cursor-pointer hover:opacity-75" />
-    <FaCopyright className="cursor-pointer hover:opacity-75" />
-  </div>
-);
 
 export default Header;

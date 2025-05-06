@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Menu from "../shared/MenuBar";
 import ElectionResults from "./ElectionResults";
 import { GrPrevious } from "react-icons/gr";
 import WonParty from "./WonParty";
+import { GetElectionYear } from "../../../../api";
 
 export default function Election() {
   const [currentState, setCurrentState] = useState("");
@@ -42,6 +43,17 @@ export default function Election() {
     }
   };
 
+  const loadYears = async () => {
+    try {
+      const res = await GetElectionYear("MYAWR241227001");
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    loadYears();
+  }, []);
   return (
     <div>
       <Menu menuText={"चुनाव"} setSubcategory={setCurrentState} menu={[]} />
