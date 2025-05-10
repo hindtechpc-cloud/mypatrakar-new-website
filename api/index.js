@@ -41,6 +41,17 @@ export const GetElectionYear = async (election_poll_id) => {
       }
     );
   };
+  export const GetElectionPolls = async () => {
+    return await API.get(
+      "/election-poll",
+     
+      {
+        headers: {
+          'X-Custom-Token': "aaaaa",
+        }
+      }
+    );
+  };
   
 
 

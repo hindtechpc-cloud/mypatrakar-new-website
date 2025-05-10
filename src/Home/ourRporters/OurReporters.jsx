@@ -75,7 +75,6 @@ export default function OurReporters() {
                 <h2 className="mt-4 text-xl font-bold">सुधीर चौधरी</h2>
                 <p className="text-gray-700 font-medium">State Head</p>
                 <p className="text-red-600 font-semibold">Area: Delhi</p>
-
                 <div className="flex justify-center gap-2 mt-4">
                   <a
                     href="https://www.facebook.com"

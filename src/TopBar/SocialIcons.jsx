@@ -13,6 +13,7 @@ const SocialIcons = () => {
         console.log("API Response:", res);
         if (res?.data?.response) {
           setSocialLinks(res.data.response);
+          console.log("Social Links:", res.data.response);
         } else {
           console.warn("Invalid response format:", res);
         }
@@ -30,12 +31,20 @@ const SocialIcons = () => {
   };
 
   return (
-    <div className="flex space-x-3 text-xl">
+    <div className="flex flex-wrap gap-2 text-xl">
       {socialLinks.map((item, idx) => {
-        const IconComponent = iconMap[item.icon];
+        const iconName = item.icon?.trim();
+        const IconComponent = iconMap[iconName];
         const url = item?.url?.trim();
 
-        if (!IconComponent || !url) return null;
+        if (!IconComponent) {
+          console.warn(`Icon not found for: ${iconName}`);
+          return null;
+        }
+        if (!url) {
+          console.warn(`Invalid or empty URL for icon: ${iconName}`);
+          return null;
+        }
 
         return (
           <a
@@ -44,9 +53,9 @@ const SocialIcons = () => {
             target="_blank"
             rel="noopener noreferrer"
             title={item.name || "Social Link"}
-            className="hover:opacity-75 transition-opacity inline-block"
+            className="flex items-center justify-center  rounded-full  text-gray-200 hover:text-blue-500  transition-all duration-300 cursor-pointer"
           >
-            <IconComponent className="w-6 h-6 text-gray-200 hover:text-blue-500" />
+            <IconComponent className="w-6 h-6" />
           </a>
         );
       })}

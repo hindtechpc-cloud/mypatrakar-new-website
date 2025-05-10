@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { CgChevronUp } from "react-icons/cg";
 import { Link } from "react-router-dom";
-import { NewsContext } from "../../context/NewsContext";
+// import { NewsContext } from "../../context/NewsContext";
 import { MdOutlineAccessTime } from "react-icons/md";
-import { LanguageContext } from "../../context/LanguageContext";
+import { LanguageContext } from "../.../../context/LanguageContext";
 
 const MenuItem = ({ item, isMobile, activePath, handleMenuClick, toggleDropdown, dropdownOpen, mobileDropdownOpen, toggleMobileDropdown, FilteredNews, News }) => {
   const { language } = useContext(LanguageContext);

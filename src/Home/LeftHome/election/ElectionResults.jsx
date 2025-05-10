@@ -1,19 +1,23 @@
 import React from "react";
 import TopResultTable from "./TopResultTable";
 import image from "../../../assets/election.svg";
+
 export default function ElectionResults({ results }) {
-  const { red, green, orange } = results;
+  // Sort parties by seats won in descending order and get top 3
+  const topParties = [...results].sort((a, b) => parseInt(b.seats_won) - parseInt(a.seats_won)).slice(0, 3);
+
+  // Calculate total seats won by top 3 parties
+  const totalSeats = topParties.reduce((acc, party) => acc + parseInt(party.seats_won), 0);
 
   // Calculate degrees for each segment
-  const redAngle = (red / 100) * 360;
-  const greenAngle = ((red + green) / 100) * 360;
+  const angles = topParties.map((party) => (parseInt(party.seats_won) / totalSeats) * 360);
 
-  // Generate dynamic background
+  // Generate dynamic background for the pie chart
   const bgStyle = {
     background: `conic-gradient(
-      red 0deg ${redAngle}deg, 
-      green ${redAngle}deg ${greenAngle}deg, 
-      orange ${greenAngle}deg 360deg
+      red 0deg ${angles[0]}deg, 
+      green ${angles[0]}deg ${angles[0] + angles[1]}deg, 
+      orange ${angles[0] + angles[1]}deg 360deg
     )`,
   };
 
@@ -29,7 +33,7 @@ export default function ElectionResults({ results }) {
   };
 
   return (
-    <div className="flex sm:justify-between justify-center flex-wrap items-center  ">
+    <div className="flex sm:justify-between justify-center flex-wrap items-center">
       {/* Outer Circular Chart */}
       <div className="relative w-64 h-64 rounded-full shadow-lg">
         {/* Dynamic Pie Chart */}
@@ -48,28 +52,23 @@ export default function ElectionResults({ results }) {
           </p>
         </div>
 
-        {/* Dynamic Labels - Automatically Positioned */}
-        <div
-          className="absolute bg-white shadow-md rounded-full w-14 h-14 flex items-center justify-center text-black font-bold text-sm"
-          style={getLabelPosition(0, redAngle)}
-        >
-          {red}%
-        </div>
-        <div
-          className="absolute bg-white shadow-md rounded-full w-14 h-14 flex items-center justify-center text-black font-bold text-sm"
-          style={getLabelPosition(redAngle, greenAngle - redAngle)}
-        >
-          {green}%
-        </div>
-        <div
-          className="absolute bg-white shadow-md rounded-full w-14 h-14 flex items-center justify-center text-black font-bold text-sm"
-          style={getLabelPosition(greenAngle, 360 - greenAngle)}
-        >
-          {orange}%
-        </div>
+        {/* Dynamic Labels for Top 3 Parties */}
+        {topParties.map((party, index) => (
+          <div
+            key={index}
+            className="absolute bg-white shadow-md rounded-full w-14 h-14 flex items-center justify-center text-black font-bold text-sm"
+            style={getLabelPosition(
+              angles.slice(0, index).reduce((a, b) => a + b, 0),
+              angles[index]
+            )}
+          >
+            {((parseInt(party.seats_won) / totalSeats) * 100).toFixed(2)}%
+          </div>
+        ))}
       </div>
+
       <div className="w-1/2">
-        <TopResultTable results={results} />
+        <TopResultTable results={topParties} />
       </div>
     </div>
   );

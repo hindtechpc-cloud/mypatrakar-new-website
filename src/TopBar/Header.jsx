@@ -85,7 +85,7 @@ const Header = () => {
             <img src={logo1} alt={"MyPatrakar Logo"} className="w-full" />
           </div>
           <div className="w-28">
-            <img src={logo2} alt={"MyPatrakar Logo"} className="w-full" />
+            <img src={webTheme["web-logo"]} alt={"MyPatrakar Logo"} className="w-full" />
           </div>
         </div>
       )}
@@ -107,13 +107,13 @@ const Header = () => {
         {/* <div id="google_translate_element" className="hidden "></div> */}
 
         {/* Social Media & Advertisement */}
-        <div className="flex flex-wrap items-center space-x-8">
+        <div className="flex items-center justify-center gap-5">
           <SocialIcons />
-          {!urls.includes(location.pathname) && (
+          {/* {!urls.includes(location.pathname) && (
             <span className="text-sm mt-2 md:mt-0 cursor-pointer hover:underline">
               विज्ञापन के लिए संपर्क करें
             </span>
-          )}
+          )} */}
         </div>
       </div>
     </div>
