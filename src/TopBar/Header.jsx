@@ -1,11 +1,9 @@
-// import { LanguageContext } from "../context/LanguageContext";
-// import { useLocation } from "react-router-dom";
-import React, { useContext, useState } from "react";
-
+import React, { useContext } from "react";
+import { useLocation } from "react-router-dom";
 import logo1 from "../assets/Ellipse.svg";
-import logo2 from "../assets/Mypatrakar2.png";
 import SocialIcons from "./SocialIcons";
 import { WebThemeContext } from "../context/ThemeContext";
+
 const languages = [
   { code: "hi", label: "हिंदी" },
   { code: "en", label: "English" },
@@ -18,108 +16,77 @@ const languages = [
 ];
 
 const Header = () => {
-  // const location = useLocation();
-  const {webTheme}=useContext(WebThemeContext);
-  const urls = [
+  const { webTheme } = useContext(WebThemeContext);
+  const location = useLocation();
+
+  const themeColorClass = webTheme["bg-color"] === "#e60000"
+    ? "bg-red-700"
+    : "";
+
+  const isInfoPage = [
     "/about-us",
     "/terms-and-condition",
     "/privacy-policy",
     "/contact-us",
     "/our-reporters",
     "/advertise-with-us",
-  ];
-  // const { setLanguage } = useContext(LanguageContext);
-  // useEffect(() => {
-  //   const loadGoogleTranslate = () => {
-  //     if (!window.googleTranslateElementInit) {
-  //       window.googleTranslateElementInit = () => {
-  //         if (window.google && window.google.translate) {
-  //           new window.google.translate.TranslateElement(
-  //             {
-  //               pageLanguage: "en",
-  //               includedLanguages: "hi,en,mr,pa,bn,gu,ta,te",
-  //               autoDisplay: false,
-  //             },
-  //             "google_translate_element"
-  //           );
-  //         }
-  //       };
-  //     }
-
-  //     const scriptExists = document.getElementById("google-translate-script");
-  //     if (!scriptExists) {
-  //       const script = document.createElement("script");
-  //       script.id = "google-translate-script";
-  //       script.src =
-  //         "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-  //       script.classList = "hidden";
-  //       script.async = true;
-  //       script.onload = () => {
-  //         if (window.googleTranslateElementInit) {
-  //           window.googleTranslateElementInit();
-  //         }
-  //       };
-  //       document.body.appendChild(script);
-  //     }
-  //   };
-
-  //   loadGoogleTranslate();
-  // }, []);
-
-  // const changeLanguage = (langCode) => {
-  //   const selectField = document.querySelector(".goog-te-combo");
-  //   if (selectField) {
-  //     selectField.value = langCode;
-  //     setLanguage(langCode);
-  //     selectField.dispatchEvent(new Event("change", { bubbles: false }));
-  //   }
-  // };
+  ].includes(location.pathname);
 
   return (
-    <div
-      className={`bg-${webTheme["bg-color"] == "#e60000" ? "red-700" : webTheme["bg-color"]} text-white py-2 px-4`}
+    <header
+      className={`w-full ${themeColorClass} text-white py-4 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300`}
+      style={{ 
+        backgroundColor: webTheme["bg-color"] !== "#e60000" ? webTheme["bg-color"] : undefined,
+      }}
     >
-      {urls.includes(location.pathname) && (
-        <div className=" flex flex-wrap justify-between  items-center">
-          <div className="w-14">
-            <img src={logo1} alt={"MyPatrakar Logo"} className="w-full" />
+      <div className="max-w-7xl mx-auto">
+        {isInfoPage && (
+          <div className="flex justify-between items-center mb-4">
+            <div className="w-14 hover:scale-105 transition-transform duration-200">
+              <img 
+                src={logo1} 
+                alt="Icon Logo" 
+                className="w-full drop-shadow-md" 
+              />
+            </div>
+            <div className="w-28 hover:scale-105 transition-transform duration-200">
+              <img 
+                src={webTheme["web-logo"]} 
+                alt="Main Logo" 
+                className="w-full drop-shadow-md" 
+              />
+            </div>
           </div>
-          <div className="w-28">
-            <img src={webTheme["web-logo"]} alt={"MyPatrakar Logo"} className="w-full" />
+        )}
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          {/* Language Selection */}
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 text-sm">
+            {languages.map(({ code, label }) => (
+              <button
+                key={code}
+                className="px-2 py-1 rounded-md hover:bg-white/20 hover:text-yellow-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                // onClick={() => changeLanguage(code)}
+                aria-label={`Change language to ${label}`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-        </div>
-      )}
-      <div className=" flex flex-wrap justify-between items-center">
-        {/* Language Selection */}
-        <div className="flex flex-wrap space-x-4 text-sm mb-2 md:mb-0">
-          {languages.map(({ code, label }) => (
-            <span
-              key={code}
-              // onClick={() => changeLanguage(code)}
-              className="cursor-pointer hover:underline hover:text-yellow-300"
-            >
-              {label}
-            </span>
-          ))}
-        </div>
 
-        {/* Google Translate Widget (Hidden) */}
-        {/* <div id="google_translate_element" className="hidden "></div> */}
-
-        {/* Social Media & Advertisement */}
-        <div className="flex items-center justify-center gap-5">
-          <SocialIcons />
-          {/* {!urls.includes(location.pathname) && (
-            <span className="text-sm mt-2 md:mt-0 cursor-pointer hover:underline">
-              विज्ञापन के लिए संपर्क करें
-            </span>
-          )} */}
+          {/* Social Icons and Contact */}
+          <div className="flex items-center gap-4">
+            <SocialIcons />
+            {!isInfoPage && (
+              <button className="text-sm px-3 py-1 bg-white/10 rounded-md hover:bg-white/20 hover:text-yellow-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
+                विज्ञापन के लिए संपर्क करें
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
-
-// Extracted Social Icons Component
 
 export default Header;

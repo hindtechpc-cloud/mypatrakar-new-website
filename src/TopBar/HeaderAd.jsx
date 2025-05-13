@@ -1,56 +1,144 @@
 import { useEffect, useRef, useState } from "react";
+import { FiAlertCircle, FiExternalLink } from "react-icons/fi";
 
-const HeaderAd = ({ adSlot = "3965429761", className = "", height = "200px" }) => {
+const HeaderAd = ({
+  adSlot = "3965429761",
+  className = "",
+  height = "200px",
+  maxWidth = "728px",
+  enableFallbackCTA = true,
+}) => {
   const adRef = useRef(null);
-  const [adLoaded, setAdLoaded] = useState(false);
+  const [adState, setAdState] = useState("loading"); // 'loading' | 'loaded' | 'error'
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    let timeout1, timeout2;
+    const resizeObserver = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      setDimensions({ width, height });
+    });
 
-    if (window.adsbygoogle && adRef.current) {
+    const loadAd = () => {
       try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        adRef.current.hasLoaded = true;
+        if (window.adsbygoogle && adRef.current) {
+          resizeObserver.observe(adRef.current);
 
-        // Check after 2s if ad got loaded
-        timeout1 = setTimeout(() => {
-          const html = adRef.current?.innerHTML || "";
-          if (html.trim().length > 0) {
-            setAdLoaded(true);
-          }
-        }, 2000);
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          adRef.current.hasLoaded = true;
+
+          // First check after 1s
+          const checkAdLoaded = setInterval(() => {
+            const html = adRef.current?.innerHTML || "";
+            if (html.trim().length > 10) {
+              // More robust check
+              setAdState("loaded");
+              clearInterval(checkAdLoaded);
+            }
+          }, 1000);
+
+          // Fallback after 8s
+          setTimeout(() => {
+            if (adState === "loading") {
+              setAdState("error");
+              clearInterval(checkAdLoaded);
+            }
+          }, 8000);
+
+          return () => {
+            clearInterval(checkAdLoaded);
+            resizeObserver.disconnect();
+          };
+        }
       } catch (e) {
         console.error("AdSense Error:", e);
+        setAdState("error");
       }
-    }
+    };
 
-    // Fallback timeout if still not loaded after 5s
-    timeout2 = setTimeout(() => {
-      if (!adLoaded) setAdLoaded(false);
-    }, 5000);
+    // Delay initial load by 500ms to prioritize content
+    const loadTimer = setTimeout(loadAd, 500);
 
     return () => {
-      clearTimeout(timeout1);
-      clearTimeout(timeout2);
+      clearTimeout(loadTimer);
+      resizeObserver.disconnect();
     };
   }, [adSlot]);
 
+  const getAspectRatioClass = () => {
+    if (!dimensions.width || !dimensions.height) return "";
+    const ratio = dimensions.width / dimensions.height;
+    if (ratio > 3) return "aspect-wide";
+    if (ratio < 0.8) return "aspect-tall";
+    return "";
+  };
+
   return (
-    <div className={`relative ${className} w-full max-w-[728px] mx-auto rounded`}>
-      {/* 👇 Shimmer + fallback */}
-      {!adLoaded && (
-        <div className="absolute inset-0 bg-gray-100 animate-pulse flex items-center justify-center rounded">
-          <span className="text-gray-500 font-semibold">📢 Advertise Here</span>
+    <div
+      className={`relative ${className} w-full mx-auto rounded-xl overflow-hidden shadow-sm bg-white/10`}
+      style={{ maxWidth }}
+      data-testid="header-ad-container"
+    >
+      {/* Loading State */}
+      {adState === "loading" && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 animate-pulse">
+            <p className="text-center"> Advertize with us</p>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="bg-white/90 p-3 rounded-lg shadow-md flex items-center space-x-2">
+                <div
+                  className="h-3 w-3 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                />{" "}
+                <div
+                  className="h-3 w-3 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                />
+                <div
+                  className="h-3 w-3 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* 👇 Real Ad */}
+      {/* Error/Fallback State */}
+      {adState === "error" && (
+        <div
+          className={`absolute inset-0 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-gray-100 ${getAspectRatioClass()}`}
+        >
+          <div className="bg-white p-4 rounded-full shadow-md mb-3">
+            <FiAlertCircle className="text-yellow-500 text-2xl" />
+          </div>
+          <h3 className="text-gray-700 font-medium text-lg mb-1">
+            Ad Couldn't Load
+          </h3>
+          <p className="text-gray-500 text-sm text-center mb-4 max-w-md">
+            We're having trouble loading this advertisement. You may have an ad
+            blocker enabled.
+          </p>
+
+          {enableFallbackCTA && (
+            <a
+              href="/advertise"
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg hover:shadow-md transition-all flex items-center space-x-2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Advertise With Us</span>
+              <FiExternalLink className="text-sm" />
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* Actual Ad */}
       <ins
         ref={adRef}
-        className="adsbygoogle z-0"
+        className="adsbygoogle block w-full h-full"
         style={{
-          display: "block",
-          width: "100%",
+          display: adState === "loaded" ? "block" : "none",
           height,
           minHeight: "90px",
         }}
@@ -58,7 +146,8 @@ const HeaderAd = ({ adSlot = "3965429761", className = "", height = "200px" }) =
         data-ad-slot={adSlot}
         data-ad-format="auto"
         data-full-width-responsive="true"
-      ></ins>
+        aria-hidden={adState !== "loaded"}
+      />
     </div>
   );
 };

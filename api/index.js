@@ -31,40 +31,62 @@ export const GetWebTheme = async (portal_id) => {
 
 export const GetElectionYear = async (election_poll_id) => {
     return await API.post(
-      "/election-years",
-      { election_poll_id }, // send as JSON object
-      {
-        headers: {
-          'X-Custom-Token': "aaaaa",
-          'Content-Type': 'application/json'
+        "/election-years",
+        { election_poll_id }, // send as JSON object
+        {
+            headers: {
+                'X-Custom-Token': "aaaaa",
+                'Content-Type': 'application/json'
+            }
         }
-      }
     );
-  };
-  export const GetElectionPolls = async () => {
+};
+export const GetElectionPolls = async () => {
     return await API.get(
-      "/election-poll",
-     
-      {
-        headers: {
-          'X-Custom-Token': "aaaaa",
+        "/election-poll",
+
+        {
+            headers: {
+                'X-Custom-Token': "aaaaa",
+            }
         }
-      }
     );
-  };
-  
+};
 
+export const GetHoroscope = async () => {
+    return await API.post(
+        "/get-daily-horoscope",
 
+        {
+            headers: {
+                'X-Custom-Token': "aaaaa",
+            }
+        }
+    );
+};
+export const GetLiveCrickeScore = async () => {
+    return await API.post(
+        "/live-cricket",
 
+        {
+            headers: {
+                'X-Custom-Token': "aaaaa",
+            }
+        }
+    );
+};
 
+export const GetLiveStockMarcket = async () => {
+    return await API.post(
+        "/live-stock-marcket",
 
-// export const GetEllectionResult = async (year) => await API.post("/election-result", { year }, {
-//     headers: {
-//         'Authorization': X_Custom_Token
-//     }
-// });
-
-
+        {
+            headers: {
+                'X-Custom-Token': "aaaaa",
+            }
+        }
+    );
+};
 
 export const NewsRoadMap = async () => await API.post("/news-road-map", {}, {
     headers: {
