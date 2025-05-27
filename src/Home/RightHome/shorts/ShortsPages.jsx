@@ -1,116 +1,135 @@
 import { FaArrowUp, FaArrowDown, FaShareAlt } from "react-icons/fa";
 import logo from "../../../assets/Ellipse.svg";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NewsContext } from "../../../context/NewsContext";
-import { shorts } from "./short.js";
 import { useNavigate } from "react-router-dom";
+import { GetShortsNews } from "../../../../api/index.js";
+import HtmlToPlainText from "../../../utils/HtmlToPlainText.jsx";
+import { WebThemeContext } from "../../../context/ThemeContext.jsx";
 
 const ShortsPages = () => {
   const { setNews } = useContext(NewsContext);
+  const { webTheme } = useContext(WebThemeContext);
   const navigate = useNavigate();
+
+  const [shorts, setShorts] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0); // only one short at a time
 
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/read-news/${news.title}`);
+    navigate(`/read-news/shorts/${news.short_news_id}`);
   };
 
-  // Use useRef to reference the scroll container
-  const scrollContainer = useRef(null);
-
   const handleScrollDown = () => {
-    // Scroll down by 500px
-    if (scrollContainer.current) {
-      scrollContainer.current.scrollBy({ top: 550, behavior: "smooth" });
+    if (currentIndex < shorts.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
     }
   };
 
   const handleScrollUp = () => {
-    // Scroll up by 500px
-    if (scrollContainer.current) {
-      scrollContainer.current.scrollBy({ top: -550, behavior: "smooth" });
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
     }
   };
 
-  return (
-    <div className=" fixed w-full flex gap-3 items-center justify-center mt-12">
-      <div
-        className="overflow-y-auto h-[530px] flex flex-col gap-10 hide-scroll py-5"
-        ref={scrollContainer} // Attach the ref to the scroll container
-      >
-        {shorts?.map((short, index) => {
-          return (
-            <div
-              key={index}
-              className="  bg-white rounded-3xl shadow-md shadow-gray-500 pb-3 relative  "
-            >
-              <div className="  bg-white rounded-2xl shadow-md shadow-gray-500 pb-3 relative  ">
-                <div
-                  key={index}
-                  className="w-[330px]  bg-white rounded-xl   relative border shadow-lg shadow-gray-400"
-                >
-                  <div className="relative rounded-md">
-                    <img
-                      src={logo || "https://picsum.photos/1070/580"}
-                      alt="Coldplay"
-                      className="w-12 h-12 rounded-full object-cover absolute "
-                    />
+  const loadShorts = async () => {
+    try {
+      const res = await GetShortsNews("MYAWR241227001");
+      // console.log("API Response:", res);
+      if (res) {
+        setShorts(res.data.response.news);
+      }
+    } catch (error) {
+      console.error("Error fetching shorts:", error);
+    }
+  };
 
-                    <img
-                      src={short.urlToImage || "https://picsum.photos/1070/580"}
-                      alt="PM Modi"
-                      className="w-full h-48 object-cover rounded-t-md"
-                    />
-                    <span className="flex items-end justify-end -mt-10 p-2 text-white font-bold text-xl">
-                      {`${index + 1}/${shorts.length}`}
-                    </span>
-                  </div>
-                  <div className="p-4">
-                    <h2 className="font-bold text-lg">{short.title}</h2>
-                    <p className="text-red-600 text-sm font-semibold">
-                      {short.location} | {short.publishedAt}
-                    </p>
-                    <p className="text-gray-600 text-sm mt-2">
-                      {short?.description?.length > 300
-                        ? short.description.slice(
-                            0,
-                            short.description.lastIndexOf(" ", 300)
-                          ) + "..."
-                        : short.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <button
-                          className="bg-red-600 text-white text-sm font-normal py-1 px-4 rounded-full mt-4"
-                          onClick={() => handleNewsContent(short)}
-                        >
-                          Read Full Article
-                        </button>
-                      </div>
-                      <div className="bottom-4">
-                        <button className="text-gray-500 hover:text-gray-600 font-thin">
-                          <FaShareAlt size={20} className="font-thin" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+  useEffect(() => {
+    loadShorts();
+  }, []);
+
+  const currentShort = shorts[currentIndex];
+  // console.log(currentShort);
+  return (
+    <div className="fixed w-full flex gap-3 items-center justify-center mt-12">
+      <div className="h-[530px] w-[350px] flex items-center justify-center">
+        {currentShort && (
+          <div className="bg-white rounded-2xl shadow-md shadow-gray-500 pb-3 relative w-full border">
+            <div className="relative rounded-md">
+              <img
+                src={
+                  webTheme["web-logo"]|| "https://picsum.photos/1070/580"
+                }
+                alt="Source"
+                className="w-12 h-12 rounded-full object-cover absolute m-2"
+              />
+              <img
+                src={
+                  currentShort.news_img || "https://picsum.photos/1070/580"
+                }
+                alt={currentShort.news_title}
+                className="w-full h-48 object-cover rounded-t-md"
+              />
+              <span className="flex items-end justify-end -mt-10 p-2 text-white font-bold text-xl">
+                {`${currentIndex + 1}/${shorts.length}`}
+              </span>
+            </div>
+
+            <div className="p-4">
+              <h2 className="font-bold text-lg">{currentShort.news_title}</h2>
+              <p className="text-red-600 text-sm font-semibold">
+                {currentShort.location} {currentShort.publishedAt}
+              </p>
+              <p className="text-gray-600 text-sm ">
+                {currentShort.news_des?.length > 300 ? (
+                  (
+                    <HtmlToPlainText htmlContent={currentShort.news_des} />
+                  ).slice(
+                    0,
+                    (
+                      <HtmlToPlainText htmlContent={currentShort.news_des} />
+                    ).lastIndexOf(" ", 300)
+                  ) + "..."
+                ) : (
+                  <HtmlToPlainText htmlContent={currentShort.news_des} />
+                )}
+              </p>
+
+              <div className="flex items-center justify-between ">
+                <button
+                  className="bg-red-600 text-white text-sm font-normal py-1 px-4 rounded-full"
+                  onClick={() => handleNewsContent(currentShort)}
+                >
+                  Read Full Article
+                </button>
+                <button className="text-gray-500 hover:text-gray-600 font-thin">
+                  <FaShareAlt size={20} />
+                </button>
               </div>
             </div>
-          );
-        })}
+          </div>
+        )}
       </div>
 
       {/* Scroll Up and Down Buttons */}
-      <div className=" top-1/3 flex flex-col gap-2 ">
+      <div className="flex flex-col gap-2">
         <button
-          className="bg-red-600 p-2 rounded-full text-white"
-          onClick={handleScrollUp} // Directly invoke the function here
+          className={`bg-red-600 p-2 rounded-full text-white ${
+            currentIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handleScrollUp}
+          disabled={currentIndex === 0}
         >
           <FaArrowUp size={20} />
         </button>
         <button
-          className="bg-red-600 p-2 rounded-full text-white"
-          onClick={handleScrollDown} // Directly invoke the function here
+          className={`bg-red-600 p-2 rounded-full text-white ${
+            currentIndex === shorts.length - 1
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`}
+          onClick={handleScrollDown}
+          disabled={currentIndex === shorts.length - 1}
         >
           <FaArrowDown size={20} />
         </button>

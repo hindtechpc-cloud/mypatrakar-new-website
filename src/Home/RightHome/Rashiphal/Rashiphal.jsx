@@ -1,82 +1,133 @@
 import { useEffect, useState } from "react";
 import Header from "../shared/Header";
-import axios from "axios";
 import Loader from "../../../utils/Loader";
-import generateRandomRashiphal from "./staticRashiphal";
+import { GetHoroscope } from "../../../../api";
+
+const zodiacSigns = [
+  { name: "Aries", symbol: "♈", color: "bg-red-100 text-red-600" },
+  { name: "Taurus", symbol: "♉", color: "bg-green-100 text-green-600" },
+  { name: "Gemini", symbol: "♊", color: "bg-yellow-100 text-yellow-600" },
+  { name: "Cancer", symbol: "♋", color: "bg-blue-100 text-blue-600" },
+  { name: "Leo", symbol: "♌", color: "bg-orange-100 text-orange-600" },
+  { name: "Virgo", symbol: "♍", color: "bg-purple-100 text-purple-600" },
+  { name: "Libra", symbol: "♎", color: "bg-pink-100 text-pink-600" },
+  { name: "Scorpio", symbol: "♏", color: "bg-red-100 text-red-600" },
+  { name: "Sagittarius", symbol: "♐", color: "bg-indigo-100 text-indigo-600" },
+  { name: "Capricorn", symbol: "♑", color: "bg-gray-100 text-gray-600" },
+  { name: "Aquarius", symbol: "♒", color: "bg-teal-100 text-teal-600" },
+  { name: "Pisces", symbol: "♓", color: "bg-blue-100 text-blue-600" },
+];
 
 export default function Rashiphal() {
-  const [posts, setPosts] = useState([]);
+  const [rashis, setRashis] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const fetchAllRashis = async () => {
+    try {
+      setLoading(true);
+      const allData = await Promise.all(
+        zodiacSigns.map(async (sign) => {
+          const res = await GetHoroscope(sign.name.toLowerCase());
+          return {
+            ...sign,
+            rashifal: res.data.data.prediction,
+            lucky_number: res.data.data.lucky_number,
+          };
+        })
+      );
+      setRashis(allData);
+    } catch (err) {
+      console.error("Error fetching rashifal:", err.message);
+      setError("Network error. Showing fallback rashiphal.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchRashiphal = async () => {
-      try {
-        const res = await axios.post(
-          "https://corsproxy.io/?https://json.freeastrologyapi.com/astrology/v1/horoscope/today",
-          {
-            day: "18",
-            month: "04",
-            year: "2000",
-            hour: "12",
-            min: "00",
-            lat: "28.6139",
-            lon: "77.2090",
-            tzone: "5.5",
-          },
-          {
-            headers: {
-              Authorization: "Bearer N8Y8g2w4NI3oAbBzkIAuK9phJhfRU9m66obIulOQ",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const result = res.data?.data || [];
-        if (result.length === 0) throw new Error("Empty result");
-        setPosts(result);
-      } catch (err) {
-        console.warn(
-          "Falling back to static rashiphal due to error:",
-          err.message
-        );
-        const randomRashi = generateRandomRashiphal();
-        setPosts(randomRashi);
-        setError("Showing randomly generated rashiphal due to network issue.");
-      }
-    };
-
-    fetchRashiphal();
+    fetchAllRashis();
   }, []);
 
   return (
-    <div className="my-2 mt-5 md:max-w-sm w-[300px] mx-auto py-4">
-      <Header text="Rashiphal" />
+    <div className="max-w-md w-full mx-auto p-4 font-sans">
+      {/* Header with Glow Effect */}
+      <div className="relative mb-6">
+        <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg blur opacity-20"></div>
+        <Header 
+          text="🌟 आज का राशिफल" 
+          className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"
+        />
+      </div>
+
+      {/* Error Message */}
       {error && (
-        <p className="text-center text-xs text-yellow-600 mb-2">{error}</p>
+        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded mb-4">
+          <p className="font-medium">⚠️ {error}</p>
+        </div>
       )}
-      <ul className="flex flex-col gap-4 items-center justify-center overflow-y-auto py-2 hide-scroll h-[500px]">
-        {posts.length > 0 ? (
-          posts.map((item, index) => (
-            <li key={index} className="w-full">
-              <article className="flex items-start gap-3 bg-white p-2 rounded-lg shadow">
-                <img
-                  src="https://bharatsamachartv.in/wp-content/uploads/2025/01/मेष-वृष-मिथुन-राशिफल_-220x150.jpg"
-                  alt="rashifal"
-                  className="w-20 h-20 object-cover rounded"
-                />
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-800">
-                    {item.rashi}
-                  </h3>
-                  <p className="text-xs text-gray-600">{item.rashifal}</p>
-                </div>
-              </article>
-            </li>
-          ))
-        ) : (
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center p-8">
           <Loader />
-        )}
-      </ul>
+          <p className="text-gray-600 mt-3">Loading your horoscope...</p>
+        </div>
+      )}
+
+      {/* Zodiac Signs Grid */}
+      {!loading && rashis.length > 0 && (
+        <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[600px]">
+          {rashis.map((item, index) => (
+            <div 
+              key={index}
+              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
+            >
+              {/* Zodiac Header */}
+              <div className={`flex items-center justify-between p-4 ${item.color}`}>
+                <div className="flex items-center">
+                  <span className="text-2xl mr-3">{item.symbol}</span>
+                  <h3 className="text-lg font-bold">{item.name}</h3>
+                </div>
+                <span className="bg-white rounded-full px-3 py-1 text-sm font-medium shadow-sm">
+                  🎲 {item.lucky_number}
+                </span>
+              </div>
+
+              {/* Horoscope Content */}
+              <div className="p-4">
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  {item.rashifal}
+                </p>
+                <div className="mt-3 flex justify-end">
+                  <span className="text-xs text-gray-500">
+                    {new Date().toLocaleDateString('en-IN', { 
+                      day: 'numeric', 
+                      month: 'long', 
+                      year: 'numeric' 
+                    })}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!loading && rashis.length === 0 && !error && (
+        <div className="text-center p-8">
+          <div className="text-4xl mb-3">🔮</div>
+          <h3 className="text-lg font-medium text-gray-700">Horoscope unavailable</h3>
+          <p className="text-gray-500 mt-1">Try refreshing later</p>
+          <button 
+            onClick={fetchAllRashis}
+            className="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-5 py-2 rounded-lg shadow-sm"
+          >
+            Refresh
+          </button>
+        </div>
+      )}
     </div>
   );
 }

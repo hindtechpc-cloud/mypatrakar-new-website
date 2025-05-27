@@ -1,111 +1,96 @@
-import {
-  FaEnvelope,
-  FaFacebook,
-  FaPen,
-  FaPhone,
-  FaWhatsapp,
-} from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { FaEnvelope, FaPhone, FaWhatsapp } from "react-icons/fa6";
+import { useEffect, useState } from "react";
+import { GetOurRepoterData } from "../../../api";
 
 export default function OurReporters() {
-  const reporters = [
-    {
-      name: "John Doe",
-      image: "https://picsum.photos/200/300",
-      description: "",
-    },
-    {
-      name: "John Doe",
-      image: "https://picsum.photos/200/300",
-      description: "",
-    },
-    {
-      name: "John Doe",
-      image: "https://picsum.photos/200/300",
-      description: "",
-    },
-    {
-      name: "John Doe",
-      image: "https://picsum.photos/200/300",
-      description: "",
-    },
-    {
-      name: "John Doe",
-      image: "https://picsum.photos/200/300",
-      description: "",
-    },
-  ];
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/feedback");
+  const [reporters, setReporters] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadData = async () => {
+    try {
+      const res = await GetOurRepoterData("MYAWR241227001");
+      const data = res?.data?.response;
+
+      // Ensure it is an array; if single object, convert to array
+      if (data) {
+        const result = Array.isArray(data) ? data : [data];
+        setReporters(result);
+      }
+    } catch (error) {
+      console.error("Failed to load reporter:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  if (loading) {
+    return <div className="p-10 text-center text-lg">Loading...</div>;
+  }
+
+  if (reporters.length === 0) {
+    return <div className="p-10 text-center text-lg">No reporters found.</div>;
+  }
+
   return (
-    <div className="bg-red-100 w-full min-h-screen py-5 px-4 md:px-10">
-      <div className=" mx-auto max-w-5xl">
-        {/* Header */}
-        <header className=" text-gray-950 p-4 rounded-t-xl flex items-center justify-between">
-          <h1 className="font-bold text-lg md:text-xl text-start">
-            OUR REPORTERS
-          </h1>
-          <button
-            className="border border-red-400 text-red-600 flex items-center justify-center gap-2 py-2 px-3 rounded"
-            onClick={handleClick}
-          >
-            <div>
-              <FaPen />
-            </div>
-            <div>Feedback</div>
-          </button>
-        </header>
-        {/* reporters 
- 
- */}
-        <div className="flex flex-wrap items-center md:justify-start justify-center gap-3">
-          {reporters.map((reporter, index) => {
+    <div className="bg-red-50 w-full min-h-screen py-10 px-4 md:px-10">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center text-red-800">
+          Our Reporters / Agencies
+        </h1>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {reporters.map((rep, index) => {
+            const {
+              name,
+              address,
+              owner_email,
+              owner_phone_no,
+              whatsapp_no
+            } = rep;
+
             return (
               <div
                 key={index}
-                className="max-w-sm bg-white rounded-2xl shadow-lg p-4 text-center border border-gray-200"
+                className="bg-white p-6 rounded-2xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-200"
               >
-                <img
-                  src="https://via.placeholder.com/150"
-                  alt="Profile"
-                  className="w-32 h-32 mx-auto rounded-full border-2 border-gray-300"
-                />
-                <h2 className="mt-4 text-xl font-bold">सुधीर चौधरी</h2>
-                <p className="text-gray-700 font-medium">State Head</p>
-                <p className="text-red-600 font-semibold">Area: Delhi</p>
-                <div className="flex justify-center gap-2 mt-4">
-                  <a
-                    href="https://www.facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-                  >
-                    <FaFacebook /> Facebook
-                  </a>
-                  <a
-                    href="mailto:example@gmail.com"
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-                  >
-                    <FaEnvelope /> Gmail
-                  </a>
-                </div>
-                <div className="flex justify-center gap-2 mt-2">
-                  <a
-                    href="https://wa.me/1234567890"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-                  >
-                    <FaWhatsapp /> WhatsApp
-                  </a>
-                  <a
-                    href="tel:+1234567890"
-                    className="bg-blue-400 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-                  >
-                    <FaPhone /> Call
-                  </a>
+                <h2 className="text-xl font-bold text-gray-800 text-center">
+                  {name}
+                </h2>
+                <p className="text-gray-600 text-sm mt-2 whitespace-pre-line text-center">
+                  {address}
+                </p>
+
+                <div className="flex flex-wrap justify-center gap-3 mt-5">
+                  {owner_email && (
+                    <a
+                      href={`mailto:${owner_email}`}
+                      className="bg-red-600 text-white px-4 py-2 rounded-lg text-xs flex items-center gap-2 hover:bg-red-700"
+                    >
+                      <FaEnvelope /> Email
+                    </a>
+                  )}
+                  {whatsapp_no && (
+                    <a
+                      href={`https://wa.me/+91${whatsapp_no}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-green-600 text-white px-4 py-2 rounded-lg text-xs flex items-center gap-2 hover:bg-green-700"
+                    >
+                      <FaWhatsapp /> WhatsApp
+                    </a>
+                  )}
+                  {owner_phone_no && (
+                    <a
+                      href={`tel:+91${owner_phone_no}`}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg text-xs flex items-center gap-2 hover:bg-blue-600"
+                    >
+                      <FaPhone /> Call
+                    </a>
+                  )}
                 </div>
               </div>
             );

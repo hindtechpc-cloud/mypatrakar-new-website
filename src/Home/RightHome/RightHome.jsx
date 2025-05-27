@@ -21,7 +21,7 @@ export default function RightHome() {
     <div>
       {url === "/" && <LiveTv />}
       <Trending />
-      <Youtube />
+      <Youtube  />
       <OwnState />
       <AddRightHome1 />
       <LiveCricket />
@@ -31,8 +31,8 @@ export default function RightHome() {
       <JoinChannels />
       {/* <StockMarcket /> */}
       {/* <CorporateActions/> */}
-      <StockInfo/>
-      <SourceWidget className="bg-red-900 mx-auto md:max-w-sm  w-[300px]  py-4 text-white shadow-lg  my-4 p-4 rounded-lg" />
+      <StockInfo />
+      {/* <SourceWidget className="bg-red-900 mx-auto md:max-w-sm  w-[300px]  py-4 text-white shadow-lg  my-4 p-4 rounded-lg" /> */}
       <PollWidget />
       <WeatherWidget />
       <AddRightHome1 />

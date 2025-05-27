@@ -1,26 +1,66 @@
+import { useEffect, useState } from "react";
+import { GetTermsAndConditionData } from "../../../api";
 import HtmlToPlainText from "../../utils/HtmlToPlainText";
 
 export default function TermsAndCondition() {
-  const text =
-    "<h3>These Terms of Use (“Terms”) govern your use of this website/ application owned and operated by the India Today Group (the “Company”), and the content and community services offered herein (“Service”).</h3> <h2>1. Acceptance</h2> <p>Please read these Terms carefully before using this site. If you do not agree to these Terms, please do not use thissite.</p> <h2>2. Registration and Termination</h2><p>To use a Service you may need to register and create an account with a username and a password. You may need to provide us with certain personal and other information. The Company may verify your e-mail address before your account can be used. You agree to provide truthful and complete information when you register for the Service and to keep that information updated. You must take due care to protect your username and password against misuse by others and promptly notify the Company about any misuse. You are personally responsible for any use of the Service. You may terminate your registration if you no longer wish to use the Service. After termination, you will no longer have access to the Service. The Company may terminate your registration or restrict your access to certain parts of the Service if the Company has reason to believe that you have breached these Terms.</p> <h2>3. Licenses</h2><p>The Company grants you a non-exclusive, non-transferable license, revocable, at the Company’s sole discretion, right to access and use the Service strictly in accordance with the Terms. Use of the Service does not grant you anyintellectual property rights in or to any information or content in the Service. As part of the Service, the Company may provide you with content developed by the Company or its licensors (“Content”). The Company grants you a non-exclusive license to use the Content for the purpose it is intended, unless otherwise defined in the Terms or an applicable purchase order. The Company, however, retains the right to withdraw the aforementioned license at its sole discretion.You are bound by any restrictions applicable to specific Content you obtain through the Service. Any license acquired to third-party Content is a binding agreement between you and the third-party Content provider. You only have such rights to the Content as are expressly granted herein. Any liability arising out of your use of the Content shall be solely to your account and the Company shall not take any responsibility for the same. As part of the Service, the Company may provide you with certain software developed by the Company or, licensors (“Software”). Your use of Software may be subject to separate terms and conditions that you must accept before using the Software. If there are no separate terms and conditions applicable to such Software, the following terms shall apply:i) the Company grants to you a limited, non-exclusive, non-transferable right to install and use the Software on your computer and/or mobile device in order to use the Service.ii) You may not distribute, transfer the right to use, modify, translate, reproduce, resell, sublicense, rent, lease, reverse engineer, or otherwise attempt to discover the source code of or make derivative works of the Software.iii) For open source licensed software, applicable open source license terms apply. You may be able to submit information or content (“Material”) to the Service. The Company does not claim ownership in your Material. Your submission of Material does not transfer ownership of rights of the Material to the Company. The Company is only transmitting the Material and is not responsible for editorial control over it. Any liability arising out of the use of your Material shall not be borne by the Company and you shall keep the Company indemnified and harmless in this regard. By submitting Material to the Service you grant the Company a world-wide, non-exclusive, sub-licensable, assignable, fully paid-up, royalty-free, perpetual and irrevocable license to use, copy, publicly perform, display, distribute in any media and modify the Material to incorporate the Material into other works, and to grant similar sub-licenses to the extent necessary for the Company to provide the Service. You are solely responsible for taking backup copies of the data you store on the Service, including Content you upload. If the Service is discontinued or canceled, the Company may permanently delete your data. The Company has no obligation to return data to you after the Service is discontinued or canceled.</p> <h2>4. Using the Service</h2> <p> You agree to: Comply with applicable laws, these Terms and good ethics and manners; Use the Service only for your personal, non-commercial purposes; Not submit unlawful, offensive, inaccurate, misleading, abusive, pornographic, harassing, libelous, blasphemous, defamatory, obscene, pedophilic, invasive of another’s privacy, hateful, racially or ethically objectionable, disparaging, relating to or encouraging money laundering or gambling, or otherwise inappropriate material; Not to upload or share any information that impersonates another person, threatens the unity, integrity, defence, security or sovereignty of India; Obtain any consents, permission or licenses that may be legally required for you to submit any Material; Respect the privacy of others; Not distribute or post spam, unreasonably large files, chain letters, pyramid schemes, viruses; and not use any other technologies or initiate other activities that may harm the Service, or the interest or property of the Service users. Not to use any automated systems or means to access, acquire, copy or monitor any part of the Service. Be responsible for the consequences related to the Material that you post. Report any abuse of these Terms at the e-mail ID provided below. The Company may but has no obligation to: Monitor or moderate any Content or Material;Remove any Material from the Service; and Restrict access to any part of the Service at any time in its sole discretion.</p> <h2> 5. Content</h2> <p>Before downloading or accessing any Content, please check whether the Content which you wish to access is restricted by age or marked as potentially ‘offensive’ or ‘explicit’. The Company shall not be responsible for any claims or offense caused or suffered by you accessing such Content. You agree: To use the Content only for your personal, non-commercial purposes; To use the Content in accordance with the restrictions set out in the applicable laws, additional terms, guidelines and policies or on the product pages that apply to that particular piece of the Content; Not to make copies, give, sell, resell, loan, rent, offer, broadcast, send, distribute, transfer, communicate to he public, reproduce, modify, display, perform, commercially exploit or make the Content available unless otherwise authorized in the applicable Terms and to advise the Company promptly of any such unauthorized use; Not to remove, circumvent, reverse engineer, decrypt, or otherwise alter or interfere with any applicable usage rules or attempt to circumvent digital rights management or copy protection features associated with the Content or any other technologies used to control the access to or use of the Content or its identifying information; Not to use any automated systems or means, except for those provided by us, for the selection or downloading of the Content; Not to give out your password or otherwise allow other people to access the Content. The restrictions on copying that apply to applicable media also apply to the Content accessed as part of this Service. The Content is owned and/or controlled by the Company and/or its respective licensors and is protected by intellectual property laws. The third party Content provider is solely responsible for any Content it provides, any warranties to the extent that such warranties have not been disclaimed and for any claims you may have relating to that Content or your use of that Content. However, the Company reserves the right to enforce the third party Content license terms against you as a third party beneficiary of those terms. The third party Content providers are third-party beneficiaries under these Terms and may enforce the provisions that directly concern the Content in which they have rights. The Company may be acting as an agent for third party Content provider in providing the Content to you. The Company is not a party to the transaction between you and the third party Content provider for such Content.</p>                                                                                             ";
+  const [termsData, setTermsData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const res = await GetTermsAndConditionData("MYAWR241227001");
+        console.log(res.data.response);
+        if (res) {
+          setTermsData(res.data.response);
+        } else {
+          console.error("Failed to fetch Terms and Conditions data");
+        }
+      } catch (error) {
+        console.error("Error fetching Terms and Conditions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <div className="bg-red-100 w-full min-h-screen py-5 px-4 md:px-10">
       <div className="bg-gray-50 rounded-xl shadow-lg mx-auto max-w-4xl">
         {/* Header */}
-        <header className="bg-red-500 text-gray-50 p-4 rounded-t-xl">
-          <h1 className="font-bold text-lg md:text-xl text-start">
-            <span className="block md:inline">MyPatrakar:</span>{" "}
-            <span className="block md:inline">Terms & Conditions</span>
+        <header className="bg-red-500 text-gray-50 p-4 rounded-t-xl flex items-center gap-3">
+          {/* {termsData?.page_icon_url && (
+            <img
+              src={termsData.page_icon_url}
+              alt="icon"
+              className="w-8 h-8 rounded bg-white p-1"
+            />
+          )} */}
+          <h1 className="font-bold text-lg md:text-xl">
+            {termsData?.title || "Terms & Conditions"}
           </h1>
         </header>
 
         {/* Content Section */}
         <div className="flex flex-col w-full items-start justify-start p-5">
-          <HtmlToPlainText
-            htmlContent={text}
-            className="text-gray-800 text-sm md:text-base leading-relaxed"
-          />
+          {loading ? (
+            <p className="text-gray-500 text-sm">Loading...</p>
+          ) : termsData ? (
+            <>
+              <HtmlToPlainText
+                htmlContent={termsData.content}
+                className="text-gray-800 text-sm md:text-base leading-relaxed"
+              />
+              <p className="text-sm text-gray-400 mt-4">
+                Last updated:{" "}
+                {new Date(termsData.date).toLocaleDateString()}
+              </p>
+            </>
+          ) : (
+            <p className="text-red-500 text-sm">Failed to load content.</p>
+          )}
         </div>
       </div>
     </div>

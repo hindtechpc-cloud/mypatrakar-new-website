@@ -1,13 +1,13 @@
 import { useState } from "react";
 import whatsapp from "../../assets/whatsapp.svg";
+import { AdvertiseWithUsApi } from "../../../api";
+import toast from "react-hot-toast";
 
 export default function AdvertiseWithUs() {
-  const [advertise, setAdvertise] = useState("");
+  const [advertise, setAdvertise] = useState(""); // This maps to `short_description`
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [description, setDescription] = useState("");
-
-  const [formData, setFormData] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,24 +17,43 @@ export default function AdvertiseWithUs() {
     if (name === "description") setDescription(value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newFormData = {
-      advertise,
+
+    // Optional frontend validation
+    if (!name || !contact || !description) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    const payload = {
+      user_id: "MYAU30042025001", // Use real user_id
+      user_type: "0", // Change if needed
+      short_description: advertise || null,
       name,
-      contact,
+      ContactNumber: contact,
       description,
     };
-    setFormData([...formData, newFormData]); // Push new data into the array
-    console.log(formData); // Log the form data (optional)
-    setAdvertise("");
-    setName("");
-    setContact("");
-    setDescription("");
+
+    try {
+      const res = await AdvertiseWithUsApi(payload);
+      if (res) {
+        toast.success("Query raised successfully");
+        setAdvertise("");
+        setName("");
+        setContact("");
+        setDescription("");
+      } else {
+        toast.error("Something went wrong. Try again!");
+      }
+    } catch (error) {
+      toast.error("Submission failed. Please check the details.");
+      console.log("Submission Error:", error);
+    }
   };
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = contact || "9170446729"; // If user doesn't provide contact, default to the given number
+    const phoneNumber = contact || "9170446729";
     window.open(`https://wa.me/${phoneNumber}`, "_blank");
   };
 
@@ -47,41 +66,32 @@ export default function AdvertiseWithUs() {
         </header>
 
         <div className="p-6 space-y-6">
-          {/* Raise Query Section */}
           <div className="bg-gray-100 p-4 rounded-lg">
             <h2 className="text-lg font-semibold">Raise a Query</h2>
           </div>
 
           {/* Form Section */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Advertising Query */}
             <div>
-              <label
-                htmlFor="advertise"
-                className="block text-gray-600 text-sm font-medium mb-2"
-              >
+              <label htmlFor="advertise" className="block text-gray-600 text-sm font-medium mb-2">
                 What do you want to advertise for?
               </label>
               <select
                 id="advertise"
                 name="advertise"
-                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600 focus:ring-red-500 focus:border-red-500"
+                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600"
                 value={advertise}
                 onChange={handleChange}
               >
                 <option value="">Select an option</option>
-                <option value="product">Selling a product</option>
-                <option value="service">Offering a service</option>
-                <option value="other">Other</option>
+                <option value="Selling a product">Selling a product</option>
+                <option value="Offering a service">Offering a service</option>
+                <option value="Other">Other</option>
               </select>
             </div>
 
-            {/* Name */}
             <div>
-              <label
-                htmlFor="name"
-                className="block text-gray-600 text-sm font-medium mb-2"
-              >
+              <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
                 Name
               </label>
               <input
@@ -89,18 +99,14 @@ export default function AdvertiseWithUs() {
                 name="name"
                 type="text"
                 placeholder="Enter your name"
-                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600 focus:ring-red-500 focus:border-red-500"
+                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600"
                 value={name}
                 onChange={handleChange}
               />
             </div>
 
-            {/* Contact Number */}
             <div>
-              <label
-                htmlFor="contact"
-                className="block text-gray-600 text-sm font-medium mb-2"
-              >
+              <label htmlFor="contact" className="block text-gray-600 text-sm font-medium mb-2">
                 Contact Number
               </label>
               <input
@@ -108,18 +114,14 @@ export default function AdvertiseWithUs() {
                 name="contact"
                 type="text"
                 placeholder="Enter your contact number"
-                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600 focus:ring-red-500 focus:border-red-500"
+                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600"
                 value={contact}
                 onChange={handleChange}
               />
             </div>
 
-            {/* Description */}
             <div>
-              <label
-                htmlFor="description"
-                className="block text-gray-600 text-sm font-medium mb-2"
-              >
+              <label htmlFor="description" className="block text-gray-600 text-sm font-medium mb-2">
                 Description
               </label>
               <textarea
@@ -127,17 +129,16 @@ export default function AdvertiseWithUs() {
                 name="description"
                 placeholder="Enter a brief description"
                 rows="4"
-                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600 focus:ring-red-500 focus:border-red-500"
+                className="block w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-600"
                 value={description}
                 onChange={handleChange}
               ></textarea>
             </div>
 
-            {/* Submit Button */}
             <div className="text-center flex items-center justify-center mx-auto w-1/3">
               <button
                 type="submit"
-                className="bg-red-500 hover:bg-red-600 w-full text-white font-bold py-2 px-6 rounded-lg transition duration-300"
+                className="bg-red-500 hover:bg-red-600 w-full text-white font-bold py-2 px-6 rounded-lg"
               >
                 Submit
               </button>
@@ -146,25 +147,18 @@ export default function AdvertiseWithUs() {
 
           {/* OR Section */}
           <div className="flex items-center justify-center my-4">
-          <div className="bg-gray-200 w-full h-[1px]"/>
-            <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">
-                
-              OR
-              <hr />
-            </span>
-            <div className="bg-gray-200 w-full h-[1px]"/>
+            <div className="bg-gray-200 w-full h-[1px]" />
+            <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">OR</span>
+            <div className="bg-gray-200 w-full h-[1px]" />
           </div>
 
           {/* WhatsApp Section */}
           <div
-            className=" mx-auto w-1/3 flex items-center justify-center border border-green-500 py-2  px-3
-            rounded-lg hover:bg-green-50 transition duration-300 cursor-pointer"
+            className="mx-auto w-1/3 flex items-center justify-center border border-green-500 py-2 px-3 rounded-lg hover:bg-green-50 cursor-pointer"
             onClick={handleWhatsAppClick}
           >
             <img src={whatsapp} alt="WhatsApp" className="w-8 h-8 mr-3" />
-            <span className="text-green-600 font-bold text-lg">
-              WhatsApp Us
-            </span>
+            <span className="text-green-600 font-bold text-lg">WhatsApp Us</span>
           </div>
         </div>
       </div>

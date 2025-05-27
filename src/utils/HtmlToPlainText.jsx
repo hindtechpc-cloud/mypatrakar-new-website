@@ -1,12 +1,12 @@
 import React from "react";
 import { FaExternalLinkAlt } from "react-icons/fa"; // Example icon for links
 
-const convertNodeToJSX = (node, id) => {
+const convertNodeToJSX = (node, id,style) => {
   if (node.nodeType === Node.TEXT_NODE) {
     return node.textContent;
   }
 
-  const tag = node.tagName.toLowerCase();
+  const tag = node?.tagName?.toLowerCase();
   const children = Array.from(node.childNodes).map((child) =>
     convertNodeToJSX(child, id)
   );
@@ -30,7 +30,7 @@ const convertNodeToJSX = (node, id) => {
     case "h3":
       return <h3 className={styles.h2}>{children}</h3>;
     case "p":
-      return <p className={styles.p}>{children}</p>;
+      return <p className={styles.p} style={style}>{children}</p>;
     case "li":
       return (
         <li key={Math.random() * 10 + id} className={styles.li}>
@@ -62,14 +62,14 @@ const convertNodeToJSX = (node, id) => {
 };
 
 // Main component
-export default function HtmlToPlainText({ htmlContent, id }) {
+export default function HtmlToPlainText({ htmlContent, id,style }) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlContent, "text/html");
   const body = doc.body;
 
   const elements = Array.from(body.childNodes).map((node) =>
-    convertNodeToJSX(node, id)
+    convertNodeToJSX(node, id,style)
   );
 
-  return <div className="container mx-auto px-4 py-8">{elements}</div>;
+  return <div className="container mx-auto px-4 py-8" style={style}>{elements}</div>;
 }

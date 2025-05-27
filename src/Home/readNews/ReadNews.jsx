@@ -9,6 +9,7 @@ import OwnState from "../LeftHome/OwnState/OwnState";
 import VideoGallery from "./videos/VideoGallery";
 import { articlesCard } from "../search/news";
 import HeaderAd from "../../TopBar/HeaderAd";
+import TotalCommnets from "./feedback/TotalComments";
 
 export default function ReadNews() {
   return (
@@ -21,7 +22,7 @@ export default function ReadNews() {
           height={"200px"}
         />
         <Feedback />
-
+        <TotalCommnets />
         <NewsFeed newsCard={articlesCard} />
 
         <NewsAppAd />

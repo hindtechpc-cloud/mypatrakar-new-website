@@ -1,16 +1,55 @@
+import { useEffect, useState } from "react";
+import { GetAboutUsData } from "../../../api";
 import HtmlToPlainText from "../../utils/HtmlToPlainText";
 
-const text ="<p>uhweiufherihferw;o  Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta iusto asperiores fugit libero molestias sed distinctio! Culpa dolorum, excepturi molestias cumque eaque dolorem deleniti fugit dicta itaque maiores laborum expedita uhweiufherihferw;o  Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta iusto asperiores fugit libero molestias sed distinctio! Culpa dolorum, excepturi molestias cumque eaque dolorem deleniti fugit dicta itaque maiores laborum expedita.</p> <p>uhweiufherihferw;o  Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta iusto asperiores fugit libero molestias sed distinctio! Culpa dolorum, excepturi molestias cumque eaque dolorem deleniti fugit dicta itaque maiores laborum expedita uhweiufherihferw;o  Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta iusto asperiores fugit libero molestias sed distinctio! Culpa dolorum, excepturi molestias cumque eaque dolorem deleniti fugit dicta itaque maiores laborum expedita.</p> <p>uhweiufherihferw;o  Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta iusto asperiores fugit libero molestias sed distinctio! Culpa dolorum, excepturi molestias cumque eaque dolorem deleniti fugit dicta itaque maiores laborum expedita uhweiufherihferw;o  Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta iusto asperiores fugit libero molestias sed distinctio! Culpa dolorum, excepturi molestias cumque eaque dolorem deleniti fugit dicta itaque maiores laborum expedita.</p>";
 export default function AboutMypatrakar() {
+  const [aboutData, setAboutData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data on mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const res = await GetAboutUsData("MYAWR241227001");
+        console.log(res.data.response)
+        if (res) {
+          setAboutData(res.data.response);
+        } else {
+          console.error("Failed to fetch About Us data");
+        }
+      } catch (error) {
+        console.error("Error fetching About Us data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
   return (
-    <div className="">
-      <h1 className="text-gray-900 text-center font-bold font-sans text-xl mt-5">
-        {" "}
-        About MyPatrakar
+    <div className="p-4 md:p-8">
+      <h1 className="text-gray-900 text-center font-bold text-2xl mt-5">
+        {aboutData?.title || "About MyPatrakar"}
       </h1>
-      <div className="flex flex-col w-full items-start justify-start">
-        <HtmlToPlainText htmlContent={text} className=" mb-5" />
-      </div>
+
+      {loading ? (
+        <p className="text-center mt-4 text-gray-500">Loading...</p>
+      ) : aboutData ? (
+        <div className="flex flex-col w-full items-start justify-start mt-6">
+          <HtmlToPlainText
+            htmlContent={aboutData.content}
+            className="mb-5 text-gray-700 text-base leading-relaxed"
+          />
+          <p className="text-sm text-gray-400 mt-2">
+            Last updated: {new Date(aboutData.date).toLocaleDateString()}
+          </p>
+        </div>
+      ) : (
+        <p className="text-center text-red-500 mt-4">
+          Unable to load About Us content.
+        </p>
+      )}
     </div>
   );
 }

@@ -15,16 +15,17 @@ export default function NewsFeed({ newsCard }) {
   return (
     <div>
       <div className="flex flex-col mt-10 items-start justify-center gap-5">
-        {newsCard.length>0?newsCard?.slice(start, end)?.map((card, index) => (
-          <div key={index} className={card.className}>
+        {newsCard?.length>0?newsCard?.slice(start, end)?.map((card, index) => (
+          <div key={index} className={newsCard?.className}>
             <NewsCard
               className="md:flex flex-1 items-start gap-4 max-w-4xl mx-auto"
               classNameToImage="md:w-52 md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
               classNameForContent="md:w-2/3 w-full "
-              image={card?.urlToImage}
-              ctaText={card?.category}
-              title={card?.title}
-              description={card?.content}
+              image={card?.news_img_url}
+              newsId={card?.news_id}
+              ctaText={card?.news_category_name || "Read More"}
+              title={card?.news_headline}
+              description={card?.news_description_html}
               news={card}
             />
           </div>

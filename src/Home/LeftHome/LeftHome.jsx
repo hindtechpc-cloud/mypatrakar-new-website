@@ -18,6 +18,9 @@ export default function LeftHome() {
     ];
     setLayoutIds(fetchedLayout);
   }, []);
+
+
+  
   return (
     <div className="w-full">
       {layoutIds.map((id, index) => {

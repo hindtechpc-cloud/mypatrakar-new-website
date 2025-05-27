@@ -9,7 +9,7 @@ export default function Election() {
   const [currentYear, setCurrentYear] = useState();
   const [state, setCurrentState] = useState();
   const [polls, setPolls] = useState([]);
-  const [pollIndex, setPollIndex] = useState(0);
+  const [pollIndex, setPollIndex] = useState(1);
   const [years, setYears] = useState([]);
   const [parties, setParties] = useState([]);
   const [topThreeParties, setTopThreeParties] = useState([]);

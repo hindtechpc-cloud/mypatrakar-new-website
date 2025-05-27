@@ -31,7 +31,7 @@ const PostsListWidget = () => {
   const navigate = useNavigate();
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/readNews/${news.title}`);
+    navigate(`/read-news/${news.title}`);
   };
   return (
     <div className="w-[300px] ">

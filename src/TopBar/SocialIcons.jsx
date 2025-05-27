@@ -36,6 +36,20 @@ const SocialIcons = () => {
     ...TbIcons,
   };
 
+  const colorMap = {
+    FaFacebook: "#1877F2",
+    FaInstagram: "#E1306C",
+    FaTwitter: "#1DA1F2",
+    FaLinkedin: "#0077B5",
+    FaYoutube: "#FF0000",
+    FaWhatsapp: "#25D366",
+    FaPinterest: "#BD081C",
+    FaTelegram: "#0088cc",
+    FaGithub: "#333",
+    FaTiktok: "#010101",
+    TbWorld: "#0A66C2", // Optional custom
+  };
+
   if (isLoading) {
     return (
       <div className="flex gap-3 animate-pulse">
@@ -69,6 +83,7 @@ const SocialIcons = () => {
         const iconName = item.icon?.trim();
         const IconComponent = iconMap[iconName];
         const url = item?.url?.trim();
+        const brandColor = colorMap[iconName];
 
         if (!IconComponent || !url) return null;
 
@@ -82,16 +97,26 @@ const SocialIcons = () => {
             className="
               flex items-center justify-center
               
-               
               rounded-full
-              hover:text-blue-500 dark:hover:text-blue-400
               transition-all duration-300
               transform hover:scale-110
               focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50
+              text-gray-700 dark:text-gray-300
             "
             aria-label={`Visit ${item.name || "social profile"}`}
           >
-            <IconComponent className="w-5 h-5" />
+            <IconComponent
+              className="w-5 h-5"
+              style={{
+                transition: "color 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (brandColor) e.currentTarget.style.color = brandColor;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "";
+              }}
+            />
           </a>
         );
       })}

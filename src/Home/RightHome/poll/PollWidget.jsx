@@ -1,80 +1,273 @@
-import { useState } from "react";
+// import { useEffect, useState } from "react";
+// import Header from "../shared/Header";
+// import { getPollByCategoryId, getPollsIds } from "../../../../api";
+
+// export const PollWidget = () => {
+//   const [pollIds, setPollIds] = useState([]);
+//   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [poll, setPoll] = useState(null);
+//   const [selectedOption, setSelectedOption] = useState(null);
+
+//   const handleVote = (optionId) => {
+//     if (selectedOption) return;
+
+//     setSelectedOption(optionId);
+
+//     const updatedOptions = poll.options.map((option) =>
+//       option.id === optionId ? { ...option, votes: option.votes + 1 } : option
+//     );
+
+//     const newTotalVotes = parseInt(poll.totalVotes) + 1;
+
+//     setPoll({
+//       ...poll,
+//       options: updatedOptions,
+//       totalVotes: newTotalVotes,
+//     });
+//   };
+
+//   const fetchPollData = async (categoryId) => {
+//     try {
+//       const res = await getPollByCategoryId(categoryId);
+//       const data = res?.data?.response?.[0];
+//       if (data) {
+//         const formattedPoll = {
+//           question: data.poll_title,
+//           options: data.options.map((opt, index) => ({
+//             id: index + 1,
+//             option: opt.option,
+//             votes: parseInt(opt.votes || 0),
+//           })),
+//           totalVotes: parseInt(data.total_poll_votes || 0),
+//         };
+//         setPoll(formattedPoll);
+//       }
+//     } catch (error) {
+//       console.error("Error fetching poll:", error);
+//     }
+//   };
+
+//   const loadPollIds = async () => {
+//     const res = await getPollsIds();
+//     const ids = res?.data?.response?.map((item) => item.category_id) || [];
+//     setPollIds(ids);
+
+//     if (ids.length > 0) {
+//       fetchPollData(ids[0]);
+//     }
+//   };
+
+//   const handleNextPoll = async () => {
+//     const nextIndex = currentIndex + 1;
+//     if (nextIndex < pollIds.length) {
+//       await fetchPollData(pollIds[nextIndex]);
+//       setCurrentIndex(nextIndex);
+//       setSelectedOption(null);
+//     }
+//   };
+
+//   useEffect(() => {
+//     loadPollIds();
+//   }, []);
+
+//   if (!poll) return <div className="text-center py-4">लोड हो रहा है...</div>;
+
+//   return (
+//     <div className="my-2 mt-5 font-sans md:max-w-sm w-[300px] mx-auto py-4">
+//       <Header text="Poll" />
+//       <div className="bg-gray-200 p-4 shadow-lg rounded-lg w-full">
+//         <h3 className="text-lg font-bold mb-3">{poll.question}</h3>
+
+//         <div className="space-y-2">
+//           {poll.options.map((option) => (
+//             <div key={option.id} className="flex items-center justify-between">
+//               <label className="flex items-center">
+//                 <input
+//                   type="radio"
+//                   name="poll"
+//                   className="mr-2"
+//                   disabled={!!selectedOption}
+//                   onChange={() => handleVote(option.id)}
+//                 />
+//                 {option.option}
+//               </label>
+//               <span className="text-sm text-gray-600">
+//                 {option.votes} वोट्स (
+//                 {((option.votes / poll.totalVotes) * 100).toFixed(1)}%)
+//               </span>
+//             </div>
+//           ))}
+//         </div>
+
+//         <p className="text-sm text-gray-500 mt-3">
+//           कुल वोट्स: {poll.totalVotes}
+//         </p>
+
+//         <button
+//           className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300 disabled:opacity-50"
+//           onClick={handleNextPoll}
+//           disabled={currentIndex >= pollIds.length - 1}
+//         >
+//           और भी
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+import { useEffect, useState } from "react";
 import Header from "../shared/Header";
+import { getPollByCategoryId, getPollsIds, submitVote } from "../../../../api";
 
 export const PollWidget = () => {
-    const initialPoll = {
-      id: 1,
-      question: "क्या केजरीवाल को जेल से सरकार चलानी चाहिए?",
-      options: [
-        {
-          id: 1,
-          option: "हां",
-          votes: 20,
-        },
-        {
-          id: 2,
-          option: "नहीं",
-          votes: 80,
-        },
-      ],
-      totalVotes: 100,
-    };
-  
-    const [poll, setPoll] = useState(initialPoll);
-    const [selectedOption, setSelectedOption] = useState(null);
-  
-    const handleVote = (optionId) => {
-      if (selectedOption) return; // Prevent multiple votes
-  
-      setSelectedOption(optionId);
-      const updatedOptions = poll.options.map((option) => {
-        if (option.id === optionId) {
-          return { ...option, votes: option.votes + 1 };
-        }
-        return option;
+  const [pollIds, setPollIds] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [poll, setPoll] = useState(null);
+  const [selectedOptionId, setSelectedOptionId] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const userId = "MYAU30042025001"; // ✅ Replace with dynamic user ID when available
+
+  const handleVoteChange = (optionId) => {
+    if (submitted) return;
+    setSelectedOptionId(optionId);
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedOptionId || !poll || !poll.question_id) return;
+// console.log(poll.question_id, selectedOptionId,userId);
+    try {
+      // ✅ Submit vote to backend
+      const res = await submitVote({
+        user_id: userId,
+        question_id: poll.question_id,
+        option_id: selectedOptionId,
       });
-  
-      const newTotalVotes = poll.totalVotes + 1;
-      setPoll({
-        ...poll,
+      // console.log("Submitted vote:", res);
+
+      // ✅ Update local UI
+      const updatedOptions = poll.options.map((option) =>
+        option.option_id === selectedOptionId
+          ? { ...option, votes: option.votes + 1 }
+          : option
+      );
+
+      setPoll((prev) => ({
+        ...prev,
         options: updatedOptions,
-        totalVotes: newTotalVotes,
-      });
-    };
-  
-    return (
-     <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
-        <Header text="Poll"  />
-         <div className="bg-gray-200 p-4 shadow-lg rounded-lg  w-full">
+        totalVotes: prev.totalVotes + 1,
+      }));
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Vote submit failed:", error);
+    }
+  };
+
+  const fetchPollData = async (categoryId) => {
+    try {
+      const res = await getPollByCategoryId(categoryId);
+      const data = res?.data?.response?.[0];
+      if (data) {
+        const formattedPoll = {
+          question_id: data.poll_id,
+          question: data.poll_title,
+          options: data.options.map((opt) => ({
+            option_id: opt.option_id,
+            option: opt.option,
+            votes: parseInt(opt.votes || 0),
+          })),
+          totalVotes: parseInt(data.total_poll_votes || 0),
+        };
+        setPoll(formattedPoll);
+      }
+    } catch (error) {
+      console.error("Error fetching poll:", error);
+    }
+  };
+
+  const loadPollIds = async () => {
+    const res = await getPollsIds();
+    const ids = res?.data?.response || [];
+    setPollIds(ids);
+    if (ids.length > 0) {
+      fetchPollData(ids[0].category_id);
+    }
+  };
+
+  const goToPoll = async (index) => {
+    if (index >= 0 && index < pollIds.length) {
+      setSelectedOptionId(null);
+      setSubmitted(false);
+      setCurrentIndex(index);
+      await fetchPollData(pollIds[index].category_id);
+    }
+  };
+
+  useEffect(() => {
+    loadPollIds();
+  }, []);
+
+  if (!poll) return <div className="text-center py-4">लोड हो रहा है...</div>;
+
+  return (
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[300px] mx-auto py-4">
+      <Header text="Poll" />
+      <div className="bg-gray-200 p-4 shadow-lg rounded-lg w-full">
         <h3 className="text-lg font-bold mb-3">{poll.question}</h3>
-  
+
         <div className="space-y-2">
           {poll.options.map((option) => (
-            <div key={option.id} className="flex items-center justify-between">
+            <div key={option.option_id} className="flex items-center justify-between">
               <label className="flex items-center">
                 <input
                   type="radio"
                   name="poll"
                   className="mr-2"
-                  disabled={!!selectedOption}
-                  onChange={() => handleVote(option.id)}
+                  disabled={submitted}
+                  checked={selectedOptionId === option.option_id}
+                  onChange={() => handleVoteChange(option.option_id)}
                 />
                 {option.option}
               </label>
               <span className="text-sm text-gray-600">
-                {option.votes} वोट्स ({((option.votes / poll.totalVotes) * 100).toFixed(1)}%)
+                {option.votes} वोट्स (
+                {poll.totalVotes > 0
+                  ? ((option.votes / poll.totalVotes) * 100).toFixed(1)
+                  : 0}
+                %)
               </span>
             </div>
           ))}
         </div>
-  
-        <p className="text-sm text-gray-500 mt-3">Total votes: {poll.totalVotes}</p>
-  
-        <button className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300">
-          और भी
-        </button>
+
+        <p className="text-sm text-gray-500 mt-3">कुल वोट्स: {poll.totalVotes}</p>
+
+        <div className="flex justify-between items-center gap-2 mt-4">
+          <button
+            className="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300 disabled:opacity-50"
+            onClick={() => goToPoll(currentIndex - 1)}
+            disabled={currentIndex <= 0}
+          >
+      Previous
+          </button>
+
+          <button
+            className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+            onClick={handleSubmit}
+            disabled={!selectedOptionId || submitted}
+          >
+           Submit
+          </button>
+
+          <button
+            className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300 disabled:opacity-50"
+            onClick={() => goToPoll(currentIndex + 1)}
+            disabled={currentIndex >= pollIds.length - 1}
+          >
+           Next
+          </button>
+        </div>
       </div>
-     </div>
-    );
-  };
-  
+    </div>
+  );
+};

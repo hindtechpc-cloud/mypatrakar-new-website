@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
+import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 // import { useDispatch } from "react-redux";
 // import { setSelectedNews } from "../../../redux/features/newsSlice";
 
@@ -9,6 +10,7 @@ const NewsCard = ({
   className,
   classNameToImage,
   classNameForContent = "",
+  newsId,
   image,
   ctaText,
   title,
@@ -21,14 +23,14 @@ const NewsCard = ({
     setNews(news);
     // dispatch(setSelectedNews(news)); // Save clicked news to Redux
 
-    navigate(`/read-news/${title}`);
+    navigate(`/read-news/${title}/${newsId}`);
   };
   return (
     <div className={`relative ${className}`}>
       {/* Image Section */}
       <div className={classNameToImage}>
         <img
-          src={image}
+          src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${image}`}
           alt="News"
           className="rounded-lg w-full h-full object-cover"
           // className={classNameToImage}
@@ -50,8 +52,8 @@ const NewsCard = ({
         </h2>
 
         {/* Description */}
-        <p className="text-sm md:text-sm text-gray-600 mb-3 ">
-          {description?.slice(0, 300)}...
+        <p className="text-sm md:text-sm text-gray-600 mb-3">
+          <HtmlToPlainText htmlContent={description} id={newsId} />
         </p>
       </div>
     </div>

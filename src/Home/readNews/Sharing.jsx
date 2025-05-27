@@ -16,7 +16,7 @@ export default function Sharing({ data }) {
         <FiMessageCircle className="w-5 h-5 text-blue-500" />
         <span className="text-xs">
           {data?.comments > 1000 ? data.comments / 1000 + "k" : data.comments}{" "}
-          Comments
+      
         </span>
       </div>
       <div className="flex items-center space-x-1">

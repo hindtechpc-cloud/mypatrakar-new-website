@@ -1,245 +1,230 @@
-// import React, { useEffect, useState } from "react";
-// import Header from "../shared/Header";
-
-// export default function LiveCricket() {
-//   const [score, setScore] = useState([]);
-//   const [error, setError] = useState(null);
-
-//   // Function to fetch live cricket scores
-//   const fetchScore = async () => {
-//     try {
-//       const response = await fetch(
-//         "https://api.cricapi.com/v1/currentMatches?apikey=90e6f74a-b95c-422d-a6ea-45d6b9daf7e5&offset=0"
-//       );
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! status: ${response.status}`);
-//       }
-//       const data = await response.json();
-
-//       if (data.data?.length === 0) {
-//         setScore("No Live Matches");
-//       } else if (data.status === "success") {
-//         setScore(data.data);
-//       } else {
-//         throw new Error("Failed to fetch live matches");
-//       }
-//     } catch (error) {
-//       console.error("Error fetching cricket scores:", error);
-//       setError(error.message || "Something went wrong!");
-//     }
-//   };
-
-//   // Fetch scores on component mount and set an interval for updates
-//   useEffect(() => {
-//     // fetchScore(); // Initial fetch
-
-//     const timeout = setTimeout(() => {
-//       // fetchScore();
-//     }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
-
-//     return () => clearTimeout(timeout); // Cleanup on unmount
-//   }, []);
-
-//   return (
-//   <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
-//     <Header text="Live Cricket" />
-//       <div className="overflow-y-auto h-[500px]">
-
-//       {/* Error Handling */}
-//       {error && (
-//         <div className="text-center text-red-600 text-lg">
-//           <p>Error: {error}</p>
-//         </div>
-//       )}
-
-//       {/* Display No Matches */}
-//       {score === "No Live Matches" && !error && (
-//         <h2 className="text-center text-xl text-red-600">
-//           No Live Matches Available
-//         </h2>
-//       )}
-
-//       {/* Display Live Matches */}
-//       {!error &&
-//         score !== "No Live Matches" &&
-//         Array.isArray(score) &&
-//         score.length > 0 &&
-//         score.map((item) => (
-//           <div
-//             key={item.id}
-//             className="bg-white rounded-lg border shadow-md p-2 mb-5  mx-auto"
-//           >
-//             {/* Match Details */}
-//             <h2 className="text-xl font-semibold text-gray-800">
-//               {item.name}
-//             </h2>
-//             <p className="text-sm text-gray-600">
-//               <strong>Date:</strong> {item.date}
-//             </p>
-//             <p className="text-sm text-gray-600">
-//               <strong>Match Type:</strong> {item.matchType}
-//             </p>
-//             <p className="text-sm text-gray-600">
-//               <strong>Venue:</strong> {item.venue}
-//             </p>
-//             <p className="text-sm text-gray-600">
-//               <strong>Status:</strong>{" "}
-//               <span
-//                 className={`${
-//                   item.status.includes("Live")
-//                     ? "text-green-600"
-//                     : "text-red-600"
-//                 }`}
-//               >
-//                 {item.status}
-//               </span>
-//             </p>
-
-//             {/* Team Details */}
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-//               {(item.teamInfo || item.teams)?.map((team) => (
-//                 <div
-//                   key={team.name}
-//                   className="flex items-center gap-4 bg-gray-50 rounded-lg p-4 shadow-sm"
-//                 >
-//                   <img
-//                     src={team.img}
-//                     alt={team.name}
-//                     className="w-12 h-12 rounded-full"
-//                   />
-//                   <div>
-
-//                     <p className="text-xs text-gray-600">
-//                       <strong>Short Name:</strong> {team.shortname}
-//                     </p>
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-
-//             {/* Score Table */}
-//             {item.score && (
-//               <div className="mt-6">
-//                 <h3 className="text-lg font-semibold text-gray-800">
-//                   Score Table
-//                 </h3>
-//                 <table className="w-full text-left border-collapse border border-gray-300 mt-2">
-//                   <thead>
-//                     <tr className="bg-blue-500 text-white">
-//                       <th className="border border-gray-300 px-2 py-2">
-//                         Inning
-//                       </th>
-//                       <th className="border border-gray-300 px-2 py-2">
-//                         Overs
-//                       </th>
-//                       <th className="border border-gray-300 px-2 py-2">
-//                         Runs
-//                       </th>
-//                       <th className="border border-gray-300 px-2 py-2">
-//                         Wickets
-//                       </th>
-//                     </tr>
-//                   </thead>
-//                   <tbody>
-//                     {item.score.map((s) => (
-//                       <tr key={s.inning} className="hover:bg-gray-100">
-//                         <td className="border border-gray-300 px-2 py-2">
-//                           {s.inning}
-//                         </td>
-//                         <td className="border border-gray-300 px-2 py-2">
-//                           {s.o}
-//                         </td>
-//                         <td className="border border-gray-300 px-2 py-2">
-//                           {s.r}
-//                         </td>
-//                         <td className="border border-gray-300 px-2 py-2">
-//                           {s.w}
-//                         </td>
-//                       </tr>
-//                     ))}
-//                   </tbody>
-//                 </table>
-//               </div>
-//             )}
-//           </div>
-//         ))}
-//     </div>
-//   </div>
-//   );
-// }
-
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import Header from "../shared/Header";
 import { GetLiveCrickeScore } from "../../../../api";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaMapMarkerAlt,
+  FaSync,
+  FaFire,
+} from "react-icons/fa";
+import { ImSpinner8 } from "react-icons/im";
+import { motion, AnimatePresence } from "framer-motion";
 
-const LiveCricket = () => {
+export default function LiveCricket() {
   const [matches, setMatches] = useState([]);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState("");
 
-  // Fetch data from backend
-  useEffect(() => {
-    const fetchMatches = async () => {
-      try {
-        const res = await GetLiveCrickeScore(); // 👈 change this URL
-        console.log(res)
-        // if (res.data.success) {
-          setMatches(res.data.data);
-        // } else {
-          // console.error("Failed to load matches:", res.data.message);
-        // }
-      } catch (error) {
-        console.error("Error fetching live matches:", error);
-      } finally {
-        setLoading(false);
+  const fetchLiveMatches = async () => {
+    try {
+      setLoading(true);
+      const res = await GetLiveCrickeScore();
+
+      if (res?.data?.data?.length > 0) {
+        setMatches(res.data.data);
+      } else {
+        setMatches([]);
       }
-    };
+      setLastUpdated(new Date().toLocaleTimeString());
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to fetch live matches");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchMatches();
+  useEffect(() => {
+    fetchLiveMatches();
+    const interval = setInterval(fetchLiveMatches, 30000); // Refresh every 30 sec
+    return () => clearInterval(interval);
   }, []);
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
-        🟢 Live & Recent Matches
-      </h2>
+    <div className="max-w-md w-full mx-auto p-4 font-sans overflow-x-hidden hover:overflow-x-hidden">
+      {/* Header with Glow Effect */}
 
-      {loading ? (
-        <p className="text-gray-500 text-sm">Loading matches...</p>
-      ) : matches.length === 0 ? (
-        <p className="text-gray-500 text-sm">No matches found.</p>
-      ) : (
-        matches.map((match) => (
-          <div key={match.match_id} className="mb-4 border-b pb-4">
-            <h3 className="font-semibold text-md text-blue-700">
-              {match.teams}
-            </h3>
-            <p className="text-sm text-gray-600 italic">{match.match_status}</p>
+      <Header text="Live Cricket" />
 
-            <div className="mt-2 space-y-1">
-              {match.score.innings.map((inning, i) => (
-                <div
-                  key={i}
-                  className="flex justify-between text-sm text-gray-800"
+      {/* Main Content */}
+      <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        {/* Loading State */}
+        {loading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center p-8"
+          >
+            <ImSpinner8 className="animate-spin text-blue-600 text-4xl mb-4" />
+            <p className="text-gray-600 font-medium">Fetching live scores...</p>
+            <p className="text-sm text-gray-400 mt-1">This won't take long</p>
+          </motion.div>
+        )}
+
+        {/* Error Message */}
+        {error && !loading && (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="p-6 text-center"
+          >
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+              <p className="font-medium text-red-600">Error Loading Data</p>
+              <p className="text-red-500 mt-1">{error}</p>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={fetchLiveMatches}
+                className="mt-3 bg-gradient-to-r from-red-500 to-orange-500 text-white px-5 py-2 rounded-lg shadow-sm transition-all"
+              >
+                Try Again
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* No Matches */}
+        {!error && !loading && matches.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="p-8 text-center"
+          >
+            <div className="inline-block p-4 bg-blue-50 rounded-full mb-3">
+              <FaCalendarAlt className="text-blue-400 text-3xl" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-700">No Live Matches</h3>
+            <p className="text-gray-500 mt-1">
+              Currently no matches being played
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              onClick={fetchLiveMatches}
+              className="mt-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2 rounded-lg shadow-sm transition-all"
+            >
+              Check Again
+            </motion.button>
+          </motion.div>
+        )}
+
+        {/* Live Matches */}
+        {!error && !loading && matches.length > 0 && (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="max-h-[600px] overflow-y-auto"
+          >
+            <AnimatePresence>
+              {matches.map((match) => (
+                <motion.div
+                  key={match?.match_id}
+                  variants={itemVariants}
+                  className="border-b border-gray-200 last:border-b-0 p-6 hover:bg-gray-50 transition-colors"
+                  whileHover={{ scale: 1.01 }}
+                  layout
                 >
-                  <span>{inning.team}</span>
-                  <span>
-                    {inning.runs}/{inning.wickets} ({inning.overs} ov)
-                  </span>
-                </div>
-              ))}
-            </div>
+                  {/* Match Header with Gradient */}
+                  <div className="flex justify-between items-start mb-4">
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 text-transparent bg-clip-text">
+                      {match.teams}
+                    </h2>
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full font-medium ${
+                        match.match_status.includes("Live")
+                          ? "animate-pulse bg-gradient-to-r from-green-500 to-emerald-500 text-white"
+                          : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {match.match_status}
+                    </span>
+                  </div>
 
-            <div className="mt-2 text-xs text-gray-500">
-              <div>📍 {match.venue}</div>
-              <div>
-                📅 {match.date} | 🕒 {match.match_time}
-              </div>
-            </div>
-          </div>
-        ))
-      )}
+                  {/* Match Info Grid */}
+                  <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 mb-5">
+                    <div className="flex items-center">
+                      <FaCalendarAlt className="mr-2 text-blue-400" />
+                      <span>{match.date}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <FaClock className="mr-2 text-blue-400" />
+                      <span>{match.match_time}</span>
+                    </div>
+                    <div className="col-span-2 flex items-start">
+                      <FaMapMarkerAlt className="mr-2 mt-0.5 text-blue-400" />
+                      <span className="text-gray-700">{match.venue}</span>
+                    </div>
+                  </div>
+
+                  {/* Scores with Modern Card */}
+                  {match.score?.innings?.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="mt-5"
+                    >
+                      <h3 className="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                        <span className="bg-blue-500 w-2 h-2 rounded-full mr-2"></span>
+                        Scorecard
+                      </h3>
+                      <div className="space-y-3">
+                        {match.score.innings.map((inning, index) => (
+                          <div
+                            key={index}
+                            className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
+                          >
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="font-medium text-gray-800">
+                                {inning.team}
+                              </span>
+                              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                {inning.overs} overs
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-end">
+                              <div>
+                                <span className="text-2xl font-bold text-gray-900">
+                                  {inning.runs}
+                                </span>
+                                <span className="text-gray-500">
+                                  /{inning.wickets}
+                                </span>
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Run Rate:{" "}
+                                {(inning.runs / inning.overs).toFixed(2)}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
-};
-
-export default LiveCricket;
+}

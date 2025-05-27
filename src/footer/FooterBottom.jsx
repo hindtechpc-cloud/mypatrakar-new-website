@@ -1,5 +1,6 @@
 import { BsInstagram } from "react-icons/bs";
 import { FaFacebook, FaPinterest, FaTelegram, FaTwitter, FaYoutube } from "react-icons/fa";
+import SocialIcons from "../TopBar/SocialIcons";
 
 export default function FooterBottom() {
   const currentYear = new Date().getFullYear();
@@ -17,24 +18,8 @@ export default function FooterBottom() {
         <div className="flex items-center space-x-4 mt-2 md:mt-0">
             <span className="text-gray-400 text-xs font-thin">Social Media</span>
           {/* Social Media Icons */}
-          <a href="#" className="hover:text-blue-500">
-            <FaFacebook />
-          </a>
-          <a href="#" className="hover:text-blue-500">
-            <FaTwitter />
-          </a>
-          <a href="#" className="hover:text-red-500">
-            <FaYoutube />
-          </a>
-          <a href="#" className="hover:text-red-500">
-            <FaPinterest />
-          </a>
-          <a href="#" className="hover:text-blue-500">
-            <FaTelegram />
-          </a>
-          <a href="#" className="hover:text-pink-600">
-            <BsInstagram />
-          </a>
+          <SocialIcons />
+          
 
 
           {/* Developer Info */}

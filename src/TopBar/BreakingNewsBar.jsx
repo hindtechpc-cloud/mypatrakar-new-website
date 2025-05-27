@@ -1,58 +1,107 @@
 import { useContext, useEffect, useState } from "react";
 import { WebThemeContext } from "../context/ThemeContext";
+import { getBreakingNews } from "../../api";
+import { Link } from "react-router-dom";
 
 const BreakingNewsBar = () => {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
-const {webTheme}=useContext(WebThemeContext);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date().toLocaleTimeString());
-    }, 1000);
+  const [newsItems, setNewsItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    // Clean up interval when component unmounts
-    return () => clearInterval(interval);
+  const { webTheme } = useContext(WebThemeContext);
+
+  // Live Clock Update (Optimized)
+  useEffect(() => {
+    let animationFrameId;
+    const updateClock = () => {
+      setTime(new Date().toLocaleTimeString());
+      animationFrameId = requestAnimationFrame(updateClock);
+    };
+    animationFrameId = requestAnimationFrame(updateClock);
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
-  const newsItems = [
-    "सीनियर गेंदबाज का खेलना मुश्किल",
-    "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'",
-    "सस्ते इंजेक्शन पर बड़ा फैसला",
-  ];
+
+  // Load Breaking News
+  useEffect(() => {
+    const loadBreakingNews = async () => {
+      try {
+        setLoading(true);
+        const res = await getBreakingNews("MYAWR241227001");
+
+        const response = res?.data?.response;
+        setNewsItems(Array.isArray(response) && response.length > 0
+          ? response
+          : [
+              { news_headline: "सीनियर गेंदबाज का खेलना मुश्किल", news_category_name: "sports", news_id: "1" },
+              { news_headline: "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'", news_category_name: "bollywood", news_id: "2" },
+              { news_headline: "सस्ते इंजेक्शन पर बड़ा फैसला", news_category_name: "health", news_id: "3" },
+            ]
+        );
+      } catch (err) {
+        console.error("Error loading breaking news:", err);
+        setNewsItems([
+          { news_headline: "सीनियर गेंदबाज का खेलना मुश्किल", news_category_name: "sports", news_id: "1" },
+          { news_headline: "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'", news_category_name: "bollywood", news_id: "2" },
+          { news_headline: "सस्ते इंजेक्शन पर बड़ा फैसला", news_category_name: "health", news_id: "3" },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBreakingNews();
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        className="bg-gray-500 rounded-lg text-white mx-0 sm:mx-2 md:mx-10 my-2 p-2 text-center"
+        style={{ backgroundColor: webTheme["bg-color"] || "#b91c1c" }}
+      >
+        Loading breaking news...
+      </div>
+    );
+  }
+
+  if (!newsItems || newsItems.length === 0) return null;
 
   return (
     <div
-      className={`bg-${webTheme["bg-color"] == "#e60000" ? "red-700" : webTheme["bg-color"]} rounded-l-lg rounded-r-lg text-white mx-0 sm:mx-2 md:mx-10 my-2`}
+      className="rounded-lg text-white mx-0 sm:mx-2 md:mx-10 my-2"
+      style={{ backgroundColor: webTheme["bg-color"] || "#b91c1c" }}
     >
-      <div className="flex items-center space-x-4 ">
-        {/* Breaking Label */}
-        {/* <div className="flex items-center rounded-r-sm bg-black px-3 py-1 text-xs md:text-sm font-bold rounded">
-          BREAKING
-        </div> */}
-        <div className="relative flex items-center rounded-l-lg bg-black h-full px-3 py-2 text-xs md:text-sm font-bold text-white rounded-r-sm">
+      <div className="flex items-center">
+        {/* BREAKING Label */}
+        <div className="relative flex items-center bg-black h-full px-3 py-2 text-xs md:text-sm font-bold text-white rounded-l-lg">
           <span>BREAKING</span>
-
-          {/* Right Arrow */}
           <div
             className="absolute h-full w-4 bg-black"
             style={{
               clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-              right: "-16px", // Adjust positioning to align with the button
+              right: "-16px",
             }}
-          ></div>
+          />
         </div>
 
         {/* News Ticker */}
         <div className="flex-1 overflow-hidden">
           <div className="whitespace-nowrap animate-marquee space-x-5 text-xs md:text-sm">
             {newsItems.map((news, index) => (
-              <span key={index} className="inline-block">
-                {news} <span className="mx-1 h-5 text-yellow-500">››</span>
-              </span>
+              <Link
+                key={index}
+                to={`/read-news/${news.news_category_name}/${news.news_id}`}
+                title={news.news_headline}
+                className="inline-block hover:text-yellow-300 transition-colors duration-200"
+              >
+                {news.news_headline}
+                <span className="mx-1 text-yellow-400">››</span>
+              </Link>
             ))}
           </div>
         </div>
 
         {/* Clock */}
-        <div className="bg-black px-3 rounded-r-lg py-2 text-xs md:text-sm font-bold text-white">
+        <div className="bg-black px-3 py-2 text-xs md:text-sm font-bold text-white rounded-r-lg">
           {time}
         </div>
       </div>

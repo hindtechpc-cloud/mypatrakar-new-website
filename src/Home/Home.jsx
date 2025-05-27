@@ -1,5 +1,5 @@
 import LeftHome from "./LeftHome/LeftHome";
-import Right from "./RightHome/Right";
+// import Right from "./RightHome/Right";
 import RightHome from "./RightHome/RightHome";
 
 export default function Home() {

@@ -30,6 +30,14 @@ export default function OwnState() {
       urlToImage: "https://picsum.photos/200/700",
     },
   ];
+
+  const loadNews=async()=>{
+    try {
+      // const res=await GetR
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const [hoverIndex, setHoverIndex] = useState(null); // State to track the hovered index
   const { setNews } = useContext(NewsContext);
   const navigate = useNavigate();

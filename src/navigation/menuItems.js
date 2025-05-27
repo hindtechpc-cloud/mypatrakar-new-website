@@ -175,3 +175,33 @@ export const menuItems = [
     icon: true,
   },
 ];
+
+
+
+export const transformMenuData = (backendData) => {
+  const menuMap = {};
+
+  backendData.forEach((item) => {
+    if (!item.parent) {
+      // Parent item (main menu)
+      menuMap[item.name] = {
+        name: item.name,
+        path: item.path,
+        icon: true,
+        subItems: []
+      };
+    }
+  });
+
+  backendData.forEach((item) => {
+    if (item.parent && menuMap[item.parent]) {
+      // Submenu
+      menuMap[item.parent].subItems.push({
+        name: item.name,
+        path: item.path
+      });
+    }
+  });
+
+  return Object.values(menuMap); // convert from object to array
+};

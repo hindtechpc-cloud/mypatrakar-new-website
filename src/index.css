@@ -1,9 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
 iframe.skiptranslate { 
     display: none !important;
   }
+  
   
   .goog-te-banner-frame { 
     display: none !important;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FooterMenu from "./footerMenu";
 import FooterFaceBook from "./FooterFaceBook";
 // import FaceBookClone from './FaceBookClone'
@@ -7,15 +7,49 @@ import PostsListWidget from "./PostsListWidget";
 import SourceWidget from "./SourceWidget";
 import FooterBottom from "./FooterBottom";
 import HeaderAd from "../TopBar/HeaderAd";
+import { GetBottomBannerAds } from "../../api";
 
 export default function Footer() {
+
+  const [topBanner, setTopBanner] = useState(null);
+    const [loadingBanner, setLoadingBanner] = useState(true);
+    const [bannerError, setBannerError] = useState(false);
+  
+    const loadTopBannerAds = async () => {
+      try {
+        setLoadingBanner(true);
+        setBannerError(false);
+  
+        const res = await GetBottomBannerAds("MYAWR241227001");
+  
+        // Check for valid structure
+        if (res) {
+          // console.log(res);
+          setTopBanner(res.data.response.top_banner);
+        } else {
+          // console.warn("Top banner structure not valid or images missing");
+          setBannerError(true);
+        }
+      } catch (error) {
+        console.log("Error loading top banner ads:", error);
+        setBannerError(true);
+      } finally {
+        setLoadingBanner(false);
+      }
+    };
+  
+    useEffect(() => {
+      loadTopBannerAds();
+    }, []);
   return (
-    <div>
+    <div className="">
+      
       <div className=" flex items-center justify-center mx-auto">
         {" "}
         <HeaderAd
           className="my-4 flex justify-center items-center bg-gray-300 rounded shadow 
              w-full h-[100px] sm:w-[728px] sm:h-[90px] md:w-[970px] mx-auto"
+             adData={topBanner}
         />
         {/* <Horoscope/> */}
       </div>
