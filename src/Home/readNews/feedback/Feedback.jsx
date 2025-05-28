@@ -288,9 +288,9 @@ export default function Feedback() {
 
     try {
       const payload = {
-        name: isAuthenticated ? user.user_name : formData.name,
-        email: isAuthenticated ? user.email : formData.email,
-        comment: formData.comment,
+        name: isAuthenticated ? user?.user_name : formData?.name,
+        email: isAuthenticated ? user.email : formData?.email,
+        comment: formData?.comment,
         news_id: newsId,
       };
 

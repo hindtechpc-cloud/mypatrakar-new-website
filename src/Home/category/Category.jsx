@@ -16,7 +16,7 @@ export default function Category() {
   const loadNewsByCategories = async () => {
     try {
       const res = await loadNewsByCategory(categoryId);
-      // console.log(res)
+      console.log(res.data.response)
     setArticles(res.data.response); // Reset articles before fetching
    
     } catch (error) {
@@ -24,6 +24,7 @@ export default function Category() {
 
   };
   }
+ 
   // Fetch on categoryId change
   useEffect(() => {
     loadNewsByCategories();

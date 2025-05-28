@@ -663,9 +663,9 @@ export default function News() {
           src={
             type == "shorts"
               ? news.news_img
-              : news.news_img ||
-                news.urlToImage ||
-                "https://picsum.photos/300/500"
+              : `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                  news?.news_img_url
+                }` || "https://picsum.photos/300/500"
           }
           alt={type == "shorts" ? news.news_title : news.news_headline}
           className="rounded-lg shadow-lg w-full h-96 object-cover"
@@ -709,8 +709,8 @@ export default function News() {
       >
         {type == "shorts" ? news.news_title : news.news_headline}
       </div>
-      <div >
-        <p >
+      <div>
+        <p>
           <HtmlToPlainText
             htmlContent={
               type == "shorts"

@@ -1,91 +1,140 @@
-import { useContext, useState } from "react";
-import { IoHandLeft } from "react-icons/io5";
+import { useContext, useEffect, useState } from "react";
 import { NewsContext } from "../context/NewsContext";
 import { useNavigate } from "react-router-dom";
+import { newsRoadMapBottom } from "../../api";
+import { motion } from "framer-motion";
+import { FiClock } from "react-icons/fi";
+import LoadingSkeleton from "./LoadingSkeleton"; // You'll need to create this component
 
 const PostsListWidget = () => {
-  const articles = [
-    {
-      title:
-        "The Privacy Policy and any additional privacy information made available to you, govern the use of your personal",
-      date: "March 6, 2024",
-      urlToImage:'https://picsum.photos/200/500'
-    },
-    {
-      title:
-        "The Privacy Policy and any additional privacy information made available to you, govern the use of your personal",
-      date: "March 6, 2024",
-      urlToImage:'https://picsum.photos/200/800'
-
-    },
-    {
-      title:
-        "The Privacy Policy and any additional privacy information made available to you, govern the use of your personal",
-      date: "March 6, 2024",
-      urlToImage:'https://picsum.photos/200/100'
-
-    },
-  ];
-  const [hoverIndex, setHoverIndex] = useState(null); // State to track the hovered index
   const { setNews } = useContext(NewsContext);
   const navigate = useNavigate();
+
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/read-news/${news.title}`);
+    navigate(`/read-news/${encodeURIComponent(news.title)}/${news.news_id}`);
   };
-  return (
-    <div className="w-[300px] ">
-      <div className="  flex items-start justify-center   ">
-        {/* Root Section */}
-        <div className="flex flex-col items-start relative">
-          <span className="text-lg font-semibold text-yellow-400 font-sans">#BS_Exclusive</span>
-          {articles.map((article, index) => (
-            <div
-              key={index}
-              className="flex items-center  relative"
-              onMouseEnter={() => setHoverIndex(index)} // Highlight on hover
-              onMouseLeave={() => setHoverIndex(null)} // Reset highlight
-            >
-              {/* Line (except for the first dot) */}
-              {index !== 0 && (
-                <div
-                  className={`absolute -top-1/2 left-[3.5px]   w-[1px] h-full transition ${
-                    hoverIndex === index || hoverIndex === index - 1
-                      ? "bg-gray-600"
-                      : "bg-gray-600"
-                  }`}
-                ></div>
-              )}
 
-              {/* Dot */}
-              <div
-                className={`w-2 h-2 rounded-full transition  ${
-                  hoverIndex === index
-                    ? "bg-yellow-500 z-20"
-                    : "bg-gray-600 z-20"
-                }`}
-              ></div>
+  const loadRoadMap = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await newsRoadMapBottom("");
+      if (res?.data?.response) {
+        setArticles(res.data.response.slice(0, 4)); // Only take first 4 articles
+      } else {
+        setError("No articles found");
+      }
+    } catch (err) {
+      setError("Failed to load latest news");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-              {/* News Section */}
-              <div
-                className={`  w-full max-w-3xl py-2 ml-2 transition ${
-                  hoverIndex === index ? "" : ""
-                }`}
-              >
-                <p className="text-xs text-gray-400 ">{article.date}</p>
-                <h3
-                  className={`text-xs font-semibold transition duration-300 cursor-pointer ${
-                    hoverIndex === index ? "text-yellow-500" : "text-gray-200"
-                  }`}
-                  onClick={() => handleNewsContent(article)}
-                >
-                  {article.title}
-                </h3>
-              </div>
-            </div>
-          ))}
-        </div>
+  useEffect(() => {
+    loadRoadMap();
+  }, []);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  };
+
+  if (loading) {
+    return <LoadingSkeleton count={4} />;
+  }
+
+  if (error) {
+    return (
+      <div className="w-[300px] p-4 bg-red-50 rounded-lg">
+        <p className="text-red-600 text-sm">{error}</p>
+        <button
+          onClick={loadRoadMap}
+          className="mt-2 px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+        >
+          Retry
+        </button>
       </div>
+    );
+  }
+
+  return (
+    <div className="w-[300px] bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 shadow-lg">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-yellow-400 font-sans">
+          #BS_Exclusive
+        </h2>
+        <span className="text-xs text-gray-400 flex items-center">
+          <FiClock className="mr-1" /> LATEST
+        </span>
+      </div>
+
+      <motion.div
+        className="flex flex-col space-y-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
+        {articles.map((article, index) => (
+          <motion.div
+            key={article.news_id || index}
+            className="relative pl-4 group"
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+          >
+            {/* Timeline decoration */}
+            <div className="absolute left-0 top-0 h-full flex flex-col items-center">
+              <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-yellow-500' : 'bg-gray-600'} group-hover:bg-yellow-400 transition-colors`} />
+              {index !== articles.length - 1 && (
+                <div className="w-px h-full bg-gray-600 group-hover:bg-yellow-400 transition-colors" />
+              )}
+            </div>
+
+            {/* News content */}
+            <div 
+              className="ml-4 cursor-pointer"
+              onClick={() => handleNewsContent(article)}
+            >
+              <p className="text-xs text-gray-400 mb-1 flex items-center">
+                <FiClock className="mr-1" />
+                {article.date || "Recent"}
+              </p>
+              <h3 className="text-sm font-medium text-gray-200 group-hover:text-yellow-400 transition-colors line-clamp-2">
+                {article.title || "Untitled"}
+              </h3>
+              <div className="mt-1 h-px w-full bg-gradient-to-r from-transparent via-gray-600 to-transparent group-hover:via-yellow-400 transition-all" />
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* {articles.length > 0 && (
+        <button 
+          onClick={loadRoadMap}
+          className="mt-6 text-xs text-gray-400 hover:text-yellow-400 transition-colors flex items-center"
+        >
+          Refresh
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+      )} */}
     </div>
   );
 };

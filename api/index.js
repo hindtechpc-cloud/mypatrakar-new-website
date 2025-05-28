@@ -100,540 +100,171 @@ const API = axios.create({
     baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}`
 });
 
-const X_Custom_Token = "aaaaa"
-// get api
-
-export const GetUserAuthentication = async (data) => {
-    return await API.post("/auth-user", data, {
-
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
+// get api// Base configuration
+const API_CONFIG = {
+  headers: {
+    'X-Custom-Token': 'aaaaa'
+  }
 };
 
-
-export const GetOwnerSocialLinks = async (portal_id) => {
-    return await API.get("/social-media", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
+// Helper functions
+const getRequest = (endpoint, params = {}) => {
+  return API.get(endpoint, {
+    params,
+    ...API_CONFIG
+  });
 };
 
-
-
-export const GetWebTheme = async (portal_id) => {
-    return await API.get("/web-theme", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
+const postRequest = (endpoint, data = {}, params = {}) => {
+  return API.post(endpoint, data, {
+    params,
+    ...API_CONFIG
+  });
 };
 
-export const menuWithSubNavMenuList = async (portal_id) => {
-    return await API.post("/menu-with-sub-nav-list", {
-        portal_id
-    },
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-                // 'Content-Type': 'application/json' // Not needed for GET
-            }
-        }
-    );
-};
+// Auth API
+export const GetUserAuthentication = (data) => postRequest('/auth-user', data);
 
-// export const loadNewsByCategory = async (category) => {
-export const loadNewsByCategory = async (category) => {
+// Utils APIs
+export const GetOwnerSocialLinks = (portal_id) => 
+  getRequest('/social-media', { portal_id });
 
-    return await API.post(
-        "/news-by-category",
-        { category },
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-                'Content-Type': 'application/json', // Optional, but safe to include for POST
-            }
-        }
-    );
-    // return await API.post("/news-by-category", {
-    //     category
-};
+export const GetWebTheme = (portal_id) => 
+  getRequest('/web-theme', { portal_id });
 
+// Navigation Menu
+export const menuWithSubNavMenuList = (portal_id) => 
+  postRequest('/menu-with-sub-nav-list', { portal_id });
 
-export const loadNewsBySubCategory = async (sub_category) => {
-    return await API.post("/news-by-subcategory", {
-        sub_category
-    },
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-                'Content-Type': 'application/json' // Not needed for GET
-            }
-        }
-    );
-};
+// News Management
+export const getBreakingNews = (portal_id) => 
+  postRequest('/breaking-news', { portal_id });
 
+export const loadNewsByCategory = (category) => 
+  postRequest('/news-by-category', { category });
 
-// 
-// ads 
-export const GetTopBannerAds = async (portal_id) => {
-    return await API.get("/top-banner-ads", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
+export const loadNewsBySubCategory = (sub_category) => 
+  postRequest('/news-by-subcategory', { sub_category });
 
-export const GetLeftBannerAds = async (portal_id) => {
-    return await API.get(`/left-home-banner-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
-export const GetLeftHomeMainAds = async (portal_id) => {
-    return await API.get(`/left-home-main-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
-export const GetSearchPageTopAds = async (portal_id) => {
-    return await API.get(`/search-page-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
-export const GetReadNewsPageTopAds = async (portal_id) => {
-    return await API.get(`/news-read-main-page-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
-export const GetReadNewsPageBottomAds = async (portal_id) => {
-    return await API.get(`/news-read-bottom-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
+export const newsRoadMapBottom = (portal_id) => 
+  API.get('/news-road-map', {
+    params: { portal_id },
+    ...API_CONFIG
+  });
 
-export const GetBottomBannerAds = async (portal_id) => {
-    return await API.get("/bottom-banner-ads", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
+export const GetShortsNews = (portal_id) => 
+  postRequest('/short-news', {}, { portal_id });
 
+export const GetShortsNewsDetails = (portal_id) => 
+  postRequest('/short-news-details', { short_id: portal_id });
 
-// right side ads 
-export const GetRightTopAds = async (portal_id) => {
-    return await API.get(`/custom-right-home-main-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
-export const GetRightMainAds = async (portal_id) => {
-    return await API.get(`/custom-right-home-main-2-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
+// News Categories
+export const GetNewsCategories = (portal_id) => 
+  postRequest('/category-list', {}, { portal_id });
 
-export const GetRightBottomAds = async (portal_id) => {
-    return await API.get(`/custom-right-home-bottom-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
-export const GetElectionYear = async (election_poll_id) => {
-    return await API.post(
-        "/election-years",
-        { election_poll_id }, // send as JSON object
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-                'Content-Type': 'application/json'
-            }
-        }
-    );
-};
-export const GetElectionPolls = async () => {
-    return await API.get(
-        "/election-poll",
+export const GetNewsSubcategories = (portal_id, category_id) => 
+  postRequest('/sub-category-by-list', { category_id }, { portal_id });
 
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-            }
-        }
-    );
-};
+export const GetNewsById = (newsId, ip) => 
+  postRequest('/news-by-id', { news_id: newsId, ip });
 
-export const GetHoroscope = async (sign) => {
-    return await API.post(
-        "/get-daily-horoscope",
-        { zodiac: sign }, // send as JSON object
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-            }
-        }
-    );
-};
-export const GetLiveCrickeScore = async (params) => {
-    return await API.post(
-        "/app/live-cricket", // URL
-        { params }, // request body (empty in this case)
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-            }
-        }
-    );
-};
+export const NewsSortBy = (portal_id, sortByType = "date", sub_category_id) => 
+  postRequest('/news-sort-by-filter', 
+    { filter: sortByType, sub_category_id }, 
+    { portal_id }
+  );
 
-export const GetLiveStockMarcket = async (params) => {
-    return await API.get("/live-stock-marcket", { params }, {
-        headers: {
-            'X-Custom-Token': "aaaaa",
-        }
-    }); // use GET with params in query
-};
+// Comments
+export const SubmitComment = (data) => postRequest('/submit-comment', data);
+export const GetCommentsOnNews = (newsId) => 
+  postRequest('/get-comments', { news_id: newsId });
 
-// get live youtube 
-export const GetLiveYouTube = async () => {
-    return await API.post(
-        "/live-link",
-        {}, // request body (empty in this case)
-        {
-            headers: {
-                'X-Custom-Token': "aaaaa",
-            }
-        }
-    );
-};
-// news rioad map 
-export const NewsRoadMap = async () => await API.post("/news-road-map", {}, {
-    headers: {
-        'X-Custom-Token': X_Custom_Token
-    }
-}
-);
+export const SubmitCommentsReply = (data) => 
+  postRequest('/submit-comment-reply', data);
 
-// sidebar polls
-export const getPollsIds = async () => {
-    return await API.post("/poll-category", {}, {
-        headers: {
-            'X-Custom-Token': "aaaaa",
-        }
-    });
-}
+export const GetCommentsreply = (comment_id) => 
+  postRequest('/get-comment-reply', { comment_id });
 
-export const getPollByCategoryId = async (categoryId) => {
-    return await API.post("/poll-questions", { pollcategory_id: categoryId }, {
-        headers: {
-            'X-Custom-Token': "aaaaa",
-        }
-    });
-}
+// Ads
+export const GetTopBannerAds = (portal_id) => 
+  getRequest('/top-banner-ads', { portal_id });
 
-export const submitVote = async (data) => {
-    return await API.post("/submit-quiz", {
-        user_id: data.user_id,
-        question_id: data.question_id,
-        option_id: data.option_id,
-    }, {
-        headers: {
-            'X-Custom-Token': "aaaaa",
-        }
-    });
-}
+export const GetLeftBannerAds = (portal_id) => 
+  getRequest('/left-home-banner-ads', { portal_id });
 
+export const GetLeftHomeMainAds = (portal_id) => 
+  getRequest('/left-home-main-ads', { portal_id });
 
+export const GetSearchPageTopAds = (portal_id) => 
+  getRequest('/search-page-ads', { portal_id });
 
-export const getBreakingNews = async (portal_id) => {
-    return await API.post("/breaking-news", { portal_id }, {
+export const GetReadNewsPageTopAds = (portal_id) => 
+  getRequest('/news-read-main-page-ads', { portal_id });
 
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
-export const GetAboutUsData = async (portal_id) => {
-    return await API.get("/page/about-us", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
-export const GetPrivacyPolicyData = async (portal_id) => {
-    return await API.get("/page/privacy-and-policy", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
+export const GetReadNewsPageBottomAds = (portal_id) => 
+  getRequest('/news-read-bottom-ads', { portal_id });
 
-export const GetTermsAndConditionData = async (portal_id) => {
-    return await API.get("/page/terms-and-conditions", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
-export const GetContactData = async (portal_id) => {
-    return await API.get("/contact-us", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
-export const GetOurRepoterData = async (portal_id) => {
-    return await API.get("/contact-us", {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-            // 'Content-Type': 'application/json' // Not needed for GET
-        }
-    });
-};
-export const AdvertiseWithUsApi = async (data) => {
-    return await API.post("/raise-query", data, {
-        headers: {
-            'X-Custom-Token': "aaaaa",
-        }
-    });
-};
-export const GetShortsNews = async (portal_id) => {
-    return await API.post("/short-news", {}, {
-        params: { portal_id },
-        headers: {
-            'X-Custom-Token': "aaaaa",
-        }
-    });
-};
-export const GetShortsNewsDetails = async (portal_id) => {
-    return await API.post("/short-news-details", {
-        short_id: portal_id
-    }, {
+export const GetBottomBannerAds = (portal_id) => 
+  getRequest('/bottom-banner-ads', { portal_id });
 
-        headers: {
-            'X-Custom-Token': "aaaaa",
-        }
-    });
-};
+export const GetRightTopAds = (portal_id) => 
+  getRequest('/custom-right-home-main-ads', { portal_id });
 
+export const GetRightMainAds = (portal_id) => 
+  getRequest('/custom-right-home-main-2-ads', { portal_id });
 
-export const GetAdsRightSidebar = async (portal_id) => {
-    return await API.get(`/custom-right-home-bottom-ads`, {
-        headers: {
-            'X-Custom-Token': 'aaaaa',
-        },
-        params: {
-            portal_id: portal_id,
-        }
-    });
-};
+export const GetRightBottomAds = (portal_id) => 
+  getRequest('/custom-right-home-bottom-ads', { portal_id });
 
-// 1. Get News Categories
-export const GetNewsCategories = async (portal_id) => {
-    try {
-        return await API.post(
-            "/category-list",
-            {},
-            {
-                params: { portal_id },
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in GetNewsCategories:", error);
-        throw error;
-    }
-};
+// Election API
+export const GetElectionYear = (election_poll_id) => 
+  postRequest('/election-years', { election_poll_id });
 
-// 2. Get News Subcategories (requires portal_id and category_id)
-export const GetNewsSubcategories = async (portal_id, category_id) => {
-    try {
-        return await API.post(
-            "/sub-category-by-list",
-            { category_id },
-            {
-                params: { portal_id },
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in GetNewsSubcategories:", error);
-        throw error;
-    }
-};
-export const GetNewsById = async (newsId, ip) => {
-    try {
-        return await API.post(
-            "/news-by-id",
-            {
-                news_id: newsId,
-                ip: ip
-            },
-            {
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in GetNewsSubcategories:", error);
-        throw error;
-    }
-};
+export const GetElectionPolls = () => getRequest('/election-poll');
 
-// 3. News Sort By (you might need to pass sortBy type too)
-export const NewsSortBy = async (portal_id, sortByType = "date", sub_category_id) => {
-    try {
-        return await API.post(
-            "/news-sort-by-filter",
-            {
-                filter: sortByType,
-                sub_category_id: sub_category_id
-            },
-            {
-                params: { portal_id },
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in NewsSotBy:", error);
-        throw error;
-    }
-};
-export const SubmitComment = async (data) => {
-    try {
-        return await API.post(
-            "/submit-comment",
+// Horoscope
+export const GetHoroscope = (sign) => 
+  postRequest('/get-daily-horoscope', { zodiac: sign });
 
-            data,
+// Live Cricket
+export const GetLiveCrickeScore = (params) => 
+  postRequest('/app/live-cricket', { params });
 
-            {
-                // params: { portal_id },
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in NewsSotBy:", error);
-        throw error;
-    }
-};
-export const GetCommentsOnNews = async (newsId) => {
-    try {
-        return await API.post(
-            "/get-comments",
-            { news_id: newsId },
-            {
-                // params: { portal_id },
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in NewsSotBy:", error);
-        throw error;
-    }
-};
+// Stock Market
+export const GetLiveStockMarcket = (params) => 
+  getRequest('/live-stock-marcket', params);
 
-export const SubmitCommentsReply = async (data) => {
-    try {
-        return await API.post(
-            "/submit-comment-reply",
-            data,
-            {
-                // params: { portal_id },
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in NewsSotBy:", error);
-        throw error;
-    }
-};
+// Live YouTube
+export const GetLiveYouTube = () => postRequest('/live-link', {});
 
-export const GetCommentsreply = async (comment_id) => {
-    try {
-        return await API.post(
-            "/get-comment-reply",
-            { comment_id: comment_id },
-            {
-                // params: { portal_id },
-                headers: {
-                    "X-Custom-Token": "aaaaa",
-                },
-            }
-        );
-    } catch (error) {
-        console.error("Error in NewsSotBy:", error);
-        throw error;
-    }
-};
-// comment
+// Polls
+export const getPollsIds = () => postRequest('/poll-category', {});
+
+export const getPollByCategoryId = (categoryId) => 
+  postRequest('/poll-questions', { pollcategory_id: categoryId });
+
+export const submitVote = (data) => 
+  postRequest('/submit-quiz', {
+    user_id: data.user_id,
+    question_id: data.question_id,
+    option_id: data.option_id
+  });
+
+// Pages
+export const GetAboutUsData = (portal_id) => 
+  getRequest('/page/about-us', { portal_id });
+
+export const GetPrivacyPolicyData = (portal_id) => 
+  getRequest('/page/privacy-and-policy', { portal_id });
+
+export const GetTermsAndConditionData = (portal_id) => 
+  getRequest('/page/terms-and-conditions', { portal_id });
+
+export const GetContactData = (portal_id) => 
+  getRequest('/contact-us', { portal_id });
+
+export const GetOurRepoterData = (portal_id) => 
+  getRequest('/contact-us', { portal_id });
+
+export const AdvertiseWithUsApi = (data) => 
+  postRequest('/raise-query', data);
