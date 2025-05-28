@@ -265,18 +265,18 @@ const HeaderAd = ({
           <div className="bg-white p-4 rounded-full shadow-md mb-3">
             <FiAlertCircle className="text-yellow-500 text-2xl" />
           </div>
-          <h3 className="text-gray-700 font-medium text-lg mb-1">
+          {/* <h3 className="text-gray-700 font-medium text-lg mb-1">
             Ad Couldn't Load
           </h3>
           <p className="text-gray-500 text-sm text-center mb-4 max-w-md">
             We're having trouble loading this advertisement. You may have an ad
             blocker enabled.
-          </p>
-
+          </p> */}
+{/* 
           {enableFallbackCTA && (
             <a
               href="/advertise-with-us"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:shadow-md transition-all flex items-center space-x-2"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:shadow-md transition-all flex items-end space-x-2 "
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Advertise with us"
@@ -284,7 +284,7 @@ const HeaderAd = ({
               <span>Advertise With Us</span>
               <FiExternalLink className="text-sm" />
             </a>
-          )}
+          )} */}
         </div>
       </div>
     );

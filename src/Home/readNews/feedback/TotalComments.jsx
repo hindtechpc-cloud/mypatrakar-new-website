@@ -61,7 +61,7 @@
 //         comments.length > 0 &&
 //         comments?.map((comment) => (
 //           <div
-          
+
 //             key={comment.news_is}
 //             className="bg-white rounded-lg shadow-sm p-4 border border-gray-100"
 //           >
@@ -139,11 +139,12 @@ export default function TotalCommnets() {
     const loadComments = async () => {
       try {
         const response = await GetCommentsOnNews(newsId);
+        // console.log(response)
         if (response.status === 200) {
           // Map the response to add empty replies array if not present
-          const formattedComments = response.data.response.map(comment => ({
+          const formattedComments = response.data.response.map((comment) => ({
             ...comment,
-            replies: comment.replies || []
+            replies: comment.replies || [],
           }));
           setComments(formattedComments);
         } else {
@@ -160,8 +161,8 @@ export default function TotalCommnets() {
   }, [newsId]);
 
   const handleReplySuccess = (newReply, parentCommentId) => {
-    setComments(prevComments =>
-      prevComments.map(comment =>
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
         comment.user_id === parentCommentId
           ? { ...comment, replies: [...comment.replies, newReply] }
           : comment
@@ -170,8 +171,10 @@ export default function TotalCommnets() {
     setReplyingTo(null);
   };
 
-  if (loading) return <div className="text-center py-8">Loading comments...</div>;
-  if (error) return <div className="text-red-500 text-center py-8">{error}</div>;
+  if (loading)
+    return <div className="text-center py-8">Loading comments...</div>;
+  if (error)
+    return <div className="text-red-500 text-center py-8">{error}</div>;
 
   return (
     <div className="space-y-6">
@@ -186,28 +189,34 @@ export default function TotalCommnets() {
       ) : (
         comments.map((comment) => (
           <div
-            key={comment.user_id}  // Changed from news_is to user_id for unique key
+            key={comment.user_id} // Changed from news_is to user_id for unique key
             className="bg-white rounded-lg shadow-sm p-4 border border-gray-100"
           >
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0 rounded-full w-10 h-10 overflow-hidden">
-                <img 
-                  src={comment.user?.profile_image_url || "https://customer.mypatrakar.com/assets/No_Image_Available.jpg"} 
-                  alt={comment.user?.name} 
+                <img
+                  src={
+                    comment.user?.profile_image_url ||
+                    "https://customer.mypatrakar.com/assets/No_Image_Available.jpg"
+                  }
+                  alt={comment.user?.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.target.src = "https://customer.mypatrakar.com/assets/No_Image_Available.jpg";
+                    e.target.src =
+                      "https://customer.mypatrakar.com/assets/No_Image_Available.jpg";
                   }}
                 />
               </div>
               <div className="flex-1">
                 <div className="flex items-center space-x-2">
-                  <h4 className="font-medium text-gray-900">{comment.user?.name || comment.name}</h4>
+                  <h4 className="font-medium text-gray-900">
+                    {comment.user?.name || comment.name}
+                  </h4>
                   <span className="text-xs text-gray-500">
-                    {new Date(comment.date).toLocaleDateString('en-IN', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric'
+                    {new Date(comment.date).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
                     })}
                   </span>
                 </div>
@@ -235,7 +244,7 @@ export default function TotalCommnets() {
                 {replyingTo === comment.user_id && (
                   <div className="mt-4 pl-4 border-l-2 border-blue-100">
                     <ReplyOnComment
-                      parentCommentId={newsId}
+                      parentCommentId={comment.id}
                       onSuccess={(newReply) =>
                         handleReplySuccess(newReply, comment.user_id)
                       }
@@ -243,9 +252,9 @@ export default function TotalCommnets() {
                   </div>
                 )}
 
-                {comment.replies.length > 0 && (
+                {comment && (
                   <div className="mt-4 pl-4 border-l-2 border-gray-100">
-                    <TotalreplyOnComment replies={comment.replies} />
+                    <TotalreplyOnComment id={comment.id} />
                   </div>
                 )}
               </div>

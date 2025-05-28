@@ -207,6 +207,7 @@ import { WebThemeContext } from "../../context/ThemeContext";
 import {
   GetNewsCategories,
   GetNewsSubcategories,
+  GetSearchPageTopAds,
   NewsSortBy,
 } from "../../../api";
 
@@ -221,6 +222,7 @@ export default function Search() {
   const [sortBy, setSortBy] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const { webTheme } = useContext(WebThemeContext);
+  const [topAds, setTopAds] = useState({});
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -322,7 +324,7 @@ export default function Search() {
   useEffect(() => {
     const loadNewsSortBy = async () => {
       try {
-        const res = await NewsSortBy("MYAWR241227001", sortBy,subcategory);
+        const res = await NewsSortBy("MYAWR241227001", sortBy, subcategory);
         // console.log(res.data.response)
         setArticles(res.data.response);
       } catch (error) {
@@ -334,6 +336,19 @@ export default function Search() {
     }
   }, [sortBy]);
 
+  const loadSearchAds = async () => {
+    try {
+      const res = await GetSearchPageTopAds("MYAWR241227001");
+      // console.log(res.data.response.top_banner);
+      setTopAds(res.data.response.top_banner);
+    } catch (error) {
+      console.log(error);
+      setError("Failed to load ads. Please try again later.");
+    }
+  };
+  useEffect(() => {
+    loadSearchAds();
+  }, []);
   return (
     <div className="mt-1">
       <div
@@ -416,7 +431,10 @@ export default function Search() {
       </div>
 
       <div className="flex items-center justify-center mx-auto">
-        <HeaderAd className="my-4 flex justify-center items-center bg-gray-300 sm:w-[728px] sm:h-[90px] w-[320px] h-[100px] sm:mx-0 mx-2 rounded" />
+        <HeaderAd
+          className="my-4 flex justify-center items-center bg-gray-300 sm:w-[728px] sm:h-[90px] w-[320px] h-[100px] sm:mx-0 mx-2 rounded"
+          adData={topAds}
+        />
       </div>
 
       <div className="flex items-center flex-wrap justify-center gap-5 my-2 md:mx-14 sm:mx-8 mx-2">

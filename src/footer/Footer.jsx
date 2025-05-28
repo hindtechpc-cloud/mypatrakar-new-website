@@ -57,7 +57,7 @@ export default function Footer() {
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between md:items-start sm:items-center gap-5 my-2 md:mx-14 sm:mx-8 mx-2 ">
           <FooterMenu />
           <FooterFaceBook />
-          <FooterTwitter />
+          {/* <FooterTwitter /> */}
           <PostsListWidget />
           <SourceWidget className="mx-auto  text-white shadow-lg w-[300px] `" />
         </div>

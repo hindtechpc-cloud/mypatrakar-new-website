@@ -192,12 +192,98 @@ export const GetTopBannerAds = async (portal_id) => {
         }
     });
 };
+
+export const GetLeftBannerAds = async (portal_id) => {
+    return await API.get(`/left-home-banner-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
+        }
+    });
+};
+export const GetLeftHomeMainAds = async (portal_id) => {
+    return await API.get(`/left-home-main-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
+        }
+    });
+};
+export const GetSearchPageTopAds = async (portal_id) => {
+    return await API.get(`/search-page-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
+        }
+    });
+};
+export const GetReadNewsPageTopAds = async (portal_id) => {
+    return await API.get(`/news-read-main-page-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
+        }
+    });
+};
+export const GetReadNewsPageBottomAds = async (portal_id) => {
+    return await API.get(`/news-read-bottom-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
+        }
+    });
+};
+
 export const GetBottomBannerAds = async (portal_id) => {
     return await API.get("/bottom-banner-ads", {
         params: { portal_id },
         headers: {
             'X-Custom-Token': "aaaaa",
             // 'Content-Type': 'application/json' // Not needed for GET
+        }
+    });
+};
+
+
+// right side ads 
+export const GetRightTopAds = async (portal_id) => {
+    return await API.get(`/custom-right-home-main-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
+        }
+    });
+};
+export const GetRightMainAds = async (portal_id) => {
+    return await API.get(`/custom-right-home-main-2-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
+        }
+    });
+};
+
+export const GetRightBottomAds = async (portal_id) => {
+    return await API.get(`/custom-right-home-bottom-ads`, {
+        headers: {
+            'X-Custom-Token': 'aaaaa',
+        },
+        params: {
+            portal_id: portal_id,
         }
     });
 };
@@ -388,6 +474,7 @@ export const GetShortsNewsDetails = async (portal_id) => {
     });
 };
 
+
 export const GetAdsRightSidebar = async (portal_id) => {
     return await API.get(`/custom-right-home-bottom-ads`, {
         headers: {
@@ -445,7 +532,6 @@ export const GetNewsById = async (newsId, ip) => {
                 ip: ip
             },
             {
-
                 headers: {
                     "X-Custom-Token": "aaaaa",
                 },
@@ -478,13 +564,13 @@ export const NewsSortBy = async (portal_id, sortByType = "date", sub_category_id
         throw error;
     }
 };
-export const SubmitComment = async ( data) => {
+export const SubmitComment = async (data) => {
     try {
         return await API.post(
             "/submit-comment",
-           
-                data,
-               
+
+            data,
+
             {
                 // params: { portal_id },
                 headers: {
@@ -501,7 +587,7 @@ export const GetCommentsOnNews = async (newsId) => {
     try {
         return await API.post(
             "/get-comments",
-           {news_id: newsId},
+            { news_id: newsId },
             {
                 // params: { portal_id },
                 headers: {
@@ -533,16 +619,13 @@ export const SubmitCommentsReply = async (data) => {
     }
 };
 
-export const GetCommentsreply = async (portal_id, sortByType = "date", sub_category_id) => {
+export const GetCommentsreply = async (comment_id) => {
     try {
         return await API.post(
             "/get-comment-reply",
+            { comment_id: comment_id },
             {
-                filter: sortByType,
-                sub_category_id: sub_category_id
-            },
-            {
-                params: { portal_id },
+                // params: { portal_id },
                 headers: {
                     "X-Custom-Token": "aaaaa",
                 },
