@@ -139,7 +139,7 @@ const Navbar = () => {
       </button>
       {item.submenus?.length > 0 && activeDropdown === item.cat_id && (
         <div
-          className="absolute left-0 z-50 mt-0 shadow-lg pb-5"
+          className="absolute -left-64 z-50 mt-0 shadow-lg pb-5"
           style={{ backgroundColor: themeColor }}
         >
           <div className="flex items-start justify-start gap-3">

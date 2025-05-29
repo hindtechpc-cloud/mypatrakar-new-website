@@ -1,77 +1,76 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
 import TopNewsItems from "./TopNewsItems";
-import { articlesCard } from "../../search/news";
-// import Menu
+import { loadNewsByCategory } from "../../../../api";
 
-export default function TopNews() {
-  const menu = [];
-  const topNewsItems = [
-    {
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      urlToImage: "https://picsum.photos/200/500",
-      title: "This is current news",
-    },
-    {
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      urlToImage: "https://picsum.photos/200/700",
-      title: "This is current news",
-    },
-    {
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      imaurlToImagege: "https://picsum.photos/200/200",
-      title: "This is current news",
-    },
-    {
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      imaurlToImagege: "https://picsum.photos/200/300",
-      title: "This is current news",
-    },
-    {
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      imurlToImageage: "https://picsum.photos/200/700",
-      title: "This is current news",
-    },
-    {
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      urlToImage: "https://picsum.photos/200/500",
-      title: "This is current news",
-    },
-  ];
+const TopNews = ({ category_id, section_title }) => {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchNews = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data } = await loadNewsByCategory(category_id);
+      setArticles(data?.response || []);
+    } catch (err) {
+      console.error("News fetch error:", err);
+      setError(err.response?.message || "Failed to load news");
+    } finally {
+      setLoading(false);
+    }
+  }, [category_id]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
+
+  if (loading) return <div className="p-4">Loading...</div>;
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (!articles.length) return <div className="p-4">No articles found</div>;
+
+  const featuredArticle = articles[0];
+  const featuredImageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${featuredArticle?.news_img_url}`;
+
   return (
     <div>
-      <Menu menuText={"TopNews"} menu={menu} />
+      <Menu menuText={section_title} menu={[]} />
+      
+      {/* Featured Article - Layout preserved exactly */}
       <div className="w-full">
         <NewsCard
-          className="sm:flex flex-1 w-full  items-start gap-4 max-w-4xl mx-auto"
+          className="sm:flex flex-1 w-full items-start gap-4 max-w-4xl mx-auto"
           classNameToImage="md:w-2/3 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
-          image="https://picsum.photos/200/500"
-          ctaText="खेल"
+          image={featuredImageUrl}
+          ctaText={featuredArticle?.news_category_name}
           classNameForContent="w-5/6"
-          title="Are you Free? Let's Enjoy the Best Entertainment!"
-          description="जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में और मई 2024 के बीच आम चुनाव"
+          title={featuredArticle?.news_headline}
+          description={featuredArticle?.news_description_html}
+          newsId={featuredArticle?.news_id}
           news={{
-            title: "Are you Free? Let's Enjoy the Best Entertainment!",
-            urlToImage: "https://picsum.photos/200/500",
-            content:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में और मई 2024 के बीच आम चुनाव",
+            title: featuredArticle?.news_headline,
+            urlToImage: featuredImageUrl,
+            content: featuredArticle?.news_description_html,
           }}
         />
       </div>
 
-    <div className="w-full">
-    <TopNewsItems
-        topNewsItems={articlesCard}
-        className={"grid grid-cols-1 sm:grid-cols-2 gap-4 my-2"}
-      />
-    </div>
+      {/* News List - Layout preserved exactly */}
+      <div className="w-full">
+        <TopNewsItems
+          topNewsItems={articles}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-2"
+        />
+      </div>
     </div>
   );
-}
+};
+
+TopNews.propTypes = {
+  category_id: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+};
+
+export default React.memo(TopNews);

@@ -9,6 +9,7 @@ import HeaderAd from "../../TopBar/HeaderAd";
 import TotalCommnets from "./feedback/TotalComments";
 import { articlesCard } from "../search/news";
 import { GetReadNewsPageBottomAds, GetReadNewsPageTopAds } from "../../../api";
+import { useParams } from "react-router-dom";
 
 export default function ReadNews() {
   const [topAds, setTopAds] = useState(null);
@@ -16,6 +17,7 @@ export default function ReadNews() {
   const [adError, setAdError] = useState(null);
   const [loadingAds, setLoadingAds] = useState(true);
 
+  const { type } = useParams();
   const loadAds = useCallback(async () => {
     setLoadingAds(true);
     try {
@@ -70,8 +72,8 @@ export default function ReadNews() {
       <div className="w-full lg:w-8/12">
         <News />
         {renderAd(topAds)}
-        <Feedback />
-        <TotalCommnets />
+        {type !== "shorts" && <Feedback />}
+        {type !== "shorts" && <TotalCommnets />}
         <NewsFeed newsCard={articlesCard} />
         {/* <NewsAppAd /> */}
         {renderAd(bottomAds)}

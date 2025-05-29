@@ -1,4 +1,4 @@
-export const news = [
+export const articlesnews = [
   {
     source: {
       id: null,

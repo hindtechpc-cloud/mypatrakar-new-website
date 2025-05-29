@@ -12,7 +12,7 @@ export default function Shorts() {
     try {
       const res = await GetShortsNews("MYAWR241227001");
       // console.log("API Response:", res);
-
+// console.log(object)
       const shorts = res?.data?.response?.news;
       // console.log("Fetched Shorts:", shorts);
 
@@ -22,7 +22,7 @@ export default function Shorts() {
         // console.log("Selected Short:", selected);
 
         setArticle({
-          urlToImage: selected.news_img || "https://picsum.photos/300/200",
+          urlToImage: selected.news_img,
           category: "Shorts",
           title: selected.news_title || "Untitled",
           updated: selected.updated_at || "Just now",
@@ -64,7 +64,7 @@ export default function Shorts() {
               {/* Article Image */}
               <div className="w-full h-44 rounded-lg mt-4 overflow-hidden shadow-lg">
                 <img
-                  src={article.urlToImage}
+                  src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${article.urlToImage}`}
                   alt="Article"
                   className="w-full h-full object-cover transition-transform transform hover:scale-105"
                 />

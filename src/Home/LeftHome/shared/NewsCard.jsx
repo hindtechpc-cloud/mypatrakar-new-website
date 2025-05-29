@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
+import PropTypes from "prop-types";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
-// import { useDispatch } from "react-redux";
-// import { setSelectedNews } from "../../../redux/features/newsSlice";
 
 const NewsCard = ({
   news,
-  className,
-  classNameToImage,
+  className = "",
+  classNameToImage = "",
   classNameForContent = "",
   newsId,
   image,
@@ -16,29 +15,42 @@ const NewsCard = ({
   title,
   description,
 }) => {
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);
-  const handleNewsContent = (news) => {
-    setNews(news);
-    // dispatch(setSelectedNews(news)); // Save clicked news to Redux
 
-    navigate(`/read-news/${title}/${newsId}`);
-  };
+  const handleNewsClick = useCallback(() => {
+    if (!news) return;
+    
+    setNews(news);
+    const safeTitle = encodeURIComponent(title || "");
+    navigate(`/read-news/${safeTitle}/${newsId}`);
+  }, [news, setNews, navigate, title, newsId]);
+
+  const imageUrl = image 
+    ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${image}`
+    : "https://via.placeholder.com/800x400?text=No+Image";
+
+ 
   return (
     <div className={`relative ${className}`}>
       {/* Image Section */}
-      <div className={classNameToImage}>
+      <div className={`relative ${classNameToImage}`}>
         <img
-          src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${image}`}
-          alt="News"
+          src={imageUrl}
+          alt={title || "News image"}
           className="rounded-lg w-full h-full object-cover"
-          // className={classNameToImage}
+          loading="lazy"
         />
-        {/* CTA Button Stuck to Image Bottom-Right */}
-        <button className="absolute bottom-2 right-2 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded shadow-md">
-          {ctaText}
-        </button>
+        
+        {/* CTA Button */}
+        {ctaText && (
+          <button 
+            className="absolute bottom-2 right-2 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded shadow-md"
+            aria-label={`Category: ${ctaText}`}
+          >
+            {ctaText}
+          </button>
+        )}
       </div>
 
       {/* Content Section */}
@@ -46,18 +58,31 @@ const NewsCard = ({
         {/* Title */}
         <h2
           className="text-lg md:text-xl font-semibold text-gray-800 mb-2 cursor-pointer hover:underline"
-          onClick={() => handleNewsContent(news)}
+          onClick={handleNewsClick}
+          aria-label={`Read news: ${title}`}
         >
-          {title}
+          {title || "Untitled News"}
         </h2>
 
         {/* Description */}
         <p className="text-sm md:text-sm text-gray-600 mb-3">
-          <HtmlToPlainText htmlContent={description} id={newsId} />
+       <HtmlToPlainText htmlContent={description} />
         </p>
       </div>
     </div>
   );
 };
 
-export default NewsCard;
+NewsCard.propTypes = {
+  news: PropTypes.object,
+  className: PropTypes.string,
+  classNameToImage: PropTypes.string,
+  classNameForContent: PropTypes.string,
+  newsId: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  ctaText: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string,
+};
+
+export default React.memo(NewsCard);

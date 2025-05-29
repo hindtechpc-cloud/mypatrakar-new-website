@@ -35,7 +35,7 @@ const ShortsPages = () => {
   const loadShorts = async () => {
     try {
       const res = await GetShortsNews("MYAWR241227001");
-      // console.log("API Response:", res);
+      console.log("API Response:", res);
       if (res) {
         setShorts(res.data.response.news);
       }
@@ -57,18 +57,16 @@ const ShortsPages = () => {
           <div className="bg-white rounded-2xl shadow-md shadow-gray-500 pb-3 relative w-full border">
             <div className="relative rounded-md">
               <img
-                src={
-                  webTheme["web-logo"]|| "https://picsum.photos/1070/580"
-                }
+                src={webTheme["web-logo"]}
                 alt="Source"
                 className="w-12 h-12 rounded-full object-cover absolute m-2"
               />
               <img
-                src={
-                  currentShort.news_img || "https://picsum.photos/1070/580"
-                }
+                src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                  currentShort?.news_img
+                }`}
                 alt={currentShort.news_title}
-                className="w-full h-48 object-cover rounded-t-md"
+                className="w-full h-48 object-center rounded-t-md"
               />
               <span className="flex items-end justify-end -mt-10 p-2 text-white font-bold text-xl">
                 {`${currentIndex + 1}/${shorts.length}`}

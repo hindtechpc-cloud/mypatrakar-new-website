@@ -38,8 +38,6 @@ export default function LiveCricket() {
 
   useEffect(() => {
     fetchLiveMatches();
-    const interval = setInterval(fetchLiveMatches, 30000); // Refresh every 30 sec
-    return () => clearInterval(interval);
   }, []);
 
   // Animation variants

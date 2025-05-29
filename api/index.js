@@ -121,6 +121,12 @@ const postRequest = (endpoint, data = {}, params = {}) => {
     ...API_CONFIG
   });
 };
+// featured section 
+export const GetFeaturedSection = (portal_id) => 
+  postRequest('/featured-section', { portal_id });
+
+export const GetFeaturedNews = (portal_id) => 
+  postRequest('/featured-news', { portal_id });
 
 // Auth API
 export const GetUserAuthentication = (data) => postRequest('/auth-user', data);

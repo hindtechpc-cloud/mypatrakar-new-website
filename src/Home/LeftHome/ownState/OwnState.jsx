@@ -1,44 +1,77 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
 import TopNewsItems from "../TopNews/TopNewsItems";
 import { articlesCard } from "../../search/news";
+import { loadNewsByCategory } from "../../../../api";
 
-export default function OwnState() {
- const [subcategory,setSubcategory]=useState("");
-  const menu = [
-    "All",
-    "Agra",
-    "Kanpur",
-    "Varanasi",
-    "Bahraich",
-    "Ballia",
-    "Sultanpur",
-    "Unnao",
-    "Varanasi",
-  ];
+export default function OwnState({
+  section_id,
+  category_id,
+  category,
+  section_typetype,
+  web_section_idion_id,
+  section_title
+}) {
+  const [subcategory, setSubcategory] = useState("");
+  const menu = [];
+
+
+ const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchNews = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data } = await loadNewsByCategory(category_id);
+      setArticles(data?.response || []);
+    } catch (err) {
+      console.error("News fetch error:", err);
+      setError(err.response?.message || "Failed to load news");
+    } finally {
+      setLoading(false);
+    }
+  }, [category_id]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
+
+  if (loading) return <div className="p-4">Loading...</div>;
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (!articles.length) return <div className="p-4">No articles found</div>;
+
+  const featuredArticle = articles[0];
+  const featuredImageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${featuredArticle?.news_img_url}`;
+
   return (
     <div className="my-2 mb-5">
-      <Menu menuText={"उत्तर प्रदेश"} menu={menu} setSubcategory={setSubcategory}/>
+      <Menu
+        menuText={section_title||" Own State"}
+        menu={menu}
+        setSubcategory={setSubcategory}
+      />
       <div className="md:flex flex-1 items-start gap-4">
         <div className="">
           <NewsCard
             className="md:flex flex-col items-start gap-4 max-w-4xl mx-auto"
             classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
             classNameForContent="w-5/6"
-            image="https://picsum.photos/200/500"
-            ctaText="खेल"
-            title="Are you Free? Let's Enjoy the Best Entertainment!"
-            description="जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुनाव"
+            image={featuredImageUrl}
+            ctaText={featuredArticle.category}
+            title={featuredArticle.news_headline}
+            description={featuredArticle.news_description_html}
+            newsId={featuredArticle.news_id}
             news={{
               title:
-                "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-              urlToImage: "https://picsum.photos/200/500",
+                featuredArticle.news_headline,
+              urlToImage: featuredImageUrl,
             }}
           />
         </div>
         <div className="w-full">
-          <TopNewsItems topNewsItems={articlesCard} className={"grid gap-3"} />
+          <TopNewsItems topNewsItems={articles} className={"grid gap-3"} />
         </div>
       </div>
     </div>

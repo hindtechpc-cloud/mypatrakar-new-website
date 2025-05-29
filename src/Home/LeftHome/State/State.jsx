@@ -1,126 +1,122 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
-import TopNewsItems from "../TopNews/TopNewsItems";
 import NewsCard from "../shared/NewsCard";
+import { loadNewsByCategory } from "../../../../api";
 
-export default function State() {
-  const topNewsItems = [
-    {
-      id: 1,
-      title: "News 1",
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      title: "News 2",
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      title: "News 3",
-      description:
-        "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव",
-      image: "https://via.placeholder.com/150",
-    },
-  ];
+const State = ({
+  section_id,
+  category_id,
+  category,
+  section_type,
+  web_section_id,
+  section_title,
+}) => {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchNews = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const { data } = await loadNewsByCategory(category_id);
+      setArticles(data?.response || []);
+    } catch (err) {
+      console.error("News fetch error:", err);
+      setError(err.response?.message || "Failed to load news");
+    } finally {
+      setLoading(false);
+    }
+  }, [category_id]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
+
+  if (loading) {
+    return (
+      <div className="p-4 flex justify-center items-center h-64">
+        <div className="animate-pulse text-gray-500">Loading news...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 text-red-500 text-center">
+        {error}
+        <button
+          onClick={fetchNews}
+          className="ml-2 text-blue-600 hover:underline"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!articles.length) {
+    return (
+      <div className="p-4 text-center text-gray-500">
+        No articles found for this state
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <Menu
-        menuText={"राज्य"}
-        menu={[
-          "All",
-          "Andhra Pradesh",
-          "Arunachal Pradesh",
-          "Assam",
-          "Bihar",
-          "Chhattisgarh",
-          "Goa",
-          "Gujarat",
-        ]}
-      ></Menu>
-      <div className="flex  flex-col items-center gap-4">
-        <NewsCard
-         className="  sm:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/500"}
-          ctaText={"राज्य"}
-          title={"Are you Free? Let's Enjoy the Best Entertainment!"}
-          description={
-            "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/500",
-          }}
-        />
-        <NewsCard
-          className=" sm:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/700"}
-          ctaText={"राज्य"}
-          title={"Are you Free? Let's Enjoy the Best Entertainment!"}
-          description={
-            "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/700",
-          }}
-        />
-        <NewsCard
-         className="sm:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/100"}
-          ctaText={"राज्य"}
-          title={"Are you Free? Let's Enjoy the Best Entertainment!"}
-          description={
-            "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/100",
-          }}
-        />
-        <NewsCard
-          className=" sm:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/300"}
-          ctaText={"राज्य"}
-          title={"Are you Free? Let's Enjoy the Best Entertainment!"}
-          description={
-            "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/300",
-          }}
-        />
-        <NewsCard
-          className=" sm:flex flex-1  items-start gap-4 max-w-4xl mx-auto"
-          classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-          image={"https://picsum.photos/200/200"}
-         
-          ctaText={"राज्य"}
-          title={"Are you Free? Let's Enjoy the Best Entertainment!"}
-          description={
-            "जब चुनाव का मौसम आता है, तो मंचों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भरोसे की परीक्षा होती है। दुनिया के सबसे युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में अप्रैल और मई 2024 के बीच आम चुनाव"
-          }
-          news={{
-            title:
-              "जब चुनाव का मौसम आता है, तो मंच ों और पोस्टरों पर वादे करने वालों और उज्ज्वल भविष्य की आशा रखने वालों से आमरी भर से की परीक्षा होती है। दुनिया के युवा लोकतंत्रों में से एक होने के बावजूद भारत की संसद में युवा सदस्यों की भागीदारी बहुत कम है। भारत में             और मई 2024 के बीच आम चुना",
-            urlToImage: "https://picsum.photos/200/200",
-          }}
-        />
-      </div>
+    <div className="container mx-auto px-4">
+      <Menu menuText={section_title || "State"} menu={[]} />
+
+      <ul className="flex flex-col items-center gap-4 mt-4">
+        {articles.length > 0 &&
+          articles.map((featuredArticle) => {
+            return (
+              <li key={featuredArticle.section_id}>
+                <NewsCard
+                  className="sm:flex flex-1 items-start justify-start gap-4 max-w-4xl mx-auto"
+                  classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
+                  image={
+                    featuredArticle?.news_img_url
+                      ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                          featuredArticle.news_img_url
+                        }`
+                      : "https://via.placeholder.com/800x400?text=No+Image"
+                  }
+                  ctaText={category || "General"}
+                  title={featuredArticle.news_headline || "Untitled Article"}
+                  description={featuredArticle.news_description_html}
+                  newsId={featuredArticle.news_id}
+                  news={{
+                    title: featuredArticle.news_headline,
+                    urlToImage: featuredArticle?.news_img_url
+                      ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                          featuredArticle.news_img_url
+                        }`
+                      : "https://via.placeholder.com/800x400?text=No+Image",
+                    content: featuredArticle.news_description_html,
+                    news_id: featuredArticle.news_id,
+                  }}
+                />
+              </li>
+            );
+          })}
+      </ul>
     </div>
   );
-}
+};
+
+State.propTypes = {
+  section_id: PropTypes.string,
+  category_id: PropTypes.string.isRequired,
+  category: PropTypes.string,
+  section_type: PropTypes.string,
+  web_section_id: PropTypes.string,
+  section_title: PropTypes.string,
+};
+
+State.defaultProps = {
+  section_title: "State",
+};
+
+export default React.memo(State);

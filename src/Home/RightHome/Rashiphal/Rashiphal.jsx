@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useEffect,  useState } from "react";
 import Header from "../shared/Header";
 import Loader from "../../../utils/Loader";
 import { GetHoroscope } from "../../../../api";

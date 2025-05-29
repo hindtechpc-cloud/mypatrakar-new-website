@@ -1,75 +1,83 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
-// const news = {
-//   source: {
-//     id: null,
-//     name: "The Times of India",
-//   },
-//   author: {
-//     name: "Rajat",
-//     image: "https://picsum.photos/200/300",
-//     links: [
-//       {
-//         url: "https://www.linkedin.com/in/rajat-singh-1b1b3b1b3/",
-//         name: "LinkedIn",
-//       },
-//       {
-//         url: "https://www.whatsapp.com/in/rajat-singh-1b1b3b1b3/",
-//         name: "whatsapp",
-//       },
-//       {
-//         url: "https://www.email.com/in/rajat-singh-1b1b3b1b3/",
-//         name: "email",
-//       },
-//       { url: "https://www.instagram.com/rajat_2502/", name: "Instagram" },
-//       { url: "https://twitter.com/RajatSi2502", name: "Twitter" },
-//       { url: "https://www.facebook.com/rajat.singh.2502", name: "Facebook" },
-//       {
-//         url: "https://www.youtube.com/channel/UC9QJQJ9Zjv3ZJjJLJ9Zzv9A",
-//         name: "Youtube",
-//       },
-//     ],
-//   },
-//   title: "This is comes from country section",
-//   urlToImage:
-//     "https://static.toiimg.com/thumb/msid-79510186,width-1070,height-580,imgsize-101117,resizemode-75,overlay-toi_sw,pt-32,y_pad-40/photo.jpg",
-//   publishedAt: "2020-05-15T14:30:00",
-//   views: 100,
-//   comments: 1020,
-//   category: "Sports",
-//   content:
-//     "MELBOURNE: India's star batsmen Rohit Sharma, Virat Kohli and Rishabh Pant will join the squad on Wednesday ahead of the first Test against Australia, starting on December 17.The trio was not a part of the limi… [+1602 chars]",
-// };
+import PropTypes from "prop-types";
 
-export default function TopNewsItems({ topNewsItems, className }) {
+const NewsItem = ({ news, onNewsClick }) => {
+  return (
+    <div className="flex items-start gap-2">
+      <div className="w-48">
+        <img
+          src={news?.news_img_url}
+          alt={news?.news_headline}
+          className="w-full h-24 rounded-xl object-cover"
+          loading="lazy"
+        />
+      </div>
+      <h2
+        className="text-gray-800 text-sm font-semibold cursor-pointer hover:underline w-5/6"
+        onClick={() => onNewsClick(news)}
+      >
+        {news?.news_headline?.length > 300
+          ? `${news.news_headline.slice(0, 300)}...`
+          : news.news_headline}
+      </h2>
+    </div>
+  );
+};
+
+NewsItem.propTypes = {
+  news: PropTypes.shape({
+    news_img_url: PropTypes.string,
+    news_headline: PropTypes.string,
+    news_id: PropTypes.string,
+  }).isRequired,
+  onNewsClick: PropTypes.func.isRequired,
+};
+
+export default function TopNewsItems({
+  topNewsItems = [],
+  className,
+  itemsToShow = 6,
+}) {
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);
-  const handleNewsContent = (news) => {
-    setNews(news);
-    navigate(`/read-news/${news?.title}`);
-  };
+
+  const handleNewsClick = useCallback(
+    (news) => {
+      setNews(news);
+      navigate(`/read-news/${news?.news_headline}/${news.news_id}`);
+    },
+    [setNews, navigate]
+  );
+
   return (
     <div className={className}>
-      {topNewsItems?.slice(0,6).map((item, index) => {
-        return (
-          <div key={index} className="flex items-start gap-2">
-            <div className="w-48">
-              <img
-                src={item.urlToImage}
-                alt="news"
-                className="w-full h-24 rounded-xl object-cover"
-              />
-            </div>
-            <p
-              className="text-gray-800 text-sm font-semibold cursor-pointer hover:underline w-5/6"
-              onClick={() => handleNewsContent(item)}
-            >
-              {item?.title ?.slice(0, 100)}...
-            </p>
-          </div>
-        );
-      })}
+      {topNewsItems.slice(0, itemsToShow).map((item) => (
+        <NewsItem
+          key={item.news_id}
+          news={item}
+          onNewsClick={handleNewsClick}
+        />
+      ))}
     </div>
   );
 }
+
+TopNewsItems.propTypes = {
+  topNewsItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      news_img_url: PropTypes.string,
+      news_headline: PropTypes.string,
+      news_id: PropTypes.string,
+      title: PropTypes.string,
+    })
+  ),
+  className: PropTypes.string,
+  itemsToShow: PropTypes.number,
+};
+
+TopNewsItems.defaultProps = {
+  topNewsItems: [],
+  className: "",
+};

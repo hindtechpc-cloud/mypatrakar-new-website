@@ -55,7 +55,7 @@ const socialIcons = {
   email: <MdOutlineEmail className="text-orange-600 hover:text-orange-700" />,
 };
 
-const UserProfile = ({ user, setZoomText, zoomText,handleDownloadPDF }) => {
+const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -97,7 +97,13 @@ const UserProfile = ({ user, setZoomText, zoomText,handleDownloadPDF }) => {
   return (
     <div className="flex items-center space-x-4">
       <img
-        src={user?.profileImage || "https://via.placeholder.com/150"}
+        src={
+          user?.profileImage.includes("https://")
+            ? user?.profileImage
+            : `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                user?.profileImage
+              }`
+        }
         alt={user?.name || "User"}
         className="w-12 h-12 rounded-full"
       />
