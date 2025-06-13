@@ -5,6 +5,7 @@ import { newsRoadMapBottom } from "../../api";
 import { motion } from "framer-motion";
 import { FiClock } from "react-icons/fi";
 import LoadingSkeleton from "./LoadingSkeleton"; // You'll need to create this component
+import { encryptData } from "../utils/cryptoHelper";
 
 const PostsListWidget = () => {
   const { setNews } = useContext(NewsContext);
@@ -16,7 +17,7 @@ const PostsListWidget = () => {
 
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/read-news/${encodeURIComponent(news.title)}/${news.news_id}`);
+    navigate(`/read-news/${encodeURIComponent(news.title)}/${encryptData(news.news_id)}`);
   };
 
   const loadRoadMap = async () => {

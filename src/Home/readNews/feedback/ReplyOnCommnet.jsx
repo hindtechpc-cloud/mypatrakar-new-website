@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SubmitCommentsReply } from "../../../../api";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { decryptData } from "../../../utils/cryptoHelper";
 
 export default function ReplyOnComment({ parentCommentId, onSuccess }) {
   const [formData, setFormData] = useState({ reply: "" });
@@ -44,7 +45,7 @@ export default function ReplyOnComment({ parentCommentId, onSuccess }) {
     try {
       const payload = {
         comment_id: parentCommentId,
-        news_id: newsId,
+        news_id: decryptData(newsId),
         name: isAuthenticated ? user.user_name : formData.name,
         email: isAuthenticated ? user.email : formData.email,
         reply: formData.reply,

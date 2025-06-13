@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
+import { encryptData } from "../../../utils/cryptoHelper";
 
 const NewsCard = ({
   news,
@@ -20,17 +21,16 @@ const NewsCard = ({
 
   const handleNewsClick = useCallback(() => {
     if (!news) return;
-    
+
     setNews(news);
     const safeTitle = encodeURIComponent(title || "");
-    navigate(`/read-news/${safeTitle}/${newsId}`);
+    navigate(`/read-news/${safeTitle}/${encryptData(newsId)}`);
   }, [news, setNews, navigate, title, newsId]);
 
-  const imageUrl = image 
+  const imageUrl = image
     ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${image}`
     : "https://via.placeholder.com/800x400?text=No+Image";
 
- 
   return (
     <div className={`relative ${className}`}>
       {/* Image Section */}
@@ -38,13 +38,15 @@ const NewsCard = ({
         <img
           src={imageUrl}
           alt={title || "News image"}
-          className="rounded-lg w-full h-full object-cover"
+          className={
+            classNameToImage || "rounded-lg w-full h-full object-cover"
+          }
           loading="lazy"
         />
-        
+
         {/* CTA Button */}
         {ctaText && (
-          <button 
+          <button
             className="absolute bottom-2 right-2 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded shadow-md"
             aria-label={`Category: ${ctaText}`}
           >
@@ -66,7 +68,7 @@ const NewsCard = ({
 
         {/* Description */}
         <p className="text-sm md:text-sm text-gray-600 mb-3">
-       <HtmlToPlainText htmlContent={description} />
+          <HtmlToPlainText htmlContent={description} />
         </p>
       </div>
     </div>

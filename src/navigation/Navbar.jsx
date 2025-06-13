@@ -8,8 +8,8 @@ import { NewsContext } from "../context/NewsContext";
 import { WebThemeContext } from "../context/ThemeContext";
 import { loadNewsBySubCategory, menuWithSubNavMenuList } from "../../api";
 import defaultLogo from "../assets/MyPatrakarLogo1.png";
-import HtmlToPlainText from "../utils/HtmlToPlainText";
 import toast from "react-hot-toast";
+import { encryptData } from "../utils/cryptoHelper";
 
 const Navbar = () => {
   const { setNews } = useContext(NewsContext);
@@ -34,26 +34,24 @@ const Navbar = () => {
     const fetchMenuItems = async () => {
       try {
         const res = await menuWithSubNavMenuList("MYAWR241227001");
-        setMenuItems(res.data.response);
+        setMenuItems(res.data.response || []);
       } catch (error) {
         toast.error("Failed to load menu items");
       }
     };
-
     fetchMenuItems();
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsFixed(window.scrollY > 150);
-    };
+    const handleScroll = () => setIsFixed(window.scrollY > 150);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-    document.body.style.overflow = menuOpen ? "auto" : "hidden";
+    const willOpen = !menuOpen;
+    setMenuOpen(willOpen);
+    document.body.style.overflow = willOpen ? "hidden" : "auto";
   };
 
   const handleMenuClick = (path) => {
@@ -66,7 +64,7 @@ const Navbar = () => {
   const fetchHoverNews = async (subcategoryId) => {
     try {
       const res = await loadNewsBySubCategory(subcategoryId);
-      setHoveredNews(res.data.response);
+      setHoveredNews(res.data.response || []);
     } catch {
       toast.error("Failed to load news preview");
     }
@@ -77,15 +75,15 @@ const Navbar = () => {
       {hoveredNews.slice(0, 3).map((newsItem) => (
         <Link
           key={newsItem.news_id}
-          to={`/read-news/${newsItem.news_headline}/${newsItem.news_id}`}
+          to={`/read-news/${newsItem.news_headline}/${encryptData(newsItem.news_id)}`}
           className="block mb-4 last:mb-0 group w-[250px] px-2"
         >
           <div className="w-full h-32 rounded overflow-hidden">
             <img
               src={
-                `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
-                  newsItem?.news_img_url
-                }` || "https://picsum.photos/300/500"
+                newsItem?.news_img_url
+                  ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${newsItem.news_img_url}`
+                  : "https://picsum.photos/300/500"
               }
               alt={newsItem.news_headline}
               className="w-full h-full object-cover transition-transform group-hover:scale-105"
@@ -124,7 +122,7 @@ const Navbar = () => {
         }`}
         onClick={() =>
           handleMenuClick(
-            `/topic/${item.nav_name.toLowerCase()}/${item.cat_id}`
+            `/topic/${item.nav_name.toLowerCase()}/${encryptData(item.cat_id)}`
           )
         }
       >
@@ -142,19 +140,19 @@ const Navbar = () => {
           className="absolute -left-64 z-50 mt-0 shadow-lg pb-5"
           style={{ backgroundColor: themeColor }}
         >
-          <div className="flex items-start justify-start gap-3">
+          <div className="flex items-start gap-3">
             {item.submenus.map((submenu) => (
               <Link
                 key={submenu.subcategory_id}
-                to={`/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${
+                to={`/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${encryptData(
                   submenu.subcategory_id
-                }`}
+                )}`}
                 className="block px-4 py-2 text-white hover:bg-gray-200 hover:text-black transition-colors"
                 onClick={() =>
                   handleMenuClick(
-                    `/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${
+                    `/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${encryptData(
                       submenu.subcategory_id
-                    }`
+                    )}`
                   )
                 }
                 onMouseEnter={() => fetchHoverNews(submenu.subcategory_id)}
@@ -184,7 +182,7 @@ const Navbar = () => {
             );
           } else {
             handleMenuClick(
-              `/topic/${item.nav_name.toLowerCase()}/${item.cat_id}`
+              `/topic/${item.nav_name.toLowerCase()}/${encryptData(item.cat_id)}`
             );
           }
         }}
@@ -203,22 +201,22 @@ const Navbar = () => {
           {item.submenus.map((submenu) => (
             <Link
               key={submenu.subcategory_id}
-              to={`/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${
+              to={`/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${encryptData(
                 submenu.subcategory_id
-              }`}
+              )}`}
               className={`block px-4 py-2 text-gray-50 ${
                 activePath ===
-                `/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${
+                `/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${encryptData(
                   submenu.subcategory_id
-                }`
+                )}`
                   ? "bg-gray-200 text-black"
                   : "hover:bg-gray-200 hover:text-black"
               }`}
               onClick={() =>
                 handleMenuClick(
-                  `/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${
+                  `/topic/${item.nav_name.toLowerCase()}/${submenu.nav_name.toLowerCase()}/${encryptData(
                     submenu.subcategory_id
-                  }`
+                  )}`
                 )
               }
             >
@@ -241,9 +239,7 @@ const Navbar = () => {
         style={{ backgroundColor: themeColor }}
       >
         <div className="container mx-auto flex justify-between items-center px-4">
-          <div
-            className={`${isFixed ? "flex" : "lg:hidden flex"} items-center`}
-          >
+          <div className={`${isFixed ? "flex" : "lg:hidden flex"} items-center`}>
             <Link to="/">
               <img
                 src={logo}
@@ -265,9 +261,7 @@ const Navbar = () => {
             <Link
               to="/"
               className={`flex items-center p-4 hover:bg-gray-200 hover:text-black transition-colors ${
-                location.pathname === "/"
-                  ? "bg-gray-200 text-black shadow-xl"
-                  : ""
+                location.pathname === "/" ? "bg-gray-200 text-black shadow-xl" : ""
               }`}
               aria-label="Home"
             >
@@ -290,18 +284,16 @@ const Navbar = () => {
 
       {menuOpen && (
         <div
-          className="fixed inset-0  bg-opacity-50 z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
           onClick={toggleMenu}
         />
       )}
 
       <div
-        className={`fixed lg:hidden top-0 left-0 w-3/4 h-full  z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed lg:hidden top-0 left-0 w-3/4 h-full z-50 transform transition-transform duration-300 ease-in-out ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{
-          background:themeColor
-        }}
+        style={{ background: themeColor }}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <Link to="/">
@@ -329,7 +321,9 @@ const Navbar = () => {
             className="block px-4 py-3 text-white font-semibold hover:bg-gray-200 hover:text-black"
             onClick={() => handleMenuClick("/search")}
           >
-           <span className="flex items-center justify-start gap-3"> <FaSearch/> <span>Search</span></span>
+            <span className="flex items-center gap-3">
+              <FaSearch /> <span>Search</span>
+            </span>
           </Link>
         </div>
       </div>

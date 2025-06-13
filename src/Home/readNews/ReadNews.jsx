@@ -74,10 +74,10 @@ export default function ReadNews() {
         {renderAd(topAds)}
         {type !== "shorts" && <Feedback />}
         {type !== "shorts" && <TotalCommnets />}
-        <NewsFeed newsCard={articlesCard} />
+        {/* <NewsFeed newsCard={articlesCard} /> */}
         {/* <NewsAppAd /> */}
         {renderAd(bottomAds)}
-        <OwnState />
+        {/* <OwnState /> */}
         <VideoGallery />
       </div>
 

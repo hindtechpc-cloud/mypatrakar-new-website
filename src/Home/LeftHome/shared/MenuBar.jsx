@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-const MenuBar = ({ menuText,setSubcategory, menuItems }) => {
+const MenuBar = ({ menuText, setSubcategory, menuItems }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -18,12 +18,14 @@ const MenuBar = ({ menuText,setSubcategory, menuItems }) => {
         <span className="text-sm font-semibold">{menuText}</span>
 
         {/* Toggle Button for Mobile */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden focus:outline-none transition-transform duration-300"
-        >
-          {isOpen ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
-        </button>
+        {menuItems.length > 0 && (
+          <button
+            onClick={toggleMenu}
+            className="md:hidden focus:outline-none transition-transform duration-300"
+          >
+            {isOpen ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+          </button>
+        )}
 
         {/* Menu Items */}
         <div
@@ -31,25 +33,31 @@ const MenuBar = ({ menuText,setSubcategory, menuItems }) => {
             isOpen ? "block" : "hidden md:flex"
           }`}
         >
-          {menuItems?.map((item, index) => (
-            <div
-              key={index}
-              className="px-2 py-1 text-sm hover:text-red-600 font-semibold cursor-pointer hover:bg-gray-50 rounded-lg transition-all"
-              onClick={()=>setSubcategory(item)}
-            >
-              {item}
-            </div>
-          ))}
+          {menuItems.length > 0 &&
+            menuItems?.map((item, index) => (
+              <div
+                key={index}
+                className="px-2 py-1 text-sm hover:text-red-600 font-semibold cursor-pointer hover:bg-gray-50 rounded-lg transition-all"
+                onClick={() => setSubcategory(item)}
+              >
+                {item}
+              </div>
+            ))}
         </div>
       </div>
     </div>
   );
 };
 
-export default function Menu({ menuText,setSubcategory, menu }) {
+export default function Menu({ menuText, setSubcategory, menu }) {
+  console.log(menuText);
   return (
     <div className="w-full">
-      <MenuBar menuItems={menu} menuText={menuText} setSubcategory={setSubcategory} />
+      <MenuBar
+        menuItems={menu}
+        menuText={menuText}
+        setSubcategory={setSubcategory}
+      />
     </div>
   );
 }

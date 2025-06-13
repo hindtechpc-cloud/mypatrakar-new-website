@@ -10,6 +10,7 @@ import Footer from "./footer/footer";
 import FooterLinks from "./Home/FooterLinks";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { useTranslation } from "react-i18next";
+import Election from "./Home/LeftHome/election/Election";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));
@@ -94,6 +95,7 @@ function Layout() {
             />
           </div>
           <Navbar />
+          {/* <Election/> */}
         </>
       )}
       {!isSearchPage && !isShorts && <BreakingNewsBar />}

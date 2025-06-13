@@ -2,13 +2,14 @@ import { useCallback, useContext } from "react";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { encryptData } from "../../../utils/cryptoHelper";
 
 const NewsItem = ({ news, onNewsClick }) => {
   return (
     <div className="flex items-start gap-2">
       <div className="w-48">
         <img
-          src={news?.news_img_url}
+          src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${news?.news_img_url}`}
           alt={news?.news_headline}
           className="w-full h-24 rounded-xl object-cover"
           loading="lazy"
@@ -38,7 +39,7 @@ NewsItem.propTypes = {
 export default function TopNewsItems({
   topNewsItems = [],
   className,
-  itemsToShow = 6,
+  itemsToShow = 5,
 }) {
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);
@@ -46,7 +47,7 @@ export default function TopNewsItems({
   const handleNewsClick = useCallback(
     (news) => {
       setNews(news);
-      navigate(`/read-news/${news?.news_headline}/${news.news_id}`);
+      navigate(`/read-news/${news?.news_headline}/${encryptData(news.news_id)}`);
     },
     [setNews, navigate]
   );

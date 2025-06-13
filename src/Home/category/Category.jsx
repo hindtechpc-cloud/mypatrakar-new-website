@@ -4,6 +4,7 @@ import NewsFeed from "../readNews/newsfeed/NewsFeed";
 import { articlesCard } from "../search/news";
 import RightHome from "../RightHome/RightHome";
 import { loadNewsByCategory } from "../../../api";
+import { decryptData } from "../../utils/cryptoHelper";
 
 export default function Category() {
   const { category, categoryId } = useParams();
@@ -11,11 +12,11 @@ export default function Category() {
 
   // Normalize category slug to compare (e.g., "madhya-pradesh" → "madhya pradesh")
   // const normalize = (str) => str?.replace(/-/g, " ").toLowerCase();
-
+const catId=decryptData(categoryId)
   // Load from API
   const loadNewsByCategories = async () => {
     try {
-      const res = await loadNewsByCategory(categoryId);
+      const res = await loadNewsByCategory(catId);
       console.log(res.data.response)
     setArticles(res.data.response); // Reset articles before fetching
    

@@ -34,74 +34,57 @@ const State = ({
     fetchNews();
   }, [fetchNews]);
 
-  if (loading) {
-    return (
-      <div className="p-4 flex justify-center items-center h-64">
-        <div className="animate-pulse text-gray-500">Loading news...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 text-red-500 text-center">
-        {error}
-        <button
-          onClick={fetchNews}
-          className="ml-2 text-blue-600 hover:underline"
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
-
-  if (!articles.length) {
-    return (
-      <div className="p-4 text-center text-gray-500">
-        No articles found for this state
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto px-4">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 font-[Syne]">
       <Menu menuText={section_title || "State"} menu={[]} />
 
-      <ul className="flex flex-col items-center gap-4 mt-4">
-        {articles.length > 0 &&
-          articles.map((featuredArticle) => {
-            return (
-              <li key={featuredArticle.section_id}>
-                <NewsCard
-                  className="sm:flex flex-1 items-start justify-start gap-4 max-w-4xl mx-auto"
-                  classNameToImage="md:w-full md:h-32 sm:w-full w-full h-60 sm:h-48 items-end justify-end relative"
-                  image={
-                    featuredArticle?.news_img_url
-                      ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
-                          featuredArticle.news_img_url
-                        }`
-                      : "https://via.placeholder.com/800x400?text=No+Image"
-                  }
-                  ctaText={category || "General"}
-                  title={featuredArticle.news_headline || "Untitled Article"}
-                  description={featuredArticle.news_description_html}
-                  newsId={featuredArticle.news_id}
-                  news={{
-                    title: featuredArticle.news_headline,
-                    urlToImage: featuredArticle?.news_img_url
-                      ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
-                          featuredArticle.news_img_url
-                        }`
-                      : "https://via.placeholder.com/800x400?text=No+Image",
-                    content: featuredArticle.news_description_html,
-                    news_id: featuredArticle.news_id,
-                  }}
-                />
-              </li>
-            );
-          })}
-      </ul>
+      {loading ? (
+        <div className="flex justify-center items-center h-60">
+          <div className="animate-pulse text-gray-500 text-lg">
+            Loading news...
+          </div>
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-600 mt-10">
+          <p>{error}</p>
+          <button
+            onClick={fetchNews}
+            className="mt-2 text-blue-600 underline hover:text-blue-800 transition"
+          >
+            Retry
+          </button>
+        </div>
+      ) : articles.length === 0 ? (
+        <div className="text-center text-gray-500 text-lg mt-10">
+          No articles found for this state.
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center gap-6 mt-8">
+          {articles?.map((article) => (
+            <NewsCard
+              key={article.news_id}
+              className="flex items-center justify-center gap-5 "
+              classNameToImage="w-full md:w-[500px] h-40 object-center rounded"
+              image={article?.news_img_url}
+              ctaText={category || "General"}
+              title={article.news_headline || "Untitled Article"}
+              description={article.news_description_html}
+              newsId={article.news_id}
+              classNameForContent={"flex flex-col items-start justify-center gap-3"}
+              news={{
+                title: article.news_headline,
+                urlToImage: article?.news_img_url
+                  ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                      article.news_img_url
+                    }`
+                  : "https://via.placeholder.com/800x400?text=No+Image",
+                content: article.news_description_html,
+                news_id: article.news_id,
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

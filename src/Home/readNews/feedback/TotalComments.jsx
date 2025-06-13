@@ -3,6 +3,7 @@ import { GetCommentsOnNews } from "../../../../api";
 import ReplyOnComment from "./ReplyOnCommnet";
 import TotalreplyOnComment from "./TotalReplyOnComment";
 import { useParams } from "react-router-dom";
+import { decryptData } from "../../../utils/cryptoHelper";
 
 export default function TotalCommnets() {
   const { newsId } = useParams();
@@ -14,8 +15,8 @@ export default function TotalCommnets() {
   useEffect(() => {
     const loadComments = async () => {
       try {
-        const response = await GetCommentsOnNews(newsId);
-        // console.log(response)
+        const response = await GetCommentsOnNews(decryptData(newsId));
+        console.log(response)
         if (response.status === 200) {
           // Map the response to add empty replies array if not present
           const formattedComments = response.data.response.map((comment) => ({
@@ -51,7 +52,8 @@ export default function TotalCommnets() {
   if (loading)
     return <div className="text-center py-8">Loading comments...</div>;
   if (error)
-    return <div className="text-red-500 text-center py-8">{error}</div>;
+    null
+    // return <div className="text-red-500 text-center py-8">{error}</div>;
 
   return (
     <div className="space-y-6">
@@ -66,7 +68,7 @@ export default function TotalCommnets() {
       ) : (
         comments.map((comment) => (
           <div
-            key={comment.user_id} // Changed from news_is to user_id for unique key
+            key={comment?.user_id} // Changed from news_is to user_id for unique key
             className="bg-white rounded-lg shadow-sm p-4 border border-gray-100"
           >
             <div className="flex items-start space-x-3">

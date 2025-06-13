@@ -56,7 +56,6 @@ const LiveTv = () => {
     <div className="min-h-1/2 bg-gradient-to-br py-8 px-4 flex justify-center items-center">
       <div className="w-full max-w-xl">
         <Header text="📺 Live TV Stream" />
-
         <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-3xl p-6 shadow-2xl">
           {loading ? (
             <div className="animate-pulse text-center text-white text-lg">

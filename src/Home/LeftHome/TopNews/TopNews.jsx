@@ -11,6 +11,7 @@ const TopNews = ({ category_id, section_title }) => {
   const [error, setError] = useState(null);
 
   const fetchNews = useCallback(async () => {
+    // console.log(section_title)
     try {
       setLoading(true);
       const { data } = await loadNewsByCategory(category_id);
@@ -32,18 +33,18 @@ const TopNews = ({ category_id, section_title }) => {
   if (!articles.length) return <div className="p-4">No articles found</div>;
 
   const featuredArticle = articles[0];
-  const featuredImageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${featuredArticle?.news_img_url}`;
+  // const featuredImageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${featuredArticle?.news_img_url}`;
 
   return (
-    <div>
-      <Menu menuText={section_title} menu={[]} />
+    <div className="w-full">
+      <Menu menuText={"TopNews"} menu={[]} />
       
       {/* Featured Article - Layout preserved exactly */}
       <div className="w-full">
         <NewsCard
-          className="sm:flex flex-1 w-full items-start gap-4 max-w-4xl mx-auto"
+          className="sm:flex flex-1 w-full items-start gap-4 max-w-xl mx-auto"
           classNameToImage="md:w-2/3 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
-          image={featuredImageUrl}
+          image={featuredArticle?.news_img_url}
           ctaText={featuredArticle?.news_category_name}
           classNameForContent="w-5/6"
           title={featuredArticle?.news_headline}
@@ -51,7 +52,7 @@ const TopNews = ({ category_id, section_title }) => {
           newsId={featuredArticle?.news_id}
           news={{
             title: featuredArticle?.news_headline,
-            urlToImage: featuredImageUrl,
+            urlToImage: featuredArticle?.news_img_url,
             content: featuredArticle?.news_description_html,
           }}
         />

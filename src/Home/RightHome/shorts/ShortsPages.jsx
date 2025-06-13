@@ -6,18 +6,22 @@ import { useNavigate } from "react-router-dom";
 import { GetShortsNews } from "../../../../api/index.js";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText.jsx";
 import { WebThemeContext } from "../../../context/ThemeContext.jsx";
+import { encryptData } from "../../../utils/cryptoHelper.js";
+import ShortsClap from "./ShortsClap.jsx";
+import { checkAuth } from "../../../utils/checkAuth.js";
 
 const ShortsPages = () => {
   const { setNews } = useContext(NewsContext);
   const { webTheme } = useContext(WebThemeContext);
   const navigate = useNavigate();
-
+  const user = checkAuth();
+  console.log(user);
   const [shorts, setShorts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0); // only one short at a time
 
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/read-news/shorts/${news.short_news_id}`);
+    navigate(`/read-news/shorts/${encryptData(news.short_news_id)}`);
   };
 
   const handleScrollDown = () => {
@@ -49,7 +53,7 @@ const ShortsPages = () => {
   }, []);
 
   const currentShort = shorts[currentIndex];
-  // console.log(currentShort);
+  console.log(currentShort);
   return (
     <div className="fixed w-full flex gap-3 items-center justify-center mt-12">
       <div className="h-[530px] w-[350px] flex items-center justify-center">
@@ -68,11 +72,16 @@ const ShortsPages = () => {
                 alt={currentShort.news_title}
                 className="w-full h-48 object-center rounded-t-md"
               />
-              <span className="flex items-end justify-end -mt-10 p-2 text-white font-bold text-xl">
-                {`${currentIndex + 1}/${shorts.length}`}
+            
+
+              <span className="flex flex-col items-end justify-end -mt-10 p-2 font-bold text-xl">
+                  <ShortsClap
+                news_id={currentShort.short_news_id}
+                user_id={user?.user_id}
+              />
+                {/* {`${currentIndex + 1}/${shorts.length}`} */}
               </span>
             </div>
-
             <div className="p-4">
               <h2 className="font-bold text-lg">{currentShort.news_title}</h2>
               <p className="text-red-600 text-sm font-semibold">

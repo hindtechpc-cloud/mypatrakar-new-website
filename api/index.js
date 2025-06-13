@@ -1,13 +1,13 @@
 import axios from "axios";
 
 if (import.meta.env.VITE_REACT_APP_API_URL === undefined) {
-    console.error("VITE_REACT_APP_API_URL is not defined");
+  console.error("VITE_REACT_APP_API_URL is not defined");
 }
 if (import.meta.env.VITE_REACT_APP_API_URL === "") {
-    console.error("VITE_REACT_APP_API_URL is empty");
+  console.error("VITE_REACT_APP_API_URL is empty");
 }
 if (import.meta.env.VITE_REACT_APP_API_URL === null) {
-    console.error("VITE_REACT_APP_API_URL is null");
+  console.error("VITE_REACT_APP_API_URL is null");
 }
 /**
  Route::prefix('v1')->group(function () {
@@ -96,8 +96,8 @@ Route::post('menu-with-sub-nav-list',[WebMenuManagementController::class, 'menuW
 });
  */
 const API = axios.create({
-    // baseURL: "/api",  // Correct concatenation
-    baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}`
+  // baseURL: "/api",  // Correct concatenation
+  baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}`
 });
 
 // get api// Base configuration
@@ -121,123 +121,137 @@ const postRequest = (endpoint, data = {}, params = {}) => {
     ...API_CONFIG
   });
 };
+
+
 // featured section 
-export const GetFeaturedSection = (portal_id) => 
+export const GetFeaturedSection = (portal_id) =>
   postRequest('/featured-section', { portal_id });
 
-export const GetFeaturedNews = (portal_id) => 
+export const GetFeaturedNews = (portal_id) =>
   postRequest('/featured-news', { portal_id });
 
 // Auth API
 export const GetUserAuthentication = (data) => postRequest('/auth-user', data);
 
 // Utils APIs
-export const GetOwnerSocialLinks = (portal_id) => 
+export const GetOwnerSocialLinks = (portal_id) =>
   getRequest('/social-media', { portal_id });
 
-export const GetWebTheme = (portal_id) => 
+export const GetWebTheme = (portal_id) =>
   getRequest('/web-theme', { portal_id });
 
 // Navigation Menu
-export const menuWithSubNavMenuList = (portal_id) => 
+export const menuWithSubNavMenuList = (portal_id) =>
   postRequest('/menu-with-sub-nav-list', { portal_id });
 
 // News Management
-export const getBreakingNews = (portal_id) => 
+export const getBreakingNews = (portal_id) =>
   postRequest('/breaking-news', { portal_id });
 
-export const loadNewsByCategory = (category) => 
+export const loadNewsByCategory = (category) =>
   postRequest('/news-by-category', { category });
 
-export const loadNewsBySubCategory = (sub_category) => 
+export const loadNewsBySubCategory = (sub_category) =>
   postRequest('/news-by-subcategory', { sub_category });
 
-export const newsRoadMapBottom = (portal_id) => 
+export const newsRoadMapBottom = (portal_id) =>
   API.get('/news-road-map', {
     params: { portal_id },
     ...API_CONFIG
   });
 
-export const GetShortsNews = (portal_id) => 
+export const GetShortsNews = (portal_id) =>
   postRequest('/short-news', {}, { portal_id });
 
-export const GetShortsNewsDetails = (portal_id) => 
+export const GetShortsNewsDetails = (portal_id) =>
   postRequest('/short-news-details', { short_id: portal_id });
+export const SubmitShortsClap = (short_id, user_id) =>
+  postRequest('/submit-clap', { shorts_id:short_id, user_id });
+
+export const CheckShortsClapped = (short_id, user_id) =>
+  postRequest('/check-clap-status', { shorts_id:short_id, user_id });
+// check-clap-status
+
 
 // News Categories
-export const GetNewsCategories = (portal_id) => 
+export const GetNewsCategories = (portal_id) =>
   postRequest('/category-list', {}, { portal_id });
 
-export const GetNewsSubcategories = (portal_id, category_id) => 
+export const GetNewsSubcategories = (portal_id, category_id) =>
   postRequest('/sub-category-by-list', { category_id }, { portal_id });
 
-export const GetNewsById = (newsId, ip) => 
+export const GetNewsById = (newsId, ip) =>
   postRequest('/news-by-id', { news_id: newsId, ip });
 
-export const NewsSortBy = (portal_id, sortByType = "date", sub_category_id) => 
-  postRequest('/news-sort-by-filter', 
-    { filter: sortByType, sub_category_id }, 
+export const NewsSortBy = (portal_id, filter) =>
+  postRequest('/news-by-filter',
+    filter,
     { portal_id }
   );
+// export const NewsSortBy = (portal_id, filter) => 
+// postRequest('/news-sort-by-filter', 
+//  filter, 
+//   { portal_id }
+// );
 
 // Comments
 export const SubmitComment = (data) => postRequest('/submit-comment', data);
-export const GetCommentsOnNews = (newsId) => 
+export const GetCommentsOnNews = (newsId) =>
   postRequest('/get-comments', { news_id: newsId });
 
-export const SubmitCommentsReply = (data) => 
+export const SubmitCommentsReply = (data) =>
   postRequest('/submit-comment-reply', data);
 
-export const GetCommentsreply = (comment_id) => 
+export const GetCommentsreply = (comment_id) =>
   postRequest('/get-comment-reply', { comment_id });
 
 // Ads
-export const GetTopBannerAds = (portal_id) => 
+export const GetTopBannerAds = (portal_id) =>
   getRequest('/top-banner-ads', { portal_id });
 
-export const GetLeftBannerAds = (portal_id) => 
+export const GetLeftBannerAds = (portal_id) =>
   getRequest('/left-home-banner-ads', { portal_id });
 
-export const GetLeftHomeMainAds = (portal_id) => 
+export const GetLeftHomeMainAds = (portal_id) =>
   getRequest('/left-home-main-ads', { portal_id });
 
-export const GetSearchPageTopAds = (portal_id) => 
+export const GetSearchPageTopAds = (portal_id) =>
   getRequest('/search-page-ads', { portal_id });
 
-export const GetReadNewsPageTopAds = (portal_id) => 
+export const GetReadNewsPageTopAds = (portal_id) =>
   getRequest('/news-read-main-page-ads', { portal_id });
 
-export const GetReadNewsPageBottomAds = (portal_id) => 
+export const GetReadNewsPageBottomAds = (portal_id) =>
   getRequest('/news-read-bottom-ads', { portal_id });
 
-export const GetBottomBannerAds = (portal_id) => 
+export const GetBottomBannerAds = (portal_id) =>
   getRequest('/bottom-banner-ads', { portal_id });
 
-export const GetRightTopAds = (portal_id) => 
+export const GetRightTopAds = (portal_id) =>
   getRequest('/custom-right-home-main-ads', { portal_id });
 
-export const GetRightMainAds = (portal_id) => 
+export const GetRightMainAds = (portal_id) =>
   getRequest('/custom-right-home-main-2-ads', { portal_id });
 
-export const GetRightBottomAds = (portal_id) => 
+export const GetRightBottomAds = (portal_id) =>
   getRequest('/custom-right-home-bottom-ads', { portal_id });
 
 // Election API
-export const GetElectionYear = (election_poll_id) => 
+export const GetElectionYear = (election_poll_id) =>
   postRequest('/election-years', { election_poll_id });
 
 export const GetElectionPolls = () => getRequest('/election-poll');
 
 // Horoscope
-export const GetHoroscope = (sign) => 
+export const GetHoroscope = (sign) =>
   postRequest('/get-daily-horoscope', { zodiac: sign });
 
 // Live Cricket
-export const GetLiveCrickeScore = (params) => 
+export const GetLiveCrickeScore = (params) =>
   postRequest('/app/live-cricket', { params });
 
 // Stock Market
-export const GetLiveStockMarcket = (params) => 
+export const GetLiveStockMarcket = (params) =>
   getRequest('/live-stock-marcket', params);
 
 // Live YouTube
@@ -246,10 +260,10 @@ export const GetLiveYouTube = () => postRequest('/live-link', {});
 // Polls
 export const getPollsIds = () => postRequest('/poll-category', {});
 
-export const getPollByCategoryId = (categoryId) => 
+export const getPollByCategoryId = (categoryId) =>
   postRequest('/poll-questions', { pollcategory_id: categoryId });
 
-export const submitVote = (data) => 
+export const submitVote = (data) =>
   postRequest('/submit-quiz', {
     user_id: data.user_id,
     question_id: data.question_id,
@@ -257,20 +271,20 @@ export const submitVote = (data) =>
   });
 
 // Pages
-export const GetAboutUsData = (portal_id) => 
+export const GetAboutUsData = (portal_id) =>
   getRequest('/page/about-us', { portal_id });
 
-export const GetPrivacyPolicyData = (portal_id) => 
+export const GetPrivacyPolicyData = (portal_id) =>
   getRequest('/page/privacy-and-policy', { portal_id });
 
-export const GetTermsAndConditionData = (portal_id) => 
+export const GetTermsAndConditionData = (portal_id) =>
   getRequest('/page/terms-and-conditions', { portal_id });
 
-export const GetContactData = (portal_id) => 
+export const GetContactData = (portal_id) =>
   getRequest('/contact-us', { portal_id });
 
-export const GetOurRepoterData = (portal_id) => 
+export const GetOurRepoterData = (portal_id) =>
   getRequest('/contact-us', { portal_id });
 
-export const AdvertiseWithUsApi = (data) => 
+export const AdvertiseWithUsApi = (data) =>
   postRequest('/raise-query', data);

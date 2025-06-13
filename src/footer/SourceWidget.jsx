@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import image from "../assets/Ellipse.svg";
 import PropTypes from "prop-types";
 
-const SourceWidget = ({ className = "" }) => {
+const SourceWidget = ({ className = "",redirectTo }) => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const SourceWidget = ({ className = "" }) => {
 
       sessionStorage.setItem("user", JSON.stringify(userData));
 
-      const redirectPath = state?.from?.pathname || "/";
+      const redirectPath = state?.from?.pathname||redirectTo||"/";
       toast.success("Login successful!");
       navigate(redirectPath, { replace: true });
     } catch (error) {

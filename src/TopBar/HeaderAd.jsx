@@ -193,7 +193,7 @@ const HeaderAd = ({
                   href={
                     adData?.is_url === "0" && adData?.ad_url
                       ? adData.ad_url
-                      : "#"
+                      : ""
                   }
                   target="_blank"
                   rel="noopener noreferrer"
@@ -234,7 +234,7 @@ const HeaderAd = ({
             </button> */}
 
             {/* Indicators */}
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
               {adData.ad_image_url.map((_, idx) => (
                 <button
                   key={idx}

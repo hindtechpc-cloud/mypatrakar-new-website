@@ -43,12 +43,12 @@ export default function OwnState({
   if (!articles.length) return <div className="p-4">No articles found</div>;
 
   const featuredArticle = articles[0];
-  const featuredImageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${featuredArticle?.news_img_url}`;
+  // const featuredImageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${featuredArticle?.news_img_url}`;
 
   return (
     <div className="my-2 mb-5">
       <Menu
-        menuText={section_title||" Own State"}
+        menuText={" Own State"}
         menu={menu}
         setSubcategory={setSubcategory}
       />
@@ -58,7 +58,7 @@ export default function OwnState({
             className="md:flex flex-col items-start gap-4 max-w-4xl mx-auto"
             classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
             classNameForContent="w-5/6"
-            image={featuredImageUrl}
+            image={featuredArticle.news_img_url}
             ctaText={featuredArticle.category}
             title={featuredArticle.news_headline}
             description={featuredArticle.news_description_html}
@@ -66,7 +66,7 @@ export default function OwnState({
             news={{
               title:
                 featuredArticle.news_headline,
-              urlToImage: featuredImageUrl,
+              urlToImage: featuredArticle?.news_img_url,
             }}
           />
         </div>

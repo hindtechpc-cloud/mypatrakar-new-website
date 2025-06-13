@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SubmitComment } from "../../../../api";
 import { useParams } from "react-router-dom";
 import { checkAuth } from "../../../utils/checkAuth";
+import { decryptData } from "../../../utils/cryptoHelper";
 
 export default function Feedback() {
   const user = checkAuth(); // ⬅️ Authenticated user, if any
@@ -70,7 +71,7 @@ export default function Feedback() {
         name: isAuthenticated ? user?.user_name : formData?.name,
         email: isAuthenticated ? user.email : formData?.email,
         comment: formData?.comment,
-        news_id: newsId,
+        news_id: decryptData(newsId),
       };
 
       const res = await SubmitComment(payload);
