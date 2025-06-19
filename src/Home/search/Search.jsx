@@ -186,6 +186,7 @@ export default function Search() {
                   }} 
                 />
 <<<<<<< HEAD
+<<<<<<< HEAD
                 {filters.searchTerm && (
                   <button
                     type="button"
@@ -321,6 +322,9 @@ export default function Search() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <NewsFeed newsCard={articles} />
+=======
+              ))}
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
 =======
               ))}
 >>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a

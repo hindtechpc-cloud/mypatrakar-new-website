@@ -1,11 +1,17 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React from "react";
 =======
+=======
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
 // DropdownFilters.jsx (Final Corrected Version)
 
 import React from "react";
 import PropTypes from "prop-types";
 
+<<<<<<< HEAD
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
+=======
 >>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
 const DropdownFilters = ({
   categories = [],
@@ -98,6 +104,7 @@ const DropdownFilters = ({
           >
             <option value="">Select Sort Option</option>
 <<<<<<< HEAD
+<<<<<<< HEAD
             {[
               { lable: "Date", value: "date" },
               { lable: "Latest", value: "latest" },
@@ -107,10 +114,15 @@ const DropdownFilters = ({
                 {option.lable}
               </option>
 =======
+=======
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
             {sortOptions?.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
+<<<<<<< HEAD
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
+=======
 >>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
             ))}
           </select>
@@ -130,6 +142,7 @@ const DropdownFilters = ({
           >
             <option value="">Select Location</option>
 <<<<<<< HEAD
+<<<<<<< HEAD
             {[
               { lable: "Date", value: "date" },
               { lable: "Latest", value: "latest" },
@@ -139,10 +152,15 @@ const DropdownFilters = ({
                 {loc.loc_name}
               </option>
 =======
+=======
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
             {locations?.map((loc) => (
                   <option key={loc.id} value={loc.id}>
                     {loc.name}
                   </option>
+<<<<<<< HEAD
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
+=======
 >>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
             ))}
           </select>
