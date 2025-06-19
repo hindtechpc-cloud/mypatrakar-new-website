@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// src/Home/contactUs/ContactUs.jsx
+import React, { useEffect, useState } from "react";
 import { GetContactData } from "../../../api";
 import call from "../../assets/telephone.svg";
 import whatsapp from "../../assets/whatsapp.svg";

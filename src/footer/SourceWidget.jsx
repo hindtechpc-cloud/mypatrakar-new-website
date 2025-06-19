@@ -1,3 +1,5 @@
+// src/footer/SourceWidget.jsx
+
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";

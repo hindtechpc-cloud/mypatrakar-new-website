@@ -74,10 +74,10 @@ const LiveTv = () => {
                 </div>
               )}
 
-              <div className="relative overflow-hidden rounded-xl shadow-lg border-4 border-white/30 hover:scale-[1.01] transition-transform">
+              <div className="relative overflow-hidden rounded-xl shadow-lg border-4 border-white/30 hover:scale-[1.01] transition-transform ">
                 <iframe
                   className="w-full h-64 md:h-80 rounded-xl"
-                  src={liveUrl}
+                  src={liveUrl + (liveUrl.includes('youtube.com') ? (liveUrl.includes('?') ? '&controls=1' : '?controls=1') : '')}
                   title="Live Stream"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen

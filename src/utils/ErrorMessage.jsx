@@ -1,3 +1,6 @@
+// src/utils/ErrorMessage.jsx
+import React from "react";
+
 const ErrorMessage = ({ message, retryHandler }) => {
   return (
     <div className="text-center p-4 bg-red-50 rounded-lg">

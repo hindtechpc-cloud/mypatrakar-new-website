@@ -1,7 +1,10 @@
+// src/TopBar/SocialIcons.jsx
+
 import * as FaIcons from "react-icons/fa";
 import * as TbIcons from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { GetOwnerSocialLinks } from "../../api";
+import React from "react";
 
 const SocialIcons = () => {
   const [socialLinks, setSocialLinks] = useState([]);

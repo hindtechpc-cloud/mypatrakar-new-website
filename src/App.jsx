@@ -1,4 +1,4 @@
-// App.jsx
+// src/App.jsx
 import {
   BrowserRouter as Router,
 } from "react-router-dom";
