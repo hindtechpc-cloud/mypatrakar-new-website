@@ -8,9 +8,6 @@ const MenuBar = ({ menuText, setSubcategory, menuItems }) => {
     setIsOpen(!isOpen);
   };
 
-  // const handleSubcategory=(item)=>{
-  //   setSubcategory(item);
-  // }
   return (
     <div className="bg-blue-600 text-gray-50 my-2 py-2 rounded-md px-2 mt-5">
       {/* Menu Header */}
@@ -50,7 +47,6 @@ const MenuBar = ({ menuText, setSubcategory, menuItems }) => {
 };
 
 export default function Menu({ menuText, setSubcategory, menu }) {
-  console.log(menuText);
   return (
     <div className="w-full">
       <MenuBar

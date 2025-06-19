@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { WebThemeContext } from "../context/ThemeContext";
 import { getBreakingNews } from "../../api";
 import { Link } from "react-router-dom";
+import { encryptData } from "../utils/cryptoHelper";
 
 const BreakingNewsBar = () => {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
@@ -27,22 +28,49 @@ const BreakingNewsBar = () => {
       try {
         setLoading(true);
         const res = await getBreakingNews("MYAWR241227001");
-
+        console.log(res);
         const response = res?.data?.response;
-        setNewsItems(Array.isArray(response) && response.length > 0
-          ? response
-          : [
-              { news_headline: "सीनियर गेंदबाज का खेलना मुश्किल", news_category_name: "sports", news_id: "1" },
-              { news_headline: "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'", news_category_name: "bollywood", news_id: "2" },
-              { news_headline: "सस्ते इंजेक्शन पर बड़ा फैसला", news_category_name: "health", news_id: "3" },
-            ]
+        setNewsItems(
+          Array.isArray(response) && response.length > 0
+            ? response
+            : [
+                {
+                  news_headline: "सीनियर गेंदबाज का खेलना मुश्किल",
+                  news_category_name: "sports",
+                  news_id: "1",
+                },
+                {
+                  news_headline:
+                    "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'",
+                  news_category_name: "bollywood",
+                  news_id: "2",
+                },
+                {
+                  news_headline: "सस्ते इंजेक्शन पर बड़ा फैसला",
+                  news_category_name: "health",
+                  news_id: "3",
+                },
+              ]
         );
       } catch (err) {
         console.error("Error loading breaking news:", err);
         setNewsItems([
-          { news_headline: "सीनियर गेंदबाज का खेलना मुश्किल", news_category_name: "sports", news_id: "1" },
-          { news_headline: "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'", news_category_name: "bollywood", news_id: "2" },
-          { news_headline: "सस्ते इंजेक्शन पर बड़ा फैसला", news_category_name: "health", news_id: "3" },
+          {
+            news_headline: "सीनियर गेंदबाज का खेलना मुश्किल",
+            news_category_name: "sports",
+            news_id: "1",
+          },
+          {
+            news_headline:
+              "सोनू सूद की तमाम कोशिश के बावजूद नहीं बची लड़की की जान, एक्टर बोले- 'काश! मैं उसे बचा पाता'",
+            news_category_name: "bollywood",
+            news_id: "2",
+          },
+          {
+            news_headline: "सस्ते इंजेक्शन पर बड़ा फैसला",
+            news_category_name: "health",
+            news_id: "3",
+          },
         ]);
       } finally {
         setLoading(false);
@@ -89,7 +117,9 @@ const BreakingNewsBar = () => {
             {newsItems.map((news, index) => (
               <Link
                 key={index}
-                to={`/read-news/${news.news_category_name}/${news.news_id}`}
+                to={`/read-news/${news.news_category_name}/${encryptData(
+                  news.news_id
+                )}`}
                 title={news.news_headline}
                 className="inline-block hover:text-yellow-300 transition-colors duration-200"
               >

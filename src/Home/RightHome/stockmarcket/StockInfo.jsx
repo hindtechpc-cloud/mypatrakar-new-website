@@ -292,7 +292,7 @@ const StockInfo = () => {
           <p className="text-gray-500 mb-4">Select a country and symbol to view stock information</p>
           <div className="text-xs text-gray-400">
             <p>Try: India → RELIANCE.BSE</p>
-            <p>or USA → AAPL</p>
+            <p>or USA → APPLE</p>
           </div>
         </motion.div>
       )}

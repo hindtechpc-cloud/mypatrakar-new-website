@@ -40,9 +40,9 @@ const TopNews = ({ category_id, section_title }) => {
       <Menu menuText={"TopNews"} menu={[]} />
       
       {/* Featured Article - Layout preserved exactly */}
-      <div className="w-full">
+      <div className="w-full flex items-start justify-start">
         <NewsCard
-          className="sm:flex flex-1 w-full items-start gap-4 max-w-xl mx-auto"
+          className="sm:flex flex-1 w-full items-start justify-start gap-4 max-w-xl mx-auto"
           classNameToImage="md:w-2/3 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
           image={featuredArticle?.news_img_url}
           ctaText={featuredArticle?.news_category_name}

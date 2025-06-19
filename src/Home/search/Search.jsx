@@ -264,6 +264,7 @@ export default function Search() {
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow hover:shadow-md transition-all w-full sm:w-auto flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
+                
                 <>
                   <ImSpinner8 className="animate-spin" />
                   Searching...

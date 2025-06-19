@@ -12,7 +12,7 @@ import Election from "./election/Election";
 // No Ads here now!
 export const componentsMap = [
   {
-    order: 3,
+    order: 1,
     section_title: "regional",
     category: "breaking",
     component: TopNews,
@@ -24,7 +24,7 @@ export const componentsMap = [
     component: OwnState,
   },
   {
-    order: 1,
+    order: 3,
     section_title: "state",
     category: "top_news",
     component: State,
