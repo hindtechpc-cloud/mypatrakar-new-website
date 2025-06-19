@@ -1,4 +1,4 @@
-// Layout.jsx
+// src/Layout.jsx
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef, lazy } from "react";
 import { GetTopBannerAds } from "../api";
@@ -11,6 +11,7 @@ import FooterLinks from "./Home/FooterLinks";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { useTranslation } from "react-i18next";
 import Election from "./Home/LeftHome/election/Election";
+import React from "react";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));

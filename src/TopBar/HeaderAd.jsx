@@ -1,5 +1,5 @@
-
-// export default HeaderAd;
+// src/TopBar/HeaderAd.jsx
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { FiAlertCircle, FiExternalLink } from "react-icons/fi";
 import PropTypes from "prop-types";

@@ -1,6 +1,8 @@
+// src/Home/readNews/DownloadNews.jsx
+import React from "react";
 import { jsPDF } from "jspdf";
 
-export default function DownloadNews({news}) {
+export default function DownloadNews({ news }) {
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
 
@@ -21,7 +23,10 @@ export default function DownloadNews({news}) {
 
   return (
     <div className="bg-white p-2 rounded-lg">
-      <div className="text-lg font-bold text-gray-800 my-2" style={{ fontSize: `${zoomText + 5}px` }}>
+      <div
+        className="text-lg font-bold text-gray-800 my-2"
+        style={{ fontSize: `${zoomText + 5}px` }}
+      >
         {news?.title}
       </div>
       <div>

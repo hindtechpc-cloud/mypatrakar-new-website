@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// src/Home/termsAndConditions/TermsAndConditions.jsx
+import React, { useEffect, useState } from "react";
 import { GetTermsAndConditionData } from "../../../api";
 import HtmlToPlainText from "../../utils/HtmlToPlainText";
 

@@ -1,4 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+// src/navigation/Navbar.jsx
+import React, { useState, useEffect } from "react";
+import { useContext } from "react";
 import { FaBars, FaHome, FaSearch, FaTimes } from "react-icons/fa";
 import { CgChevronUp } from "react-icons/cg";
 import { Link, useLocation, useNavigate } from "react-router-dom";

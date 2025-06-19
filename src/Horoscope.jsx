@@ -1,4 +1,5 @@
-import { useState } from "react";
+// src/Horoscope.jsx
+import React, { useState, useEffect } from "react";
 
 const Horoscope = () => {
   const [sign, setSign] = useState("aries");
@@ -12,11 +13,11 @@ const Horoscope = () => {
 
     try {
       const response = await fetch(
-        `https://json.astrologyapi.com/v1/sun_sign_prediction/daily/${sign}`, 
+        `https://json.astrologyapi.com/v1/sun_sign_prediction/daily/${sign}`,
         {
-          method: "POST",  // ✅ Change back to POST
+          method: "POST", // ✅ Change back to POST
           headers: {
-            "Authorization": `Basic ${auth}`,
+            Authorization: `Basic ${auth}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -45,8 +46,7 @@ const Horoscope = () => {
         value={sign}
         onChange={(e) => setSign(e.target.value)}
       >
-        {[
-          "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+        {["aries", "taurus", "gemini", "cancer", "leo", "virgo",
           "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"
         ].map((zodiac) => (
           <option key={zodiac} value={zodiac}>
@@ -54,7 +54,7 @@ const Horoscope = () => {
           </option>
         ))}
       </select>
-      
+
       <button
         className="bg-blue-500 text-white p-2 rounded w-full"
         onClick={getHoroscope}

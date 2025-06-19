@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// src/Home/aboutMypatrakar/AboutMypatrakar.jsx
+import React, { useEffect, useState } from "react";
 import { GetAboutUsData } from "../../../api";
 import HtmlToPlainText from "../../utils/HtmlToPlainText";
 
