@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// src/Home/subcategory/Subcategory.jsx
+import React, { useEffect, useState } from "react";
 import NewsFeed from "../readNews/newsfeed/NewsFeed";
 import { useLocation, useParams } from "react-router-dom";
 import RightHome from "../RightHome/RightHome";

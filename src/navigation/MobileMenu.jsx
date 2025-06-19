@@ -1,3 +1,5 @@
+// src/navigation/MobileMenu.jsx
+import React, { useState } from "react";
 import { FaTimes, FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import MenuItem from "./MenuItem";

@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+// src/TopBar/BreakingNewsBar.jsx
+import React, { useContext, useEffect, useState } from "react";
 import { WebThemeContext } from "../context/ThemeContext";
 import { getBreakingNews } from "../../api";
 import { Link } from "react-router-dom";

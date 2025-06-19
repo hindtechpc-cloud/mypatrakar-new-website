@@ -1,7 +1,9 @@
+// src/Home/advertiseWithUs/AdvertiseWithUs.jsx
 import { useState } from "react";
 import whatsapp from "../../assets/whatsapp.svg";
 import { AdvertiseWithUsApi } from "../../../api";
 import toast from "react-hot-toast";
+import React from "react";
 
 export default function AdvertiseWithUs() {
   const [advertise, setAdvertise] = useState(""); // This maps to `short_description`
