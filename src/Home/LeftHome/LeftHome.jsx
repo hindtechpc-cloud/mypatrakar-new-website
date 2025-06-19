@@ -120,6 +120,10 @@
 //     </div>
 //   );
 // }
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { componentsMap } from "./componentsMap";
 import {
@@ -172,7 +176,9 @@ export default function LeftHome() {
     loadAds();
   }, []);
 
-  const renderAd = (adData, label) => (
+const renderAd = (adData, label) => {
+  console.log("Rendering ad for", label, ":", adData);
+  return (
     <div className="w-full">
       {loadingAds ? (
         <div className="h-[160px] bg-gray-100 flex items-center justify-center rounded shadow">
@@ -189,6 +195,8 @@ export default function LeftHome() {
       )}
     </div>
   );
+};
+
 
   return (
     <div className="w-full space-y-4">

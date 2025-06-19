@@ -6,7 +6,13 @@ import {
   NewsSortBy,
 } from "../../../api";
 import { WebThemeContext } from "../../context/ThemeContext";
-import { FaSearch, FaTimes, FaFilter, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTimes,
+  FaFilter,
+  FaArrowLeft,
+  FaArrowRight,
+} from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
 import DropdownFilters from "./DropdownFilters";
 import HeaderAd from "../../TopBar/HeaderAd";
@@ -35,61 +41,76 @@ export default function Search() {
 
   const { webTheme } = useContext(WebThemeContext);
 
-  const fetchFilteredNews = useCallback(async (page = 1, isNewSearch = false) => {
-    setIsLoading(true);
-    try {
-      const payload = {
-        search_term: filters.searchTerm || undefined,
-        category_id: filters.category || undefined,
-        sub_category_id: filters.subcategory || undefined,
-        location_id: filters.location || undefined,
-        sort_by: filters.sortBy || undefined,
-        page: page,
-      };
+  const fetchFilteredNews = useCallback(
+    async (page = 1, isNewSearch = false) => {
+      setIsLoading(true);
+      try {
+        const payload = {
+          search_term: filters.searchTerm || undefined,
+          category_id: filters.category || undefined,
+          sub_category_id: filters.subcategory || undefined,
+          location_id: filters.location || undefined,
+          sort_by: filters.sortBy || undefined,
+          page: page,
+        };
 
-      // Clean undefined/empty values
-      const cleanPayload = Object.fromEntries(
-        Object.entries(payload).filter(([_, v]) => v !== undefined && v !== "")
-      );
+        // Clean undefined/empty values
+        const cleanPayload = Object.fromEntries(
+          Object.entries(payload).filter(
+            ([_, v]) => v !== undefined && v !== ""
+          )
+        );
 
-      const res = await NewsSortBy("MYAWR241227001", cleanPayload);
-      
-      if (!res?.data?.response) {
-        throw new Error("Invalid response format");
+        const res = await NewsSortBy("MYAWR241227001", cleanPayload);
+
+        if (!res?.data?.response) {
+          throw new Error("Invalid response format");
+        }
+
+        const newArticles = res.data.response;
+        const estimatedTotalPages = Math.ceil(
+          (res.data.total_count || newArticles.length) / 10
+        ); // Default to 10 items per page
+
+        setArticles(newArticles);
+        setTotalPages(estimatedTotalPages);
+        setCurrentPage(page);
+
+        if (isNewSearch) {
+          setSearchHistory((prev) => [
+            ...prev,
+            {
+              filters: { ...filters },
+              page: 1,
+              articles: newArticles,
+            },
+          ]);
+        }
+
+        setError("");
+      } catch (err) {
+        console.error("API Error:", err);
+        setError(
+          err.response?.data?.message || err.message || "Failed to fetch news"
+        );
+      } finally {
+        setIsLoading(false);
       }
+    },
+    [filters]
+  );
 
-      const newArticles = res.data.response;
-      const estimatedTotalPages = Math.ceil((res.data.total_count || newArticles.length) / 10); // Default to 10 items per page
-      
-      setArticles(newArticles);
-      setTotalPages(estimatedTotalPages);
-      setCurrentPage(page);
-      
-      if (isNewSearch) {
-        setSearchHistory(prev => [...prev, {
-          filters: {...filters},
-          page: 1,
-          articles: newArticles
-        }]);
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!filters.searchTerm.trim() && !filters.category) {
+        setError("Please enter a search term or select a category");
+        return;
       }
-
-      setError("");
-    } catch (err) {
-      console.error("API Error:", err);
-      setError(err.response?.data?.message || err.message || "Failed to fetch news");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [filters]);
-
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-    if (!filters.searchTerm.trim() && !filters.category) {
-      setError("Please enter a search term or select a category");
-      return;
-    }
-    fetchFilteredNews(1, true);
-  }, [filters, fetchFilteredNews]);
+      fetchFilteredNews(1, true);
+    },
+    [filters, fetchFilteredNews]
+  );
 
   const handleClear = useCallback(() => {
     setFilters(defaultFilters);
@@ -106,16 +127,19 @@ export default function Search() {
       setFilters(prevState.filters);
       setCurrentPage(prevState.page);
       setArticles(prevState.articles);
-      setSearchHistory(prev => prev.slice(0, -1));
+      setSearchHistory((prev) => prev.slice(0, -1));
     } else {
       handleClear();
     }
   }, [searchHistory, handleClear]);
 
-  const loadPage = useCallback((page) => {
-    if (page < 1 || page > totalPages) return;
-    fetchFilteredNews(page);
-  }, [totalPages, fetchFilteredNews]);
+  const loadPage = useCallback(
+    (page) => {
+      if (page < 1 || page > totalPages) return;
+      fetchFilteredNews(page);
+    },
+    [totalPages, fetchFilteredNews]
+  );
 
   // Initial load: categories and ads
   useEffect(() => {
@@ -126,14 +150,14 @@ export default function Search() {
           GetNewsCategories("MYAWR241227001"),
           GetSearchPageTopAds("MYAWR241227001"),
         ]);
-        
+
         setCategories(catRes?.data?.response || []);
         setTopAds(adRes?.data?.response?.top_banner || {});
-        
+
         // Load first category by default if no filters
         if (!filters.category && catRes?.data?.response?.length > 0) {
           const firstCategoryId = catRes.data.response[0].id;
-          setFilters(prev => ({ ...prev, category: firstCategoryId }));
+          setFilters((prev) => ({ ...prev, category: firstCategoryId }));
         }
       } catch (err) {
         console.error("Initial load failed:", err);
@@ -166,7 +190,10 @@ export default function Search() {
 
     const loadSubcategories = async () => {
       try {
-        const res = await GetNewsSubcategories("MYAWR241227001", filters.category);
+        const res = await GetNewsSubcategories(
+          "MYAWR241227001",
+          filters.category
+        );
         setSubcategories(res?.data?.response || []);
       } catch (err) {
         console.error("Failed to load subcategories:", err);
@@ -200,33 +227,42 @@ export default function Search() {
                 <FaArrowLeft />
               </button>
             )}
-            
+
             {/* Search Bar */}
-            <form onSubmit={handleSubmit} className="flex-1">
+            <form onSubmit={handleSubmit} className="flex-1 ">
               <div
                 className={`${
                   error ? "border border-red-500" : "border border-transparent"
                 } flex items-center gap-2 px-3 py-2 bg-white w-full rounded-lg shadow-sm`}
               >
-                <button 
-                  type="submit" 
-                  className="p-1"
-                  disabled={isLoading}
-                >
-                  <FaSearch className={`${isLoading ? "text-gray-400" : "text-gray-500 hover:text-red-500"} transition-colors`} />
+                <button type="submit" className="p-1" disabled={isLoading}>
+                  <FaSearch
+                    className={`${
+                      isLoading
+                        ? "text-gray-400"
+                        : "text-gray-500 hover:text-red-500"
+                    } transition-colors`}
+                  />
                 </button>
                 <input
                   type="text"
                   placeholder="Search news, categories..."
                   value={filters.searchTerm}
-                  onChange={(e) => setFilters(prev => ({...prev, searchTerm: e.target.value}))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      searchTerm: e.target.value,
+                    }))
+                  }
                   className="border-none outline-none w-full text-gray-700 placeholder-gray-400"
                   disabled={isLoading}
                 />
                 {filters.searchTerm && (
                   <button
                     type="button"
-                    onClick={() => setFilters(prev => ({...prev, searchTerm: ""}))}
+                    onClick={() =>
+                      setFilters((prev) => ({ ...prev, searchTerm: "" }))
+                    }
                     className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
                     disabled={isLoading}
                   >
@@ -247,10 +283,22 @@ export default function Search() {
             <DropdownFilters
               categories={categories}
               subcategories={subcategories}
-              setCategory={(value) => setFilters(prev => ({...prev, category: value, subcategory: ""}))}
-              setSubcategory={(value) => setFilters(prev => ({...prev, subcategory: value}))}
-              setSortBy={(value) => setFilters(prev => ({...prev, sortBy: value}))}
-              setLocation={(value) => setFilters(prev => ({...prev, location: value}))}
+              setCategory={(value) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  category: value,
+                  subcategory: "",
+                }))
+              }
+              setSubcategory={(value) =>
+                setFilters((prev) => ({ ...prev, subcategory: value }))
+              }
+              setSortBy={(value) =>
+                setFilters((prev) => ({ ...prev, sortBy: value }))
+              }
+              setLocation={(value) =>
+                setFilters((prev) => ({ ...prev, location: value }))
+              }
               currentFilters={filters}
               disabled={isLoading}
             />
@@ -299,23 +347,35 @@ export default function Search() {
           <DropdownFilters
             categories={categories}
             subcategories={subcategories}
-            setCategory={(value) => setFilters(prev => ({...prev, category: value, subcategory: ""}))}
-            setSubcategory={(value) => setFilters(prev => ({...prev, subcategory: value}))}
-            setSortBy={(value) => setFilters(prev => ({...prev, sortBy: value}))}
-            setLocation={(value) => setFilters(prev => ({...prev, location: value}))}
+            setCategory={(value) =>
+              setFilters((prev) => ({
+                ...prev,
+                category: value,
+                subcategory: "",
+              }))
+            }
+            setSubcategory={(value) =>
+              setFilters((prev) => ({ ...prev, subcategory: value }))
+            }
+            setSortBy={(value) =>
+              setFilters((prev) => ({ ...prev, sortBy: value }))
+            }
+            setLocation={(value) =>
+              setFilters((prev) => ({ ...prev, location: value }))
+            }
             currentFilters={filters}
             disabled={isLoading}
           />
         </div>
       )}
 
-      {/* Top Banner Ad */}
-      <div className="flex justify-center my-6">
+      {/* Lower Banner Ad */}
+      {/* <div className="flex justify-center my-6">
         <HeaderAd
           className="bg-gray-100 sm:w-[728px] sm:h-[90px] w-full max-w-[320px] h-[100px] rounded-lg overflow-hidden shadow-sm"
           adData={topAds}
         />
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 pb-8">
@@ -330,8 +390,8 @@ export default function Search() {
         {!isLoading && articles.length === 0 ? (
           <div className="text-center py-12">
             <h3 className="text-xl font-medium text-gray-600 mb-2">
-              {filters.searchTerm || filters.category 
-                ? "No articles found" 
+              {filters.searchTerm || filters.category
+                ? "No articles found"
                 : "Search for news or select a category"}
             </h3>
             <p className="text-gray-500">
@@ -347,14 +407,15 @@ export default function Search() {
                 <h2 className="text-xl font-semibold text-gray-800">
                   {filters.searchTerm
                     ? `Results for "${filters.searchTerm}"`
-                    : categories.find(c => c.id === filters.category)?.name || "Latest News"}
+                    : categories.find((c) => c.id === filters.category)?.name ||
+                      "Latest News"}
                 </h2>
                 <span className="text-sm text-gray-500">
                   Page {currentPage} of {totalPages}
                 </span>
               </div>
             )}
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <NewsFeed newsCard={articles} />
             </div>
@@ -372,9 +433,9 @@ export default function Search() {
               <FaArrowLeft />
               Previous
             </button>
-            
+
             <div className="flex items-center px-4">
-              {Array.from({length: Math.min(5, totalPages)}, (_, i) => {
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 // Show pages around current page
                 let pageNum;
                 if (totalPages <= 5) {
@@ -392,16 +453,18 @@ export default function Search() {
                     key={pageNum}
                     onClick={() => loadPage(pageNum)}
                     disabled={pageNum === currentPage || isLoading}
-                    className={`w-10 h-10 rounded-full mx-1 ${pageNum === currentPage 
-                      ? "bg-blue-600 text-white" 
-                      : "bg-white hover:bg-gray-100 text-gray-700"}`}
+                    className={`w-10 h-10 rounded-full mx-1 ${
+                      pageNum === currentPage
+                        ? "bg-blue-600 text-white"
+                        : "bg-white hover:bg-gray-100 text-gray-700"
+                    }`}
                   >
                     {pageNum}
                   </button>
                 );
               })}
             </div>
-            
+
             <button
               onClick={() => loadPage(currentPage + 1)}
               disabled={currentPage >= totalPages || isLoading}

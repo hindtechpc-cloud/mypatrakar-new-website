@@ -1,4 +1,3 @@
-
 // export default HeaderAd;
 import { useEffect, useRef, useState } from "react";
 import { FiAlertCircle, FiExternalLink } from "react-icons/fi";
@@ -11,16 +10,14 @@ const HeaderAd = ({
   maxWidth = "728px",
   enableFallbackCTA = true,
   adData = null,
-  text
+  text,
 }) => {
   const adRef = useRef(null);
   const [adState, setAdState] = useState("loading");
   const [currentIndex, setCurrentIndex] = useState(0);
   const timerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
-
   const imageBaseURL = import.meta.env.VITE_REACT_APP_API_URL_Image;
-
   const isMultipleImages = adData?.ad_image_url?.length > 1;
 
   // Validate and set ad state based on adData
@@ -29,15 +26,15 @@ const HeaderAd = ({
       setAdState("error");
       return;
     }
-
     if (adData?.ad_image_url?.length > 0) {
       setAdState("loaded");
     } else {
       setAdState("error");
     }
   }, [adData]);
-// console.log(text)
+  // console.log(text)
   // Auto slide logic with pause on hover
+
   useEffect(() => {
     if (!isMultipleImages) return;
 
@@ -67,6 +64,8 @@ const HeaderAd = ({
       prev === adData.ad_image_url.length - 1 ? 0 : prev + 1
     );
   };
+
+
 
   // Generate a unique ID for accessibility
   const carouselId = `ad-carousel-${adSlot}`;
@@ -118,7 +117,7 @@ const HeaderAd = ({
             We're having trouble loading this advertisement. You may have an ad
             blocker enabled.
           </p> */}
-{/* 
+          {/* 
           {enableFallbackCTA && (
             <a
               href="/advertise-with-us"
@@ -144,35 +143,34 @@ const HeaderAd = ({
       aria-label="Advertisement"
     >
       <div className="w-full h-full bg-white p-4 flex flex-col justify-center items-center relative">
-        {/* {adData?.ad_title && (
+        {adData?.ad_title && (
           <h3 className="text-lg font-semibold text-gray-800 mb-1">
             {adData.ad_title}
           </h3>
         )}
         {adData?.ad_subtitle && (
-          // <p className="text-sm text-gray-600 mb-4">{adData.ad_subtitle}</p>
-        )} */}
+          <p className="text-sm text-gray-600 mb-4">{adData.ad_subtitle}</p>
+        )}
 
         {/* Single Image */}
-        {!isMultipleImages && (
-          // <a
-          //   href={
-          //     adData?.is_url === "0" && adData?.ad_url ? adData.ad_url : "#"
-          //   }
-          //   target="_blank"
-          //   rel="noopener noreferrer"
-          //   className="w-full"
-          //   aria-label="View advertisement"
-          // >
+        {!isMultipleImages && adData?.ad_image_url?.length > 0 && (
+          <a
+            href={
+              adData?.is_url === "0" && adData?.ad_url ? adData.ad_url : "#"
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full"
+            aria-label="View advertisement"
+          >
             <img
               src={`${imageBaseURL}${adData.ad_image_url[0]}`}
               alt={adData?.ad_title || "Advertisement"}
               className="rounded-lg object-cover w-full h-full max-h-40 hover:opacity-90 transition"
               loading="lazy"
             />
-          // </a>
+          </a>
         )}
-
         {/* Slider for Multiple Images */}
         {isMultipleImages && (
           <div
@@ -218,7 +216,7 @@ const HeaderAd = ({
               ))}
 
             {/* Navigation buttons */}
-            {/* <button
+            <button
               onClick={handlePrev}
               className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-30 text-white p-2 rounded-full z-20 hover:bg-opacity-50 transition"
               aria-label="Previous slide"
@@ -231,7 +229,7 @@ const HeaderAd = ({
               aria-label="Next slide"
             >
               &rarr;
-            </button> */}
+            </button>
 
             {/* Indicators */}
             <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">

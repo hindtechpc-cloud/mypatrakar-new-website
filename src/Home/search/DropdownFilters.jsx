@@ -212,6 +212,7 @@ const DropdownFilters = ({
               ))}
           </select>
         </div>
+        
       </div>
     </div>
   );

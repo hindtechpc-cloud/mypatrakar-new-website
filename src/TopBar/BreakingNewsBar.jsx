@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { WebThemeContext } from "../context/ThemeContext";
 import { getBreakingNews } from "../../api";
 import { Link } from "react-router-dom";
+import { encryptData } from "../utils/cryptoHelper";
 
 const BreakingNewsBar = () => {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
@@ -89,7 +90,7 @@ const BreakingNewsBar = () => {
             {newsItems.map((news, index) => (
               <Link
                 key={index}
-                to={`/read-news/${news.news_category_name}/${news.news_id}`}
+               to={`/read-news/${news.news_category_name}/${encryptData(news.news_id)}`}
                 title={news.news_headline}
                 className="inline-block hover:text-yellow-300 transition-colors duration-200"
               >
