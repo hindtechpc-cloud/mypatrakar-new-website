@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// src/Home/privacyPolicy/PrivacyPolicy.jsx
+import React, { useEffect, useState } from "react";
 import { GetPrivacyPolicyData } from "../../../api";
 
 import HtmlToPlainText from "../../utils/HtmlToPlainText";

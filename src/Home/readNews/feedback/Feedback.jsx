@@ -3,11 +3,12 @@ import { SubmitComment } from "../../../../api";
 import { useParams } from "react-router-dom";
 import { checkAuth } from "../../../utils/checkAuth";
 import { decryptData } from "../../../utils/cryptoHelper";
+import toast from "react-hot-toast";
 
 export default function Feedback() {
   const user = checkAuth(); // ⬅️ Authenticated user, if any
   // console.log(user)
-  const isAuthenticated = !!user && user!== null;
+  const isAuthenticated = !!user && user !== null;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -75,16 +76,23 @@ export default function Feedback() {
       };
 
       const res = await SubmitComment(payload);
-      console.log("Feedback:", res);
+
       if (res?.status === 200 || res?.status_code === 200) {
         setFormData({ name: "", email: "", comment: "" });
         setCharacterCount(0);
-        setSuccessMessage("Thank you for your feedback! Your comment has been posted successfully.");
+        setSuccessMessage(
+          "Thank you for your feedback! Your comment has been posted successfully."
+        );
       } else {
-        setSubmitError(res?.message || "Failed to post comment. Please try again.");
+        setSubmitError(
+          res?.message || "Failed to post comment. Please try again."
+        );
       }
     } catch (error) {
-      setSubmitError(error.message || "Something went wrong. Please try again later.");
+      console.log(error);
+      setSubmitError(
+        error.message || "Something went wrong. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
@@ -92,7 +100,9 @@ export default function Feedback() {
 
   return (
     <div className="w-full mx-auto p-6 bg-white rounded-xl shadow-sm mt-10 border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Share Your Thoughts</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        Share Your Thoughts
+      </h2>
 
       {/* Success and Error Messages */}
       {successMessage && (
@@ -110,7 +120,10 @@ export default function Feedback() {
         {!isAuthenticated && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Your Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -124,11 +137,16 @@ export default function Feedback() {
                   errors.name ? "border-red-300 bg-red-50" : "border-gray-300"
                 }`}
               />
-              {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+              {errors.name && (
+                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+              )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -142,17 +160,26 @@ export default function Feedback() {
                   errors.email ? "border-red-300 bg-red-50" : "border-gray-300"
                 }`}
               />
-              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
           </div>
         )}
 
         <div>
           <div className="flex justify-between items-center mb-1">
-            <label htmlFor="comment" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="comment"
+              className="block text-sm font-medium text-gray-700"
+            >
               Your Feedback <span className="text-red-500">*</span>
             </label>
-            <span className={`text-xs ${characterCount > 500 ? "text-red-500" : "text-gray-500"}`}>
+            <span
+              className={`text-xs ${
+                characterCount > 500 ? "text-red-500" : "text-gray-500"
+              }`}
+            >
               {characterCount}/500
             </span>
           </div>
@@ -168,7 +195,9 @@ export default function Feedback() {
             rows="5"
             maxLength="500"
           ></textarea>
-          {errors.comment && <p className="mt-1 text-sm text-red-600">{errors.comment}</p>}
+          {errors.comment && (
+            <p className="mt-1 text-sm text-red-600">{errors.comment}</p>
+          )}
         </div>
 
         <div className="pt-2">
@@ -176,14 +205,32 @@ export default function Feedback() {
             type="submit"
             disabled={loading}
             className={`w-full md:w-auto px-6 py-3 text-sm font-medium rounded-lg transition-all ${
-              loading ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+              loading
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
             } flex items-center justify-center`}
           >
             {loading ? (
               <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
                 </svg>
                 Posting...
               </>

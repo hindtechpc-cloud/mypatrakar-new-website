@@ -1,3 +1,5 @@
+// Search.jsx (Final Corrected Version)
+
 import { useContext, useEffect, useState, useCallback } from "react";
 import {
   GetNewsCategories,
@@ -16,7 +18,7 @@ import {
 import { ImSpinner8 } from "react-icons/im";
 import DropdownFilters from "./DropdownFilters";
 import HeaderAd from "../../TopBar/HeaderAd";
-import NewsFeed from "../readNews/newsfeed/NewsFeed";
+import ArticleListItem from "./ArticleListItem";
 
 const defaultFilters = {
   searchTerm: "",
@@ -25,11 +27,22 @@ const defaultFilters = {
   location: "",
   sortBy: "",
 };
+const mockLocations = [
+    { id: 'up', name: 'उत्तर प्रदेश' },
+    { id: 'mp', name: 'मध्य प्रदेश' },
+    { id: 'delhi', name: 'दिल्ली' },
+];
+const mockSortOptions = [
+    { label: "Latest", value: "latest" },
+    { label: "Popular", value: "popular" },
+    { label: "Date", value: "date" },
+];
 
 export default function Search() {
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [locations, setLocations] = useState(mockLocations);
   const [topAds, setTopAds] = useState({});
   const [filters, setFilters] = useState(defaultFilters);
   const [error, setError] = useState("");
@@ -37,157 +50,83 @@ export default function Search() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchHistory, setSearchHistory] = useState([]);
-
+  
   const { webTheme } = useContext(WebThemeContext);
 
-  const fetchFilteredNews = useCallback(
-    async (page = 1, isNewSearch = false) => {
-      setIsLoading(true);
-      try {
-        const payload = {
-          search_term: filters.searchTerm || undefined,
-          category_id: filters.category || undefined,
-          sub_category_id: filters.subcategory || undefined,
-          location_id: filters.location || undefined,
-          sort_by: filters.sortBy || undefined,
-          page: page,
-        };
+  // This function is now fully independent and relies only on its arguments.
+  const fetchFilteredNews = useCallback(async (page = 1, currentFilters) => {
+    if (!currentFilters.searchTerm.trim() && !currentFilters.category) {
+      setArticles([]);
+      return;
+    }
+    setIsLoading(true);
+    setError("");
+    try {
+      const payload = {
+        search_term: currentFilters.searchTerm || undefined,
+        category_id: currentFilters.category || undefined,
+        sub_category_id: currentFilters.subcategory || undefined,
+        location_id: currentFilters.location || undefined,
+        sort_by: currentFilters.sortBy || undefined,
+        page: page,
+      };
+      const cleanPayload = Object.fromEntries(
+        Object.entries(payload).filter(([_, v]) => v)
+      );
+      const res = await NewsSortBy("MYAWR241227001", cleanPayload);
+      const newArticles = res?.data?.response || [];
+      setArticles(newArticles);
+      setTotalPages(Math.ceil((res?.data?.total_count || newArticles.length) / 10) || 1);
+      setCurrentPage(page);
+    } catch (err) {
+      console.error("API Error:", err);
+      setArticles([]);
+      setError("Failed to fetch news.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []); // Empty dependency array makes this function stable.
 
-        // Clean undefined/empty values
-        const cleanPayload = Object.fromEntries(
-          Object.entries(payload).filter(
-            ([_, v]) => v !== undefined && v !== ""
-          )
-        );
+  // This handler now correctly captures the latest filters state when called.
+  const handleSubmit = useCallback((e) => {
+    e.preventDefault();
+    fetchFilteredNews(1, filters); // Pass the current filters state on submit
+  }, [fetchFilteredNews, filters]);
 
-        const res = await NewsSortBy("MYAWR241227001", cleanPayload);
-
-        if (!res?.data?.response) {
-          throw new Error("Invalid response format");
-        }
-
-        const newArticles = res.data.response;
-        const estimatedTotalPages = Math.ceil(
-          (res.data.total_count || newArticles.length) / 10
-        ); // Default to 10 items per page
-
-        setArticles(newArticles);
-        setTotalPages(estimatedTotalPages);
-        setCurrentPage(page);
-
-        if (isNewSearch) {
-          setSearchHistory((prev) => [
-            ...prev,
-            {
-              filters: { ...filters },
-              page: 1,
-              articles: newArticles,
-            },
-          ]);
-        }
-
-        setError("");
-      } catch (err) {
-        console.error("API Error:", err);
-        setError(
-          err.response?.data?.message || err.message || "Failed to fetch news"
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [filters]
-  );
-
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (!filters.searchTerm.trim() && !filters.category) {
-        setError("Please enter a search term or select a category");
-        return;
-      }
-      fetchFilteredNews(1, true);
-    },
-    [filters, fetchFilteredNews]
-  );
-
+  // The clear handler remains the same
   const handleClear = useCallback(() => {
     setFilters(defaultFilters);
     setArticles([]);
     setError("");
     setCurrentPage(1);
     setTotalPages(1);
-    setSearchHistory([]);
   }, []);
 
-  const goBack = useCallback(() => {
-    if (searchHistory.length > 1) {
-      const prevState = searchHistory[searchHistory.length - 2];
-      setFilters(prevState.filters);
-      setCurrentPage(prevState.page);
-      setArticles(prevState.articles);
-      setSearchHistory((prev) => prev.slice(0, -1));
-    } else {
-      handleClear();
-    }
-  }, [searchHistory, handleClear]);
+  // The pagination handler now correctly captures the latest filters
+  const loadPage = useCallback((page) => {
+    if (page < 1 || page > totalPages) return;
+    fetchFilteredNews(page, filters); // Pass current filters when changing pages
+  }, [totalPages, fetchFilteredNews, filters]);
 
-  const loadPage = useCallback(
-    (page) => {
-      if (page < 1 || page > totalPages) return;
-      fetchFilteredNews(page);
-    },
-    [totalPages, fetchFilteredNews]
-  );
-
-  // Initial load: categories and ads
+  // Initial data load useEffects remain the same
   useEffect(() => {
     const loadInitialData = async () => {
-      setIsLoading(true);
       try {
         const [catRes, adRes] = await Promise.all([
           GetNewsCategories("MYAWR241227001"),
           GetSearchPageTopAds("MYAWR241227001"),
         ]);
-
         setCategories(catRes?.data?.response || []);
         setTopAds(adRes?.data?.response?.top_banner || {});
-
-        // Load first category by default if no filters
-        if (!filters.category && catRes?.data?.response?.length > 0) {
-          const firstCategoryId = catRes.data.response[0].id;
-          setFilters((prev) => ({ ...prev, category: firstCategoryId }));
-        }
-      } catch (err) {
-        console.error("Initial load failed:", err);
-        setError("Failed to load initial data");
-      } finally {
-        setIsLoading(false);
-      }
+      } catch (err) { console.error("Initial load failed:", err); }
     };
-
     loadInitialData();
   }, []);
-
-  // Fetch news when filters change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (filters.category || filters.searchTerm) {
-        fetchFilteredNews(1, true);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [filters, fetchFilteredNews]);
-
-  // Fetch subcategories when category changes
   useEffect(() => {
     if (!filters.category) {
       setSubcategories([]);
       return;
     }
-
     const loadSubcategories = async () => {
       try {
         const res = await GetNewsSubcategories(
@@ -196,67 +135,67 @@ export default function Search() {
         );
         setSubcategories(res?.data?.response || []);
       } catch (err) {
+        setSubcategories([]);
         console.error("Failed to load subcategories:", err);
       }
     };
-
     loadSubcategories();
   }, [filters.category]);
-
+  
   return (
-    <div className="mt-1 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       {/* Search Header */}
-      <div
-        className="py-4 sticky top-0 z-10 shadow-md"
-        style={{
-          backgroundColor:
-            webTheme["bg-color"] === "#e60000"
-              ? "#b91c1c"
-              : webTheme["bg-color"],
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-4 mb-2">
-            {searchHistory.length > 0 && (
-              <button
-                onClick={goBack}
-                disabled={isLoading}
-                className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white transition-colors disabled:opacity-50"
-                aria-label="Go back"
-              >
-                <FaArrowLeft />
-              </button>
-            )}
+      <div className="py-4 sticky top-0 z-20 shadow-md" style={{ backgroundColor: webTheme["bg-color"] || "#b91c1c" }}>
+        <div className="max-w-5xl mx-auto px-4 flex items-center gap-4">
+          <form onSubmit={handleSubmit} className="flex-1">
+            <div className="flex items-center bg-white rounded-sm p-2 shadow-sm">
+              <button type="submit" className="text-gray-500 pl-2 pr-3" aria-label="Search" disabled={isLoading}><FaSearch /></button>
+              <input type="text" placeholder="Search news..." value={filters.searchTerm} onChange={(e) => setFilters(prev => ({...prev, searchTerm: e.target.value}))} className="border-none outline-none text-gray-800 placeholder-gray-500 w-full" disabled={isLoading}/>
+              {filters.searchTerm && (<button type="button" onClick={() => setFilters(prev => ({...prev, searchTerm: ""}))} className="p-1 text-gray-400 hover:text-gray-600"><FaTimes /></button>)}
+            </div>
+          </form>
+          <button type="button" onClick={() => setShowMobileFilters(!showMobileFilters)} className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-700 hover:bg-gray-100" aria-label="Toggle filters"><FaFilter /></button>
+        </div>
+      </div>
+      
+      {/* Main content */}
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        <div className="mb-6 p-6 rounded-lg bg-white shadow-sm">
+          <div className={`${showMobileFilters ? 'block' : 'hidden'} md:block`}>
+            <DropdownFilters categories={categories} subcategories={subcategories} locations={locations} sortOptions={mockSortOptions} setCategory={(value) => setFilters(prev => ({...prev, category: value, subcategory: ""}))} setSubcategory={(value) => setFilters(prev => ({...prev, subcategory: value}))} setSortBy={(value) => setFilters(prev => ({...prev, sortBy: value}))} setLocation={(value) => setFilters(prev => ({...prev, location: value}))} currentFilters={filters} disabled={isLoading}/>
+          </div>
+        </div>
 
-            {/* Search Bar */}
-            <form onSubmit={handleSubmit} className="flex-1 ">
-              <div
-                className={`${
-                  error ? "border border-red-500" : "border border-transparent"
-                } flex items-center gap-2 px-3 py-2 bg-white w-full rounded-lg shadow-sm`}
-              >
-                <button type="submit" className="p-1" disabled={isLoading}>
-                  <FaSearch
-                    className={`${
-                      isLoading
-                        ? "text-gray-400"
-                        : "text-gray-500 hover:text-red-500"
-                    } transition-colors`}
-                  />
-                </button>
-                <input
-                  type="text"
-                  placeholder="Search news, categories..."
-                  value={filters.searchTerm}
-                  onChange={(e) =>
-                    setFilters((prev) => ({
-                      ...prev,
-                      searchTerm: e.target.value,
-                    }))
-                  }
-                  className="border-none outline-none w-full text-gray-700 placeholder-gray-400"
-                  disabled={isLoading}
+        <div className="flex items-center justify-center gap-4 my-6">
+          <button onClick={handleSubmit} disabled={isLoading || (!filters.searchTerm && !filters.category)} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-10 rounded shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+            {isLoading ? (<><ImSpinner8 className="animate-spin" /> Searching...</>) : "SEARCH"}
+          </button>
+          <button onClick={handleClear} className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-10 rounded shadow-md hover:shadow-lg transition-all disabled:opacity-70">CLEAR</button>
+        </div>
+
+        <div className="flex justify-center my-6"><HeaderAd adData={topAds} /></div>
+        
+        {error && <p className="text-red-500 text-center my-4 font-semibold">{error}</p>}
+        
+        {/* Articles List */}
+        <div className="mt-8 bg-white p-6 rounded-lg shadow-sm flex flex-col items-center justify-center min-h-[40vh]">
+          {isLoading ? (
+            <div className="flex justify-center items-center py-20 w-full"><ImSpinner8 className="animate-spin text-4xl text-gray-400" /></div>
+          ) : articles.length > 0 ? (
+            <div className="w-full max-w-4xl">
+              {articles.map((article) => (
+                <ArticleListItem 
+                  key={article.news_id} 
+                  article={{
+                    image: article.news_img_url,
+                    title: article.news_headline,
+                    description: article.news_description_html || 'No description available.',
+                    category: article.news_category_name,
+                    url: `/news/${article.news_id}`,
+                  }} 
                 />
+<<<<<<< HEAD
+<<<<<<< HEAD
                 {filters.searchTerm && (
                   <button
                     type="button"
@@ -312,6 +251,7 @@ export default function Search() {
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow hover:shadow-md transition-all w-full sm:w-auto flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
+                
                 <>
                   <ImSpinner8 className="animate-spin" />
                   Searching...
@@ -418,62 +358,28 @@ export default function Search() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <NewsFeed newsCard={articles} />
+=======
+              ))}
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
+=======
+              ))}
+>>>>>>> 03a0cc5dbf119e107f469fdcf1fe2cc1fc0aa60a
             </div>
-          </>
-        )}
-
-        {/* Pagination Controls */}
-        {articles.length > 0 && totalPages > 1 && (
-          <div className="mt-8 flex justify-center gap-4">
-            <button
-              onClick={() => loadPage(currentPage - 1)}
-              disabled={currentPage <= 1 || isLoading}
-              className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <FaArrowLeft />
-              Previous
-            </button>
-
-            <div className="flex items-center px-4">
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                // Show pages around current page
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
-
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => loadPage(pageNum)}
-                    disabled={pageNum === currentPage || isLoading}
-                    className={`w-10 h-10 rounded-full mx-1 ${
-                      pageNum === currentPage
-                        ? "bg-blue-600 text-white"
-                        : "bg-white hover:bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
+          ) : (
+            <div className="text-center py-12 w-full">
+              <h3 className="text-xl font-medium text-gray-600 mb-2">Search for News</h3>
+              <p className="text-gray-500">Use the search bar and filters above to find articles.</p>
             </div>
+          )}
+        </div>
 
-            <button
-              onClick={() => loadPage(currentPage + 1)}
-              disabled={currentPage >= totalPages || isLoading}
-              className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-              <FaArrowRight />
-            </button>
-          </div>
+        {/* Pagination */}
+        {!isLoading && articles.length > 0 && totalPages > 1 && (
+            <div className="mt-8 flex justify-center items-center gap-4">
+                <button onClick={() => loadPage(currentPage - 1)} disabled={currentPage <= 1} className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm transition-colors disabled:opacity-50"><FaArrowLeft /> Previous</button>
+                <span className="text-gray-700 font-medium">Page {currentPage} of {totalPages}</span>
+                <button onClick={() => loadPage(currentPage + 1)} disabled={currentPage >= totalPages} className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm transition-colors disabled:opacity-50">Next <FaArrowRight /></button>
+            </div>
         )}
       </main>
     </div>

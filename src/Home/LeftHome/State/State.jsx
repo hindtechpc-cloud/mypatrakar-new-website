@@ -59,18 +59,18 @@ const State = ({
           No articles found for this state.
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center gap-6 mt-8">
+        <div className="flex flex-col  md:items-center md:justify-center gap-6 mt-8">
           {articles?.map((article) => (
             <NewsCard
               key={article.news_id}
-              className="flex items-center justify-center gap-5 "
-              classNameToImage="w-full md:w-[500px] h-40 object-center rounded"
+              className="flex flex-col md:flex-row items-center justify-center gap-5 "
+              classNameToImage="w-full md:w-[400px] h- aspect-video object-cover rounded-lg"
               image={article?.news_img_url}
               ctaText={category || "General"}
               title={article.news_headline || "Untitled Article"}
               description={article.news_description_html}
               newsId={article.news_id}
-              classNameForContent={"flex flex-col items-start justify-center gap-3"}
+              classNameForContent={"w-full md:w-2/3 flex flex-col items-start sm:items-center justify-start gap-3"}
               news={{
                 title: article.news_headline,
                 urlToImage: article?.news_img_url

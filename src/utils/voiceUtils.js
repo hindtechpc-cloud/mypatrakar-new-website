@@ -33,7 +33,7 @@ export const handleReadAloud = ({
   } else {
     const utterance = new SpeechSynthesisUtterance(
       `${news.news_title || news.news_headline} ${stripHtmlTags(
-        news.news_des || news.news_description
+        news.news_des || news.news_description_html
       )}`
     );
     utterance.voice = selectedVoice;

@@ -1,5 +1,6 @@
+// src/Home/ourRporters/OurReporters.jsx
+import React, { useEffect, useState } from "react";
 import { FaEnvelope, FaPhone, FaWhatsapp } from "react-icons/fa6";
-import { useEffect, useState } from "react";
 import { GetOurRepoterData } from "../../../api";
 
 export default function OurReporters() {
