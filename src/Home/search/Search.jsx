@@ -8,7 +8,13 @@ import {
   NewsSortBy,
 } from "../../../api";
 import { WebThemeContext } from "../../context/ThemeContext";
-import { FaSearch, FaTimes, FaFilter, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTimes,
+  FaFilter,
+  FaArrowLeft,
+  FaArrowRight,
+} from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
 import DropdownFilters from "./DropdownFilters";
 import HeaderAd from "../../TopBar/HeaderAd";
@@ -123,7 +129,10 @@ export default function Search() {
     }
     const loadSubcategories = async () => {
       try {
-        const res = await GetNewsSubcategories("MYAWR241227001", filters.category);
+        const res = await GetNewsSubcategories(
+          "MYAWR241227001",
+          filters.category
+        );
         setSubcategories(res?.data?.response || []);
       } catch (err) {
         setSubcategories([]);
@@ -190,7 +199,9 @@ export default function Search() {
                 {filters.searchTerm && (
                   <button
                     type="button"
-                    onClick={() => setFilters(prev => ({...prev, searchTerm: ""}))}
+                    onClick={() =>
+                      setFilters((prev) => ({ ...prev, searchTerm: "" }))
+                    }
                     className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
                     disabled={isLoading}
                   >
@@ -211,10 +222,22 @@ export default function Search() {
             <DropdownFilters
               categories={categories}
               subcategories={subcategories}
-              setCategory={(value) => setFilters(prev => ({...prev, category: value, subcategory: ""}))}
-              setSubcategory={(value) => setFilters(prev => ({...prev, subcategory: value}))}
-              setSortBy={(value) => setFilters(prev => ({...prev, sortBy: value}))}
-              setLocation={(value) => setFilters(prev => ({...prev, location: value}))}
+              setCategory={(value) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  category: value,
+                  subcategory: "",
+                }))
+              }
+              setSubcategory={(value) =>
+                setFilters((prev) => ({ ...prev, subcategory: value }))
+              }
+              setSortBy={(value) =>
+                setFilters((prev) => ({ ...prev, sortBy: value }))
+              }
+              setLocation={(value) =>
+                setFilters((prev) => ({ ...prev, location: value }))
+              }
               currentFilters={filters}
               disabled={isLoading}
             />
@@ -264,23 +287,35 @@ export default function Search() {
           <DropdownFilters
             categories={categories}
             subcategories={subcategories}
-            setCategory={(value) => setFilters(prev => ({...prev, category: value, subcategory: ""}))}
-            setSubcategory={(value) => setFilters(prev => ({...prev, subcategory: value}))}
-            setSortBy={(value) => setFilters(prev => ({...prev, sortBy: value}))}
-            setLocation={(value) => setFilters(prev => ({...prev, location: value}))}
+            setCategory={(value) =>
+              setFilters((prev) => ({
+                ...prev,
+                category: value,
+                subcategory: "",
+              }))
+            }
+            setSubcategory={(value) =>
+              setFilters((prev) => ({ ...prev, subcategory: value }))
+            }
+            setSortBy={(value) =>
+              setFilters((prev) => ({ ...prev, sortBy: value }))
+            }
+            setLocation={(value) =>
+              setFilters((prev) => ({ ...prev, location: value }))
+            }
             currentFilters={filters}
             disabled={isLoading}
           />
         </div>
       )}
 
-      {/* Top Banner Ad */}
-      <div className="flex justify-center my-6">
+      {/* Lower Banner Ad */}
+      {/* <div className="flex justify-center my-6">
         <HeaderAd
           className="bg-gray-100 sm:w-[728px] sm:h-[90px] w-full max-w-[320px] h-[100px] rounded-lg overflow-hidden shadow-sm"
           adData={topAds}
         />
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 pb-8">
@@ -295,8 +330,8 @@ export default function Search() {
         {!isLoading && articles.length === 0 ? (
           <div className="text-center py-12">
             <h3 className="text-xl font-medium text-gray-600 mb-2">
-              {filters.searchTerm || filters.category 
-                ? "No articles found" 
+              {filters.searchTerm || filters.category
+                ? "No articles found"
                 : "Search for news or select a category"}
             </h3>
             <p className="text-gray-500">
@@ -312,14 +347,15 @@ export default function Search() {
                 <h2 className="text-xl font-semibold text-gray-800">
                   {filters.searchTerm
                     ? `Results for "${filters.searchTerm}"`
-                    : categories.find(c => c.id === filters.category)?.name || "Latest News"}
+                    : categories.find((c) => c.id === filters.category)?.name ||
+                      "Latest News"}
                 </h2>
                 <span className="text-sm text-gray-500">
                   Page {currentPage} of {totalPages}
                 </span>
               </div>
             )}
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <NewsFeed newsCard={articles} />
 =======

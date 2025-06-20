@@ -165,6 +165,7 @@ export const GetShortsNews = (portal_id) =>
 
 export const GetShortsNewsDetails = (portal_id) =>
   postRequest('/short-news-details', { short_id: portal_id });
+
 export const SubmitShortsClap = (short_id, user_id) =>
   postRequest('/submit-clap', { shorts_id:short_id, user_id });
 
@@ -241,6 +242,8 @@ export const GetElectionYear = (election_poll_id) =>
   postRequest('/election-years', { election_poll_id });
 
 export const GetElectionPolls = () => getRequest('/election-poll');
+//Roadmap
+export const GetTrending = () => getRequest('/road-map');
 
 // Horoscope
 export const GetHoroscope = (sign) =>

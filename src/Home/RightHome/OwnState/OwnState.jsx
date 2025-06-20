@@ -1,50 +1,72 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Header from "../shared/Header";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
+import { GetTrending } from "../../../../api";
 
 export default function OwnState() {
-  const articles = [
-    {
-      title:
-        "कौन है वो कांग्रेस नेता जिसने 'खुद को ही मान लिया कानून...? अब सुप्रीम कोर्ट ने की बड़ी टिप्पणी",
-      date: "March 6, 2024",
-      urlToImage: "https://picsum.photos/200/500",
-    },
-    {
-      title:
-        "महिला रैली में पीएम मोदी बोले, “भाज़पा ने नारी शक्ति को बनाया विकासशील भारत की शक्ति”",
-      date: "March 6, 2024",
-      urlToImage: "https://picsum.photos/200/300",
-    },
-    {
-      title:
-        "आखिर अचानक क्यों बंद हो गया था Facebook और Instagram! META ने दिया ये जवाब",
-      date: "March 6, 2024",
-      urlToImage: "https://picsum.photos/200/200",
-    },
-    {
-      title:
-        "PM MODI ने नमो भारत ट्रेन का किया उद्घाटन, सांसद वी के सिंह और मंत्री हरदीप सिंह पुरी रहे मौजूद",
-      date: "March 6, 2024",
-      urlToImage: "https://picsum.photos/200/700",
-    },
-  ];
+  // const articles = [
+  //   {
+  //     title:
+  //       "कौन है वो कांग्रेस नेता जिसने 'खुद को ही मान लिया कानून...? अब सुप्रीम कोर्ट ने की बड़ी टिप्पणी",
+  //     date: "March 6, 2024",
+  //     urlToImage: "https://picsum.photos/200/500",
+  //   },
+  //   {
+  //     title:
+  //       "महिला रैली में पीएम मोदी बोले, “भाज़पा ने नारी शक्ति को बनाया विकासशील भारत की शक्ति”",
+  //     date: "March 6, 2024",
+  //     urlToImage: "https://picsum.photos/200/300",
+  //   },
+  //   {
+  //     title:
+  //       "आखिर अचानक क्यों बंद हो गया था Facebook और Instagram! META ने दिया ये जवाब",
+  //     date: "March 6, 2024",
+  //     urlToImage: "https://picsum.photos/200/200",
+  //   },
+  //   {
+  //     title:
+  //       "PM MODI ने नमो भारत ट्रेन का किया उद्घाटन, सांसद वी के सिंह और मंत्री हरदीप सिंह पुरी रहे मौजूद",
+  //     date: "March 6, 2024",
+  //     urlToImage: "https://picsum.photos/200/700",
+  //   },
+  // ];
 
-  const loadNews=async()=>{
-    try {
-      // const res=await GetR
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [articles, setArticles] = useState([]);
+  const [loading, setloading] = useState(true);
+  const [error, setError] = useState(null);
   const [hoverIndex, setHoverIndex] = useState(null); // State to track the hovered index
   const { setNews } = useContext(NewsContext);
   const navigate = useNavigate();
+
   const handleNewsContent = (news) => {
     setNews(news);
     navigate(`/read-news/${news.title}`);
   };
+
+  useEffect(() => {
+    const loadTrending = async () => {
+      try{
+        setloading(true);
+        const response = await GetTrending();
+        const trendingArticles = response?.data?.response;
+        const formattedArticles = trendingArticles.map(article => ({
+          title: article.roadmap,
+          date: article.date,
+        }));
+
+        setArticles(formattedArticles);
+      }
+      catch(err){
+        console.error(err);
+        setError("Failed to load trending news");
+      }
+      finally{
+        setloading(false);
+      }
+    };
+    loadTrending();
+  }, []);
 
   return (
     <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
