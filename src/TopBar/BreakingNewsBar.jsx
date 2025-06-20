@@ -1,4 +1,3 @@
-// src/TopBar/BreakingNewsBar.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { WebThemeContext } from "../context/ThemeContext";
 import { getBreakingNews } from "../../api";
@@ -29,7 +28,7 @@ const BreakingNewsBar = () => {
       try {
         setLoading(true);
         const res = await getBreakingNews("MYAWR241227001");
-        console.log(res);
+        // console.log(res);
         const response = res?.data?.response;
         setNewsItems(
           Array.isArray(response) && response.length > 0

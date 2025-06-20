@@ -1,10 +1,12 @@
+// PostsListWidget.jsx (Final Fixed Version)
+
 import { useContext, useEffect, useState } from "react";
 import { NewsContext } from "../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import { newsRoadMapBottom } from "../../api";
 import { motion } from "framer-motion";
 import { FiClock } from "react-icons/fi";
-import LoadingSkeleton from "./LoadingSkeleton"; // You'll need to create this component
+import LoadingSkeleton from "./LoadingSkeleton"; // Ensure this exists
 import { encryptData } from "../utils/cryptoHelper";
 
 const PostsListWidget = () => {
@@ -26,7 +28,7 @@ const PostsListWidget = () => {
       setError(null);
       const res = await newsRoadMapBottom("");
       if (res?.data?.response) {
-        setArticles(res.data.response.slice(0, 4)); // Only take first 4 articles
+        setArticles(res.data.response.slice(0, 4)); // limit to 4 articles
       } else {
         setError("No articles found");
       }
@@ -57,9 +59,7 @@ const PostsListWidget = () => {
     show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
-  if (loading) {
-    return <LoadingSkeleton count={4} />;
-  }
+  if (loading) return <LoadingSkeleton count={4} />;
 
   if (error) {
     return (
@@ -87,7 +87,7 @@ const PostsListWidget = () => {
       </div>
 
       <motion.div
-        className="flex flex-col space-y-6"
+        className="flex flex-col space-y-"
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -95,21 +95,21 @@ const PostsListWidget = () => {
         {articles.map((article, index) => (
           <motion.div
             key={article.news_id || index}
-            className="relative pl-4 group"
+            className="relative pl-6 group"
             variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
+           
           >
-            {/* Timeline decoration */}
-            <div className="absolute left-0 top-0 h-full flex flex-col items-center">
-              <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-yellow-500' : 'bg-gray-600'} group-hover:bg-yellow-400 transition-colors`} />
+            {/* Timeline dot and line */}
+            <div className="absolute left-0 top-0 flex flex-col items-center h-full">
+              <div className={`w-3 h-3 rounded-full ${index === 0 ? "bg-yellow-500" : "bg-gray-600"} group-hover:bg-yellow-400 transition-colors`} />
               {index !== articles.length - 1 && (
-                <div className="w-px h-full bg-gray-600 group-hover:bg-yellow-400 transition-colors" />
+                <div className="w-px flex-1 bg-gray-600 group-hover:bg-yellow-400 transition-colors" />
               )}
             </div>
 
             {/* News content */}
-            <div 
-              className="ml-4 cursor-pointer"
+            <div
+              className="ml-2 cursor-pointer"
               onClick={() => handleNewsContent(article)}
             >
               <p className="text-xs text-gray-400 mb-1 flex items-center">
@@ -124,18 +124,6 @@ const PostsListWidget = () => {
           </motion.div>
         ))}
       </motion.div>
-
-      {/* {articles.length > 0 && (
-        <button 
-          onClick={loadRoadMap}
-          className="mt-6 text-xs text-gray-400 hover:text-yellow-400 transition-colors flex items-center"
-        >
-          Refresh
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </button>
-      )} */}
     </div>
   );
 };

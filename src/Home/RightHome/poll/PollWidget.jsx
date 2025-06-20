@@ -26,7 +26,7 @@ export const PollWidget = () => {
         question_id: poll.question_id,
         option_id: selectedOptionId,
       });
-      // console.log("Submitted vote:", res);
+      console.log("Submitted vote:", res);
 
       // ✅ Update local UI
       const updatedOptions = poll.options.map((option) =>
