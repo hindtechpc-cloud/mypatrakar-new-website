@@ -20,9 +20,8 @@ const Header = () => {
   const { webTheme } = useContext(WebThemeContext);
   const location = useLocation();
 
-  const themeColorClass = webTheme["bg-color"] === "#e60000"
-    ? "bg-red-700"
-    : webTheme["bg-color"];
+  const themeColorClass =
+    webTheme["bg-color"] === "#e60000" ? "bg-red-700" : webTheme["bg-color"];
 
   const isInfoPage = [
     "/about-us",
@@ -37,30 +36,28 @@ const Header = () => {
     <header
       className={`w-full ${themeColorClass} text-white py-4 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300`}
       style={{
-
-          // chnages background color
-          // backgroundColor:
-          backgroundColor:
-            !webTheme["bg-color"] 
-              ? "#b91c1c"
-              : webTheme["bg-color"],
-        }}
+        // chnages background color
+        // backgroundColor:
+        backgroundColor: !webTheme["bg-color"]
+          ? "#b91c1c"
+          : webTheme["bg-color"],
+      }}
     >
       <div className="max-w-7xl mx-auto">
         {isInfoPage && (
           <div className="flex justify-between items-center mb-4">
             <div className="w-14 hover:scale-105 transition-transform duration-200">
-              <img 
-                src={logo1} 
-                alt="Icon Logo" 
-                className="w-full drop-shadow-md" 
+              <img
+                src={logo1}
+                alt="Icon Logo"
+                className="w-full drop-shadow-md"
               />
             </div>
             <div className="w-20 h-20 hover:scale-105 transition-transform duration-200">
-              <img 
-                src={webTheme["web-logo"]} 
-                alt="Main Logo" 
-                className="w-full h-full object-cover drop-shadow-md" 
+              <img
+                src={webTheme["web-logo"]}
+                alt="Main Logo"
+                className="w-full h-full object-cover drop-shadow-md"
               />
             </div>
           </div>
@@ -87,8 +84,8 @@ const Header = () => {
             {!isInfoPage && (
               <Link to={"advertise-with-us"} className="text-sm">
                 <button className="text-sm px-3 py-1 bg-white/10 rounded-md hover:bg-white/20 hover:text-yellow-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
-                विज्ञापन के लिए संपर्क करें
-              </button>
+                  विज्ञापन के लिए संपर्क करें
+                </button>
               </Link>
             )}
           </div>

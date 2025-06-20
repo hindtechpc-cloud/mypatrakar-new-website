@@ -8,8 +8,14 @@ import PropTypes from 'prop-types';
 // Based on your API response, this is the correct value.
 // =========================================================================
 const API_BASE_URL = 'https://super-admin.hindtechitsolutions.com';
+const BASE_URL = "https://customer.mypatrakar.com";
 
 const ArticleListItem = ({ article }) => {
+  // Fix image URL if it's a relative path
+  const imageUrl = article.image?.startsWith("/")
+    ? BASE_URL + article.image
+    : article.image;
+
   const fullImageUrl = article.image ? `${API_BASE_URL}${article.image}` : '';
   const placeholderImageUrl = "https://via.placeholder.com/250x160.png?text=Image+Not+Found";
   
@@ -28,12 +34,12 @@ const ArticleListItem = ({ article }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-5 py-5 w-full border-b last:border-b-0">
+    <div className="flex flex-col md:flex-row gap-5 py-5 w-3/2 last:border-b-0">
       <div className="relative md:w-[250px] w-full h-48 md:h-auto flex-shrink-0">
         <img
-          src={imageSrc || placeholderImageUrl} // Use the state-managed src
+          src={imageUrl}
           alt={article.title}
-          className="w-full h-full object-cover rounded-lg bg-gray-200"
+          className="w-full h-full object-cover rounded-lg"
           onError={handleImageError} // Call the robust error handler
         />
         {article.category && (

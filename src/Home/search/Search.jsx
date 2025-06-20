@@ -8,7 +8,13 @@ import {
   NewsSortBy,
 } from "../../../api";
 import { WebThemeContext } from "../../context/ThemeContext";
-import { FaSearch, FaTimes, FaFilter, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTimes,
+  FaFilter,
+  FaArrowLeft,
+  FaArrowRight,
+} from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
 import DropdownFilters from "./DropdownFilters";
 import HeaderAd from "../../TopBar/HeaderAd";
@@ -121,7 +127,10 @@ export default function Search() {
     }
     const loadSubcategories = async () => {
       try {
-        const res = await GetNewsSubcategories("MYAWR241227001", filters.category);
+        const res = await GetNewsSubcategories(
+          "MYAWR241227001",
+          filters.category
+        );
         setSubcategories(res?.data?.response || []);
       } catch (err) {
         setSubcategories([]);
@@ -215,6 +224,174 @@ export default function Search() {
                     url: `/news/${article.news_id}`,
                   }}
                 />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                {filters.searchTerm && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFilters((prev) => ({ ...prev, searchTerm: "" }))
+                    }
+                    className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                    disabled={isLoading}
+                  >
+                    <FaTimes />
+                  </button>
+                )}
+              </div>
+              {error && (
+                <p className="text-red-100 text-center mt-2 font-medium">
+                  {error}
+                </p>
+              )}
+            </form>
+          </div>
+
+          {/* Dropdown Filters - Desktop */}
+          <div className="hidden md:block">
+            <DropdownFilters
+              categories={categories}
+              subcategories={subcategories}
+              setCategory={(value) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  category: value,
+                  subcategory: "",
+                }))
+              }
+              setSubcategory={(value) =>
+                setFilters((prev) => ({ ...prev, subcategory: value }))
+              }
+              setSortBy={(value) =>
+                setFilters((prev) => ({ ...prev, sortBy: value }))
+              }
+              setLocation={(value) =>
+                setFilters((prev) => ({ ...prev, location: value }))
+              }
+              currentFilters={filters}
+              disabled={isLoading}
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 my-4">
+            <button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow hover:shadow-md transition-all w-full sm:w-auto flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                
+                <>
+                  <ImSpinner8 className="animate-spin" />
+                  Searching...
+                </>
+              ) : (
+                "Search"
+              )}
+            </button>
+            <button
+              onClick={handleClear}
+              disabled={isLoading}
+              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg shadow hover:shadow-md transition-all w-full sm:w-auto disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              Clear
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              disabled={isLoading}
+              className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-700 hover:bg-gray-100 transition-colors w-full sm:w-auto flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              aria-label="Toggle filters"
+            >
+              <FaFilter />
+              Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Filters */}
+      {showMobileFilters && (
+        <div className="md:hidden bg-white p-4 shadow-lg border-t border-gray-200">
+          <DropdownFilters
+            categories={categories}
+            subcategories={subcategories}
+            setCategory={(value) =>
+              setFilters((prev) => ({
+                ...prev,
+                category: value,
+                subcategory: "",
+              }))
+            }
+            setSubcategory={(value) =>
+              setFilters((prev) => ({ ...prev, subcategory: value }))
+            }
+            setSortBy={(value) =>
+              setFilters((prev) => ({ ...prev, sortBy: value }))
+            }
+            setLocation={(value) =>
+              setFilters((prev) => ({ ...prev, location: value }))
+            }
+            currentFilters={filters}
+            disabled={isLoading}
+          />
+        </div>
+      )}
+
+      {/* Lower Banner Ad */}
+      {/* <div className="flex justify-center my-6">
+        <HeaderAd
+          className="bg-gray-100 sm:w-[728px] sm:h-[90px] w-full max-w-[320px] h-[100px] rounded-lg overflow-hidden shadow-sm"
+          adData={topAds}
+        />
+      </div> */}
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 pb-8">
+        {/* Loading State */}
+        {isLoading && articles.length === 0 && (
+          <div className="flex justify-center items-center py-20">
+            <ImSpinner8 className="animate-spin text-4xl text-gray-400" />
+          </div>
+        )}
+
+        {/* Results */}
+        {!isLoading && articles.length === 0 ? (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-medium text-gray-600 mb-2">
+              {filters.searchTerm || filters.category
+                ? "No articles found"
+                : "Search for news or select a category"}
+            </h3>
+            <p className="text-gray-500">
+              {filters.searchTerm || filters.category
+                ? "Try adjusting your search criteria"
+                : "Browse news by selecting a category or using the search bar"}
+            </p>
+          </div>
+        ) : (
+          <>
+            {articles.length > 0 && (
+              <div className="mb-6 flex justify-between items-center">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {filters.searchTerm
+                    ? `Results for "${filters.searchTerm}"`
+                    : categories.find((c) => c.id === filters.category)?.name ||
+                      "Latest News"}
+                </h2>
+                <span className="text-sm text-gray-500">
+                  Page {currentPage} of {totalPages}
+                </span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <NewsFeed newsCard={articles} />
+=======
+>>>>>>> ff12ad87d0a348255beee8417e249cadd0baa817
               ))}
             </div>
           ) : (
