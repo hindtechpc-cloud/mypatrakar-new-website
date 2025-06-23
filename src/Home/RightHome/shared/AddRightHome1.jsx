@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function AddRightHome1({ adsData }) {
   const shouldShowCustomUI =
@@ -9,12 +10,12 @@ export default function AddRightHome1({ adsData }) {
 
   if (shouldShowCustomUI) {
     return (
-      <div className="relative md:max-w-sm w-[320px] mx-auto rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-red-100 via-blue-50 to-purple-100 border-2 border-white hover:shadow-3xl transition-all duration-500 group">
+      <div className="relative md:max-w-sm w-[350px] mx-auto rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-red-100 via-blue-50 to-purple-100 border-2 border-white hover:shadow-3xl transition-all duration-500 group">
         {/* Decorative Backgrounds */}
         <div className="absolute top-0 right-0 w-16 h-16 bg-red-400 rounded-full filter blur-xl opacity-20"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-400 rounded-full filter blur-xl opacity-20"></div>
 
-        <div className="relative z-10 p-6 text-center">
+        <div className="relative z-10 py-6 px-4 text-center">
           {/* Header */}
           <div className="mb-5">
             <h3 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600 inline-block">
@@ -62,7 +63,9 @@ export default function AddRightHome1({ adsData }) {
 
           {/* CTA Button */}
           <button className="relative w-full py-3 px-6 mb-4 font-extrabold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group">
+            <Link to={"/advertise-with-us"}>
             <span className="relative z-10">आज ही संपर्क करें</span>
+            </Link>
             <span className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
             <span className="absolute animate-pulse-slow top-0 left-0 w-2 h-full bg-white/30 -translate-x-10 group-hover:translate-x-[400px] transition-transform duration-1000"></span>
           </button>

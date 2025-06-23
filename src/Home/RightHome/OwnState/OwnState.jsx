@@ -1,109 +1,74 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "../shared/Header";
-import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import { GetTrending } from "../../../../api";
+import { encryptData } from "../../../utils/cryptoHelper";
 
 export default function OwnState() {
-  // const articles = [
-  //   {
-  //     title:
-  //       "कौन है वो कांग्रेस नेता जिसने 'खुद को ही मान लिया कानून...? अब सुप्रीम कोर्ट ने की बड़ी टिप्पणी",
-  //     date: "March 6, 2024",
-  //     urlToImage: "https://picsum.photos/200/500",
-  //   },
-  //   {
-  //     title:
-  //       "महिला रैली में पीएम मोदी बोले, “भाज़पा ने नारी शक्ति को बनाया विकासशील भारत की शक्ति”",
-  //     date: "March 6, 2024",
-  //     urlToImage: "https://picsum.photos/200/300",
-  //   },
-  //   {
-  //     title:
-  //       "आखिर अचानक क्यों बंद हो गया था Facebook और Instagram! META ने दिया ये जवाब",
-  //     date: "March 6, 2024",
-  //     urlToImage: "https://picsum.photos/200/200",
-  //   },
-  //   {
-  //     title:
-  //       "PM MODI ने नमो भारत ट्रेन का किया उद्घाटन, सांसद वी के सिंह और मंत्री हरदीप सिंह पुरी रहे मौजूद",
-  //     date: "March 6, 2024",
-  //     urlToImage: "https://picsum.photos/200/700",
-  //   },
-  // ];
-
   const [articles, setArticles] = useState([]);
   const [loading, setloading] = useState(true);
   const [error, setError] = useState(null);
-  const [hoverIndex, setHoverIndex] = useState(null); // State to track the hovered index
-  const { setNews } = useContext(NewsContext);
+  const [hoverIndex, setHoverIndex] = useState(null);
   const navigate = useNavigate();
 
-  const handleNewsContent = (news) => {
-    setNews(news);
-    navigate(`/read-news/${news.title}`);
+  const handleNewsContent = (article) => {
+    navigate(`/read-news/${article.title}/${encryptData(article.roadmap_id)}`);
   };
 
   useEffect(() => {
     const loadTrending = async () => {
-      try{
+      try {
         setloading(true);
         const response = await GetTrending();
+        console.log(response);
         const trendingArticles = response?.data?.response;
-        const formattedArticles = trendingArticles.map(article => ({
-          title: article.roadmap,
-          date: article.date,
+
+        const formattedArticles = trendingArticles.map((item) => ({
+          title: item.roadmap,
+          date: item.date,
+          roadmap_id: item.roadmap_id,
         }));
 
         setArticles(formattedArticles);
-      }
-      catch(err){
+      } catch (err) {
         console.error(err);
         setError("Failed to load trending news");
-      }
-      finally{
+      } finally {
         setloading(false);
       }
     };
+
     loadTrending();
   }, []);
 
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm  w-[300px] mx-auto py-4">
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4">
       <Header text={"उत्तर प्रदेश"} />
-      <div className="  flex items-start justify-center   ">
-        {/* Root Section */}
+      <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-4">
         <div className="flex flex-col items-start relative">
           {articles.map((article, index) => (
             <div
               key={index}
-              className="flex items-center  relative"
-              onMouseEnter={() => setHoverIndex(index)} // Highlight on hover
-              onMouseLeave={() => setHoverIndex(null)} // Reset highlight
+              className="flex items-center relative"
+              onMouseEnter={() => setHoverIndex(index)}
+              onMouseLeave={() => setHoverIndex(null)}
             >
-              {/* Line (except for the first dot) */}
               {index !== 0 && (
                 <div
-                  className={`absolute -top-1/2 left-[3.5px]   w-[1px] h-full transition ${
-                    hoverIndex === index || hoverIndex === index - 1
-                      ? "bg-gray-300"
-                      : "bg-gray-300"
-                  }`}
+                  className={`absolute -top-1/2 left-[3.5px] w-[1px] h-full transition bg-gray-300`}
                 ></div>
               )}
 
-              {/* Dot */}
               <div
-                className={`w-2 h-2 rounded-full transition  ${
+                className={`w-2 h-2 rounded-full transition ${
                   hoverIndex === index
                     ? "bg-yellow-500 z-20"
                     : "bg-gray-300 z-20"
                 }`}
               ></div>
 
-              {/* News Section */}
               <div
-                className={`  w-full max-w-3xl px-2 py-2 ml-1 transition ${
+                className={`w-full max-w-3xl px-2 py-2 ml-1 transition ${
                   hoverIndex === index ? "bg-gray-100" : ""
                 }`}
               >

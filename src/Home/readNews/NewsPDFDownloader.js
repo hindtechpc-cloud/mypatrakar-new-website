@@ -7,108 +7,211 @@ const stripHtml = (html) => {
   return div.textContent || div.innerText || "";
 };
 
+// Convert image URL to base64
+const toDataURL = (url) =>
+  fetch(url)
+    .then((res) => res.blob())
+    .then(
+      (blob) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        })
+    );
+
+// Format label for display
+const formatLabel = (key) => {
+  return key
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+};
+
+// Main PDF generator function - Newspaper Style
 export const handleDownloadPDF = async (type, news) => {
-  const doc = new jsPDF("p", "mm", "a4");
+  // Initialize PDF with newspaper-like dimensions
+  const doc = new jsPDF("p", "mm", [297, 420]); // A3 size for newspaper feel
   const pageWidth = doc.internal.pageSize.getWidth();
-  let currentY = 20;
+  const margin = 15;
+  let currentY = margin;
 
-  // Convert image URL to base64
-  const toDataURL = (url) =>
-    fetch(url)
-      .then((res) => res.blob())
-      .then(
-        (blob) =>
-          new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          })
-      );
-
-  // Title
+  // Add newspaper name header
   doc.setFont("times", "bold");
-  doc.setFontSize(20);
-  doc.text(news.news_title || news.news_headline, 10, currentY);
+  doc.setFontSize(24);
+  doc.setTextColor(40, 40, 40);
+  doc.text("DAILY CHRONICLE", pageWidth / 2, currentY, { align: "center" });
   currentY += 10;
 
-  // Metadata
+  // Add date line
+  doc.setFont("times", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  const today = new Date();
+  const dateString = today.toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+  doc.text(`VOL. 1, NO. 1 • ${dateString.toUpperCase()}`, pageWidth / 2, currentY, { align: "center" });
+  
+  // Add divider line
+  currentY += 5;
+  doc.setDrawColor(200, 200, 200);
+  doc.line(margin, currentY, pageWidth - margin, currentY);
+  currentY += 10;
+
+  // -------------------------------
+  // � MAIN HEADLINE SECTION
+  // -------------------------------
+  doc.setFont("times", "bold");
+  doc.setFontSize(28);
+  doc.setTextColor(0, 0, 0);
+  const headlineLines = doc.splitTextToSize(news.news_headline || "BREAKING NEWS", pageWidth - 2 * margin);
+  doc.text(headlineLines, margin, currentY);
+  currentY += headlineLines.length * 10 + 5;
+
+  // -------------------------------
+  // 🧑 REPORTER SECTION (with image)
+  // -------------------------------
   doc.setFont("times", "italic");
   doc.setFontSize(10);
-  doc.text(
-    `By ${news.reporter_name || "Reporter"} | ${new Date(
-      news.publishedAt || Date.now()
-    ).toLocaleString()} | ${news.location || "Location"}`,
-    10,
-    currentY
-  );
-  currentY += 8;
+  doc.setTextColor(100, 100, 100);
 
-  // Category
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.text(
-    `Category: ${news.category || news.news_category_name || "N/A"}`,
-    10,
-    currentY
-  );
-  currentY += 10;
-
-  // Image (if present)
-  if (news.news_img || news.news_img_url) {
+  if (news.reporter_img) {
     try {
-      const imageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
-        type === "shorts" ? news?.news_img : news?.news_img_url
-      }`;
-
-      const imageData = await toDataURL(imageUrl);
-      const imageHeight = 60;
-      doc.addImage(imageData, "JPEG", 10, currentY, pageWidth - 20, imageHeight);
-      currentY += imageHeight + 5;
+      const avatar = await toDataURL(news.reporter_img);
+      // Circular reporter image
+      doc.roundedRect(margin, currentY - 5, 20, 20, 10, 10, 'F');
+      doc.addImage(avatar, "PNG", margin + 2, currentY - 3, 16, 16, undefined, 'none', 0);
+      doc.text(`By ${news.reporter_name || "Staff Reporter"}`, margin + 25, currentY + 8);
     } catch (err) {
-      console.error("Image load failed:", err);
+      console.warn("Reporter image failed to load:", err);
+      doc.text(`By ${news.reporter_name || "Staff Reporter"}`, margin, currentY + 8);
+    }
+  } else {
+    doc.text(`By ${news.reporter_name || "Staff Reporter"}`, margin, currentY + 8);
+  }
+
+  currentY += 15;
+
+  // -------------------------------
+  // 🖼 NEWS IMAGE (Full Width with caption)
+  // -------------------------------
+  if (news.news_img_url) {
+    try {
+      const fullImageUrl = news.news_img_url.startsWith("http")
+        ? news.news_img_url
+        : `${import.meta.env.VITE_REACT_APP_API_URL_Image}${news.news_img_url}`;
+
+      const imageData = await toDataURL(fullImageUrl);
+      const imageWidth = pageWidth - 2 * margin;
+      const imageHeight = 120; // Fixed height for newspaper style
+      
+      doc.addImage(imageData, "PNG", margin, currentY, imageWidth, imageHeight, undefined, 'FAST');
+      
+      // Add image caption
+      doc.setFont("times", "italic");
+      doc.setFontSize(8);
+      doc.setTextColor(100, 100, 100);
+      doc.text("Featured Story Image", margin, currentY + imageHeight + 5);
+      
+      currentY += imageHeight + 10;
+    } catch (err) {
+      console.error("News image failed to load:", err);
     }
   }
 
-  // Description
-  doc.setFont("times", "normal");
-  doc.setFontSize(12);
-  const plainText = stripHtml(news.news_des || news.news_description || "");
-  const contentLines = doc.splitTextToSize(plainText, pageWidth - 20);
-  doc.text(contentLines, 10, currentY);
-  currentY += contentLines.length * 6;
-
-  // Views and Comments
-  doc.setFont("helvetica", "italic");
-  doc.setFontSize(10);
-  doc.text(
-    `Views: ${news.views_count || news.views || 0} | Comments: ${
-      news.comments_count || news.comments || 0
-    }`,
-    10,
-    currentY
-  );
+  // Add divider line
+  doc.setDrawColor(200, 200, 200);
+  doc.line(margin, currentY, pageWidth - margin, currentY);
   currentY += 10;
 
-  // Author links (if any)
-  if (news.links?.length) {
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("Follow the author:", 10, currentY);
-    currentY += 7;
+  // -------------------------------
+  // 📰 COLUMNS FOR CONTENT (Newspaper style)
+  // -------------------------------
+  const columnWidth = (pageWidth - 3 * margin) / 2;
+  let column1Y = currentY;
+  let column2Y = currentY;
 
-    doc.setFont("helvetica", "normal");
-    news.links.forEach((link) => {
-      doc.textWithLink(link.name, 12, currentY, { url: link.url });
-      currentY += 6;
-    });
+  // Left Column (Main story)
+  doc.setFont("times", "normal");
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+
+  const plainText = stripHtml(news.news_description_html || "No description available");
+  const contentLines = doc.splitTextToSize(plainText, columnWidth);
+  
+  // First paragraph with drop cap
+  if (contentLines.length > 0) {
+    const firstPara = contentLines[0];
+    doc.setFontSize(24);
+    doc.text(firstPara.charAt(0), margin, column1Y + 10);
+    doc.setFontSize(12);
+    doc.text(firstPara.substring(1), margin + 8, column1Y + 10, { maxWidth: columnWidth - 8 });
+    column1Y += 10;
+    
+    // Remaining paragraphs
+    for (let i = 1; i < contentLines.length; i++) {
+      if (column1Y < 280) { // Prevent overflow
+        doc.text(contentLines[i], margin, column1Y + 5, { maxWidth: columnWidth });
+        column1Y += 7;
+      }
+    }
   }
 
-  // Footer source
-  doc.setFontSize(10);
-  doc.setFont("times", "italic");
-  doc.text(`Source: ${news.reporter_name || "Unknown"}`, 10, 290);
+  // Right Column (Additional info)
+  doc.setFont("times", "bold");
+  doc.setFontSize(14);
+  doc.text("Story Details", margin * 2 + columnWidth, column2Y);
+  column2Y += 8;
 
-  // Save PDF
-  doc.save(`${(news.news_title || news.news_headline).slice(0, 50)}.pdf`);
+  doc.setFont("times", "normal");
+  doc.setFontSize(10);
+
+  const details = [
+    { label: "Category", value: news.news_category_name },
+    { label: "News ID", value: news.news_id },
+    { label: "Published", value: new Date().toLocaleDateString() },
+    { label: "Views", value: news.views_count },
+    { label: "Comments", value: news.comments_count }
+  ];
+
+  details.forEach(item => {
+    if (item.value) {
+      doc.setFont("times", "bold");
+      doc.text(`${item.label}:`, margin * 2 + columnWidth, column2Y);
+      doc.setFont("times", "normal");
+      doc.text(item.value.toString(), margin * 2 + columnWidth + 25, column2Y);
+      column2Y += 7;
+    }
+  });
+
+  // If video available, add to right column
+  if (news.is_video === "1" && news.news_video_url) {
+    column2Y += 5;
+    doc.setFont("times", "bold");
+    doc.text("Video Content:", margin * 2 + columnWidth, column2Y);
+    column2Y += 5;
+    
+    doc.setFont("times", "normal");
+    const videoLines = doc.splitTextToSize(news.news_video_url, columnWidth);
+    doc.text(videoLines, margin * 2 + columnWidth, column2Y);
+    column2Y += videoLines.length * 7 + 5;
+  }
+
+  // -------------------------------
+  // 📌 FOOTER
+  // -------------------------------
+  doc.setFont("times", "italic");
+  doc.setFontSize(8);
+  doc.setTextColor(100, 100, 100);
+  doc.text(`© ${new Date().getFullYear()} Daily Chronicle. All rights reserved.`, margin, 400);
+
+  // -------------------------------
+  // 💾 SAVE FILE
+  // -------------------------------
+  const fileName = `${(news.news_headline || "daily_news").slice(0, 50)}.pdf`.replace(/[^a-z0-9]/gi, '_');
+  doc.save(fileName);
 };

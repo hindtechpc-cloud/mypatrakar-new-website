@@ -11,6 +11,7 @@ import Loader from "./utils/Loader";
 import { GetWebTheme } from "../api";
 import { Toaster } from "react-hot-toast";
 import Layout from "./Layout";
+import { SocialMediaProvider } from "./context/SocialMediaContext";
 
 export default function App() {
   const [language, setLanguage] = useState("hi");
@@ -35,6 +36,7 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
+      <SocialMediaProvider>
       <WebThemeContext.Provider value={{ webTheme, setWebTheme }}>
         <LanguageContext.Provider value={{ language, setLanguage }}>
           <NewsContext.Provider value={{ news, setNews }}>
@@ -47,6 +49,7 @@ export default function App() {
           </NewsContext.Provider>
         </LanguageContext.Provider>
       </WebThemeContext.Provider>
+      </SocialMediaProvider>
     </Router>
   );
 }

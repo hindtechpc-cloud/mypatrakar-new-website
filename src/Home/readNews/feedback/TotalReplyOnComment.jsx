@@ -12,11 +12,11 @@ export default function TotalreplyOnComment({ id }) {
     try {
       setLoading(true);
       const res = await GetCommentsreply(id);
-      // console.log(res)
+      console.log(res)
       setReplies(res?.data?.response.replies || []);
     } catch (error) {
       setError("Failed to load replies.");
-      console.error("Error loading replies:", error);
+      console.log("Error loading replies:", error);
     } finally {
       setLoading(false);
     }
@@ -42,14 +42,16 @@ export default function TotalreplyOnComment({ id }) {
             key={reply.id}
             className="flex items-start gap-3 bg-white p-3 rounded-md shadow-sm"
           >
-            <img
-              src={
-                reply.user?.profile_image_url ||
-                "https://customer.mypatrakar.com/assets/No_Image_Available.jpg"
-              }
-              alt={reply.name}
-              className="w-10 h-10 rounded-full object-cover border"
-            />
+           <img
+  src={
+    !reply.user?.profile_image_url
+      ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}/${reply.user.profile_image_url}`
+      : "https://wallpaperaccess.com/full/4723250.jpg"
+  }
+  alt={reply.name}
+  className="w-10 h-10 rounded-full object-cover border"
+/>
+
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <div>

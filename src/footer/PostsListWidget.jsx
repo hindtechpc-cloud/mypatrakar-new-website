@@ -76,7 +76,7 @@ const PostsListWidget = () => {
   }
 
   return (
-    <div className="w-[300px] bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 shadow-lg">
+    <div className="w-[300px] bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 shadow-lg h-[96] overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-yellow-400 font-sans">
           #BS_Exclusive

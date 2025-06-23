@@ -52,9 +52,9 @@ export default function RightHome() {
   return (
     <div>
       {pathname === "/" && <LiveTv />}
-      <Trending />
       <OwnState />
       <AddRightHome1 adData={ads.top} />
+      <Trending />
       <LiveCricket />
       <Shorts />
       <AddRightHome1 adData={ads.main} />

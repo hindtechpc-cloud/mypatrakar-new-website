@@ -34,10 +34,8 @@ const Header = () => {
 
   return (
     <header
-      className={`w-full ${themeColorClass} text-white py-4 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300`}
+      className={`w-full ${themeColorClass}  md:block text-white py-4 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300`}
       style={{
-        // chnages background color
-        // backgroundColor:
         backgroundColor: !webTheme["bg-color"]
           ? "#b91c1c"
           : webTheme["bg-color"],

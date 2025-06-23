@@ -95,7 +95,7 @@ export const PollWidget = () => {
   if (!poll) return <div className="text-center py-4">लोड हो रहा है...</div>;
 
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm w-[300px] mx-auto py-4">
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4">
       <Header text="Poll" />
       <div className="bg-gray-200 p-4 shadow-lg rounded-lg w-full">
         <h3 className="text-lg font-bold mb-3">{poll.question}</h3>

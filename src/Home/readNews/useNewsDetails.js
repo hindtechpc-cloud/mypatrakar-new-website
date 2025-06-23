@@ -27,6 +27,7 @@ const useNewsDetails = (type, newsId) => {
         type !== "shorts"
           ? response.data.response[0]
           : response?.data?.response?.news?.[0];
+          console.log(response);
       setNews(newsData || null);
     } catch (err) {
       console.log("Error loading news:", err);

@@ -6,7 +6,7 @@ import { encryptData } from "../../../utils/cryptoHelper";
 
 const NewsItem = ({ news, onNewsClick }) => {
   return (
-    <div className="flex items-start gap-2">
+    <div className="flex items-start justify-start gap-2">
       <div className="w-48">
         <img
           src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${news?.news_img_url}`}

@@ -36,7 +36,7 @@ const WeatherWidget = () => {
   };
 
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm w-[300px] mx-auto py-4">
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4">
       <Header text="Weather" />
       <div className="bg-gray-800 text-white rounded-lg shadow-lg p-4 w-full">
         {weatherData ? (

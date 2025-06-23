@@ -84,6 +84,7 @@ const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
   const handleClose = () => {
     setIsModalOpen(false);
   };
+  console.log(user)
   const dateDifference = getDateDifference(user?.date);
 
   const formattedTime = dateDifference
@@ -96,17 +97,18 @@ const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
 
   return (
     <div className="flex items-center space-x-4">
-      <img
-        src={
-          user?.profileImage.includes("https://")
-            ? user?.profileImage
-            : `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
-                user?.profileImage
-              }`
-        }
-        alt={user?.name || "User"}
-        className="w-12 h-12 rounded-full"
-      />
+     <img
+  src={
+    user?.profileImage && user.profileImage!= ""
+      ? user.profileImage.includes("https://")
+        ? user.profileImage
+        : `${import.meta.env.VITE_REACT_APP_API_URL_Image}${user.profileImage}`
+      : "https://customer.mypatrakar.com/assets/No_Image_Available.JPG"
+  }
+  alt={user?.name || "User"}
+  className="w-12 h-12 rounded-full"
+/>
+
       <div className="flex items-center justify-between w-full">
         <div>
           <h2 className="font-semibold text-md">

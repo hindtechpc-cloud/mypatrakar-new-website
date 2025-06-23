@@ -16,7 +16,7 @@ export default function FooterBottom() {
 
         {/* Right Side: Developed by */}
         <div className="flex items-center space-x-4 mt-2 md:mt-0">
-            <span className="text-gray-400 text-xs font-thin">Social Media</span>
+            {/* <span className="text-gray-400 text-xs font-thin">Social Media</span> */}
           {/* Social Media Icons */}
           <SocialIcons />
           

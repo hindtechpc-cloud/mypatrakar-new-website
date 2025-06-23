@@ -3,7 +3,7 @@ import { SubmitComment } from "../../../../api";
 import { useParams } from "react-router-dom";
 import { checkAuth } from "../../../utils/checkAuth";
 import { decryptData } from "../../../utils/cryptoHelper";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 export default function Feedback() {
   const user = checkAuth(); // ⬅️ Authenticated user, if any
@@ -76,7 +76,7 @@ export default function Feedback() {
       };
 
       const res = await SubmitComment(payload);
-
+      // const res="success";
       if (res?.status === 200 || res?.status_code === 200) {
         setFormData({ name: "", email: "", comment: "" });
         setCharacterCount(0);
@@ -104,17 +104,8 @@ export default function Feedback() {
         Share Your Thoughts
       </h2>
 
-      {/* Success and Error Messages */}
-      {successMessage && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start">
-          <p className="text-sm text-green-700">{successMessage}</p>
-        </div>
-      )}
-      {submitError && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
-          <p className="text-sm text-red-700">{submitError}</p>
-        </div>
-      )}
+   
+     
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {!isAuthenticated && (
@@ -199,7 +190,17 @@ export default function Feedback() {
             <p className="mt-1 text-sm text-red-600">{errors.comment}</p>
           )}
         </div>
-
+ {submitError && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
+          <p className="text-sm text-red-700">{submitError}</p>
+        </div>
+      )}
+         {/* Success and Error Messages */}
+      {successMessage && (
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start">
+          <p className="text-sm text-green-700">{successMessage}</p>
+        </div>
+      )}
         <div className="pt-2">
           <button
             type="submit"

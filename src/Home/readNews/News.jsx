@@ -305,7 +305,7 @@ export default function News() {
   const { type, newsId } = useParams();
 
   const { news, loadNewsDetails } = useNewsDetails(type, newsId);
-  console.log(news)
+  // console.log(news)
 
   useEffect(() => {
     loadNewsDetails();

@@ -37,7 +37,7 @@ export default function FooterFaceBook() {
   }, []);
 
   if (isLoading || !facebookUrl) return null;
-  if (error) return <div className="text-red-500">{error}</div>;
+  // if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <div className="flex justify-center items-center p-1 rounded-lg">

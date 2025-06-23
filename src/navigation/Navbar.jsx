@@ -80,6 +80,7 @@ const Navbar = () => {
           to={`/read-news/${newsItem.news_headline}/${encryptData(newsItem.news_id)}`}
           className="block mb-4 last:mb-0 group w-[250px] px-2"
         >
+
           <div className="w-full h-32 rounded overflow-hidden">
             <img
               src={

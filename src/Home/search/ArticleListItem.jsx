@@ -1,14 +1,16 @@
 // src/Home/search/ArticleListItem.jsx (FINAL - Fixes the infinite loop)
 
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 // =========================================================================
 // CRITICAL: You MUST set this to your backend's domain.
 // Based on your API response, this is the correct value.
 // =========================================================================
-const API_BASE_URL = 'https://super-admin.hindtechitsolutions.com';
-const BASE_URL = "https://customer.mypatrakar.com";
+const API_BASE_URL =
+  import.meta.env.VITE_REACT_APP_API_URL || "https://api.mypatrakar.com/api/v1";
+const BASE_URL =
+  import.meta.env.VITE_REACT_APP_API_URL_Image || "https://mypatrakar.com";
 
 const ArticleListItem = ({ article }) => {
   // Fix image URL if it's a relative path
@@ -16,9 +18,10 @@ const ArticleListItem = ({ article }) => {
     ? BASE_URL + article.image
     : article.image;
 
-  const fullImageUrl = article.image ? `${API_BASE_URL}${article.image}` : '';
-  const placeholderImageUrl = "https://via.placeholder.com/250x160.png?text=Image+Not+Found";
-  
+  const fullImageUrl = article.image ? `${API_BASE_URL}${article.image}` : "";
+  const placeholderImageUrl =
+    "https://via.placeholder.com/250x160.png?text=Image+Not+Found";
+
   // Use state to manage the image source. This is the key to stopping the loop.
   const [imageSrc, setImageSrc] = useState(fullImageUrl);
 
@@ -51,7 +54,7 @@ const ArticleListItem = ({ article }) => {
 
       <div className="flex flex-col justify-center">
         <h3 className="text-xl font-bold mb-2 text-gray-900 hover:text-red-700 transition-colors">
-          <a href={article.url || '#'}>{article.title}</a>
+          <a href={article.url || "#"}>{article.title}</a>
         </h3>
         <div
           className="text-gray-600 text-base leading-relaxed"

@@ -3,6 +3,7 @@ import Header from "../shared/Header";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import { GetTrending } from "../../../../api";
+import { encryptData } from "../../../utils/cryptoHelper";
 
 // const articles = [
 //   {
@@ -42,7 +43,7 @@ const Trending = () => {
 
   const handleNewsContent = (news) => {
     setNews(news);
-    navigate(`/read-news/${news.title}`);
+    navigate(`/read-news/${news.title}/${encryptData(news.roadmap_id)}`);
   };
 
   useEffect(() => {
@@ -69,9 +70,9 @@ const Trending = () => {
   }, []);
 
   return (
-    <div className="my-2 mt-5 font-sans  md:max-w-sm  w-[300px] mx-auto py-4">
+    <div className="my-2 mt-5 font-sans  md:max-w-sm  w-[350px] mx-auto py-4">
       <Header text={"TopNews"} />
-      <div className="  flex items-start justify-center   ">
+      <div className=" flex items-start justify-center md:justify-start md:max-w-sm w-[300px] mx-auto py-4  ">
         {/* Root Section */}
         <div className="flex flex-col items-start relative">
           {articles.map((article, index) => (

@@ -15,9 +15,9 @@ const ShortsPages = () => {
   const { webTheme } = useContext(WebThemeContext);
   const navigate = useNavigate();
   const user = checkAuth();
-  console.log(user);
+
   const [shorts, setShorts] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0); // only one short at a time
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNewsContent = (news) => {
     setNews(news);
@@ -39,7 +39,6 @@ const ShortsPages = () => {
   const loadShorts = async () => {
     try {
       const res = await GetShortsNews("MYAWR241227001");
-      console.log("API Response:", res);
       if (res) {
         setShorts(res.data.response.news);
       }
@@ -53,41 +52,39 @@ const ShortsPages = () => {
   }, []);
 
   const currentShort = shorts[currentIndex];
-  console.log(currentShort);
+
   return (
     <div className="fixed w-full flex gap-3 items-center justify-center mt-12">
       <div className="h-[530px] w-[350px] flex items-center justify-center">
         {currentShort && (
-          <div className="bg-white rounded-2xl shadow-md shadow-gray-500 pb-3 relative w-full border">
-            <div className="relative rounded-md">
+          <div className="bg-white h-[530px] rounded-2xl shadow-md shadow-gray-500 pb-3 relative w-full border flex flex-col">
+            {/* Header Section */}
+            <div className="relative rounded-md h-48 overflow-hidden">
               <img
                 src={webTheme["web-logo"]}
                 alt="Source"
-                className="w-12 h-12 rounded-full object-cover absolute m-2"
+                className="w-12 h-12 rounded-full object-cover absolute m-2 z-10"
               />
               <img
-                src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
-                  currentShort?.news_img
-                }`}
+                src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${currentShort?.news_img}`}
                 alt={currentShort.news_title}
-                className="w-full h-48 object-center rounded-t-md"
+                className="w-full h-full object-cover rounded-t-md"
               />
-            
-
               <span className="flex flex-col items-end justify-end -mt-10 p-2 font-bold text-xl">
-                  <ShortsClap
-                news_id={currentShort.short_news_id}
-                user_id={user?.user_id}
-              />
-                {/* {`${currentIndex + 1}/${shorts.length}`} */}
+                <ShortsClap
+                  news_id={currentShort.short_news_id}
+                  user_id={user?.user_id}
+                />
               </span>
             </div>
-            <div className="p-4">
+
+            {/* Content Section */}
+            <div className="p-4 flex-1 overflow-auto">
               <h2 className="font-bold text-lg">{currentShort.news_title}</h2>
               <p className="text-red-600 text-sm font-semibold">
                 {currentShort.location} {currentShort.publishedAt}
               </p>
-              <p className="text-gray-600 text-sm ">
+              <p className="text-gray-600 text-sm mb-2">
                 {currentShort.news_des?.length > 300 ? (
                   (
                     <HtmlToPlainText htmlContent={currentShort.news_des} />
@@ -102,7 +99,7 @@ const ShortsPages = () => {
                 )}
               </p>
 
-              <div className="flex items-center justify-between ">
+              <div className="flex items-center justify-between">
                 <button
                   className="bg-red-600 text-white text-sm font-normal py-1 px-4 rounded-full"
                   onClick={() => handleNewsContent(currentShort)}
@@ -118,7 +115,7 @@ const ShortsPages = () => {
         )}
       </div>
 
-      {/* Scroll Up and Down Buttons */}
+      {/* Scroll Buttons */}
       <div className="flex flex-col gap-2">
         <button
           className={`bg-red-600 p-2 rounded-full text-white ${

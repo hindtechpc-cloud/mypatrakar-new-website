@@ -304,7 +304,7 @@ export default function LiveCricket() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-4 font-sans overflow-x-hidden">
+    <div className="max-w-md w-[350px] mx-auto p-4 font-sans overflow-x-hidden">
       <Header text="Live Cricket" />
 
       {/* Fallback UI */}
