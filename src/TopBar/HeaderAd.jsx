@@ -1,3 +1,4 @@
+
 // src/TopBar/HeaderAd.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { FiAlertCircle, FiExternalLink } from "react-icons/fi";

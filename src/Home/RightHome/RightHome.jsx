@@ -48,22 +48,21 @@ export default function RightHome() {
 
     loadAds();
   }, []);
-
   return (
     <div>
       {pathname === "/" && <LiveTv />}
       <OwnState />
-      <AddRightHome1 adData={ads.top} />
+      <AddRightHome1 adsData={ads.top} />
       <Trending />
       <LiveCricket />
       <Shorts />
-      <AddRightHome1 adData={ads.main} />
+      <AddRightHome1 adsData={ads.main} />
       <Rashiphal />
       <JoinChannels />
       <StockInfo />
       <PollWidget />
       <WeatherWidget />
-      <AddRightHome1 adData={ads.bottom} />
+      <AddRightHome1 adsData={ads.bottom} />
     </div>
   );
 }

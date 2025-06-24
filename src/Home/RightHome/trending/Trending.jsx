@@ -71,7 +71,7 @@ const Trending = () => {
 
   return (
     <div className="my-2 mt-5 font-sans  md:max-w-sm  w-[350px] mx-auto py-4">
-      <Header text={"TopNews"} />
+      {articles.length > 0 && <Header text={"TopNews"} />}
       <div className=" flex items-start justify-center md:justify-start md:max-w-sm w-[300px] mx-auto py-4  ">
         {/* Root Section */}
         <div className="flex flex-col items-start relative">

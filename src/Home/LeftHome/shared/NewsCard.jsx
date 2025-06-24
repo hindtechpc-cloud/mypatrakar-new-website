@@ -59,11 +59,12 @@ const NewsCard = ({
       <div className={classNameForContent}>
         {/* Title */}
         <h2
-          className="text-lg md:text-xl font-semibold text-gray-800 mb-2 cursor-pointer hover:underline"
+          className="text-lg md:text-xl font-semibold text-gray-800  cursor-pointer hover:underline"
           onClick={handleNewsClick}
           aria-label={`Read news: ${title}`}
         >
-          {title || "Untitled News"}
+          {title + "hf giurg griug rgirugk ergiwrk grgir tgrthgrt gbr fewb " ||
+            "Untitled News"}
         </h2>
 
         {/* Description */}

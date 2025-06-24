@@ -6,15 +6,15 @@ import { CgChevronUp } from "react-icons/cg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { LanguageContext } from "../context/LanguageContext";
-import { NewsContext } from "../context/NewsContext";
+// import { NewsContext } from "../context/NewsContext";
 import { WebThemeContext } from "../context/ThemeContext";
 import { loadNewsBySubCategory, menuWithSubNavMenuList } from "../../api";
 import defaultLogo from "../assets/MyPatrakarLogo1.png";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { encryptData } from "../utils/cryptoHelper";
 
 const Navbar = () => {
-  const { setNews } = useContext(NewsContext);
+  // const { setNews } = useContext(NewsContext);
   const { webTheme } = useContext(WebThemeContext);
   const { language } = useContext(LanguageContext);
 
@@ -38,7 +38,8 @@ const Navbar = () => {
         const res = await menuWithSubNavMenuList("MYAWR241227001");
         setMenuItems(res.data.response || []);
       } catch (error) {
-        toast.error("Failed to load menu items");
+        // toast.error("Failed to load menu items");
+console.log(error)
       }
     };
     fetchMenuItems();
@@ -67,8 +68,9 @@ const Navbar = () => {
     try {
       const res = await loadNewsBySubCategory(subcategoryId);
       setHoveredNews(res.data.response || []);
-    } catch {
-      toast.error("Failed to load news preview");
+    } catch(error) {
+      // toast.error("Failed to load news preview");
+console.log(error)
     }
   };
 
@@ -335,3 +337,80 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+// import React, { useState, useEffect } from "react";
+// import { useContext } from "react";
+// import { WebThemeContext } from "../context/ThemeContext";
+// import DesktopMenu from "./DesktopMenu";
+// import MobileMenu from "./MobileMenu";
+// import defaultLogo from "../assets/MyPatrakarLogo1.png";
+
+// const Navbar = () => {
+//   const { webTheme } = useContext(WebThemeContext);
+//   const [menuOpen, setMenuOpen] = useState(false);
+//   const [isFixed, setIsFixed] = useState(false);
+
+//   const themeColor = webTheme["bg-color"] || "#b91c1c";
+//   const logo = webTheme["web-logo"] || defaultLogo;
+
+//   useEffect(() => {
+//     const handleScroll = () => setIsFixed(window.scrollY > 50);
+//     window.addEventListener("scroll", handleScroll, { passive: true });
+//     return () => window.removeEventListener("scroll", handleScroll);
+//   }, []);
+
+//   const toggleMenu = () => {
+//     setMenuOpen(!menuOpen);
+//     document.body.style.overflow = menuOpen ? "auto" : "hidden";
+//   };
+
+//   return (
+//     <>
+//       <header
+//         className={`w-full text-white transition-all duration-300 ${
+//           isFixed ? "fixed top-0 left-0 shadow-lg z-50 backdrop-blur-sm" : "relative"
+//         }`}
+//         style={{ backgroundColor: isFixed ? `${themeColor}EE` : themeColor }}
+//       >
+//         <div className="container mx-auto flex justify-between items-center px-4 py-2">
+//           <div className="flex items-center">
+//             <a href="/" className="py-2">
+//               <img
+//                 src={logo}
+//                 alt="Website Logo"
+//                 className="h-12 object-contain hover:opacity-90 transition-all"
+//                 loading="eager"
+//               />
+//             </a>
+//           </div>
+
+//           <DesktopMenu themeColor={themeColor} />
+
+//           <div className="flex items-center space-x-4">
+//             <button
+//               onClick={toggleMenu}
+//               className="lg:hidden text-2xl p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors"
+//               aria-label={menuOpen ? "Close menu" : "Open menu"}
+//             >
+//               {menuOpen ? (
+//                 <span className="text-white text-xl">✕</span>
+//               ) : (
+//                 <span className="text-white text-xl">☰</span>
+//               )}
+//             </button>
+//           </div>
+//         </div>
+//       </header>
+
+//       <MobileMenu 
+//         isOpen={menuOpen} 
+//         onClose={toggleMenu} 
+//         themeColor={themeColor} 
+//         logo={logo}
+//       />
+//     </>
+//   );
+// };
+
+// export default Navbar;

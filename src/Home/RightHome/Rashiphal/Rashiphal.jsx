@@ -54,8 +54,8 @@
 //       {/* Header with Glow Effect */}
 //       <div className="relative mb-6">
 //         <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg blur opacity-20"></div>
-//         <Header 
-//           text="🌟 आज का राशिफल" 
+//         <Header
+//           text="🌟 आज का राशिफल"
 //           className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"
 //         />
 //       </div>
@@ -79,7 +79,7 @@
 //       {!loading && rashis.length > 0 && (
 //         <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[600px]">
 //           {rashis.map((item, index) => (
-//             <div 
+//             <div
 //               key={index}
 //               className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
 //             >
@@ -101,10 +101,10 @@
 //                 </p>
 //                 <div className="mt-3 flex justify-end">
 //                   <span className="text-xs text-gray-500">
-//                     {new Date().toLocaleDateString('en-IN', { 
-//                       day: 'numeric', 
-//                       month: 'long', 
-//                       year: 'numeric' 
+//                     {new Date().toLocaleDateString('en-IN', {
+//                       day: 'numeric',
+//                       month: 'long',
+//                       year: 'numeric'
 //                     })}
 //                   </span>
 //                 </div>
@@ -120,7 +120,7 @@
 //           <div className="text-4xl mb-3">🔮</div>
 //           <h3 className="text-lg font-medium text-gray-700">Horoscope unavailable</h3>
 //           <p className="text-gray-500 mt-1">Try refreshing later</p>
-//           <button 
+//           <button
 //             onClick={fetchAllRashis}
 //             className="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-5 py-2 rounded-lg shadow-sm"
 //           >
@@ -131,8 +131,6 @@
 //     </div>
 //   );
 // }
-
-
 
 import { useEffect, useState } from "react";
 import Header from "../shared/Header";
@@ -211,102 +209,114 @@ export default function Rashiphal() {
   }, []);
 
   return (
-    <div className="max-w-md w-full mx-auto p-4 font-sans">
-      {/* Header */}
-     {!error && <div className="relative mb-6">
-        <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg blur opacity-20"></div>
-        <Header
-          text="🌟 आज का राशिफल"
-          className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"
-        />
-      </div>}
+    <>
+      {rashis.length > 0 && (
+        <div className="max-w-md w-full mx-auto p-4 font-sans">
+          {/* Header */}
+          {!error && (
+            <div className="relative mb-6">
+              <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg blur opacity-20"></div>
+              <Header
+                text="🌟 आज का राशिफल"
+                className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"
+              />
+            </div>
+          )}
 
-      {/* Error message */}
-      {/* {error && (
+          {/* Error message */}
+          {/* {error && (
         <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded mb-4">
           <p className="font-medium">⚠️ {error}</p>
         </div>
       )} */}
 
-      {/* Loader */}
-      {loading && (
-        <div className="flex flex-col items-center justify-center p-8">
-          <Loader />
-          <p className="text-gray-600 mt-3">Loading your horoscope...</p>
-        </div>
-      )}
-
-      {/* ✅ Fallback View */}
-      {!loading && fallbackInfo && (
-        <div className="text-center p-6">
-          <img
-            src={fallbackInfo.image}
-            alt="Fallback Rashifal"
-            className="rounded-xl mx-auto shadow-md"
-          />
-          <p className="text-sm text-gray-600 mt-3">
-            Showing fallback data. For more detailed horoscope, visit:
-          </p>
-          <a
-            href={fallbackInfo.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-3 px-5 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg shadow hover:scale-105 transition-transform"
-          >
-            Visit Horoscope Site 🔮
-          </a>
-        </div>
-      )}
-
-      {/* Valid Horoscope Grid */}
-      {!loading && rashis.length > 0 && (
-        <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[600px]">
-          {rashis.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
-            >
-              <div className={`flex items-center justify-between p-4 ${item.color}`}>
-                <div className="flex items-center">
-                  <span className="text-2xl mr-3">{item.symbol}</span>
-                  <h3 className="text-lg font-bold">{item.name}</h3>
-                </div>
-                <span className="bg-white rounded-full px-3 py-1 text-sm font-medium shadow-sm">
-                  🎲 {item.lucky_number}
-                </span>
-              </div>
-
-              <div className="p-4">
-                <p className="text-gray-700 text-sm leading-relaxed">{item.rashifal}</p>
-                <div className="mt-3 flex justify-end">
-                  <span className="text-xs text-gray-500">
-                    {new Date().toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </span>
-                </div>
-              </div>
+          {/* Loader */}
+          {loading && (
+            <div className="flex flex-col items-center justify-center p-8">
+              <Loader />
+              <p className="text-gray-600 mt-3">Loading your horoscope...</p>
             </div>
-          ))}
-        </div>
-      )}
+          )}
 
-      {/* Empty State */}
-      {!loading && rashis.length === 0 && !fallbackInfo && !error && (
-        <div className="text-center p-8">
-          <div className="text-4xl mb-3">🔮</div>
-          <h3 className="text-lg font-medium text-gray-700">Horoscope unavailable</h3>
-          <p className="text-gray-500 mt-1">Try refreshing later</p>
-          <button
-            onClick={fetchAllRashis}
-            className="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-5 py-2 rounded-lg shadow-sm"
-          >
-            Refresh
-          </button>
+          {/* ✅ Fallback View */}
+          {!loading && fallbackInfo && (
+            <div className="text-center p-6">
+              <img
+                src={fallbackInfo.image}
+                alt="Fallback Rashifal"
+                className="rounded-xl mx-auto shadow-md"
+              />
+              <p className="text-sm text-gray-600 mt-3">
+                Showing fallback data. For more detailed horoscope, visit:
+              </p>
+              <a
+                href={fallbackInfo.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-3 px-5 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg shadow hover:scale-105 transition-transform"
+              >
+                Visit Horoscope Site 🔮
+              </a>
+            </div>
+          )}
+
+          {/* Valid Horoscope Grid */}
+          {!loading && rashis.length > 0 && (
+            <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[600px]">
+              {rashis.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
+                >
+                  <div
+                    className={`flex items-center justify-between p-4 ${item.color}`}
+                  >
+                    <div className="flex items-center">
+                      <span className="text-2xl mr-3">{item.symbol}</span>
+                      <h3 className="text-lg font-bold">{item.name}</h3>
+                    </div>
+                    <span className="bg-white rounded-full px-3 py-1 text-sm font-medium shadow-sm">
+                      🎲 {item.lucky_number}
+                    </span>
+                  </div>
+
+                  <div className="p-4">
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {item.rashifal}
+                    </p>
+                    <div className="mt-3 flex justify-end">
+                      <span className="text-xs text-gray-500">
+                        {new Date().toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && rashis.length === 0 && !fallbackInfo && !error && (
+            <div className="text-center p-8">
+              <div className="text-4xl mb-3">🔮</div>
+              <h3 className="text-lg font-medium text-gray-700">
+                Horoscope unavailable
+              </h3>
+              <p className="text-gray-500 mt-1">Try refreshing later</p>
+              <button
+                onClick={fetchAllRashis}
+                className="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-5 py-2 rounded-lg shadow-sm"
+              >
+                Refresh
+              </button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }

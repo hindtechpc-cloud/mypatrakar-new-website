@@ -99,7 +99,9 @@ const StockInfo = () => {
   const isPositive = stockData?.change >= 0;
 
   return (
-    <div className="max-w-md mx-auto px-4 py-5 space-y-5 font-sans">
+  <>
+  {
+     (  <div className="max-w-md mx-auto px-4 py-5 space-y-5 font-sans">
       <Header text="📈 Stock Info Tracker" />
 
       {/* Form Section */}
@@ -234,7 +236,9 @@ const StockInfo = () => {
          
         </div>
       )}
-    </div>
+    </div>)
+  }
+  </>
   );
 };
 
