@@ -13,11 +13,10 @@ export default function Election() {
   const [years, setYears] = useState([]);
   const [parties, setParties] = useState([]);
   const [topThreeParties, setTopThreeParties] = useState([]);
-
+  console.log(topThreeParties)
   const handleLeftScroll = () => {
     setPollIndex((prevIndex) => (prevIndex === 0 ? polls.length - 1 : prevIndex - 1));
   };
-
   const handleRightScroll = () => {
     setPollIndex((prevIndex) => (prevIndex === polls.length - 1 ? 0 : prevIndex + 1));
   };
@@ -25,8 +24,10 @@ export default function Election() {
   const loadPolls = async () => {
     try {
       const res = await GetElectionPolls();
+      console.log(res);
       setPolls(res.data.response);
     } catch (error) {
+      console.log(error);
       console.error("Error loading polls:", error);
     }
   };

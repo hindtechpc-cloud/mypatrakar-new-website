@@ -3,6 +3,7 @@ import TopResultTable from "./TopResultTable";
 import image from "../../../assets/election.svg";
 
 export default function ElectionResults({ results }) {
+  console.log(results);
   // Sort parties by seats won in descending order and get top 3
   const topParties = [...results].sort((a, b) => parseInt(b.seats_won) - parseInt(a.seats_won)).slice(0, 3);
 

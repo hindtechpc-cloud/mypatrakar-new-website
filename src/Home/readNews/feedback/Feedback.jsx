@@ -78,6 +78,7 @@ export default function Feedback() {
       const res = await SubmitComment(payload);
       console.log(res)
       // const res="success";
+      // if(is)
       if (res?.status === 200 || res?.status_code === 200) {
         setFormData({ name: "", email: "", comment: "" });
         setCharacterCount(0);

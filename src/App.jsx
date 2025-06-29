@@ -7,7 +7,7 @@ import { WebThemeContext } from "./context/ThemeContext";
 import { SocialMediaProvider } from "./context/SocialMediaContext";
 import ScrollToTop from "./utils/ScrollToTop";
 import Loader from "./utils/Loader";
-import { GetWebTheme } from "../api";
+import { getSettings, GetWebTheme } from "../api";
 import { Toaster } from "react-hot-toast";
 import Layout from "./Layout";
 
@@ -30,6 +30,20 @@ export default function App() {
 
     loadWebTheme();
   }, []);
+
+  // useEffect(() => {
+  //   const loadSetting = async () => {
+  //     try {
+  //       const res =await getSettings("");
+  //       console.log(res);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   loadSetting();
+  // }, []);
+
+  // const isExitPollEnabled = getSettingStatus("Exit Polls");
 
   return (
     <Router>

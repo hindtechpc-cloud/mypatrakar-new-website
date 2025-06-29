@@ -167,10 +167,10 @@ export const GetShortsNewsDetails = (portal_id) =>
   postRequest('/short-news-details', { short_id: portal_id });
 
 export const SubmitShortsClap = (short_id, user_id) =>
-  postRequest('/submit-clap', { shorts_id:short_id, user_id });
+  postRequest('/submit-clap', { shorts_id: short_id, user_id });
 
 export const CheckShortsClapped = (short_id, user_id) =>
-  postRequest('/check-clap-status', { shorts_id:short_id, user_id });
+  postRequest('/check-clap-status', { shorts_id: short_id, user_id });
 // check-clap-status
 
 
@@ -183,6 +183,9 @@ export const GetNewsSubcategories = (portal_id, category_id) =>
 
 export const GetNewsById = (newsId, ip) =>
   postRequest('/news-by-id', { news_id: newsId, ip });
+
+export const LocationList = () =>
+  postRequest('/location-list');
 
 export const NewsSortBy = (portal_id, filter) =>
   postRequest('/news-by-filter',
@@ -291,3 +294,8 @@ export const GetOurRepoterData = (portal_id) =>
 
 export const AdvertiseWithUsApi = (data) =>
   postRequest('/raise-query', data);
+
+// settings
+
+export const getSettings = (portal_id) =>
+  getRequest('/active-services', { portal_id });

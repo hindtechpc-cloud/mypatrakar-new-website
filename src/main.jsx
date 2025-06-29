@@ -6,10 +6,16 @@ import App from "./App.jsx";
 import "./i18n"; //
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { SettingsProvider } from "./context/SettingsContext.jsx";
+import { WebThemeProvider } from "./context/WebThemeContext.jsx";
 createRoot(document.getElementById("news-app")).render(
   <StrictMode>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <App />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <SettingsProvider>
+         <WebThemeProvider>
+          <App />
+          </WebThemeProvider>
+      </SettingsProvider>
     </GoogleOAuthProvider>
   </StrictMode>
 );

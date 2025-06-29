@@ -30,9 +30,18 @@ export default function AboutMypatrakar() {
 
   return (
     <div className="p-4 md:p-8">
-      <h1 className="text-gray-900 text-center font-bold text-2xl mt-5">
-        {aboutData?.title || "About MyPatrakar"}
-      </h1>
+       <header className="bg-red-500 text-gray-50 p-4 rounded-t-xl flex items-center gap-3">
+          {/* {termsData?.page_icon_url && (
+            <img
+              src={termsData.page_icon_url}
+              alt="icon"
+              className="w-8 h-8 rounded bg-white p-1"
+            />
+          )} */}
+          <h1 className="font-bold text-lg md:text-xl">
+            {aboutData?.title || "About Us"}
+          </h1>
+        </header>
 
       {loading ? (
         <p className="text-center mt-4 text-gray-500">Loading...</p>

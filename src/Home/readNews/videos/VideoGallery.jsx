@@ -1,9 +1,21 @@
-import { useEffect, useState } from "react";
-import { BsFillCameraReelsFill } from "react-icons/bs";
-import { ImSpinner8 } from "react-icons/im";
+import { useContext, useEffect, useState } from "react";
+import { BsFillCameraReelsFill, BsYoutube } from "react-icons/bs";
 import { FiAlertCircle } from "react-icons/fi";
+import { SocialMediaContext } from "../../../context/SocialMediaContext";
 
-const YOUTUBE_URL = "https://youtube.com/@malayalamallsongs";
+// Default YouTube channel ID (example: BBC News)
+const DEFAULT_CHANNEL_ID = "UC16niRr50-MSBwiO3YDb3RA";
+
+// Skeleton component for loading state
+const VideoSkeletonCard = () => (
+  <div className="bg-white rounded-lg overflow-hidden shadow animate-pulse">
+    <div className="bg-gray-300 h-56 w-full" />
+    <div className="p-4 space-y-2">
+      <div className="h-4 bg-gray-300 rounded w-3/4" />
+      <div className="h-4 bg-gray-200 rounded w-1/2" />
+    </div>
+  </div>
+);
 
 const VideoGallery = () => {
   const [videos, setVideos] = useState([]);
@@ -11,52 +23,79 @@ const VideoGallery = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [channelId, setChannelId] = useState("");
+  const [usingDefaultChannel, setUsingDefaultChannel] = useState(false);
+  const { socialLinks } = useContext(SocialMediaContext);
 
-  // Extract channel ID from YouTube URL
+  // Extract YouTube URL from context
+  const youtubeUrl = socialLinks?.find(
+    (link) =>
+      link.icon?.toLowerCase() === "fayoutube" ||
+      link.name?.toLowerCase().includes("youtube")
+  )?.url;
+
+  // Extract channel ID from YouTube URL with fallback to default
   useEffect(() => {
     const extractChannelId = async () => {
+      if (!youtubeUrl) {
+        setError("YouTube link not found. Showing default channel videos.");
+        setUsingDefaultChannel(true);
+        setChannelId(DEFAULT_CHANNEL_ID);
+        return;
+      }
+
       try {
         setLoading(true);
         setError("");
+        setUsingDefaultChannel(false);
 
-        // Method 1: Try noembed API
+        // Try using noembed API
         const noembedRes = await fetch(
-          `https://noembed.com/embed?url=${encodeURIComponent(YOUTUBE_URL)}`
+          `https://noembed.com/embed?url=${encodeURIComponent(youtubeUrl)}`
         );
+        
+        if (!noembedRes.ok) throw new Error("Noembed API failed");
+        
         const noembedData = await noembedRes.json();
         const authorUrl = noembedData?.author_url;
 
-        if (authorUrl && authorUrl.includes("/channel/")) {
+        if (authorUrl?.includes("/channel/")) {
           const id = authorUrl.split("/channel/")[1].split(/[\/?#]/)[0];
           setChannelId(id);
           return;
         }
 
-        // Method 2: Try direct HTML parsing
-        const handle = YOUTUBE_URL.split("youtube.com/@")[1].split(/[\/?#]/)[0];
+        // Fallback: extract from handle
+        const handle = youtubeUrl.split("youtube.com/@")[1]?.split(/[\/?#]/)[0];
+        if (!handle) throw new Error("Invalid YouTube handle URL.");
+
         const htmlRes = await fetch(`https://www.youtube.com/@${handle}`);
+        if (!htmlRes.ok) throw new Error("YouTube page not found");
+        
         const html = await htmlRes.text();
-        
-        // Try to find channelId in the HTML
-        const match = html.match(/"channelId":"(UC[\w-]+)"/) || 
-                      html.match(/{"key":"browse_id","value":"(UC[\w-]+)"}/);
-        
-        if (match && match[1]) {
+
+        const match =
+          html.match(/"channelId":"(UC[\w-]+)"/) ||
+          html.match(/{"key":"browse_id","value":"(UC[\w-]+)"}/);
+
+        if (match?.[1]) {
           setChannelId(match[1]);
         } else {
-          throw new Error("Could not extract channel ID");
+          throw new Error("Channel ID not found in HTML.");
         }
       } catch (err) {
-        console.error("Error extracting channel ID:", err);
-        setError("Failed to get channel information");
+        console.error("Channel ID extraction error:", err);
+        setError("Failed to get YouTube channel information. Showing default videos.");
+        setUsingDefaultChannel(true);
+        setChannelId(DEFAULT_CHANNEL_ID);
+      } finally {
         setLoading(false);
       }
     };
 
     extractChannelId();
-  }, []);
+  }, [youtubeUrl]);
 
-  // Fetch videos once we have channel ID
+  // Fetch videos from YouTube RSS feed with error handling
   useEffect(() => {
     if (!channelId) return;
 
@@ -64,26 +103,38 @@ const VideoGallery = () => {
       try {
         setLoading(true);
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-        const response = await fetch(
+        const res = await fetch(
           `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`
         );
-        const data = await response.json();
         
-        if (data?.items) {
+        if (!res.ok) throw new Error("RSS feed fetch failed");
+        
+        const data = await res.json();
+
+        if (data?.items?.length) {
           setVideos(data.items);
+          setError("");
         } else {
-          throw new Error("No videos found");
+          throw new Error("No videos found in feed.");
         }
-      } catch (error) {
-        console.error("Error fetching videos:", error);
-        setError("Failed to load videos");
+      } catch (err) {
+        console.error("Video fetch error:", err);
+        setError("Failed to load videos from this channel. Trying default channel...");
+        
+        // Try fallback to default channel if current channel fails
+        if (!usingDefaultChannel) {
+          setUsingDefaultChannel(true);
+          setChannelId(DEFAULT_CHANNEL_ID);
+        } else {
+          setError("Failed to load videos. Please try again later.");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchVideos();
-  }, [channelId]);
+  }, [channelId, usingDefaultChannel]);
 
   const loadMoreVideos = () => {
     setVisibleVideos((prev) => prev + 6);
@@ -103,40 +154,54 @@ const VideoGallery = () => {
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <BsFillCameraReelsFill className="text-red-600 text-2xl" />
-        <h2 className="text-2xl font-bold text-gray-800">Latest Videos</h2>
+        <h2 className="text-2xl font-bold text-gray-800">
+          {usingDefaultChannel ? "Featured Videos" : "Latest Videos"}
+        </h2>
+        {usingDefaultChannel && (
+          <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+            Default Channel
+          </span>
+        )}
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <ImSpinner8 className="animate-spin text-3xl text-blue-600 mr-3" />
-          <span>Loading videos...</span>
+      {/* Error message (if not loading) */}
+      {error && !loading && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+          <FiAlertCircle className="text-yellow-500 text-xl mt-0.5 flex-shrink-0" />
+          <p className="text-yellow-700">{error}</p>
         </div>
-      ) : error ? (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-          <FiAlertCircle className="mx-auto text-red-500 text-2xl mb-2" />
-          <p className="text-red-600 font-medium">{error}</p>
+      )}
+
+      {loading ? (
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <VideoSkeletonCard key={index} />
+          ))}
         </div>
       ) : (
         <>
           {/* Video Grid */}
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
             {videos.slice(0, visibleVideos).map((video) => {
-              const videoId = video.link.split("v=")[1]?.split("&")[0] || 
-                            video.guid.split(":")[2];
+              const videoId =
+                video.link?.split("v=")[1]?.split("&")[0] ||
+                video.guid?.split(":")[2];
               return (
                 <div
                   key={video.guid}
-                  className="bg-white shadow-xl rounded-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl"
+                  className="bg-white shadow-xl rounded-lg overflow-hidden transform transition-all hover:scale-[1.02] hover:shadow-2xl"
                 >
-                  <iframe
-                    className="w-full h-56 rounded-t-lg"
-                    src={`https://www.youtube.com/embed/${videoId}`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title={video.title}
-                    loading="lazy"
-                  ></iframe>
+                  <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-t-lg">
+                    <iframe
+                      className="absolute top-0 left-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      title={video.title}
+                      loading="lazy"
+                    />
+                  </div>
                   <div className="p-4">
                     <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
                       {video.title}
@@ -150,25 +215,26 @@ const VideoGallery = () => {
             })}
           </div>
 
-          {/* Buttons */}
-          <div className="flex justify-center gap-4 mt-8">
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
             {visibleVideos < videos.length && (
               <button
                 className="px-6 py-3 bg-gray-700 text-white font-medium rounded-lg shadow-md transition-all duration-300 hover:bg-gray-900 hover:shadow-lg"
                 onClick={loadMoreVideos}
               >
-                Load More...
+                Load More Videos
               </button>
             )}
             <button
-              className="px-6 py-3 bg-red-600 text-white font-medium rounded-lg shadow-md flex items-center gap-2 transition-all duration-300 hover:bg-red-800 hover:shadow-lg"
+              className="px-6 py-3 bg-red-600 text-white font-medium rounded-lg shadow-md flex items-center justify-center gap-2 transition-all duration-300 hover:bg-red-700 hover:shadow-lg"
               onClick={handleSubscribe}
-              disabled={!channelId}
             >
-              <span>🔔</span> Subscribe
+              <BsYoutube className="text-lg" />
+              Subscribe {usingDefaultChannel ? "to Featured Channel" : ""}
             </button>
           </div>
         </>
+        
       )}
     </div>
   );

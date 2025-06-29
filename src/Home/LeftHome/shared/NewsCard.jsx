@@ -34,7 +34,7 @@ const NewsCard = ({
   return (
     <div className={`relative ${className}`}>
       {/* Image Section */}
-      <div className={`relative ${classNameToImage}`}>
+      <div className={`relative select-none ${classNameToImage}`}>
         <img
           src={imageUrl}
           alt={title || "News image"}

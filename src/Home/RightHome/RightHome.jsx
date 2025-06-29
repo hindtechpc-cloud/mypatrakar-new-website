@@ -18,6 +18,7 @@ import {
   GetRightMainAds,
   GetRightBottomAds,
 } from "../../../api";
+import { useSettingsContext } from "../../context/SettingsContext";
 
 export default function RightHome() {
   const { pathname } = useLocation();
@@ -48,19 +49,27 @@ export default function RightHome() {
 
     loadAds();
   }, []);
+  const { getSettingStatus } = useSettingsContext();
+
+  const isHoroscopeEnabled = getSettingStatus("Hororscope");
+  const isLiveStreamingEnabled = getSettingStatus("Live Streaming");
+  const isQuizEnabled = getSettingStatus("Quiz Polls");
+  const isSportsEnabled = getSettingStatus("Sports");
+  const isStockEnabled = getSettingStatus("Stock");
+  const isWhatsAppTelegramEnabled = getSettingStatus("Whats App & Telegram Button");
   return (
     <div>
-      {pathname === "/" && <LiveTv />}
+      {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
       <OwnState />
       <AddRightHome1 adsData={ads.top} />
       <Trending />
-      <LiveCricket />
+      {isSportsEnabled && <LiveCricket />}
       <Shorts />
       <AddRightHome1 adsData={ads.main} />
-      <Rashiphal />
-      <JoinChannels />
-      <StockInfo />
-      <PollWidget />
+      {isHoroscopeEnabled && <Rashiphal />}
+      {isWhatsAppTelegramEnabled && <JoinChannels />}
+      {isStockEnabled && <StockInfo />}
+      {isQuizEnabled && <PollWidget />}
       <WeatherWidget />
       <AddRightHome1 adsData={ads.bottom} />
     </div>

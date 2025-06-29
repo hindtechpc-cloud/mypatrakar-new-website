@@ -21,7 +21,7 @@ const TopResultTable = ({ results }) => {
             <tr key={index} className="border-t border-gray-200 hover:bg-gray-50 transition-all">
               <td className="py-2 px-3 font-medium text-gray-800">{party.party_name}</td>
               <td className="py-2 px-3 flex justify-center items-center">
-                <img src={party.party_image} alt={party.party_name} className="h-8 w-8 object-contain" />
+                <img src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${party.party_image}`} alt={party.party_name} className="h-8 w-8 object-contain" />
               </td>
               <td className="py-2 px-3 text-right font-semibold text-gray-700">
                 {((parseInt(party.seats_won) / totalVotes) * 100).toFixed(2)}%

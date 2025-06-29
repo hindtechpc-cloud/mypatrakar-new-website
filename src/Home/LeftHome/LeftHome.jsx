@@ -8,6 +8,7 @@ import {
 } from "../../../api";
 import HeaderAd from "../../TopBar/HeaderAd";
 import Election from "./election/Election";
+import { useSettingsContext } from "../../context/SettingsContext";
 
 export default function LeftHome() {
   const [featured, setFeatured] = useState([]);
@@ -51,6 +52,9 @@ export default function LeftHome() {
     loadFeaturedSection();
     loadAds();
   }, []);
+  const { getSettingStatus } = useSettingsContext();
+
+  const isElectionEnabled = getSettingStatus("Exit Polls");
 
   const renderAd = (adData, label) => {
     console.log("Rendering ad for", label, ":", adData);
@@ -117,7 +121,7 @@ export default function LeftHome() {
           </React.Fragment>
         );
       })}
-      <Election />
+      {isElectionEnabled && <Election />}
     </div>
   );
 }

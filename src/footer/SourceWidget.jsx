@@ -206,7 +206,7 @@ const SourceWidget = ({ className = "", redirectTo, onSuccess,setShowLoginOverla
   };
 
   return (
-    <div className={`max-w-md mx-auto p-8 bg-white rounded-lg ${className}`}>
+    <div className={`max-w-md mx-auto p-8 bg-white rounded ${className}`}>
      <div className="text-center mb-8">
         <div className="flex justify-center mb-4">
           <img

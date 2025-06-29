@@ -6,6 +6,7 @@ import { FaThumbsUp } from "react-icons/fa6";
 import { AiOutlineDash } from "react-icons/ai";
 
 const TopResultTable = ({ parties }) => {
+  // console.log(parties)
   // const parties = [
   //   {
   //     name: "BJP",
@@ -50,7 +51,7 @@ const TopResultTable = ({ parties }) => {
                 </td>
                 <td className="p-3 text-center">
                   <img
-                    src={party.party_image}
+                    src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${party.party_image}`}
                     alt={party.party_name}
                     className="h-8 w-8 object-contain mx-auto"
                   />

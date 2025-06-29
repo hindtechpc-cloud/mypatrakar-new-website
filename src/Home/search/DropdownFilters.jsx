@@ -15,7 +15,10 @@ const DropdownFilters = ({
   currentFilters,
   disabled,
 }) => {
+
   const handleChange = (e) => {
+
+
     const { name, value } = e.target;
     switch (name) {
       case "category":
@@ -114,9 +117,9 @@ const DropdownFilters = ({
             disabled={disabled}
           >
             <option value="">Select Location</option>
-            {locations.map((loc) => (
-              <option key={loc.id} value={loc.id}>
-                {loc.name}
+            {locations?.map((loc) => (
+              <option key={loc.location_id} value={loc.location_id}>
+                {loc.location_name}
               </option>
             ))}
           </select>

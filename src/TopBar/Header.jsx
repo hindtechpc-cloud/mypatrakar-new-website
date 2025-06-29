@@ -97,10 +97,11 @@
 
 // src/TopBar/Header.jsx
 import React, { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Links, useLocation } from "react-router-dom";
 import logo1 from "../assets/Ellipse.svg";
 import SocialIcons from "./SocialIcons";
 import { WebThemeContext } from "../context/ThemeContext";
+import { useSettingsContext } from "../context/SettingsContext";
 
 const languages = [
   { code: "hi", label: "हिंदी" },
@@ -129,9 +130,13 @@ const Header = () => {
     "/advertise-with-us",
   ].includes(location.pathname);
 
+
+    const { getSettingStatus } = useSettingsContext();
+  
+    const isAdvertiseWithUsEnabled = getSettingStatus("Apply for Advertisement");
   return (
     <header
-      className={`w-full ${themeColorClass}  md:block text-white py-4 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300`}
+      className={`w-full ${themeColorClass}  md:block text-white py-1 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300`}
       style={{
         backgroundColor: !webTheme["bg-color"]
           ? "#b91c1c"
@@ -140,15 +145,18 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto">
         {isInfoPage && (
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center">
             <div className="w-14 hover:scale-105 transition-transform duration-200">
+             <Link to={"/"}>
+             
               <img
                 src={logo1}
                 alt="Icon Logo"
                 className="w-full drop-shadow-md"
               />
+              </Link>
             </div>
-            <div className="w-20 h-20 hover:scale-105 transition-transform duration-200">
+            <div className="w-16 h-16 hover:scale-105 transition-transform duration-200">
               <img
                 src={webTheme["web-logo"]}
                 alt="Main Logo"
@@ -176,7 +184,7 @@ const Header = () => {
           {/* Social Icons and Contact */}
           <div className="flex items-center gap-4">
             <SocialIcons />
-            {!isInfoPage && (
+            {!isInfoPage && isAdvertiseWithUsEnabled && (
               <Link to={"advertise-with-us"} className="text-sm">
                 <button className="text-sm px-3 py-1 bg-white/10 rounded-md hover:bg-white/20 hover:text-yellow-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50">
                   विज्ञापन के लिए संपर्क करें

@@ -12,6 +12,7 @@ import ScrollToTopButton from "./ScrollToTopButton";
 import { useTranslation } from "react-i18next";
 import Election from "./Home/LeftHome/election/Election";
 import React from "react";
+import { useSettingsContext } from "./context/SettingsContext";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));
@@ -38,6 +39,12 @@ const Subcategory = lazy(() => import("./Home/subcategory/Subcategory"));
 function Layout() {
   const location = useLocation();
   const { t } = useTranslation();
+  const { getSettingStatus } = useSettingsContext();
+
+  const isBreakingNewsEnabled = getSettingStatus("Breaking Banner");
+  const isAboutPageEnabled = getSettingStatus("About Us");
+  const isAdvertiseWithUsPageEnabled = getSettingStatus("Apply for Advertisement");
+
 
   const commonPaths = [
     "/contact-us",
@@ -99,17 +106,21 @@ function Layout() {
           {/* <Election/> */}
         </>
       )}
-      {!isSearchPage && !isShorts && <BreakingNewsBar />}
+      {!isSearchPage && !isShorts && isBreakingNewsEnabled && (
+        <BreakingNewsBar />
+      )}
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/feedback" element={<Feedback />} />
-        <Route path="/about-us" element={<AboutMypatrakar />} />
+        {isAboutPageEnabled && (
+          <Route path="/about-us" element={<AboutMypatrakar />} />
+        )}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/about" element={<Navbar />} />
+        {isAboutPageEnabled && <Route path="/about" element={<Navbar />} />}
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/advertise-with-us" element={<AdvertiseWithUs />} />
+        {isAdvertiseWithUsPageEnabled && <Route path="/advertise-with-us" element={<AdvertiseWithUs />} />}
         <Route path="/our-reporters" element={<OurReporters />} />
         <Route path="/terms-and-conditions" element={<TermsAndCondition />} />
         <Route path="/read-news/:type/:newsId" element={<ReadNews />} />
