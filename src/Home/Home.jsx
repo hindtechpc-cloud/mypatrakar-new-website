@@ -1,4 +1,6 @@
 import LeftHome from "./LeftHome/LeftHome";
+import { AdListingPage } from "./market/pages/AdListingPage";
+import SellerQueryForm from "./market/pages/QueryForm";
 // import Right from "./RightHome/Right";
 import RightHome from "./RightHome/RightHome";
 
@@ -16,7 +18,10 @@ export default function Home() {
           <RightHome />
           {/* <Right/> */}
         </div>
+
       </div>
+      <AdListingPage/>
+      <SellerQueryForm/>
     </div>
   );
 }

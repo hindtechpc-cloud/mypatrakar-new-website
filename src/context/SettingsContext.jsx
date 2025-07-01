@@ -17,34 +17,28 @@ export const SettingsProvider = ({ children }) => {
     sessionStorage.setItem("globalSettings", JSON.stringify(data));
   };
 
-
   // ✅ Load from sessionStorage
-  // const loadFromSession = () => {
-  //   const stored = sessionStorage.getItem("globalSettings");
-  //   return stored ? JSON.parse(stored) : null;
-  // };
-const loadFromSession = () => {
-  const stored = sessionStorage.getItem("globalSettings");
-  if (!stored) return null;
+  const loadFromSession = () => {
+    const stored = sessionStorage.getItem("globalSettings");
+    if (!stored) return null;
 
-  try {
-    const parsed = JSON.parse(stored);
-    const now = new Date().getTime();
-    const twentyMinutes = 20
-     * 60 * 1000;
+    try {
+      const parsed = JSON.parse(stored);
+      const now = new Date().getTime();
+      const twentyMinutes = 20 * 60 * 1000;
 
-    // ⏱ Expired?
-    if (now - parsed.timestamp > twentyMinutes) {
-      sessionStorage.removeItem("globalSettings");
+      // ⏱ Expired?
+      if (now - parsed.timestamp > twentyMinutes) {
+        sessionStorage.removeItem("globalSettings");
+        return null;
+      }
+
+      return parsed.data;
+    } catch (error) {
+      console.error("Failed to parse session data:", error);
       return null;
     }
-
-    return parsed.data;
-  } catch (error) {
-    console.error("Failed to parse session data:", error);
-    return null;
-  }
-};
+  };
 
   // 📦 Fetch from API (only if not in sessionStorage)
   const fetchSettings = async () => {

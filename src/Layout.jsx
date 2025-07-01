@@ -10,9 +10,10 @@ import Footer from "./footer/footer";
 import FooterLinks from "./Home/FooterLinks";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { useTranslation } from "react-i18next";
-import Election from "./Home/LeftHome/election/Election";
 import React from "react";
 import { useSettingsContext } from "./context/SettingsContext";
+import { AdDetailPage } from "./Home/market/pages/AdDetailPage";
+import SellerQueryForm from "./Home/market/pages/QueryForm";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));
@@ -126,7 +127,10 @@ function Layout() {
         <Route path="/read-news/:type/:newsId" element={<ReadNews />} />
         <Route path="/shorts" element={<ShortsPages />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/market-place/:AdsId" element={<AdDetailPage />} />
         <Route path="/bharat-trending" element={<Search />} />
+        <Route path={"/buyer-query-form" } element={<SellerQueryForm />} />
+        <Route path="/seller-query-form" element={<SellerQueryForm />} />
         <Route path="/videos" element={<VideoGallery />} />
         <Route path="/topic/:category/:categoryId" element={<Category />} />
         <Route
@@ -139,6 +143,7 @@ function Layout() {
       {isCommonPage && !isShorts && <FooterLinks />}
 
       <ScrollToTopButton />
+      {/* <AdDetailPage /> */}
     </>
   );
 }

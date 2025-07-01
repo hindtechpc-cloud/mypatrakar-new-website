@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function AddRightHome1({ adsData }) {
+  console.log(adsData);
   const isAdDataValid =
     adsData &&
     Array.isArray(adsData.ad_image_url) &&
@@ -10,14 +11,16 @@ export default function AddRightHome1({ adsData }) {
   // ✅ If adsData exists and has content
   if (isAdDataValid) {
     return (
-      <div className="w-[320px] p-3 border rounded-lg shadow-sm bg-white mx-auto">
+      <div className="w-[350px]  border rounded-lg shadow-sm bg-white mx-auto">
         <img
-          src={adsData.ad_image_url[0]}
+          src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+            adsData.ad_image_url[0]
+          }`}
           alt={adsData.ad_title || "Advertisement"}
-          className="rounded-lg w-full mb-2 object-cover"
+          className="rounded-lg w-full h-full mb-2 object-center"
         />
 
-        {adsData.ad_title && (
+        {/* {adsData.ad_title && (
           <h2 className="text-lg font-semibold text-gray-800">
             {adsData.ad_title}
           </h2>
@@ -25,7 +28,7 @@ export default function AddRightHome1({ adsData }) {
 
         {adsData.ad_subtitle && (
           <p className="text-sm text-gray-600">{adsData.ad_subtitle}</p>
-        )}
+        )} */}
 
         {adsData.ad_url && (
           <a
@@ -108,7 +111,9 @@ export default function AddRightHome1({ adsData }) {
         {/* Contact Info */}
         <div className="flex items-center justify-center mb-2 animate-float">
           <div className="bg-white/90 px-4 py-2 rounded-full shadow-md border border-gray-100 flex items-center">
-            <span className="text-lg font-bold text-gray-800">+91 XXXX-XX-XXXX</span>
+            <span className="text-lg font-bold text-gray-800">
+              +91 XXXX-XX-XXXX
+            </span>
             <a
               href="#"
               className="ml-2 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center hover:bg-green-200 transition-colors shadow-inner"
