@@ -3,9 +3,14 @@ import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
 import TopNewsItems from "../TopNews/TopNewsItems";
 import { loadNewsByCategory } from "../../../../api";
+import { AdCardSkeleton } from "../../market/components/Skeleton";
 
 // Main Country Component
-const Country = ({ category_id, category = "Country", section_title = "Country News" }) => {
+const Country = ({
+  category_id,
+  category = "Country",
+  section_title = "Country News",
+}) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,23 +49,21 @@ const Country = ({ category_id, category = "Country", section_title = "Country N
 
 // Loading State Component
 const LoadingState = () => (
-  <div className="p-4 flex justify-center items-center h-64">
-    <span className="animate-pulse text-gray-500 text-lg">
-      Loading country news...
-    </span>
+  <div className="p-4 flex justify-center items-center ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...Array(3)].map((_, i) => (
+        <AdCardSkeleton key={i} />
+      ))}
+    </div>
   </div>
 );
 
 // Error State Component
 const ErrorState = ({ error, onRetry }) => (
-  <div className="p-4 text-center text-red-500">
-    <p>{error}</p>
-    <button
-      onClick={onRetry}
-      className="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-    >
-      Retry
-    </button>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {[...Array(3)].map((_, i) => (
+      <AdCardSkeleton key={i} />
+    ))}
   </div>
 );
 
@@ -72,7 +75,11 @@ ErrorState.propTypes = {
 // Empty State Component
 const EmptyState = () => (
   <div className="p-4 text-center text-gray-500">
-    <p>No country news available at the moment.</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...Array(3)].map((_, i) => (
+        <AdCardSkeleton key={i} />
+      ))}
+    </div>
   </div>
 );
 

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
 import { loadNewsByCategory } from "../../../../api";
+import { AdCardSkeleton } from "../../market/components/Skeleton";
 
 const State = ({
   section_id,
@@ -39,24 +40,24 @@ const State = ({
       <Menu menuText={section_title || "State"} menu={[]} />
 
       {loading ? (
-        <div className="flex justify-center items-center h-60">
-          <div className="animate-pulse text-gray-500 text-lg">
-            Loading news...
-          </div>
+        <div className="flex justify-center items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
         </div>
       ) : error ? (
-        <div className="text-center text-red-600 mt-10">
-          <p>{error}</p>
-          <button
-            onClick={fetchNews}
-            className="mt-2 text-blue-600 underline hover:text-blue-800 transition"
-          >
-            Retry
-          </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
         </div>
       ) : articles.length === 0 ? (
-        <div className="text-center text-gray-500 text-lg mt-10">
-          No articles found for this state.
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
         </div>
       ) : (
         <div className="flex flex-col  md:items-center md:justify-center gap-6 mt-3">

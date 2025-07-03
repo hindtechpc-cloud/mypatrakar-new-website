@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
 import { loadNewsByCategory } from "../../../../api";
+import { AdCardSkeleton } from "../../market/components/Skeleton";
 
 const Game = ({
   category_id,
@@ -32,7 +33,7 @@ const Game = ({
   }, [fetchNews]);
 
   const getImageUrl = (imagePath) => {
-    return imagePath 
+    return imagePath
       ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${imagePath}`
       : "https://via.placeholder.com/800x400?text=No+Image";
   };
@@ -52,10 +53,10 @@ const Game = ({
   return (
     <div className="container mx-auto px-4">
       <Menu menuText={section_title} menu={[]} />
-      
+
       <div className="flex flex-col items-center gap-6 py-4">
         {articles.map((article) => (
-          <ArticleCard 
+          <ArticleCard
             key={article.news_id}
             article={article}
             category={category}
@@ -69,32 +70,36 @@ const Game = ({
 
 // Sub-components for better organization
 const LoadingState = () => (
-  <div className="p-4 flex justify-center items-center h-64">
-    <div className="animate-pulse text-gray-500">Loading news...</div>
+  <div className="p-4 flex justify-center items-center ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...Array(3)].map((_, i) => (
+        <AdCardSkeleton key={i} />
+      ))}
+    </div>
   </div>
 );
 
 const ErrorState = ({ error, onRetry }) => (
-  <div className="p-4 text-red-500 text-center">
-    {error}
-    <button
-      onClick={onRetry}
-      className="ml-2 text-blue-600 hover:underline"
-    >
-      Retry
-    </button>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {[...Array(3)].map((_, i) => (
+      <AdCardSkeleton key={i} />
+    ))}
   </div>
 );
 
 const EmptyState = () => (
   <div className="p-4 text-center text-gray-500">
-    {" "}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...Array(3)].map((_, i) => (
+        <AdCardSkeleton key={i} />
+      ))}
+    </div>
   </div>
 );
 
 const ArticleCard = ({ article, category, getImageUrl }) => {
   const imageUrl = getImageUrl(article.news_img_url);
-  
+
   return (
     <NewsCard
       className="md:flex flex-1 items-start gap-4 max-w-4xl mx-auto"

@@ -128,6 +128,10 @@ const Header = () => {
     "/contact-us",
     "/our-reporters",
     "/advertise-with-us",
+    "/market-place",
+    "/seller-query-form",
+    "/buyer-query-form",
+    "/market-place/details"
   ].includes(location.pathname);
 
 
@@ -146,7 +150,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto">
         {isInfoPage && (
           <div className="flex justify-between items-center">
-            <div className="w-14 hover:scale-105 transition-transform duration-200">
+            <div className="select-none w-14 hover:scale-105 transition-transform duration-200">
              <Link to={"/"}>
              
               <img
@@ -156,7 +160,7 @@ const Header = () => {
               />
               </Link>
             </div>
-            <div className="w-16 h-16 hover:scale-105 transition-transform duration-200">
+            <div className="select-none w-16 h-16 hover:scale-105 transition-transform duration-200">
               <img
                 src={webTheme["web-logo"]}
                 alt="Main Logo"

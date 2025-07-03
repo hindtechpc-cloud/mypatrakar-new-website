@@ -74,7 +74,7 @@ export default function ReplyOnComment({ parentCommentId, onSuccess }) {
     <form onSubmit={handleSubmit} className="space-y-3">
       {submitError && (
         <div className="bg-red-50 text-red-600 text-sm p-2 rounded">
-          {submitError}
+          {""}
         </div>
       )}
 

@@ -312,7 +312,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
       }
     } catch (error) {
       console.error("Poll fetch error:", error);
-      toast.error("Failed to load poll data");
+      // toast.error("Failed to load poll data");
     }
   }, []);
 
@@ -329,7 +329,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
       }
     } catch (error) {
       console.error("Poll IDs fetch error:", error);
-      toast.error("Failed to load polls");
+      // toast.error("Failed to load polls");
     }
   }, [fetchPollData]);
 

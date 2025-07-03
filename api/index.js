@@ -213,6 +213,9 @@ export const GetCommentsreply = (comment_id) =>
 export const GetTopBannerAds = (portal_id) =>
   getRequest('/top-banner-ads', { portal_id });
 
+export const GetMarketPlaceAds = (portal_id) =>
+  getRequest('/marketplace-ads', { portal_id });
+
 export const GetLeftBannerAds = (portal_id) =>
   getRequest('/left-home-banner-ads', { portal_id });
 

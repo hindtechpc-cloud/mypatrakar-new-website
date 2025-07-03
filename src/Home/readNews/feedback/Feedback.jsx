@@ -189,12 +189,12 @@ export default function Feedback() {
             maxLength="500"
           ></textarea>
           {errors.comment && (
-            <p className="mt-1 text-sm text-red-600">{errors.comment}</p>
+            <p className="mt-1 text-sm text-red-600">{""}</p>
           )}
         </div>
  {submitError && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
-          <p className="text-sm text-red-700">{submitError}</p>
+          <p className="text-sm text-red-700">{" "}</p>
         </div>
       )}
          {/* Success and Error Messages */}

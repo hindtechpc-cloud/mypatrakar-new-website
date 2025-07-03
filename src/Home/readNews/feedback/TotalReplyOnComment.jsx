@@ -28,7 +28,7 @@ export default function TotalreplyOnComment({ id }) {
 
   if (loading)
     return <div className="text-sm text-gray-500">Loading replies...</div>;
-  if (error) return <div className="text-sm text-red-500">{error}</div>;
+  if (error) return <div className="text-sm text-red-500">{""}</div>;
   if (replies.length>0 && replies[0].replies?.length === 0)
     return <div className="text-sm text-gray-400">No replies found.</div>;
 

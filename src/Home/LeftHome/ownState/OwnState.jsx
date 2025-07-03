@@ -4,6 +4,7 @@ import NewsCard from "../shared/NewsCard";
 import TopNewsItems from "../TopNews/TopNewsItems";
 import { articlesCard } from "../../search/news";
 import { loadNewsByCategory } from "../../../../api";
+import { AdCardSkeleton } from "../../market/components/Skeleton";
 
 export default function OwnState({
   section_id,
@@ -37,9 +38,34 @@ export default function OwnState({
     fetchNews();
   }, [fetchNews]);
 
-  if (loading) return <div className="p-4">Loading...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
-  if (!articles.length) return <div className="p-4">No articles found</div>;
+  if (loading)
+    return (
+      <div className="">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(3)].map((_, i) => (
+          <AdCardSkeleton key={i} />
+        ))}
+      </div>
+    );
+  if (!articles.length)
+    return (
+      <div className="">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
 
   const featuredArticle = articles[0];
 

@@ -20,8 +20,7 @@ export default function Home() {
         </div>
 
       </div>
-      <AdListingPage/>
-      <SellerQueryForm/>
+      
     </div>
   );
 }

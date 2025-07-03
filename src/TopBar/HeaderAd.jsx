@@ -106,14 +106,14 @@ const HeaderAd = ({
       aria-label="Advertisement"
     >
       <div className="w-full h-full bg-white p-4 flex flex-col justify-center items-center relative">
-        {adData?.ad_title && (
+        {/* {adData?.ad_title && (
           <h3 className="text-lg font-semibold text-gray-800 mb-1">
             {adData.ad_title}
           </h3>
-        )}
-        {adData?.ad_subtitle && (
+        )} */}
+        {/* {adData?.ad_subtitle && (
           <p className="text-sm text-gray-600 mb-4">{adData.ad_subtitle}</p>
-        )}
+        )} */}
 
         {/* Single Image */}
         {!isMultipleImages && adData?.ad_image_url?.length > 0 && (
@@ -129,7 +129,7 @@ const HeaderAd = ({
             <img
               src={`${imageBaseURL}${adData.ad_image_url[0]}`}
               alt={adData?.ad_title || "Advertisement"}
-              className="rounded-lg object-cover w-full h-full max-h-40 hover:opacity-90 transition"
+              className="rounded-lg object-center w-full h-full max-h-40 hover:opacity-90 transition"
               loading="lazy"
             />
           </a>

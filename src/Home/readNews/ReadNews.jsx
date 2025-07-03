@@ -59,7 +59,7 @@ export default function ReadNews() {
 
     return (
       <HeaderAd
-        className="my-4 flex justify-center items-center bg-gray-300 w-full rounded"
+        className="my-4 flex justify-center items-center bg-gray-300 w-1/2 rounded"
         height="200px"
         adData={adData}
       />
@@ -76,7 +76,7 @@ export default function ReadNews() {
         {type !== "shorts" && <TotalCommnets />}
         {/* <NewsFeed newsCard={articlesCard} /> */}
         {/* <NewsAppAd /> */}
-        {renderAd(bottomAds)}
+        {/* {renderAd(bottomAds)} */}
         {/* <OwnState /> */}
         <VideoGallery />
       </div>

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { encryptData } from "../../../utils/cryptoHelper";
 
 const NewsItem = ({ news, onNewsClick }) => {
+  
   return (
     <div className="flex items-start justify-start gap-2">
       <div className="w-48">

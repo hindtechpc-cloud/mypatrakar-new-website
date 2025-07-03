@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
 import TopNewsItems from "../TopNews/TopNewsItems";
+import { AdCardSkeleton } from "../../market/components/Skeleton";
 // import { news } from "../../../navigation/news";
 
 const Entertainment = ({
@@ -59,25 +60,30 @@ const Entertainment = ({
 
 // Sub-components
 const LoadingState = () => (
-  <div className="p-4 flex justify-center items-center h-64">
-    <div className="animate-pulse text-gray-500">
-      Loading entertainment news...
-    </div>
+  <div className="p-4 flex justify-center items-center ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
   </div>
 );
 
 const ErrorState = ({ error, onRetry }) => (
-  <div className="p-4 text-red-500 text-center">
-    {error}
-    <button onClick={onRetry} className="ml-2 text-blue-600 hover:underline">
-      Retry
-    </button>
-  </div>
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
 );
 
 const EmptyState = () => (
   <div className="p-4 text-center text-gray-500">
-    No entertainment news found
+   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
   </div>
 );
 

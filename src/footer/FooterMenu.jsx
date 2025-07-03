@@ -5,6 +5,7 @@ import {
   FaVideo,
   FaShieldAlt,
   FaFileContract,
+  FaStore,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useSettingsContext } from "../context/SettingsContext";
@@ -18,7 +19,7 @@ export default function FooterMenu() {
   const baseMenu = [
     { name: "Home", link: "/", icon: <FaHome /> },
     { name: "Contact Us", link: "/contact-us", icon: <FaEnvelope /> },
-    { name: "Videos", link: "/videos", icon: <FaVideo /> },
+   { name: "Market Place", link: "/market-place", icon: <FaStore /> },
     { name: "Privacy Policy", link: "/privacy-policy", icon: <FaShieldAlt /> },
     {
       name: "Terms & Conditions",

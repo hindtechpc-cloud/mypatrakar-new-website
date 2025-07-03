@@ -27,9 +27,10 @@ export default function AdvertiseWithUs() {
       toast.error("Please fill all required fields");
       return;
     }
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     const payload = {
-      user_id: "MYAU30042025001", // Use real user_id
+      user_id: user.user_id, // Use real user_id
       user_type: "0", // Change if needed
       short_description: advertise || null,
       name,
@@ -75,7 +76,10 @@ export default function AdvertiseWithUs() {
           {/* Form Section */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="advertise" className="block text-gray-600 text-sm font-medium mb-2">
+              <label
+                htmlFor="advertise"
+                className="block text-gray-600 text-sm font-medium mb-2"
+              >
                 What do you want to advertise for?
               </label>
               <select
@@ -93,7 +97,10 @@ export default function AdvertiseWithUs() {
             </div>
 
             <div>
-              <label htmlFor="name" className="block text-gray-600 text-sm font-medium mb-2">
+              <label
+                htmlFor="name"
+                className="block text-gray-600 text-sm font-medium mb-2"
+              >
                 Name
               </label>
               <input
@@ -108,7 +115,10 @@ export default function AdvertiseWithUs() {
             </div>
 
             <div>
-              <label htmlFor="contact" className="block text-gray-600 text-sm font-medium mb-2">
+              <label
+                htmlFor="contact"
+                className="block text-gray-600 text-sm font-medium mb-2"
+              >
                 Contact Number
               </label>
               <input
@@ -123,7 +133,10 @@ export default function AdvertiseWithUs() {
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-gray-600 text-sm font-medium mb-2">
+              <label
+                htmlFor="description"
+                className="block text-gray-600 text-sm font-medium mb-2"
+              >
                 Description
               </label>
               <textarea
@@ -150,7 +163,9 @@ export default function AdvertiseWithUs() {
           {/* OR Section */}
           <div className="flex items-center justify-center my-4">
             <div className="bg-gray-200 w-full h-[1px]" />
-            <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">OR</span>
+            <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full">
+              OR
+            </span>
             <div className="bg-gray-200 w-full h-[1px]" />
           </div>
 
@@ -160,7 +175,9 @@ export default function AdvertiseWithUs() {
             onClick={handleWhatsAppClick}
           >
             <img src={whatsapp} alt="WhatsApp" className="w-8 h-8 mr-3" />
-            <span className="text-green-600 font-bold text-lg">WhatsApp Us</span>
+            <span className="text-green-600 font-bold text-lg">
+              WhatsApp Us
+            </span>
           </div>
         </div>
       </div>

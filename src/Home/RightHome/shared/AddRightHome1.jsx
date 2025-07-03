@@ -11,13 +11,14 @@ export default function AddRightHome1({ adsData }) {
   // ✅ If adsData exists and has content
   if (isAdDataValid) {
     return (
-      <div className="w-[350px]  border rounded-lg shadow-sm bg-white mx-auto">
+      <div className="w-[350px]  border rounded-lg shadow-sm 
+       mx-auto">
         <img
           src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
             adsData.ad_image_url[0]
           }`}
           alt={adsData.ad_title || "Advertisement"}
-          className="rounded-lg w-full h-full mb-2 object-center"
+          className="rounded-lg w-full h-full object-center"
         />
 
         {/* {adsData.ad_title && (

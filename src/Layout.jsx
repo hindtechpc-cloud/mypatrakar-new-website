@@ -14,6 +14,7 @@ import React from "react";
 import { useSettingsContext } from "./context/SettingsContext";
 import { AdDetailPage } from "./Home/market/pages/AdDetailPage";
 import SellerQueryForm from "./Home/market/pages/QueryForm";
+import { AdListingPage } from "./Home/market/pages/AdListingPage";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));
@@ -44,8 +45,9 @@ function Layout() {
 
   const isBreakingNewsEnabled = getSettingStatus("Breaking Banner");
   const isAboutPageEnabled = getSettingStatus("About Us");
-  const isAdvertiseWithUsPageEnabled = getSettingStatus("Apply for Advertisement");
-
+  const isAdvertiseWithUsPageEnabled = getSettingStatus(
+    "Apply for Advertisement"
+  );
 
   const commonPaths = [
     "/contact-us",
@@ -55,6 +57,11 @@ function Layout() {
     "/privacy-policy",
     "/advertise-with-us",
     "/feedback",
+    "/market-place",
+    "/seller-query-form",
+    "/buyer-query-form",
+    "/market-place/details",
+  
   ];
   const searchPaths = ["/search", ...commonPaths];
   const isShorts = location.pathname.startsWith("/shorts");
@@ -83,7 +90,7 @@ function Layout() {
       setLoadingBanner(false);
     }
   };
-
+  
   useEffect(() => {
     if (!hasFetchedBanner.current) {
       loadTopBannerAds();
@@ -121,7 +128,9 @@ function Layout() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         {isAboutPageEnabled && <Route path="/about" element={<Navbar />} />}
         <Route path="/contact-us" element={<ContactUs />} />
-        {isAdvertiseWithUsPageEnabled && <Route path="/advertise-with-us" element={<AdvertiseWithUs />} />}
+        {isAdvertiseWithUsPageEnabled && (
+          <Route path="/advertise-with-us" element={<AdvertiseWithUs />} />
+        )}
         <Route path="/our-reporters" element={<OurReporters />} />
         <Route path="/terms-and-conditions" element={<TermsAndCondition />} />
         <Route path="/read-news/:type/:newsId" element={<ReadNews />} />
@@ -129,9 +138,9 @@ function Layout() {
         <Route path="/search" element={<Search />} />
         <Route path="/market-place/:AdsId" element={<AdDetailPage />} />
         <Route path="/bharat-trending" element={<Search />} />
-        <Route path={"/buyer-query-form" } element={<SellerQueryForm />} />
+        <Route path={"/buyer-query-form"} element={<SellerQueryForm />} />
         <Route path="/seller-query-form" element={<SellerQueryForm />} />
-        <Route path="/videos" element={<VideoGallery />} />
+        <Route path="/market-place" element={<AdListingPage />} />
         <Route path="/topic/:category/:categoryId" element={<Category />} />
         <Route
           path="/topic/:category/:subcategory/:subCategoryId"

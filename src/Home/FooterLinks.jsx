@@ -18,6 +18,7 @@ export default function FooterLinks() {
     { label: "PRIVACY POLICY", path: "/privacy-policy" },
     { label: "CONTACT US", path: "/contact-us" },
     { label: "TERMS AND CONDITIONS", path: "/terms-and-conditions" },
+    { label: "MARKET PLACE", path: "/market-place" },
     // { label: "ADVERTISE WITH US", path: "/advertise-with-us" },
   ].filter(Boolean); // Remove false values
 

@@ -50,7 +50,6 @@ export default function RightHome() {
     loadAds();
   }, []);
   const { getSettingStatus } = useSettingsContext();
-
   const isHoroscopeEnabled = getSettingStatus("Hororscope");
   const isLiveStreamingEnabled = getSettingStatus("Live Streaming");
   const isQuizEnabled = getSettingStatus("Quiz Polls");

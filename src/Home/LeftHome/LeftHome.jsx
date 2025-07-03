@@ -9,6 +9,7 @@ import {
 import HeaderAd from "../../TopBar/HeaderAd";
 import Election from "./election/Election";
 import { useSettingsContext } from "../../context/SettingsContext";
+import { AdCardSkeleton } from "../market/components/Skeleton";
 
 export default function LeftHome() {
   const [featured, setFeatured] = useState([]);
@@ -108,12 +109,11 @@ export default function LeftHome() {
                 web_section_id={section.web_section_id}
               />
             ) : (
-              <div className="text-sm text-yellow-500 px-2 py-1 border rounded">
-                Skipped: No matching component for{" "}
-                <strong>
-                  {section.order} / {section.section_title} / {section.category}
-                </strong>
-              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {[...Array(6)].map((_, i) => (
+                            <AdCardSkeleton key={i} />
+                          ))}
+                        </div>
             )}
 
             {/* ✅ Show mid Ad after 2nd component */}
