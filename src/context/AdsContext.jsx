@@ -1,117 +1,289 @@
-import React, { useEffect, useState } from "react";
-import { GetTopBannerAds, GetMarketPlaceAds } from "../../api"; // Import all your ad APIs
+// import React, { useEffect, useState, useCallback } from "react";
 
-export const AdContext = React.createContext();
+// // CACHE CONSTANTS
+// const CACHE_EXPIRY_MINUTES = 30;
+// const DEFAULT_PORTAL_ID = "MYAWR241227001";
+
+// export const AdContext = React.createContext();
+
+// export const AdProvider = ({ children }) => {
+//   const [ads, setAds] = useState({});
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [error, setError] = useState(null);
+
+//   // Helper to get cache key
+//   const getCacheKey = (apiName, portalId = DEFAULT_PORTAL_ID) => 
+//     `ad_${apiName}_${portalId}`;
+
+//   // Clear expired cache entries
+//   const clearExpiredCache = useCallback(() => {
+//     Object.keys(sessionStorage).forEach((key) => {
+//       if (key.startsWith("ad_")) {
+//         const cachedData = sessionStorage.getItem(key);
+//         try {
+//           const { timestamp } = JSON.parse(cachedData);
+//           if (Date.now() - timestamp > CACHE_EXPIRY_MINUTES * 60 * 1000) {
+//             sessionStorage.removeItem(key);
+//           }
+//         } catch {
+//           sessionStorage.removeItem(key);
+//         }
+//       }
+//     });
+//   }, []);
+
+//   // Fetch data with caching
+//   const fetchAdData = useCallback(
+//     async (apiName, apiFunction, portalId = DEFAULT_PORTAL_ID) => {
+//       const cacheKey = getCacheKey(apiName, portalId);
+
+//       // Clear expired cache first
+//       clearExpiredCache();
+
+//       // Check for valid cached data
+//       const cachedData = sessionStorage.getItem(cacheKey);
+//       if (cachedData) {
+//         try {
+//           const { data, timestamp } = JSON.parse(cachedData);
+//           if (Date.now() - timestamp <= CACHE_EXPIRY_MINUTES * 60 * 1000) {
+//             return data;
+//           }
+//         } catch {
+//           // If cache is corrupted, remove it
+//           sessionStorage.removeItem(cacheKey);
+//         }
+//       }
+
+//       // Fetch fresh data
+//       try {
+//         const res = await apiFunction(portalId);
+//         if (res?.data?.response) {
+//           const dataToCache = {
+//             data: res.data.response,
+//             timestamp: Date.now(),
+//           };
+//           sessionStorage.setItem(cacheKey, JSON.stringify(dataToCache));
+//           return res.data.response;
+//         }
+//         throw new Error("Invalid response format");
+//       } catch (error) {
+//         console.error(`Error fetching ${apiName} ads:`, error);
+//         throw error;
+//       }
+//     },
+//     [clearExpiredCache]
+//   );
+
+//   // Load all ads on initial render
+//   useEffect(() => {
+//     const initializeAds = async () => {
+//       setIsLoading(true);
+//       setError(null);
+
+//       try {
+//         // Clear expired cache on initial load
+//         clearExpiredCache();
+//       } catch (error) {
+//         setError("Failed to initialize ads");
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     initializeAds();
+//   }, [clearExpiredCache]);
+
+//   // Create the context value
+//   const contextValue = {
+//     ads,
+//     isLoading,
+//     error,
+//     fetchAdData,
+//     setAds,
+//     setIsLoading,
+//     setError
+//   };
+
+//   return (
+//     <AdContext.Provider value={contextValue}>
+//       {children}
+//     </AdContext.Provider>
+//   );
+// };
+
+// // Custom hook with simplified interface
+// export const useAds = () => {
+//   const context = React.useContext(AdContext);
+//   if (!context) {
+//     throw new Error("useAds must be used within an AdProvider");
+//   }
+
+//   const { 
+//     ads, 
+//     isLoading, 
+//     error, 
+//     fetchAdData, 
+//     setAds, 
+//     setIsLoading, 
+//     setError 
+//   } = context;
+
+//   const getAds = React.useCallback(
+//     async (apiName, apiFunction, portalId) => {
+//       try {
+//         setIsLoading(true);
+//         setError(null);
+
+//         const data = await fetchAdData(apiName, apiFunction, portalId);
+
+//         // Update the ads state with the new data
+//         setAds((prev) => ({
+//           ...prev,
+//           [apiName]: data,
+//         }));
+
+//         return data;
+//       } catch (error) {
+//         setError(`Failed to load ${apiName} ads`);
+//         throw error;
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     },
+//     [fetchAdData, setAds, setIsLoading, setError]
+//   );
+
+//   return {
+//     ads,
+//     isLoading,
+//     error,
+//     getAds
+//   };
+// };
+
+
+
+
+
+import React, { useEffect, useState, useCallback, createContext, useContext } from "react";
+
+// CACHE CONSTANTS
+const CACHE_EXPIRY_MINUTES = 30;
+const DEFAULT_PORTAL_ID = "MYAWR241227001";
+
+export const AdContext = createContext();
 
 export const AdProvider = ({ children }) => {
   const [ads, setAds] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Helper to get cache key
-  const getCacheKey = (adType, portalId) => `ad_${adType}_${portalId}`;
+  const getCacheKey = useCallback((apiName, portalId = DEFAULT_PORTAL_ID) => {
+    return `ad_${apiName}_${portalId}`;
+  }, []);
 
-  // Load data from session storage or fetch fresh
-  const loadAdData = async (adType, fetchFunction, portalId = "MYAWR241227001") => {
-    const cacheKey = getCacheKey(adType, portalId);
-    
-    // Check session storage first
-    const cachedData = sessionStorage.getItem(cacheKey);
-    if (cachedData) {
-      const { data, timestamp } = JSON.parse(cachedData);
-      
-      // Use cached data if less than 30 minutes old
-      if (Date.now() - timestamp < 30 * 60 * 1000) {
-        return data;
+  // Clear expired cache entries
+  const clearExpiredCache = useCallback(() => {
+    Object.keys(sessionStorage).forEach((key) => {
+      if (key.startsWith("ad_")) {
+        try {
+          const cachedData = JSON.parse(sessionStorage.getItem(key));
+          if (!cachedData.timestamp || Date.now() - cachedData.timestamp > CACHE_EXPIRY_MINUTES * 60 * 1000) {
+            sessionStorage.removeItem(key);
+          }
+        } catch {
+          sessionStorage.removeItem(key);
+        }
       }
-    }
+    });
+  }, []);
 
-    // Fetch fresh data if no cache or expired
-    try {
-      const res = await fetchFunction(portalId);
-      if (res?.data?.response) {
-        const dataToCache = {
-          data: res.data.response,
-          timestamp: Date.now()
-        };
-        sessionStorage.setItem(cacheKey, JSON.stringify(dataToCache));
-        return res.data.response;
+  // Fetch data with caching
+  const fetchAdData = useCallback(
+    async (apiName, apiFunction, portalId = DEFAULT_PORTAL_ID) => {
+      const cacheKey = getCacheKey(apiName, portalId);
+      clearExpiredCache();
+
+      try {
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp <= CACHE_EXPIRY_MINUTES * 60 * 1000) {
+            return data;
+          }
+        }
+      } catch {
+        sessionStorage.removeItem(cacheKey);
       }
-      throw new Error("Invalid response format");
-    } catch (error) {
-      console.error(`Error fetching ${adType} ads:`, error);
-      throw error;
-    }
+
+      try {
+        const res = await apiFunction(portalId);
+        const response = res?.data?.response;
+        if (response) {
+          const toCache = {
+            data: response,
+            timestamp: Date.now(),
+          };
+          sessionStorage.setItem(cacheKey, JSON.stringify(toCache));
+          return response;
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (err) {
+        console.error(`Error fetching ${apiName} ads:`, err);
+        throw err;
+      }
+    },
+    [clearExpiredCache, getCacheKey]
+  );
+
+  useEffect(() => {
+    clearExpiredCache();
+  }, [clearExpiredCache]);
+
+  const contextValue = {
+    ads,
+    isLoading,
+    error,
+    fetchAdData,
+    setAds,
+    setIsLoading,
+    setError,
   };
 
-  // Load all ads on initial render
-  useEffect(() => {
-    const fetchAllAds = async () => {
+  return <AdContext.Provider value={contextValue}>{children}</AdContext.Provider>;
+};
+
+export const useAds = () => {
+  const context = useContext(AdContext);
+  if (!context) throw new Error("useAds must be used within an AdProvider");
+
+  const { ads, isLoading, error, fetchAdData, setAds, setIsLoading, setError } = context;
+
+  const getAds = useCallback(
+    async (apiName, apiFunction, portalId) => {
       try {
         setIsLoading(true);
-        
-        const [topBanner, marketplace] = await Promise.all([
-          loadAdData("top_banner", GetTopBannerAds),
-          loadAdData("marketplace", GetMarketPlaceAds),
-          // Add other ad types here
-        ]);
+        setError(null);
 
-        setAds({
-          top_banner: topBanner,
-          marketplace: marketplace,
-          // Add other ad types here
-        });
+        const data = await fetchAdData(apiName, apiFunction, portalId);
 
-      } catch (error) {
-        setError("Failed to load some ads");
-        console.error("Error loading ads:", error);
+        setAds((prev) => ({
+          ...prev,
+          [apiName]: data,
+        }));
+
+        return data;
+      } catch (err) {
+        setError(`Failed to load ${apiName} ads`);
+        throw err;
       } finally {
         setIsLoading(false);
       }
-    };
-
-    fetchAllAds();
-  }, []);
-
-  // Function to manually refresh specific ad
-  const refreshAd = async (adType) => {
-    try {
-      setIsLoading(true);
-      let freshData;
-      
-      switch (adType) {
-        case "top_banner":
-          freshData = await loadAdData("top_banner", GetTopBannerAds);
-          break;
-        case "marketplace":
-          freshData = await loadAdData("marketplace", GetMarketPlaceAds);
-          break;
-        // Add other cases
-        default:
-          throw new Error("Unknown ad type");
-      }
-
-      setAds(prev => ({ ...prev, [adType]: freshData }));
-    } catch (error) {
-      console.error(`Error refreshing ${adType} ad:`, error);
-      setError(`Failed to refresh ${adType} ad`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <AdContext.Provider value={{ ads, isLoading, error, refreshAd }}>
-      {children}
-    </AdContext.Provider>
+    },
+    [fetchAdData, setAds, setIsLoading, setError]
   );
-};
 
-// Custom hook for easy consumption
-export const useAds = () => {
-  const context = React.useContext(AdContext);
-  if (!context) {
-    throw new Error("useAds must be used within an AdProvider");
-  }
-  return context;
+  return { ads, isLoading, error, getAds };
 };

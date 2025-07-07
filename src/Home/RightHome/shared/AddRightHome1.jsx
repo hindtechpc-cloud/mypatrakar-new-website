@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function AddRightHome1({ adsData }) {
-  console.log(adsData);
+export default function AddRightHome1({ adsData, text }) {
+  console.log(text + " " + adsData);
+
   const isAdDataValid =
     adsData &&
     Array.isArray(adsData.ad_image_url) &&
@@ -11,8 +12,10 @@ export default function AddRightHome1({ adsData }) {
   // ✅ If adsData exists and has content
   if (isAdDataValid) {
     return (
-      <div className="w-[350px]  border rounded-lg shadow-sm 
-       mx-auto">
+      <div
+        className="w-[350px]  border rounded-lg shadow-sm 
+       mx-auto"
+      >
         <img
           src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
             adsData.ad_image_url[0]

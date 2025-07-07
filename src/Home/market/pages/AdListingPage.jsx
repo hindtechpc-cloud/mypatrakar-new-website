@@ -26,6 +26,7 @@ export const AdListingPage = () => {
       setLoading(true);
       const res = await GetMarketPlaceAds("MYAWR241227001");
       const adList = res?.data?.response || [];
+      console.log(res)
       setDefaultAds(adList);
       setAds(adList);
     } catch (error) {
@@ -63,6 +64,7 @@ export const AdListingPage = () => {
         setLocation("Location permission denied or unavailable");
       }
     );
+    loadAds()
   }, []);
 
   const handleSearch = () => {

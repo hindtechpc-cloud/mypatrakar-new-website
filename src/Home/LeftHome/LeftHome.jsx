@@ -10,14 +10,16 @@ import HeaderAd from "../../TopBar/HeaderAd";
 import Election from "./election/Election";
 import { useSettingsContext } from "../../context/SettingsContext";
 import { AdCardSkeleton } from "../market/components/Skeleton";
+import { useAds } from "../../context/AdsContext";
 
 export default function LeftHome() {
   const [featured, setFeatured] = useState([]);
-  const [ads, setAds] = useState({ top: null, main: null });
   const [loadingAds, setLoadingAds] = useState(true);
   const [adError, setAdError] = useState(null);
+  const { ads, getAds } = useAds();
+  const { getSettingStatus } = useSettingsContext();
+  const isElectionEnabled = getSettingStatus("Exit Polls");
 
-  // Load featured sections
   const loadFeaturedSection = async () => {
     try {
       const res = await GetFeaturedSection("MYAWR241227001");
@@ -29,18 +31,16 @@ export default function LeftHome() {
     }
   };
 
-  // Load ads
   const loadAds = async () => {
     setLoadingAds(true);
     try {
       const [topRes, mainRes] = await Promise.all([
-        GetLeftBannerAds(""),
-        GetLeftHomeMainAds(""),
+        getAds("left_home_top_banner_ad", GetLeftBannerAds, ""),
+        getAds("left_home_main_banner_ad", GetLeftHomeMainAds, ""),
       ]);
-      setAds({
-        top: topRes?.data?.response?.top_banner || null,
-        main: mainRes?.data?.response?.top_banner || null,
-      });
+console.log(topRes)
+      ads.top = topRes?.top_banner || null;
+      ads.main = mainRes?.top_banner || null;
     } catch (err) {
       console.error("Ad loading error:", err);
       setAdError("Ads could not be loaded.");
@@ -52,13 +52,10 @@ export default function LeftHome() {
   useEffect(() => {
     loadFeaturedSection();
     loadAds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { getSettingStatus } = useSettingsContext();
-
-  const isElectionEnabled = getSettingStatus("Exit Polls");
 
   const renderAd = (adData, label) => {
-    console.log("Rendering ad for", label, ":", adData);
     return (
       <div className="w-full">
         {loadingAds ? (
@@ -87,7 +84,6 @@ export default function LeftHome() {
 
       {/* ✅ Featured Components with mid Ad */}
       {featured.map((section, index) => {
-        // Match based on all 3 keys
         const match = componentsMap.find(
           (item) =>
             item.order === section.order ||
@@ -110,10 +106,10 @@ export default function LeftHome() {
               />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {[...Array(6)].map((_, i) => (
-                            <AdCardSkeleton key={i} />
-                          ))}
-                        </div>
+                {[...Array(6)].map((_, i) => (
+                  <AdCardSkeleton key={i} />
+                ))}
+              </div>
             )}
 
             {/* ✅ Show mid Ad after 2nd component */}
@@ -121,6 +117,7 @@ export default function LeftHome() {
           </React.Fragment>
         );
       })}
+
       {isElectionEnabled && <Election />}
     </div>
   );

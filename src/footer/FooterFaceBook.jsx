@@ -1,56 +1,64 @@
-import { useEffect, useState } from "react";
-import { GetOwnerSocialLinks } from "../../api";
+import { useContext, useEffect, useState, useMemo } from "react";
+import { SocialMediaContext } from "../context/SocialMediaContext";
 
 export default function FooterFaceBook() {
   const [facebookUrl, setFacebookUrl] = useState("HindtechLucknow");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { socialLinks = [] } = useContext(SocialMediaContext);
+
+  // Memoize the Facebook link finding to avoid recalculating unnecessarily
+  const facebookLink = useMemo(() => {
+    return socialLinks.find(
+      (link) =>
+        link.icon?.toLowerCase() === "fafacebook" ||
+        link.name?.toLowerCase().includes("facebook")
+    );
+  }, [socialLinks]);
 
   useEffect(() => {
-    const fetchSocialLinks = async () => {
-      try {
-        setIsLoading(true);
-        const res = await GetOwnerSocialLinks("MYAWR241227001");
+    if (!facebookLink?.url) return;
 
-        if (res?.data?.response) {
-          const links = res.data.response;
-          const facebookLink = links.find(link => link.name === "Facebook");
-
-          if (facebookLink) {
-            const fbUrl = new URL(facebookLink.url);
-            const fbPage = fbUrl.pathname.split("/").filter(Boolean)[0];
-            setFacebookUrl(fbPage || "HindtechLucknow");
-          } else {
-            setError("Facebook link not found.");
-          }
-        } else {
-          setError("Invalid response format.");
-        }
-      } catch {
-        setError("Failed to load social links.");
-      } finally {
-        setIsLoading(false);
+    try {
+      const fbUrl = new URL(
+        // Ensure the URL has a protocol for URL parsing
+        facebookLink.url.startsWith('http') 
+          ? facebookLink.url 
+          : `https://${facebookLink.url}`
+      );
+      
+      console.log(fbUrl)
+      // Extract the page name more reliably
+      const fbPage = fbUrl.pathname.split('/').filter(Boolean)[0] || 
+                    fbUrl.hostname.split('.')[0];
+      
+      if (fbPage) {
+        console.log(fbUrl.username)
+        setFacebookUrl(fbUrl.username);
       }
-    };
+    } catch (err) {
+      console.error("Invalid Facebook URL:", facebookLink.url);
+    }
+  }, [facebookLink]);
 
-    fetchSocialLinks();
-  }, []);
-
-  if (isLoading || !facebookUrl) return null;
-  // if (error) return <div className="text-red-500">{error}</div>;
+  // Memoize the iframe src to prevent unnecessary re-renders
+  const iframeSrc = useMemo(() => {
+    return `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(
+      `https://www.facebook.com/${facebookUrl||"HindtechLucknow"}`
+    )}&tabs=timeline&small_header=true&width=300&adapt_container_width=true&hide_cover=false&show_facepile=true`;
+  }, [facebookUrl]);
 
   return (
-    <div className="flex justify-center items-center p-1 rounded h-[330px]">
+    <div className="flex justify-center items-center p-1 rounded h-auto md:h-[330px]">
       <iframe
-        src={`https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2F${facebookUrl}&tabs=timeline&small_header=true&width=300&adapt_container_width=true&hide_cover=false&show_facepile=true`}
-        className="border-none overflow-hidden rounded-md w-full h-[500px] sm:h-[500px] md:h-[310px] lg:h-[330px] sm:w-[full] md:w-[250px] lg:w-[270px]"
+        src={iframeSrc}
+        className="border-none overflow-hidden rounded-md w-full h-[500px] sm:h-[500px] md:h-[310px] lg:h-[330px] sm:w-full md:w-[250px] lg:w-[270px]"
         scrolling="no"
         frameBorder="0"
         allowFullScreen
         style={{ border: "none", overflow: "hidden" }}
         data-chrome="noscrollbar"
         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-      ></iframe>
+        title="Facebook Page Plugin"
+      />
     </div>
   );
 }

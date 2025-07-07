@@ -10,6 +10,7 @@ import Loader from "./utils/Loader";
 import { getSettings, GetWebTheme } from "../api";
 import { Toaster } from "react-hot-toast";
 import Layout from "./Layout";
+import { AdProvider } from "./context/AdsContext";
 
 export default function App() {
   const [language, setLanguage] = useState("hi");
@@ -53,11 +54,13 @@ export default function App() {
         <WebThemeContext.Provider value={{ webTheme, setWebTheme }}>
           <LanguageContext.Provider value={{ language, setLanguage }}>
             <NewsContext.Provider value={{ news, setNews }}>
+              <AdProvider>
               <Suspense fallback={<Loader />}>
                 <div className="bg-gray-100 min-h-screen">
                   <Layout />
                 </div>
               </Suspense>
+              </AdProvider>
             </NewsContext.Provider>
           </LanguageContext.Provider>
         </WebThemeContext.Provider>

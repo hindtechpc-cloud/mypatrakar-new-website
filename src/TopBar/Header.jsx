@@ -140,7 +140,7 @@ const Header = () => {
     const isAdvertiseWithUsEnabled = getSettingStatus("Apply for Advertisement");
   return (
     <header
-      className={`w-full ${themeColorClass}  md:block text-white py-1 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300`}
+      className={`w-full ${themeColorClass}  md:block text-white py-1 px-4 shadow-lg sticky top-0 z-50 transition-colors duration-300 mb-5`}
       style={{
         backgroundColor: !webTheme["bg-color"]
           ? "#b91c1c"
