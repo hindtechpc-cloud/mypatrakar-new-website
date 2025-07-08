@@ -130,7 +130,7 @@ const handleClap = async () => {
             <h2 className="text-lg font-semibold mb-3 text-center text-red-600">
               Please login to Clap this post
             </h2>
-            <SourceWidget redirectTo={"/"} showLoginOverlay={showSourcePopup} setShowLoginOverlay={setShowSourcePopup}/>
+            <SourceWidget redirectTo={"/shorts"} showLoginOverlay={showSourcePopup} setShowLoginOverlay={setShowSourcePopup}/>
           </div>
         </div>
       )}

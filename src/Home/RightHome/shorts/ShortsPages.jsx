@@ -164,7 +164,11 @@ const ShortsPages = () => {
   const { setNews } = useContext(NewsContext);
   const { webTheme } = useContext(WebThemeContext);
   const navigate = useNavigate();
-  const user = checkAuth();
+  // const user = checkAuth();
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+
+
 
   const [shorts, setShorts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
