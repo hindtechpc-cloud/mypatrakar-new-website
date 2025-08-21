@@ -15,6 +15,7 @@ import SellerQueryForm from "./Home/market/pages/QueryForm";
 import { AdListingPage } from "./Home/market/pages/AdListingPage";
 // import { useAds } from "./AdProvider"; // Import useAds hook
 import { useAds } from "./context/AdsContext";
+import NewsSkeleton from "./utils/NewsSkeleton";
 
 
 // Lazy components
@@ -118,6 +119,7 @@ function Layout() {
       {!isCommonPage && !isShorts && <Footer />}
       {isCommonPage && !isShorts && <FooterLinks />}
 
+{/* <NewsSkeleton/> */}
       <ScrollToTopButton />
     </>
   );

@@ -35,10 +35,12 @@ export default function LeftHome() {
     setLoadingAds(true);
     try {
       const [topRes, mainRes] = await Promise.all([
-        getAds("left_home_top_banner_ad", GetLeftBannerAds, ""),
-        getAds("left_home_main_banner_ad", GetLeftHomeMainAds, ""),
+        // getAds("left_home_top_banner_ad", GetLeftBannerAds, ""),
+        // getAds("left_home_main_banner_ad", GetLeftHomeMainAds, ""),
+        GetLeftBannerAds(),
+        GetLeftHomeMainAds(),
       ]);
-console.log(topRes)
+      console.log(topRes);
       ads.top = topRes?.top_banner || null;
       ads.main = mainRes?.top_banner || null;
     } catch (err) {
@@ -67,7 +69,7 @@ console.log(topRes)
         ) : adError || !adData ? (
           <div className="h-[160px] bg-gray-100 flex items-center justify-center rounded shadow">
             <span className="text-sm text-red-500">
-              {adError || "Ad not available"}
+              {/* {adError || "Ad not available"} */}
             </span>
           </div>
         ) : (
@@ -80,7 +82,7 @@ console.log(topRes)
   return (
     <div className="w-full space-y-4">
       {/* ✅ Top Ad */}
-      {renderAd(ads.top, "Top Banner Ad")}
+      {ads.top && renderAd(ads.top, "Top Banner Ad")}
 
       {/* ✅ Featured Components with mid Ad */}
       {featured.map((section, index) => {
@@ -113,12 +115,12 @@ console.log(topRes)
             )}
 
             {/* ✅ Show mid Ad after 2nd component */}
-            {index === 1 && renderAd(ads.main, "Main Banner Ad")}
+            {index === 1 && ads.main && renderAd(ads.main, "Main Banner Ad")}
           </React.Fragment>
         );
       })}
 
-      {isElectionEnabled && <Election />}
+      {!isElectionEnabled && <Election />}
     </div>
   );
 }

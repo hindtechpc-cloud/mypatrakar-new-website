@@ -5,7 +5,7 @@ import { GetNewsById, GetShortsNewsDetails } from "../../../api";
 
 const useNewsDetails = (type, newsId) => {
   const [news, setNews] = useState(null);
-
+// console.log(decryptData(newsId))
   const getUserIP = async () => {
     try {
       const res = await fetch("https://api64.ipify.org?format=json");

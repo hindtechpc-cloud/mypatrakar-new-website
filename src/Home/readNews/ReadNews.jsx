@@ -10,12 +10,15 @@ import TotalCommnets from "./feedback/TotalComments";
 import { articlesCard } from "../search/news";
 import { GetReadNewsPageBottomAds, GetReadNewsPageTopAds } from "../../../api";
 import { useParams } from "react-router-dom";
+import { useSettingsContext } from "../../context/SettingsContext";
 
 export default function ReadNews() {
   const [topAds, setTopAds] = useState(null);
   const [bottomAds, setBottomAds] = useState(null);
   const [adError, setAdError] = useState(null);
   const [loadingAds, setLoadingAds] = useState(true);
+  const { getSettingStatus } = useSettingsContext();
+  const isCommentEbaled = getSettingStatus("Comments");
 
   const { type } = useParams();
   const loadAds = useCallback(async () => {
@@ -71,9 +74,9 @@ export default function ReadNews() {
       {/* Left Section */}
       <div className="w-full lg:w-8/12">
         <News />
-        {renderAd(topAds)}
-        {type !== "shorts" && <Feedback />}
-        {type !== "shorts" && <TotalCommnets />}
+        {topAds && renderAd(topAds)}
+        {type !== "shorts" && isCommentEbaled && <Feedback />}
+        {type !== "shorts" && isCommentEbaled && <TotalCommnets />}
         {/* <NewsFeed newsCard={articlesCard} /> */}
         {/* <NewsAppAd /> */}
         {/* {renderAd(bottomAds)} */}

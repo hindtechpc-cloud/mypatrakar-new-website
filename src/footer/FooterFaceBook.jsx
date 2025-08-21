@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { SocialMediaContext } from "../context/SocialMediaContext";
-
 export default function FooterFaceBook() {
   const [facebookUrl, setFacebookUrl] = useState("HindtechLucknow");
   const { socialLinks = [] } = useContext(SocialMediaContext);

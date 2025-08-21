@@ -60,35 +60,32 @@ export default function ShortsClap({ news_id, user_id }) {
   //   }
   // };
 
-const handleClap = async () => {
-  if (!news_id || !user_id) {
-    setShowSourcePopup(true);
-    return;
-  }
+  const handleClap = async () => {
+    if (!news_id || !user_id) {
+      setShowSourcePopup(true);
+      return;
+    }
 
-  const optimisticNewClap = !isClapped;
-  setIsClapped(optimisticNewClap); // UI immediately reflects
+    const optimisticNewClap = !isClapped;
+    setIsClapped(optimisticNewClap); // UI immediately reflects
 
-  try {
-    setLoading(true);
-    const res = await SubmitShortsClap(news_id, user_id);
-    const is_clapped = res?.data?.response;
+    try {
+      setLoading(true);
+      const res = await SubmitShortsClap(news_id, user_id);
+      const is_clapped = res?.data?.response;
 
-    // ✅ Convert to Boolean (0 or 1 => false or true)
-    setIsClapped(Boolean(is_clapped));
-
-    toast.success(
-      is_clapped ? "👏 You clapped this!" : "👏 You unclapped this!"
-    );
-  } catch (error) {
-    console.error("Error submitting clap:", error);
-    setIsClapped(!optimisticNewClap); // rollback
-    toast.error("Something went wrong while clapping.");
-  } finally {
-    setLoading(false);
-  }
-};
-
+      // ✅ Convert to Boolean (0 or 1 => false or true)
+      setIsClapped(!is_clapped);
+      let msg = !is_clapped ? "👏 You unclapped this!" : "👏 You clapped this!";
+      toast.success(msg);
+    } catch (error) {
+      console.error("Error submitting clap:", error);
+      setIsClapped(!optimisticNewClap); // rollback
+      toast.error("Something went wrong while clapping.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchClapStatus();
@@ -130,7 +127,11 @@ const handleClap = async () => {
             <h2 className="text-lg font-semibold mb-3 text-center text-red-600">
               Please login to Clap this post
             </h2>
-            <SourceWidget redirectTo={"/shorts"} showLoginOverlay={showSourcePopup} setShowLoginOverlay={setShowSourcePopup}/>
+            <SourceWidget
+              redirectTo={"/shorts"}
+              showLoginOverlay={showSourcePopup}
+              setShowLoginOverlay={setShowSourcePopup}
+            />
           </div>
         </div>
       )}

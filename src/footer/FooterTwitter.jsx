@@ -1,36 +1,64 @@
-import React, { useEffect } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
+import { SocialMediaContext } from "../context/SocialMediaContext";
 
-const FooterTwitter = () => {
-  const account = "@Arvind827502";  // Replace with your Twitter account
+export default function FooterFaceBook() {
+  const [facebookUrl, setFacebookUrl] = useState("HindtechLucknow");
+  const { socialLinks = [] } = useContext(SocialMediaContext);
+
+  // Memoize the Facebook link finding to avoid recalculating unnecessarily
+  const facebookLink = useMemo(() => {
+    return socialLinks.find(
+      (link) =>
+        link.icon?.toLowerCase() === "fafacebook" ||
+        link.name?.toLowerCase().includes("facebook")
+    );
+  }, [socialLinks]);
 
   useEffect(() => {
-    // Dynamically load Twitter embed script
-    const script = document.createElement("script");
-    script.src = "https://platform.twitter.com/widgets.js";
-    script.async = true;
-    document.body.appendChild(script);
+    if (!facebookLink?.url) return;
 
-    return () => {
-      // Clean up the script tag if the component is removed
-      document.body.removeChild(script);
-    };
-  }, []);
+    try {
+      const fbUrl = new URL(
+        // Ensure the URL has a protocol for URL parsing
+        facebookLink.url.startsWith('http') 
+          ? facebookLink.url 
+          : `https://${facebookLink.url}`
+      );
+      
+      console.log(fbUrl)
+      // Extract the page name more reliably
+      const fbPage = fbUrl.pathname.split('/').filter(Boolean)[0] || 
+                    fbUrl.hostname.split('.')[0];
+      
+      if (fbPage) {
+        console.log(fbUrl.username)
+        setFacebookUrl(fbUrl.username);
+      }
+    } catch (err) {
+      console.error("Invalid Facebook URL:", facebookLink.url);
+    }
+  }, [facebookLink]);
+
+  // Memoize the iframe src to prevent unnecessary re-renders
+  const iframeSrc = useMemo(() => {
+    return `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(
+      `https://www.facebook.com/${facebookUrl||"HindtechLucknow"}`
+    )}&tabs=timeline&small_header=true&width=300&adapt_container_width=true&hide_cover=false&show_facepile=true`;
+  }, [facebookUrl]);
 
   return (
-    <div className="flex justify-center items-center p-4 rounded-lg">
-      <a
-        className="twitter-timeline"
-        data-width="100%" // This makes it responsive
-        data-height="310" // This controls the height of the widget
-        data-theme="light" // You can set it to 'dark' if you prefer a dark mode theme
-        data-chrome="noheader nofooter noborders transparent" // Customize the widget (remove header, footer, etc.)
-        href={`https://twitter.com/${account}?ref_src=twsrc%5Etfw`} // Link to the Twitter account
-      >
-        Tweets by {account}
-         {/* // Displayed if the widget fails to load */}
-      </a>
+    <div className="flex justify-center items-center p-1 rounded h-auto md:h-[330px]">
+      <iframe
+        src={iframeSrc}
+        className="border-none overflow-hidden rounded-md w-full h-[500px] sm:h-[500px] md:h-[310px] lg:h-[330px] sm:w-full md:w-[250px] lg:w-[270px]"
+        scrolling="no"
+        frameBorder="0"
+        allowFullScreen
+        style={{ border: "none", overflow: "hidden" }}
+        data-chrome="noscrollbar"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        title="Facebook Page Plugin"
+      />
     </div>
   );
-};
-
-export default FooterTwitter;
+}

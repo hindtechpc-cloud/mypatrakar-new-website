@@ -75,18 +75,18 @@
 //   return (
 //     <div className={`max-w-md mx-auto p-8 bg-white rounded-lg shadow-md ${className}`}>
 //       {/* Logo and Title */}
-      // <div className="text-center mb-8">
-      //   <div className="flex justify-center mb-4">
-      //     <img
-      //       src={image}
-      //       alt="Company logo"
-      //       className="w-20 h-20"
-      //       loading="lazy"
-      //     />
-      //   </div>
-      //   <h1 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h1>
-      //   <p className="text-gray-600">Sign in to continue to your account</p>
-      // </div>
+// <div className="text-center mb-8">
+//   <div className="flex justify-center mb-4">
+//     <img
+//       src={image}
+//       alt="Company logo"
+//       className="w-20 h-20"
+//       loading="lazy"
+//     />
+//   </div>
+//   <h1 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h1>
+//   <p className="text-gray-600">Sign in to continue to your account</p>
+// </div>
 
 //       {/* Google Login */}
 //       <div className="mb-6">
@@ -137,7 +137,12 @@ import image from "../assets/Ellipse.svg";
 import PropTypes from "prop-types";
 import Loader from "../utils/Loader";
 
-const SourceWidget = ({ className = "", redirectTo, onSuccess,setShowLoginOverlay }) => {
+const SourceWidget = ({
+  className = "",
+  redirectTo,
+  onSuccess,
+  setShowLoginOverlay,
+}) => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
@@ -166,7 +171,7 @@ const SourceWidget = ({ className = "", redirectTo, onSuccess,setShowLoginOverla
       formData.append("user_image", decoded.picture);
 
       const response = await GetUserAuthentication(formData);
-
+      console.log(response);
       if (!response?.data?.response) {
         throw new Error("Invalid response from server");
       }
@@ -207,7 +212,7 @@ const SourceWidget = ({ className = "", redirectTo, onSuccess,setShowLoginOverla
 
   return (
     <div className={`max-w-md mx-auto p-8 bg-white rounded ${className}`}>
-     <div className="text-center mb-8">
+      <div className="text-center mb-8">
         <div className="flex justify-center mb-4">
           <img
             src={image}
