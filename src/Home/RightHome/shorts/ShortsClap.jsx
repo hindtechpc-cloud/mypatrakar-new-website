@@ -116,21 +116,22 @@ export default function ShortsClap({ news_id, user_id }) {
 
       {showSourcePopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full relative animate-fade-in">
+          <div className="bg-blue-500 rounded-xl shadow-lg p-6 max-w-md w-full relative animate-fade-in">
             <button
               onClick={() => setShowSourcePopup(false)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-black text-2xl"
+              className="absolute top-2 right-3 text-gray-50 hover:text-black text-2xl"
               aria-label="Close"
             >
               &times;
             </button>
-            <h2 className="text-lg font-semibold mb-3 text-center text-red-600">
+            <h2 className="text-lg font-semibold mb-3 text-center text-gray-100">
               Please login to Clap this post
             </h2>
             <SourceWidget
               redirectTo={"/shorts"}
               showLoginOverlay={showSourcePopup}
               setShowLoginOverlay={setShowSourcePopup}
+             
             />
           </div>
         </div>

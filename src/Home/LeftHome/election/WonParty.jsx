@@ -71,7 +71,6 @@
 
 // export default TopResultTable;
 
-
 import React from "react";
 import { FaTrophy, FaMedal, FaAward } from "react-icons/fa";
 
@@ -108,14 +107,17 @@ const TopResultTable = ({ parties }) => {
   //   year: "1982",
   //   year_id: "MYEY02052025002"
   // };
-
+  // console.log(`${import.meta.env.VITE_REACT_APP_API_URL_Image}/${parties.key_candidates[0].image}`)
   // Use sample data if no parties are provided
-  const data = parties && parties.key_candidates ? parties : {}
+  const data = parties && parties.key_candidates ? parties : {};
   const keyCandidates = data.key_candidates || [];
 
   // Get party information for each candidate
   const getPartyInfo = (partyId) => {
-    return data.political_parties?.find(party => party.party_name === partyId) || {};
+    return (
+      data.political_parties?.find((party) => party.party_name === partyId) ||
+      {}
+    );
   };
 
   return (
@@ -125,9 +127,11 @@ const TopResultTable = ({ parties }) => {
           <FaTrophy className="text-yellow-300" />
           प्रमुख उम्मीदवार ({data.year})
         </h2>
-        <p className="text-blue-100 text-sm mt-1">मुख्य चुनावी उम्मीदवारों का विवरण</p>
+        <p className="text-blue-100 text-sm mt-1">
+          मुख्य चुनावी उम्मीदवारों का विवरण
+        </p>
       </div>
-      
+
       <div className="p-4">
         {keyCandidates.length > 0 ? (
           <div className="overflow-x-auto rounded-lg">
@@ -136,9 +140,13 @@ const TopResultTable = ({ parties }) => {
                 <tr className="bg-blue-50 text-blue-800 text-left">
                   <th className="p-3 font-semibold rounded-tl-lg">क्रम</th>
                   <th className="p-3 font-semibold">उम्मीदवार</th>
-                  <th className="p-3 font-semibold text-center">निर्वाचन क्षेत्र</th>
+                  <th className="p-3 font-semibold text-center">
+                    निर्वाचन क्षेत्र
+                  </th>
                   <th className="p-3 font-semibold text-center">दल</th>
-                  <th className="p-3 font-semibold text-right rounded-tr-lg">परिणाम</th>
+                  <th className="p-3 font-semibold text-right rounded-tr-lg">
+                    परिणाम
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -158,17 +166,23 @@ const TopResultTable = ({ parties }) => {
                         <div className="flex items-center">
                           <div className="mr-3 flex-shrink-0">
                             <img
-                              src={`${import.meta.env.VITE_REACT_APP_API_URL_Image || ''}${candidate.image}`}
+                              src={`${
+                                import.meta.env.VITE_REACT_APP_API_URL_Image}/${candidate.image}`}
                               alt={candidate.name}
                               className="h-12 w-12 rounded-full object-cover border-2 border-white shadow"
                               onError={(e) => {
-                                e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAwLTQtNEg4YTQgNCAwIDAwLTQgNHYyIj48L3BhdGg+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ij48L2NpcmNsZT48L3N2Zz4=";
+                                e.target.src =
+                                  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAwLTQtNEg4YTQgNCAwIDAwLTQgNHYyIj48L3BhdGg+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ij48L2NpcmNsZT48L3N2Zz4=";
                               }}
                             />
                           </div>
                           <div>
-                            <div className="font-semibold text-gray-800">{candidate.name}</div>
-                            <div className="text-xs text-gray-500">उम्मीदवार</div>
+                            <div className="font-semibold text-gray-800">
+                              {candidate.name}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              उम्मीदवार
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -178,14 +192,18 @@ const TopResultTable = ({ parties }) => {
                       <td className="p-3 text-center">
                         <div className="flex flex-col items-center">
                           <img
-                            src={`${import.meta.env.VITE_REACT_APP_API_URL_Image || ''}${partyInfo.party_image}`}
+                            src={`${
+                              import.meta.env.VITE_REACT_APP_API_URL_Image}/${partyInfo.party_image}`}
                             alt={partyInfo.party_name}
                             className="h-8 w-8 object-contain mx-auto"
                             onError={(e) => {
-                              e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQgMTlBMiAyIDAgMCAwIDYgMjFIMThBMiAyIDAgMCAwIDIwIDE5VjVBMiAyIDAgMCAwIDE4IDNINkEyIDIgMCAwIDAgNCA1VjE5WiI+PC9wYXRoPjxwYXRoIGQ9Ik04IDVWN0wxMiAxMUwxNiA3VjUiPjwvcGF0aD48cGF0aCBkPSJNOCAxM1YxOSI+PC9wYXRoPjxwYXRoIGQ9Ik0xNiAxM1YxOSI+PC9wYXRoPjwvc3ZnPg==";
+                              e.target.src =
+                                "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQgMTlBMiAyIDAgMCAwIDYgMjFIMThBMiAyIDAgMCAwIDIwIDE5VjVBMiAyIDAgMCAwIDE4IDNINkEyIDIgMCAwIDAgNCA1VjE5WiI+PC9wYXRoPjxwYXRoIGQ9Ik04IDVWN0wxMiAxMUwxNiA3VjUiPjwvcGF0aD48cGF0aCBkPSJNOCAxM1YxOSI+PC9wYXRoPjxwYXRoIGQ9Ik0xNiAxM1YxOSI+PC9wYXRoPjwvc3ZnPg==";
                             }}
                           />
-                          <span className="text-xs text-gray-600 mt-1">{partyInfo.party_name}</span>
+                          <span className="text-xs text-gray-600 mt-1">
+                            {partyInfo.party_name}
+                          </span>
                         </div>
                       </td>
                       <td className="p-3 text-right">
@@ -196,7 +214,9 @@ const TopResultTable = ({ parties }) => {
                                 <FaTrophy className="mr-1 text-yellow-500" />
                                 विजयी
                               </div>
-                              <span className="text-xs text-gray-500">जीत दर्ज की</span>
+                              <span className="text-xs text-gray-500">
+                                जीत दर्ज की
+                              </span>
                             </>
                           ) : (
                             <>
@@ -204,7 +224,9 @@ const TopResultTable = ({ parties }) => {
                                 <FaMedal className="mr-1 text-gray-400" />
                                 उम्मीदवार
                               </div>
-                              <span className="text-xs text-gray-500">परिणाम अपेक्षित</span>
+                              <span className="text-xs text-gray-500">
+                                परिणाम अपेक्षित
+                              </span>
                             </>
                           )}
                         </div>
@@ -222,12 +244,15 @@ const TopResultTable = ({ parties }) => {
           </div>
         )}
       </div>
-      
+
       <div className="bg-gray-50 p-3 text-center text-xs text-gray-500 border-t border-gray-200">
         {parties && parties.key_candidates ? (
           <>चुनाव वर्ष {data.year} के प्रमुख उम्मीदवार</>
         ) : (
-          <>नमूना डेटा प्रदर्शित किया जा रहा है। वास्तविक डेटा लोड होने पर यह अपडेट हो जाएगा।</>
+          <>
+            नमूना डेटा प्रदर्शित किया जा रहा है। वास्तविक डेटा लोड होने पर यह
+            अपडेट हो जाएगा।
+          </>
         )}
       </div>
     </div>

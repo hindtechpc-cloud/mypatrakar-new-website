@@ -4,6 +4,7 @@ import { GetShortsNews } from "../../../../api";
 import { useEffect, useState, useCallback } from "react";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 import { motion, AnimatePresence } from "framer-motion";
+import { ImSpinner2 } from "react-icons/im";
 
 export default function Shorts() {
   const [articles, setArticles] = useState([]);
@@ -69,8 +70,9 @@ export default function Shorts() {
     return (
       <div className="flex justify-center items-center h-96">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 bg-red-500 rounded-full mb-4"></div>
-          <p className="text-gray-600">Loading shorts...</p>
+          <div className=" text-center">
+                        <ImSpinner2 className="animate-spin text-red-500" size={50} />
+                      </div>
         </div>
       </div>
     );

@@ -68,6 +68,7 @@ import React, { useContext, useMemo } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as TbIcons from "react-icons/tb";
 import { SocialMediaContext } from "../context/SocialMediaContext";
+import { ImSpinner2 } from "react-icons/im";
 
 const SocialIcons = () => {
   const { socialLinks = [], isLoading, error } = useContext(SocialMediaContext);
@@ -92,7 +93,9 @@ const SocialIcons = () => {
     TbWorld: "#0A66C2", // fallback
   }), []);
 
-  if (isLoading) return <div className="text-gray-500">Loading...</div>;
+  if (isLoading) return <div className=" text-center">
+                <ImSpinner2 className="animate-spin text-white" size={40} />
+              </div>;
   // if (error) return <div className="text-red-500">{error}</div>; // Uncomment if needed
 
   return (

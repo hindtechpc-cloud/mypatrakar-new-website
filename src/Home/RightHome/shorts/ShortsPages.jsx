@@ -278,7 +278,7 @@ const ShortsPages = () => {
 
                   <div className="flex items-center justify-between">
                     <button
-                      className="bg-red-600 text-white text-sm font-normal py-1 px-4 rounded-full"
+                      className="bg-red-600 text-white text-sm font-normal py-2 px-4 rounded-full"
                       onClick={() => handleNewsContent(currentShort)}
                     >
                       Read Full Article

@@ -68,7 +68,7 @@ function Layout() {
       console.log("Error fetching top banner ads:", err)
     );
   }, [getAds]);
-// console.log(ads?.topBanner?.top_banner);
+console.log(ads);
   return (
     <>
       {!isShorts && <Header />}
