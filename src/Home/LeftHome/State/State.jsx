@@ -4,6 +4,7 @@ import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
+import EmptyCard from "../shared/EmptyCard";
 
 const State = ({
   section_id,
@@ -36,29 +37,17 @@ const State = ({
   }, [fetchNews]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 font-[Syne]">
+    <div className="">
+      {(error || loading) && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
       <Menu menuText={section_title || "State"} menu={[]} />
-
-      {loading ? (
-        <div className="flex justify-center items-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
-        </div>
-      ) : error ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
-      ) : articles.length === 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
+      {!articles.length ? (
+        <EmptyCard> Nothing to show in {section_title}</EmptyCard>
       ) : (
         <div className="flex flex-col  md:items-center md:justify-center gap-6 mt-3">
           {articles?.map((article) => (
@@ -71,7 +60,9 @@ const State = ({
               title={article.news_headline || "Untitled Article"}
               description={article.news_description_html}
               newsId={article.news_id}
-              classNameForContent={"w-full md:w-2/3 flex flex-col items-start justify-start gap-"}
+              classNameForContent={
+                "w-full md:w-2/3 flex flex-col items-start justify-start gap-"
+              }
               news={{
                 title: article.news_headline,
                 urlToImage: article?.news_img_url

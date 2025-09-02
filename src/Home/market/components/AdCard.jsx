@@ -3,13 +3,10 @@ import { AdDetailPage } from "../pages/AdDetailPage";
 
 export const AdCard = ({ ad }) => {
   const [isOpenDetailCard, setIsOpenDetailCard] = useState(false);
-
-  const BASE_IMAGE_URL = import.meta.env.VITE_REACT_APP_API_URL_Image;
-
   // Fallback image logic
   const imageUrl =
-    ad.images && ad.images.length > 0
-      ? `${BASE_IMAGE_URL}${ad.images[0]}`
+    ad?.images && ad?.images?.length > 0
+      ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${ad?.images[0]}`
       : "https://www.akamai.com/site/im-demo/perceptual-standard.jpg";
 
   return (
@@ -17,8 +14,8 @@ export const AdCard = ({ ad }) => {
       {/* Image with hover effect */}
       <div className="relative overflow-hidden h-48 sm:h-52">
         <img
-          src={"https://www.akamai.com/site/im-demo/perceptual-standard.jpg"}
-          alt={ad.title || "Ad Image"}
+          src={imageUrl}
+          alt={ad?.title || "Ad Image"}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
           onError={(e) => {
@@ -42,48 +39,48 @@ export const AdCard = ({ ad }) => {
         </h2>
 
         {isOpenDetailCard && (
-  <div className="fixed inset-0 z-50">
-    {/* Backdrop with smooth transition */}
-    <div 
-      className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
-      onClick={() => setIsOpenDetailCard(false)}
-    ></div>
-    
-    {/* Modal container */}
-    <div className="absolute inset-0 flex items-center justify-center p-4">
-      {/* Modal content with max-height and scrolling */}
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
-        {/* Close button (top-right) */}
-        <button
-          onClick={() => setIsOpenDetailCard(false)}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 hover:bg-gray-100 transition-colors shadow-sm"
-          aria-label="Close"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-gray-600"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-        
-        {/* Ad detail content with scrollable area */}
-        <div className="overflow-y-auto flex-1">
-          <AdDetailPage 
-            initialAd={ad} 
-            onClose={() => setIsOpenDetailCard(false)}
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+          <div className="fixed inset-0 z-50">
+            {/* Backdrop with smooth transition */}
+            <div
+              className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+              onClick={() => setIsOpenDetailCard(false)}
+            ></div>
+
+            {/* Modal container */}
+            <div className="absolute inset-0 flex items-center justify-center p-4">
+              {/* Modal content with max-height and scrolling */}
+              <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
+                {/* Close button (top-right) */}
+                <button
+                  onClick={() => setIsOpenDetailCard(false)}
+                  className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 hover:bg-gray-100 transition-colors shadow-sm"
+                  aria-label="Close"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-600"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+
+                {/* Ad detail content with scrollable area */}
+                <div className="overflow-y-auto flex-1">
+                  <AdDetailPage
+                    initialAd={ad}
+                    onClose={() => setIsOpenDetailCard(false)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Short Description */}
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">

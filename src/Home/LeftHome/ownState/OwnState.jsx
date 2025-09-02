@@ -5,18 +5,18 @@ import TopNewsItems from "../TopNews/TopNewsItems";
 import { articlesCard } from "../../search/news";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
+import EmptyCard from "../shared/EmptyCard";
 
 export default function OwnState({
   section_id,
   category_id,
   category,
   section_typetype,
-  web_section_idion_id,
+  web_section_id,
   section_title,
 }) {
   const [subcategory, setSubcategory] = useState("");
   const menu = [];
-
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,66 +37,56 @@ export default function OwnState({
   useEffect(() => {
     fetchNews();
   }, [fetchNews]);
-
-  if (loading)
-    return (
-      <div className="">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
-      </div>
-    );
-  if (error)
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => (
-          <AdCardSkeleton key={i} />
-        ))}
-      </div>
-    );
-  if (!articles.length)
-    return (
-      <div className="">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
-      </div>
-    );
-
   const featuredArticle = articles[0];
 
   return (
     <div className="my-2 mb-5">
-      <Menu
-        menuText={" Own State"}
-        menu={menu}
-        setSubcategory={setSubcategory}
-      />
-      <div className="md:flex flex-1 items-start gap-4">
+      {(loading || error) && (
         <div className="">
-          <NewsCard
-            className="md:flex flex-col items-start gap-4 max-w-4xl mx-auto"
-            classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
-            classNameForContent="w-5/6"
-            image={featuredArticle?.news_img_url}
-            ctaText={featuredArticle.category}
-            title={featuredArticle.news_headline}
-            description={featuredArticle.news_description_html}
-            newsId={featuredArticle.news_id}
-            news={{
-              title: featuredArticle.news_headline,
-              urlToImage: featuredArticle?.news_img_url,
-            }}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <AdCardSkeleton key={i} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {!error && !loading && (
+        <div>
+          <Menu
+            menuText={section_title}
+            menu={menu}
+            setSubcategory={setSubcategory}
           />
+          {!articles.length && <EmptyCard> Nothing to show in {section_title}</EmptyCard>}
+          {articles.length && (
+            <div className="md:flex flex-1 items-start gap-4">
+              <div className="">
+                <NewsCard
+                  className="md:flex flex-col items-start gap-4 max-w-4xl mx-auto"
+                  classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
+                  classNameForContent="w-5/6"
+                  image={featuredArticle?.news_img_url}
+                  ctaText={featuredArticle.category}
+                  title={featuredArticle.news_headline}
+                  description={featuredArticle.news_description_html}
+                  newsId={featuredArticle.news_id}
+                  news={{
+                    title: featuredArticle.news_headline,
+                    urlToImage: featuredArticle?.news_img_url,
+                  }}
+                />
+              </div>
+              <div className="w-full">
+                <TopNewsItems
+                  topNewsItems={articles}
+                  className={"grid gap-3"}
+                />
+              </div>
+            </div>
+          )}
         </div>
-        <div className="w-full">
-          <TopNewsItems topNewsItems={articles} className={"grid gap-3"} />
-        </div>
-      </div>
+      )}
     </div>
   );
 }

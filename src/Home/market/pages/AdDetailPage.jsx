@@ -7,39 +7,21 @@ import {
   FaWhatsapp,
   FaArrowLeft,
   FaShareAlt,
-  
 } from "react-icons/fa";
 import { FiAlertCircle } from "react-icons/fi";
 import { Skeleton } from "../components/Skeleton";
 import { toast } from "react-hot-toast";
- const defaultAds = 
-    {
-      id: "1",
-      title: "Sample Ad",
-      subtitle: "Sample subtitle",
-      description: "Sample description",
-      price: 10000,
-      company: "Sample Company",
-      date: "2023-05-15",
-      phone: "+911234567890",
-      whatsapp: "+911234567890",
-      email: "contact@example.com",
-      website: "https://example.com",
-      images: [
-        "https://th.bing.com/th/id/R.7e52d3e041e6fa384c9fecae8d3fbe1f?rik=FvJ7odXgW3LB0A&riu=http%3a%2f%2fdailynewsdig.com%2fwp-content%2fuploads%2f2013%2f08%2fhot-air-balloon-2.jpg&ehk=DqgkT7LF3eOmJ81GuzVJ22ujJ5f%2fVoJ9%2bu31AmTfsVM%3d&risl=&pid=ImgRaw&r=0",
-        "https://www.akamai.com/site/im-demo/perceptual-standard.jpg",
-      ],
-    }
 export const AdDetailPage = ({ setIsOpenDetailCard, initialAd }) => {
+  const defaultAds = initialAd;
+  // console.log(initialAd)
   const { AdsId } = useParams();
   const [ad, setAd] = useState(defaultAds || null);
   const [loading, setLoading] = useState(!initialAd);
   const [error, setError] = useState("");
   const [activeImage, setActiveImage] = useState(0);
-console.log(initialAd)
+  // console.log(initialAd);
   // Mock data - replace with your actual data source
- 
-
+// console.log(ad)
   // useEffect(() => {
   //   if (!initialAd) return; // Skip if ad is passed as prop
 
@@ -68,14 +50,18 @@ console.log(initialAd)
   // }, [AdsId, initialAd]);
 
   const handleShare = async () => {
-    try {
-      await navigator.share({
-        title: ad?.title,
-        text: `${ad?.subtitle}\n\n${ad?.description}`,
-        url: window.location.href,
-      });
-    } catch (err) {
-      // Fallback for browsers that don't support Web Share API
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: ad?.title,
+          text: `${ad?.subtitle}\n\n${ad?.description}`,
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.error("Share failed:", err.message);
+      }
+    } else {
+      // Fallback
       navigator.clipboard.writeText(window.location.href);
       toast.success("Link copied to clipboard!");
     }
@@ -95,7 +81,10 @@ console.log(initialAd)
         );
         break;
       case "email":
-        window.open(`mailto:${ad.email}?subject=Regarding ${ad.title}`, "_blank");
+        window.open(
+          `mailto:${ad.email}?subject=Regarding ${ad.title}`,
+          "_blank"
+        );
         break;
       case "website":
         window.open(
@@ -221,7 +210,9 @@ console.log(initialAd)
                 src={
                   img.startsWith("http")
                     ? img
-                    : `${import.meta.env.VITE_REACT_APP_API_URL_IMAGE || ""}${img}`
+                    : `${
+                        import.meta.env.VITE_REACT_APP_API_URL_Image || ""
+                      }${img}`
                 }
                 alt={`Thumbnail ${idx + 1}`}
                 className="h-full w-full object-cover rounded-md"
@@ -242,7 +233,7 @@ console.log(initialAd)
           <p className="text-sm text-gray-600 mt-1">{ad.subtitle}</p>
         </div>
         <p className="text-xl font-bold text-blue-600 whitespace-nowrap pl-2">
-          ₹{ad.price?.toLocaleString("en-IN")}
+          ₹{ad.amount?.toLocaleString("en-IN")}
         </p>
       </div>
 

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
 import TopNewsItems from "../TopNews/TopNewsItems";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
+import EmptyCard from "../shared/EmptyCard";
 // import { news } from "../../../navigation/news";
 
 const Entertainment = ({
@@ -33,17 +34,18 @@ const Entertainment = ({
   }, [fetchNews]);
 
   if (loading) return <LoadingState />;
-  if (error) return <ErrorState error={error} onRetry={fetchNews} />;
-  if (!articles.length) return <EmptyState />;
+  if (error) return <ErrorState />;
+  if (!articles.length)
+    return <EmptyCard>Nothing to show in {section_title}</EmptyCard>;
 
   return (
     <div className="w-full">
-      <Menu menuText={section_title} menu={[]} />
+      <Menu menuText={"Entertainment" } menu={[]} />
 
       <div className="flex flex-col items-start justify-start">
         <div className="md:flex flex-1 items-start gap-8 w-full">
           {/* Featured Entertainment Card */}
-          <FeaturedEntertainmentCard  articles={articles}/>
+          <FeaturedEntertainmentCard articles={articles} />
 
           {/* News Items Section */}
           <div className="sm:my-0 my-3 w-full flex items-start">
@@ -62,37 +64,39 @@ const Entertainment = ({
 const LoadingState = () => (
   <div className="p-4 flex justify-center items-center ">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
+      {[...Array(3)].map((_, i) => (
+        <AdCardSkeleton key={i} />
+      ))}
+    </div>
   </div>
 );
 
 const ErrorState = ({ error, onRetry }) => (
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {[...Array(3)].map((_, i) => (
+      <AdCardSkeleton key={i} />
+    ))}
+  </div>
 );
 
 const EmptyState = () => (
   <div className="p-4 text-center text-gray-500">
-   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...Array(3)].map((_, i) => (
+        <AdCardSkeleton key={i} />
+      ))}
+    </div>
   </div>
 );
 
-const FeaturedEntertainmentCard = ({articles}) => (
+const FeaturedEntertainmentCard = ({ articles }) => (
   <div className="relative md:w-96 w-full h-96 rounded-lg overflow-hidden shadow-xl my">
     <img
       src={
         articles[0].news_image_url != null
-          ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${articles[0].news_image_url}`
+          ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+              articles[0].news_image_url
+            }`
           : "https://via.placeholder.com/800x400?text=No+Image"
       }
       alt={articles[0].news_headline}
@@ -105,8 +109,7 @@ const FeaturedEntertainmentCard = ({articles}) => (
         {articles[0].category}
       </button>
       <p className="text-white font-semibold text-lg mt-2">
-               {articles[0].news_headline}
-
+        {articles[0].news_headline}
       </p>
     </div>
   </div>

@@ -4,6 +4,7 @@ import Menu from "../shared/MenuBar";
 import TopNewsItems from "../TopNews/TopNewsItems";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
+import EmptyCard from "../shared/EmptyCard";
 
 // Main Country Component
 const Country = ({
@@ -34,12 +35,14 @@ const Country = ({
   }, [fetchNews]);
 
   return (
-    <div className="w-full">
+    <div className="">
       <Menu menuText={section_title} menu={[]} />
 
       {loading && <LoadingState />}
       {error && <ErrorState error={error} onRetry={fetchNews} />}
-      {!loading && !error && articles.length === 0 && <EmptyState />}
+      {!loading && !error && !articles.length&& (
+        <EmptyCard>Nothing to show in {section_title}</EmptyCard>
+      )}
       {!loading && !error && articles.length > 0 && (
         <CountryNewsList articles={articles} />
       )}
@@ -72,23 +75,11 @@ ErrorState.propTypes = {
   onRetry: PropTypes.func.isRequired,
 };
 
-// Empty State Component
-const EmptyState = () => (
-  <div className="p-4 text-center text-gray-500">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[...Array(3)].map((_, i) => (
-        <AdCardSkeleton key={i} />
-      ))}
-    </div>
-  </div>
-);
-
 // Memoized News List Component (named inner function to fix ESLint warning)
 const CountryNewsListComponent = ({ articles }) => (
   <div className="container mx-auto px-4 py-6">
     {articles.map((article) => (
       <div key={article.news_id} className="mb-10">
-        <Menu menuText={article.news_category_name || "Country"} menu={[]} />
         <TopNewsItems
           topNewsItems={[article]}
           className="grid grid-cols-1 sm:grid-cols-2 gap-4"

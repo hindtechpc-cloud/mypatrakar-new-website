@@ -261,7 +261,8 @@ const PostsListWidget = () => {
             onClick={() => handleNewsContent(article)}
             whileHover={{ x: 5 }}
             transition={{ type: "spring", stiffness: 300 }}
-          >
+          > 
+          
             {/* Timeline dot and line */}
             <div className="absolute left-0 top-0 flex flex-col items-center h-full">
               <div className={`w-3 h-3 rounded-full ${index === 0 ? "bg-yellow-500 ring-2 ring-yellow-200" : "bg-blue-500"} group-hover:bg-yellow-400 group-hover:scale-110 transition-all duration-300 z-10`} />

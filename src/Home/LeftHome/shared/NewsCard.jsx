@@ -63,8 +63,7 @@ const NewsCard = ({
           onClick={handleNewsClick}
           aria-label={`Read news: ${title}`}
         >
-          {title + "hf giurg griug rgirugk ergiwrk grgir tgrthgrt gbr fewb " ||
-            "Untitled News"}
+          {title}
         </h2>
 
         {/* Description */}

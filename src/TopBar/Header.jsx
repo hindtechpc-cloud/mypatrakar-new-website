@@ -358,7 +358,7 @@ const Header = () => {
 
           {/* Social Icons and Contact */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex items-center">
+            <div className="hidden lg:flex items-center">
               <SocialIcons />
             </div>
             

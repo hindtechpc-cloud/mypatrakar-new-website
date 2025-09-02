@@ -4,6 +4,7 @@ import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
+import EmptyCard from "../shared/EmptyCard";
 
 const Game = ({
   category_id,
@@ -46,24 +47,25 @@ const Game = ({
     return <ErrorState error={error} onRetry={fetchNews} />;
   }
 
-  if (!articles.length) {
-    return <EmptyState />;
-  }
+ 
 
   return (
-    <div className="container mx-auto px-4">
-      <Menu menuText={section_title} menu={[]} />
-
-      <div className="flex flex-col items-center gap-6 py-4">
-        {articles.map((article) => (
-          <ArticleCard
-            key={article.news_id}
-            article={article}
-            category={category}
-            getImageUrl={getImageUrl}
-          />
-        ))}
-      </div>
+    <div className="">
+      <Menu menuText={section_title || "Game"} menu={[]} />
+      {!articles.length ? (
+        <EmptyCard>Nothing to show in {section_title}</EmptyCard>
+      ) : (
+        <div className="flex flex-col items-center gap-6 py-4">
+          {articles.map((article) => (
+            <ArticleCard
+              key={article.news_id}
+              article={article}
+              category={category}
+              getImageUrl={getImageUrl}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -84,16 +86,6 @@ const ErrorState = ({ error, onRetry }) => (
     {[...Array(3)].map((_, i) => (
       <AdCardSkeleton key={i} />
     ))}
-  </div>
-);
-
-const EmptyState = () => (
-  <div className="p-4 text-center text-gray-500">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[...Array(3)].map((_, i) => (
-        <AdCardSkeleton key={i} />
-      ))}
-    </div>
   </div>
 );
 

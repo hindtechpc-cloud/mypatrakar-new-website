@@ -43,8 +43,8 @@ export default function OwnState() {
 
   return (
     <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4">
-     {articles.length > 0 && <Header text={"उत्तर प्रदेश"} />}
-      <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-4">
+     {articles.length >= 0 && <Header text={"उत्तर प्रदेश"} />}
+   {loading?<p>Loading...</p>:   <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-4">
         <div className="flex flex-col items-start relative">
           {articles.map((article, index) => (
             <div
@@ -85,7 +85,7 @@ export default function OwnState() {
             </div>
           ))}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

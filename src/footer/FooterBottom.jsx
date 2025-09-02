@@ -37,14 +37,14 @@ export default function FooterBottom() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-r from-gray-900 to-black text-white py-6 border-t border-gray-700">
+    <footer className="bg-gradient-to-r from-blue-950 to-blue-950 text-white py-6 border-t border-gray-700">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Copyright Section */}
           <div className="text-center md:text-left">
             <p className="text-sm md:text-base">
               © Copyright {currentYear}, All Rights Reserved to{" "}
-              <span className="font-bold text-blue-400 hover:text-blue-300 transition-colors duration-300">
+              <span className="font-bold text-yellow-400 hover:text-yellow-300 transition-colors duration-300">
                 MyPatrakar
               </span>
             </p>
@@ -56,28 +56,28 @@ export default function FooterBottom() {
         </div>
 
         {/* Additional Links */}
-        <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap justify-center gap-4 text-xs text-gray-500">
+        <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap justify-center gap-4 text-xs text-gray-300">
           <a
             href="/privacy"
-            className="hover:text-blue-400 transition-colors duration-300"
+            className="hover:text-yellow-400 transition-colors duration-300"
           >
             Privacy Policy
           </a>
           <a
             href="/terms"
-            className="hover:text-blue-400 transition-colors duration-300"
+            className="hover:text-yellow-400 transition-colors duration-300"
           >
             Terms of Service
           </a>
           <a
             href="/about"
-            className="hover:text-blue-400 transition-colors duration-300"
+            className="hover:text-yellow-400 transition-colors duration-300"
           >
             About Us
           </a>
           <a
             href="/contact"
-            className="hover:text-blue-400 transition-colors duration-300"
+            className="hover:text-yellow-400 transition-colors duration-300"
           >
             Contact
           </a>
