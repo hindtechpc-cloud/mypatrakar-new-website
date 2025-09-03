@@ -67,7 +67,7 @@ function Layout() {
     getAds("topBanner", GetTopBannerAds, "").catch((err) =>
       console.log("Error fetching top banner ads:", err)
     );
-  }, [getAds]);
+  }, []);
 console.log(ads);
   return (
     <>

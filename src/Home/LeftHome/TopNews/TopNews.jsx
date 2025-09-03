@@ -20,7 +20,7 @@ const TopNews = ({ category_id, section_title }) => {
       console.log(data);
       setArticles(data?.response || []);
     } catch (err) {
-      console.error("News fetch error:", err);
+      console.log("News fetch error:", err);
       setError(err.response?.message || "Failed to load news");
     } finally {
       setLoading(false);
