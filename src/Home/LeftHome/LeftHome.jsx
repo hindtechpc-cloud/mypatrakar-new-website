@@ -300,7 +300,7 @@ export default function LeftHome() {
       setAdError("Failed to load featured section");
     }
   };
-
+console.log("s")
   const loadAds = async () => {
     setLoadingAds(true);
     try {
