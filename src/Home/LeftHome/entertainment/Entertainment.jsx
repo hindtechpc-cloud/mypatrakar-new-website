@@ -176,7 +176,7 @@ const Entertainment = ({
       ) : (
         <div className="flex flex-col items-start justify-start mt-4">
           <motion.div 
-            className="md:flex flex-1 items-start gap-4 w-full"
+            className="md:flex flex-1 items-start gap-4 w-full "
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -256,7 +256,7 @@ const FeaturedEntertainmentCard = ({ articles }) => {
   
   return (
     <motion.div 
-      className="relative md:w-96 w-full h-96 rounded-2xl overflow-hidden shadow-2xl "
+      className="relative md:w-96 w-full h-96 rounded-2xl overflow-hidden shadow-2xl mb-4 md:mb-0 "
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}

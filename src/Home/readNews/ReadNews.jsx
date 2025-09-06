@@ -11,6 +11,7 @@ import { articlesCard } from "../search/news";
 import { GetReadNewsPageBottomAds, GetReadNewsPageTopAds } from "../../../api";
 import { useParams } from "react-router-dom";
 import { useSettingsContext } from "../../context/SettingsContext";
+import Loader from "../../utils/Loader";
 
 export default function ReadNews() {
   const [topAds, setTopAds] = useState(null);
@@ -47,7 +48,7 @@ export default function ReadNews() {
     if (loadingAds) {
       return (
         <div className="my-4 h-[200px] w-full bg-gray-100 flex items-center justify-center rounded shadow">
-          <span className="text-gray-500 animate-pulse">Loading Ad...</span>
+          <span className="text-gray-500 animate-pulse"><Loader/></span>
         </div>
       );
     }

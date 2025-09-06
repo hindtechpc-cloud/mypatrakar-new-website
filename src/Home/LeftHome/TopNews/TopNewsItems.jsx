@@ -75,7 +75,6 @@
 //   );
 // }
 
-
 // TopNewsItems.propTypes = {
 //   topNewsItems: PropTypes.arrayOf(
 //     PropTypes.shape({
@@ -94,8 +93,6 @@
 //   className: "",
 // };
 
-
-
 import { useCallback, useContext } from "react";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
@@ -106,7 +103,7 @@ import { motion } from "framer-motion";
 
 const NewsItem = ({ news, onNewsClick, index }) => {
   return (
-    <motion.div 
+    <motion.div
       className="flex items-start justify-start gap-4  w-full  cursor-pointer"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -125,23 +122,21 @@ const NewsItem = ({ news, onNewsClick, index }) => {
         />
         {/* <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" /> */}
       </div>
-      
+
       <div className="flex-1 min-w-0">
-        <h2
-          className="text-gray-800 text-sm font-semibold leading-tight hover:text-blue-600 transition-colors duration-300"
-        >
-          {news?.news_headline?.length > 300
+        <h2 className="text-gray-800 text-sm font-semibold leading-tight hover:text-blue-600 transition-colors duration-300">
+          {news?.news_headline?.length > 0 && news?.news_headline?.length > 300
             ? `${news.news_headline.slice(0, 300)}...`
             : news.news_headline}
         </h2>
-        
+
         <div className="text-xs text-gray-500 ">
-          <HtmlToPlainText 
-            htmlContent={news?.news_description_html} 
+          <HtmlToPlainText
+            htmlContent={news?.news_description_html}
             maxLength={60}
           />
         </div>
-        
+
         {/* <div className="flex items-center text-xs text-gray-400 mt-1">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -185,7 +180,7 @@ export default function TopNewsItems({
 
   return (
     <div className={className}>
-      {topNewsItems.slice(1, itemsToShow).map((item, index) => (
+      {topNewsItems.slice(0, itemsToShow).map((item, index) => (
         <NewsItem
           key={item.news_id}
           news={item}

@@ -296,6 +296,7 @@ import { NewsContext } from "../../context/NewsContext";
 import { LanguageContext } from "../../context/LanguageContext";
 import { handleDownloadPDF } from "./NewsPDFDownloader";
 import useNewsDetails from "./useNewsDetails";
+import Loader from "../../utils/Loader";
 
 export default function News() {
   const { language } = useContext(LanguageContext);
@@ -311,7 +312,7 @@ export default function News() {
     loadNewsDetails();
   }, [type, newsId]);
 
-  if (!news) return <div className="text-center py-8">Loading...</div>;
+  if (!news) return <div className="text-center py-8"><Loader/></div>;
 
   return (
     <div className="bg-white p-2 rounded-lg animate-fadeIn">

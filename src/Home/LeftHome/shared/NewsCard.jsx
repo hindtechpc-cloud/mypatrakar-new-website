@@ -14,7 +14,7 @@ const NewsCard = ({
   image,
   ctaText,
   title,
-  description,
+  description,maxLength
 }) => {
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);
@@ -39,7 +39,7 @@ const NewsCard = ({
           src={imageUrl}
           alt={title || "News image"}
           className={
-            classNameToImage || "rounded-lg w-full h-full object-cover"
+            classNameToImage || "rounded-lg w-full h-full object-center"
           }
           loading="lazy"
         />
@@ -68,7 +68,7 @@ const NewsCard = ({
 
         {/* Description */}
         <p className="text-sm md:text-sm text-gray-600 mb-3">
-          <HtmlToPlainText htmlContent={description} />
+          <HtmlToPlainText htmlContent={description} maxLength={maxLength}/>
         </p>
       </div>
     </div>

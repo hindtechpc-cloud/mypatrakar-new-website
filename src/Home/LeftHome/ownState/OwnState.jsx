@@ -25,6 +25,7 @@ export default function OwnState({
     try {
       setLoading(true);
       const { data } = await loadNewsByCategory(category_id);
+      console.log(data);
       setArticles(data?.response || []);
     } catch (err) {
       console.error("News fetch error:", err);
@@ -58,31 +59,36 @@ export default function OwnState({
             menu={menu}
             setSubcategory={setSubcategory}
           />
-          {!articles.length && <EmptyCard> Nothing to show in {section_title}</EmptyCard>}
-          {articles.length && (
-            <div className="md:flex flex-1 items-start gap-4">
-              <div className="">
-                <NewsCard
-                  className="md:flex flex-col items-start gap-4 max-w-4xl mx-auto"
-                  classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
-                  classNameForContent="w-5/6"
-                  image={featuredArticle?.news_img_url}
-                  ctaText={featuredArticle.category}
-                  title={featuredArticle.news_headline}
-                  description={featuredArticle.news_description_html}
-                  newsId={featuredArticle.news_id}
-                  news={{
-                    title: featuredArticle.news_headline,
-                    urlToImage: featuredArticle?.news_img_url,
-                  }}
-                />
-              </div>
-              <div className="w-full">
-                <TopNewsItems
-                  topNewsItems={articles}
-                  className={"grid gap-3"}
-                />
-              </div>
+          {!articles.length ? (
+            <EmptyCard> Nothing to show in {section_title}</EmptyCard>
+          ) : (
+            <div>
+              {articles.length && (
+                <div className="md:flex flex-1 items-start gap-4">
+                  <div className="">
+                    <NewsCard
+                      className="md:flex flex-col items-start gap-4 max-w-4xl mx-auto"
+                      classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
+                      classNameForContent="w-5/6"
+                      image={featuredArticle?.news_img_url}
+                      ctaText={featuredArticle.category}
+                      title={featuredArticle.news_headline}
+                      description={featuredArticle.news_description_html}
+                      newsId={featuredArticle.news_id}
+                      news={{
+                        title: featuredArticle.news_headline,
+                        urlToImage: featuredArticle?.news_img_url,
+                      }}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <TopNewsItems
+                      topNewsItems={articles}
+                      className={"grid gap-3"}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

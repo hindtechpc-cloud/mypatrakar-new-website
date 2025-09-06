@@ -11,6 +11,7 @@ export default function NewsContent({ news, type, zoomText }) {
       </div>
       <div>
         <HtmlToPlainText
+        maxLength={2000}
           htmlContent={
             type === "shorts"
               ? news.news_des
