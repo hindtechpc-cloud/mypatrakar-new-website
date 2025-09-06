@@ -285,14 +285,19 @@ export default function LeftHome() {
   const [loadingAds, setLoadingAds] = useState(true);
   const [adError, setAdError] = useState(null);
 
-  const { ads, setAds } = useAds(); // ✅ useAds me setAds hona chahiye
+  // const { ads, setAds } = useAds();
+  //  // ✅ useAds me setAds hona chahiye
+  const [ads,setAds]=useState({
+    top:{},
+    main:{}
+  })
   const { getSettingStatus } = useSettingsContext();
   const isElectionEnabled = getSettingStatus("Exit Polls");
-
+console.log((ads))
   const loadFeaturedSection = async () => {
     try {
       const res = await GetFeaturedSection(); // ✅ param wapas daala
-      console.log(res);
+      // console.log(res);
       const sorted = res.data.response.sort((a, b) => a.order - b.order);
       setFeatured(sorted);
     } catch (error) {
@@ -300,7 +305,7 @@ export default function LeftHome() {
       setAdError("Failed to load featured section");
     }
   };
-console.log("s")
+// console.log("s")
   const loadAds = async () => {
     setLoadingAds(true);
     try {
@@ -308,12 +313,12 @@ console.log("s")
         GetLeftBannerAds(),
         GetLeftHomeMainAds(),
       ]);
-
+console.log(topRes.data.response.top_banner)
       // ✅ ads state ko update karna (immutably)
       setAds((prev) => ({
         ...prev,
-        top: topRes?.top_banner || null,
-        main: mainRes?.top_banner || null,
+        top: topRes.data.response.top_banner || null,
+        main: mainRes.data.response.top_banner|| null,
       }));
     } catch (err) {
       console.error("Ad loading error:", err);
@@ -328,10 +333,10 @@ console.log("s")
     loadAds();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+console.log(ads)
   const renderAd = (adData, label) => {
     return (
-      <div className="w-full mb-6">
+      <div className="w-full mb-2 flex items-center justify-center">
         {loadingAds ? (
           <div className="w-full h-40 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl shadow-md flex items-center justify-center">
             <div className="animate-pulse flex flex-col items-center">
@@ -407,7 +412,7 @@ console.log("s")
               </div>
 
               {/* ✅ Mid Ad after 2nd component */}
-              {index === 1 && ads.main && (
+              {index === 2 && ads.main && (
                 <div className="my-4">{renderAd(ads.main, "Main Banner")}</div>
               )}
             </React.Fragment>

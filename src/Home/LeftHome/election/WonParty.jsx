@@ -75,7 +75,7 @@ import React from "react";
 import { FaTrophy, FaMedal, FaAward } from "react-icons/fa";
 
 const TopResultTable = ({ parties }) => {
-  console.log(parties);
+  // console.log(parties);
   // Sample data structure for demonstration
   // const sampleData = {
   //   date: "2025-05-02",

@@ -178,7 +178,7 @@ export default function Election() {
   const handleCurrentYear = (year) => {
     const selectedYear = years.find((result) => result.year === year);
     if (selectedYear) {
-      console.log(selectedYear)
+      // console.log(selectedYear)
       setCurrentYearData(selectedYear)
       setYearData(selectedYear.year, selectedYear.political_parties);
     }

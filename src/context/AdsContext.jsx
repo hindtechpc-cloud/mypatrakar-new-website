@@ -268,7 +268,6 @@ export const useAds = () => {
         setError(null);
 
         const data = await fetchAdData(apiName, apiFunction, portalId);
-
         setAds((prev) => ({
           ...prev,
           [apiName]: data,

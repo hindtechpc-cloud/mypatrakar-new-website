@@ -163,7 +163,7 @@ NewsItem.propTypes = {
 export default function TopNewsItems({
   topNewsItems = [],
   className,
-  itemsToShow = 5,
+  itemsToShow = 3,
 }) {
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);

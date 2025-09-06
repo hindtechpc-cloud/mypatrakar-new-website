@@ -53,7 +53,7 @@ const Trending = () => {
         const response = await GetTrending();
         const trendingArticles = response?.data?.response;
 
-        const formattedArticles = trendingArticles.map(article => ({
+        const formattedArticles = trendingArticles?.map(article => ({
           title: article.roadmap,
           date: article.date,
           // urlToImage: article.news_img
@@ -70,9 +70,9 @@ const Trending = () => {
   }, []);
 
   return (
-    <div className="my-2 mt-5 font-sans  md:max-w-sm  w-[350px] mx-auto py-4">
+    <div className="my-2 mt-5 font-sans  md:max-w-sm  w-[350px] mx-auto py-2">
       {articles.length > 0 && <Header text={"TopNews"} />}
-      <div className=" flex items-start justify-center md:justify-start md:max-w-sm w-[300px] mx-auto py-4  ">
+      <div className=" flex items-start justify-center md:justify-start md:max-w-sm w-[300px] mx-auto py-2 ">
         {/* Root Section */}
         <div className="flex flex-col items-start relative">
           {articles.map((article, index) => (

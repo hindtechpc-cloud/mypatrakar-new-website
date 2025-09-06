@@ -166,7 +166,7 @@ const Game = ({
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       ) : (
         <div className="flex flex-wrap gap-3 p-4">
-          {articles.map((article) => (
+          {articles?.slice(0,5)?.map((article) => (
             <ArticleCard
               key={article.news_id}
               article={article}

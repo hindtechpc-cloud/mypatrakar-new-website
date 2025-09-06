@@ -46,11 +46,11 @@ export const SettingsProvider = ({ children }) => {
       const cached = loadFromSession();
       // console.log(cached)
       if (cached) {
-        console.log(cached);
+        // console.log(cached);
         setSettings(cached);
       } else {
         const res = await getSettings("MYAWR241227001"); // assuming it's async
-        console.log(res.data.response);
+        // console.log(res.data.response);
         if (res?.data.response) {
           setSettings(res.data.response);
           saveToSession(res.data.response);

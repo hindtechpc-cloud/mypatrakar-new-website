@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function AddRightHome1({ adsData, text }) {
-  console.log(text + " " + adsData);
+  // console.log(text + " " + adsData);
 
   const isAdDataValid =
     adsData &&

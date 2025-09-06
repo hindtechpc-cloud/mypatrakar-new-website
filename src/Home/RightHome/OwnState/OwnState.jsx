@@ -12,6 +12,7 @@ export default function OwnState() {
   const navigate = useNavigate();
 
   const handleNewsContent = (article) => {
+    console.log(article)
     navigate(`/read-news/${article.title}/${encryptData(article.roadmap_id)}`);
   };
 
@@ -20,7 +21,7 @@ export default function OwnState() {
       try {
         setloading(true);
         const response = await GetTrending();
-        // console.log(response);
+        console.log(response);
         const trendingArticles = response?.data?.response;
 
         const formattedArticles = trendingArticles.map((item) => ({
@@ -42,9 +43,9 @@ export default function OwnState() {
   }, []);
 
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4">
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2">
      {articles.length >= 0 && <Header text={"उत्तर प्रदेश"} />}
-   {loading?<p>Loading...</p>:   <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-4">
+   {loading?<p>Loading...</p>:   <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-2">
         <div className="flex flex-col items-start relative">
           {articles.map((article, index) => (
             <div

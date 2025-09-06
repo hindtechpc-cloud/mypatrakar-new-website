@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, lazy } from "react";
+import { useEffect, lazy, useState } from "react";
 import { GetTopBannerAds } from "../api";
 import HeaderAd from "./TopBar/HeaderAd";
 import Navbar from "./navigation/Navbar";
@@ -16,17 +16,23 @@ import { AdListingPage } from "./Home/market/pages/AdListingPage";
 // import { useAds } from "./AdProvider"; // Import useAds hook
 import { useAds } from "./context/AdsContext";
 import NewsSkeleton from "./utils/NewsSkeleton";
-
+import axios from "axios";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));
 const ReadNews = lazy(() => import("./Home/readNews/ReadNews"));
 const Search = lazy(() => import("./Home/search/Search"));
-const AboutMypatrakar = lazy(() => import("./Home/aboutMypatrakar/AboutMypatrakar"));
+const AboutMypatrakar = lazy(() =>
+  import("./Home/aboutMypatrakar/AboutMypatrakar")
+);
 const PrivacyPolicy = lazy(() => import("./Home/privacyPolicy/PrivacyPolicy"));
-const TermsAndCondition = lazy(() => import("./Home/termsAndConditions/TermsAndConditions"));
+const TermsAndCondition = lazy(() =>
+  import("./Home/termsAndConditions/TermsAndConditions")
+);
 const ContactUs = lazy(() => import("./Home/contactUs/ContactUs"));
-const AdvertiseWithUs = lazy(() => import("./Home/advertiseWithUs/AdvertiseWithUs"));
+const AdvertiseWithUs = lazy(() =>
+  import("./Home/advertiseWithUs/AdvertiseWithUs")
+);
 const OurReporters = lazy(() => import("./Home/ourRporters/OurReporters"));
 const Feedback = lazy(() => import("./Home/readNews/feedback/Feedback"));
 const ShortsPages = lazy(() => import("./Home/RightHome/shorts/ShortsPages"));
@@ -38,11 +44,14 @@ function Layout() {
   const location = useLocation();
   const { t } = useTranslation();
   const { getSettingStatus } = useSettingsContext();
-  const { ads, isLoading, error, getAds } = useAds(); // Use the useAds hook
+  // const { ads, isLoading, error, getAds } = useAds(); // Use the useAds hook
+  const [ads,setAds]=useState({});
 
   const isBreakingNewsEnabled = getSettingStatus("Breaking Banner");
   const isAboutPageEnabled = getSettingStatus("About Us");
-  const isAdvertiseWithUsPageEnabled = getSettingStatus("Apply for Advertisement");
+  const isAdvertiseWithUsPageEnabled = getSettingStatus(
+    "Apply for Advertisement"
+  );
   const commonPaths = [
     "/contact-us",
     "/our-reporters",
@@ -63,22 +72,35 @@ function Layout() {
   const isSearchPage = searchPaths.includes(location.pathname);
 
   // Fetch top banner ads on mount
+  // useEffect(() => {
+  //   getAds("topBanner", GetTopBannerAds, "").catch((err) =>
+  //     console.log("Error fetching top banner ads:", err)
+  //   );
+  // }, []);
+
+  const loadAds = async () => {
+    try {
+      const res = await GetTopBannerAds();
+      console.log(res);
+      setAds(res.data.response.top_banner)
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    getAds("topBanner", GetTopBannerAds, "").catch((err) =>
-      console.log("Error fetching top banner ads:", err)
-    );
+    loadAds();
   }, []);
-console.log(ads);
+  console.log(ads);
   return (
     <>
       {!isShorts && <Header />}
       {!isCommonPage && !isShorts && (
         <>
-          {ads?.topBanner?.top_banner!== null && (
+          {ads?.topBanner?.top_banner !== null && (
             <div className="flex items-center justify-center mx-auto">
               <HeaderAd
                 className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 rounded sm:w-[728px]  w-[320px] "
-                adData={ads?.topBanner?.top_banner}
+                adData={ads}
                 text="Loading Top nav top Banner Ads..."
               />
             </div>
@@ -86,13 +108,17 @@ console.log(ads);
           <Navbar />
         </>
       )}
-      {!isSearchPage && !isShorts && isBreakingNewsEnabled && <BreakingNewsBar />}
+      {!isSearchPage && !isShorts && isBreakingNewsEnabled && (
+        <BreakingNewsBar />
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<Home />} />
         {/* <Route path="/home" element={<Home />} /> */}
         <Route path="/feedback" element={<Feedback />} />
-        {isAboutPageEnabled && <Route path="/about-us" element={<AboutMypatrakar />} />}
+        {isAboutPageEnabled && (
+          <Route path="/about-us" element={<AboutMypatrakar />} />
+        )}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         {isAboutPageEnabled && <Route path="/about" element={<Navbar />} />}
         <Route path="/contact-us" element={<ContactUs />} />
@@ -119,16 +145,10 @@ console.log(ads);
       {!isCommonPage && !isShorts && <Footer />}
       {isCommonPage && !isShorts && <FooterLinks />}
 
-{/* <NewsSkeleton/> */}
+      {/* <NewsSkeleton/> */}
       <ScrollToTopButton />
     </>
   );
 }
 
 export default Layout;
-
-
-
-
-
-

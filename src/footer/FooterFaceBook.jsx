@@ -30,11 +30,11 @@ export default function FooterFaceBook() {
                     fbUrl.hostname.split('.')[0];
       
       if (fbPage) {
-        console.log(fbUrl.username)
+        // console.log(fbUrl.username)
         setFacebookUrl(fbUrl.username);
       }
     } catch (err) {
-      console.error("Invalid Facebook URL:", facebookLink.url);
+      console.log("Invalid Facebook URL:", facebookLink.url);
     }
   }, [facebookLink]);
 
