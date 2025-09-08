@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import Header from "../shared/Header";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
-import { GetTrending } from "../../../../api";
+import {  Roadmaps } from "../../../../api";
 import { encryptData } from "../../../utils/cryptoHelper";
 
 // const articles = [
@@ -50,7 +50,7 @@ const Trending = () => {
     const loadTrending = async () => {
       try{
         setLoading(true);
-        const response = await GetTrending();
+        const response = await Roadmaps();
         const trendingArticles = response?.data?.response;
 
         const formattedArticles = trendingArticles?.map(article => ({

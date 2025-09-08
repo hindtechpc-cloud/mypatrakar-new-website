@@ -39,18 +39,28 @@ export default function OwnState({
     fetchNews();
   }, [fetchNews]);
   const featuredArticle = articles[0];
-
+  if (loading || error) {
+    <div>
+      <Menu menuText={section_title || "State"} menu={[]} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(3)].map((_, i) => (
+          <AdCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>;
+  }
   return (
     <div className="my-2 mb-5">
-      {(loading || error) && (
+      {/* {(loading || error) && (
         <div className="">
+          <Menu />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(3)].map((_, i) => (
               <AdCardSkeleton key={i} />
             ))}
           </div>
         </div>
-      )}
+      )} */}
 
       {!error && !loading && (
         <div>

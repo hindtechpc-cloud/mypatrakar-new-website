@@ -61,17 +61,18 @@ const TopNews = ({ category_id, section_title }) => {
     featuredArticle?.news_img_url
   }`;
   console.log(featuredImageUrl);
-
-  return (
-    <>
-      {loading ||
-        (error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, i) => (
-              <AdCardSkeleton key={i} />
-            ))}
-          </div>
+  if (loading || error) {
+    <div>
+      <Menu menuText={section_title || "State"} menu={[]} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(3)].map((_, i) => (
+          <AdCardSkeleton key={i} />
         ))}
+      </div>
+    </div>;
+  }
+  return (
+    <div className="">
       <Menu menuText={section_title || "TopNews"} menu={[]} />
       {!articles.length && (
         <EmptyCard> Nothing to show in {section_title}</EmptyCard>
@@ -83,7 +84,7 @@ const TopNews = ({ category_id, section_title }) => {
           ))}
         </div>
       ) : (
-        articles.length>0 && (
+        articles.length > 0 && (
           <div className="w-full">
             {/* <Menu menuText={section_title || "TopNews"} menu={[]} /> */}
 
@@ -116,7 +117,7 @@ const TopNews = ({ category_id, section_title }) => {
           </div>
         )
       )}
-    </>
+    </div>
   );
 };
 

@@ -356,8 +356,6 @@
 //   );
 // }
 
-
-
 import { useContext, useEffect, useState, useCallback, useMemo } from "react";
 import debounce from "lodash.debounce";
 import {
@@ -385,7 +383,7 @@ const DEFAULT_FILTERS = {
   searchTerm: "",
   category: "",
   subcategory: "",
-  location: "",
+  location: "lucknow",
   sortBy: "",
 };
 
@@ -399,7 +397,7 @@ export default function Search() {
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
-  const [topAds, setTopAds] = useState({});
+  const [topAds, setTopAds] = useState(null);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -433,7 +431,7 @@ export default function Search() {
 
       const res = await NewsSortBy("MYAWR241227001", payload);
       const newArticles = res?.data?.response || [];
-
+      // console.log(res)
       setArticles(newArticles);
       setTotalPages(
         Math.ceil((res?.data?.total_count || newArticles.length) / 10) || 1
@@ -449,7 +447,11 @@ export default function Search() {
   }, []);
 
   const debouncedSearch = useMemo(
-    () => debounce((term) => setFilters((prev) => ({ ...prev, searchTerm: term })), 600),
+    () =>
+      debounce(
+        (term) => setFilters((prev) => ({ ...prev, searchTerm: term })),
+        600
+      ),
     []
   );
 
@@ -485,7 +487,8 @@ export default function Search() {
           GetSearchPageTopAds("MYAWR241227001"),
         ]);
         setCategories(catRes?.data?.response || []);
-        setTopAds(adRes?.data?.response?.top_banner || {});
+        setTopAds(adRes?.data?.response?.top_banner || null);
+        console.log(adRes);
       } catch (err) {
         console.error("Initial load failed:", err);
       }
@@ -497,7 +500,10 @@ export default function Search() {
     const fetchSubcategories = async () => {
       if (!filters.category) return setSubcategories([]);
       try {
-        const res = await GetNewsSubcategories("MYAWR241227001", filters.category);
+        const res = await GetNewsSubcategories(
+          "MYAWR241227001",
+          filters.category
+        );
         setSubcategories(res?.data?.response || []);
       } catch (err) {
         console.error("Subcategory fetch error:", err);
@@ -520,23 +526,32 @@ export default function Search() {
   }, []);
 
   useEffect(() => {
-    if (filters.searchTerm || filters.category) {
+    if (filters.searchTerm || filters.category||categories) {
       fetchFilteredNews(1, filters);
     } else {
       setArticles([]);
       setTotalPages(1);
       setCurrentPage(1);
     }
-  }, [filters, fetchFilteredNews]);
-
+  }, [filters, fetchFilteredNews,categories]);
+console.log(topAds)
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Sticky Search Header */}
-      <div className="py-4 sticky top-0 z-20 shadow-md" style={{ backgroundColor: webTheme["bg-color"] || "#b91c1c" }}>
+      <div
+        className="py-4 sticky top-0 z-20 shadow-md"
+        style={{ backgroundColor: webTheme["bg-color"] || "#b91c1c" }}
+      >
         <div className="max-w-5xl mx-auto px-4 flex items-center gap-4">
           <form onSubmit={handleSubmit} className="flex-1">
             <div className="flex items-center bg-white rounded-sm p-2 shadow-sm">
-              <button type="submit" className="text-gray-500 pl-2 pr-3" disabled={isLoading}><FaSearch /></button>
+              <button
+                type="submit"
+                className="text-gray-500 pl-2 pr-3"
+                disabled={isLoading}
+              >
+                <FaSearch />
+              </button>
               <input
                 type="text"
                 placeholder="Search news..."
@@ -547,7 +562,9 @@ export default function Search() {
               {filters.searchTerm && (
                 <button
                   type="button"
-                  onClick={() => setFilters((prev) => ({ ...prev, searchTerm: "" }))}
+                  onClick={() =>
+                    setFilters((prev) => ({ ...prev, searchTerm: "" }))
+                  }
                   className="p-1 text-gray-400 hover:text-gray-600"
                   disabled={isLoading}
                 >
@@ -576,10 +593,20 @@ export default function Search() {
               sortOptions={SORT_OPTIONS}
               current={current}
               setCurrent={setCurrent}
-              setCategory={(v) => setFilters((prev) => ({ ...prev, category: v, subcategory: "" }))}
-              setSubcategory={(v) => setFilters((prev) => ({ ...prev, subcategory: v }))}
+              setCategory={(v) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  category: v,
+                  subcategory: "",
+                }))
+              }
+              setSubcategory={(v) =>
+                setFilters((prev) => ({ ...prev, subcategory: v }))
+              }
               setSortBy={(v) => setFilters((prev) => ({ ...prev, sortBy: v }))}
-              setLocation={(v) => setFilters((prev) => ({ ...prev, location: v }))}
+              setLocation={(v) =>
+                setFilters((prev) => ({ ...prev, location: v }))
+              }
               currentFilters={filters}
               disabled={isLoading}
             />
@@ -592,7 +619,13 @@ export default function Search() {
             disabled={isLoading || (!filters.searchTerm && !filters.category)}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-10 rounded shadow-md hover:shadow-lg flex items-center gap-2 disabled:opacity-70"
           >
-            {isLoading ? <><ImSpinner8 className="animate-spin" /> Searching...</> : "SEARCH"}
+            {isLoading ? (
+              <>
+                <ImSpinner8 className="animate-spin" /> Searching...
+              </>
+            ) : (
+              "SEARCH"
+            )}
           </button>
           <button
             onClick={handleClear}
@@ -602,9 +635,11 @@ export default function Search() {
           </button>
         </div>
 
-        <div className="flex justify-center my-6">
-          <HeaderAd adData={topAds} />
-        </div>
+        {topAds && topAds != null && (
+          <div className="flex justify-center my-6">
+            <HeaderAd adData={topAds} />
+          </div>
+        )}
 
         <section className="mt-8 bg-white p-6 rounded-lg shadow-sm flex flex-col items-center justify-center min-h-[40vh]">
           {isLoading ? (
@@ -619,9 +654,13 @@ export default function Search() {
                   article={{
                     image: article.news_img_url,
                     title: article.news_headline,
-                    description: article.news_description_html || "No description available.",
+                    description:
+                      article.news_description_html ||
+                      "No description available.",
                     category: article.news_category_name,
-                    url: `/read-news/${article.news_headline}/${encryptData(article.news_id)}`,
+                    url: `/read-news/${article.news_headline}/${encryptData(
+                      article.news_id
+                    )}`,
                   }}
                 />
               ))}
@@ -629,10 +668,14 @@ export default function Search() {
           ) : (
             <div className="text-center py-12 w-full">
               <h3 className="text-xl font-medium text-gray-600 mb-2">
-                {(filters.searchTerm || filters.category) ? "No articles found" : "Search for news or select a category"}
+                {filters.searchTerm || filters.category
+                  ? "No articles found"
+                  : "Search for news or select a category"}
               </h3>
               <p className="text-gray-500">
-                {(filters.searchTerm || filters.category) ? "Try adjusting your search criteria" : "Browse news by selecting a category or using the search bar"}
+                {filters.searchTerm || filters.category
+                  ? "Try adjusting your search criteria"
+                  : "Browse news by selecting a category or using the search bar"}
               </p>
             </div>
           )}

@@ -51,7 +51,7 @@ const HeaderAd = ({
       <img
         src={`${imageBaseURL}${images[isMultipleImages ? currentIndex : 0]}`}
         alt={adData?.ad_title || "Advertisement"}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-center"
         style={{ height, maxWidth }}
         loading="lazy"
       />

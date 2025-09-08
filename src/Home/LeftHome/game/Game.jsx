@@ -148,13 +148,20 @@ const Game = ({
     fetchNews();
   }, [fetchNews]);
 
-  if (loading) {
-    return <LoadingState />;
-  }
+   if(loading ||error){
+  <div>
+   <Menu menuText={section_title || "State"} menu={[]} />
+     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+               {[...Array(3)].map((_, i) => (
+                 <AdCardSkeleton key={i} />
+               ))}
+             </div>
+  </div>
+   }
 
-  if (error) {
-    return <ErrorState error={error} onRetry={fetchNews} />;
-  }
+  // if (error) {
+  //   return <ErrorState error={error} onRetry={fetchNews} />;
+  // }
 
   return (
     <div className="w-full">

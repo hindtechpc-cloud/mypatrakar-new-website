@@ -34,12 +34,22 @@ const Country = ({
     fetchNews();
   }, [fetchNews]);
 
+  if(loading ||error){
+ <div>
+  <Menu menuText={section_title || "State"} menu={[]} />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <AdCardSkeleton key={i} />
+              ))}
+            </div>
+ </div>
+  }
   return (
     <div className="">
       <Menu menuText={section_title} menu={[]} />
-
+{/* 
       {loading && <LoadingState />}
-      {error && <ErrorState error={error} onRetry={fetchNews} />}
+      {error && <ErrorState error={error} onRetry={fetchNews} />} */}
       {!loading && !error && !articles.length&& (
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       )}
@@ -50,30 +60,9 @@ const Country = ({
   );
 };
 
-// Loading State Component
-const LoadingState = () => (
-  <div className="p-4 flex justify-center items-center ">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[...Array(3)].map((_, i) => (
-        <AdCardSkeleton key={i} />
-      ))}
-    </div>
-  </div>
-);
 
-// Error State Component
-const ErrorState = ({ error, onRetry }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {[...Array(3)].map((_, i) => (
-      <AdCardSkeleton key={i} />
-    ))}
-  </div>
-);
 
-ErrorState.propTypes = {
-  error: PropTypes.string.isRequired,
-  onRetry: PropTypes.func.isRequired,
-};
+
 
 // Memoized News List Component (named inner function to fix ESLint warning)
 const CountryNewsListComponent = ({ articles }) => (

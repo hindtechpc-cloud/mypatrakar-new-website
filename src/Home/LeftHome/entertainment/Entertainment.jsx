@@ -164,8 +164,16 @@ const Entertainment = ({
     fetchNews();
   }, [fetchNews]);
 
-  if (loading) return <LoadingState />;
-  if (error) return <ErrorState error={error} onRetry={fetchNews} />;
+    if(loading ||error){
+   <div>
+    <Menu menuText={section_title || "State"} menu={[]} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(3)].map((_, i) => (
+                  <AdCardSkeleton key={i} />
+                ))}
+              </div>
+   </div>
+    }
 
   return (
     <div className="w-full">
@@ -229,26 +237,26 @@ const LoadingState = () => (
 );
 
 // Enhanced Error State with Retry Button
-const ErrorState = ({ error, onRetry }) => (
-  <motion.div 
-    className="flex flex-col items-center justify-center p-8 bg-red-50 rounded-lg"
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0, scale: 0.9 }}
-  >
-    <div className="text-red-600 text-lg font-medium mb-4">
-      {error || "Failed to load news"}
-    </div>
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="px-6 py-2 bg-red-600 text-white rounded-full font-medium"
-      onClick={onRetry}
-    >
-      Try Again
-    </motion.button>
-  </motion.div>
-);
+// const ErrorState = ({ error, onRetry }) => (
+//   <motion.div 
+//     className="flex flex-col items-center justify-center p-8 bg-red-50 rounded-lg"
+//     initial={{ opacity: 0, scale: 0.9 }}
+//     animate={{ opacity: 1, scale: 1 }}
+//     exit={{ opacity: 0, scale: 0.9 }}
+//   >
+//     <div className="text-red-600 text-lg font-medium mb-4">
+//       {error || "Failed to load news"}
+//     </div>
+//     <motion.button
+//       whileHover={{ scale: 1.05 }}
+//       whileTap={{ scale: 0.95 }}
+//       className="px-6 py-2 bg-red-600 text-white rounded-full font-medium"
+//       onClick={onRetry}
+//     >
+//       Try Again
+//     </motion.button>
+//   </motion.div>
+// );
 
 // Enhanced Featured Entertainment Card with Animations
 const FeaturedEntertainmentCard = ({ articles }) => {

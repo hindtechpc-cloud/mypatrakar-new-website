@@ -128,7 +128,7 @@ export const GetFeaturedSection = (portal_id) =>
   postRequest('/featured-section', { portal_id });
 
 export const GetFeaturedNews = (portal_id) =>
-  postRequest('/featured-news', { portal_id });
+  postRequest('/featured-news', { secttion_id:portal_id });
 
 // Auth API
 export const GetUserAuthentication = (data) => postRequest('/auth-user', data);
@@ -145,6 +145,7 @@ export const menuWithSubNavMenuList = (portal_id) =>
   postRequest('/menu-with-sub-nav-list', { portal_id });
 
 // News Management
+
 export const getBreakingNews = (portal_id) =>
   postRequest('/breaking-news', { portal_id });
 
@@ -249,8 +250,8 @@ export const GetElectionYear = (election_poll_id) =>
 
 export const GetElectionPolls = () => getRequest('/election-poll');
 //Roadmap
-export const GetTrending = () => getRequest('/road-map');
-
+export const Roadmaps = () => getRequest('/road-map');
+export const loadNewsByRoadmapId=(params)=>getRequest("/news-road-map",params)
 // Horoscope
 export const GetHoroscope = (sign) =>
   postRequest('/get-daily-horoscope', { zodiac: sign });

@@ -299,6 +299,7 @@ console.log((ads))
       const res = await GetFeaturedSection(); // ✅ param wapas daala
       // console.log(res);
       const sorted = res.data.response.sort((a, b) => a.order - b.order);
+      console.log(res)
       setFeatured(sorted);
     } catch (error) {
       console.log("Featured section load error:", error);
@@ -313,7 +314,7 @@ console.log((ads))
         GetLeftBannerAds(),
         GetLeftHomeMainAds(),
       ]);
-console.log(topRes.data.response.top_banner)
+// console.log(topRes.data.response.top_banner)
       // ✅ ads state ko update karna (immutably)
       setAds((prev) => ({
         ...prev,
@@ -333,7 +334,7 @@ console.log(topRes.data.response.top_banner)
     loadAds();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-console.log(ads)
+// console.log(ads)
   const renderAd = (adData, label) => {
     return (
       <div className="w-full mb-2 flex items-center justify-center">
