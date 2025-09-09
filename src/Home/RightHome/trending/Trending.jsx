@@ -2,8 +2,9 @@ import { useContext, useState, useEffect } from "react";
 import Header from "../shared/Header";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
-import {  Roadmaps } from "../../../../api";
+import {  loadNewsByRoadmapId, Roadmaps } from "../../../../api";
 import { encryptData } from "../../../utils/cryptoHelper";
+import useRoadmapList from "../shared/useRoadmapList";
 
 // const articles = [
 //   {
@@ -39,43 +40,59 @@ const Trending = () => {
   const [error, setError] = useState(null);
   const [hoverIndex, setHoverIndex] = useState(null); // State to track the hovered index
   const { setNews } = useContext(NewsContext);
+  const [roadmap_id,setRoadmap_id]=useState();
   const navigate = useNavigate();
 
   const handleNewsContent = (news) => {
     setNews(news);
     navigate(`/read-news/${news.title}/${encryptData(news.roadmap_id)}`);
   };
+  // const { roadmaps, loadNewsByRoadmapId } = useRoadmapList();
 
   useEffect(() => {
-    const loadTrending = async () => {
-      try{
+    const loadRoadmaps = async () => {
+      try {
         setLoading(true);
         const response = await Roadmaps();
+        // console.log(response);
         const trendingArticles = response?.data?.response;
 
-        const formattedArticles = trendingArticles?.map(article => ({
-          title: article.roadmap,
-          date: article.date,
-          // urlToImage: article.news_img
-        }));
-        setArticles(formattedArticles);
-      }catch (err) {
+        const formattedArticles = trendingArticles.filter(
+          (item) => item.position == "2"
+        );
+// console.log(formattedArticles)
+        setRoadmap_id(formattedArticles[0].roadmap_id);
+      } catch (err) {
         console.error(err);
-        setError("Failed to load trending news");
+        setError("Failed to load road maps");
       } finally {
         setLoading(false);
       }
     };
-    loadTrending();
+    loadRoadmaps();
   }, []);
 
+  useEffect(() => {
+const loadnews=async()=>{
+  try {
+    console.log(roadmap_id)
+    const res=await loadNewsByRoadmapId(roadmap_id);
+    console.log(res)
+    setArticles(res?.data?.response);
+  } catch (error) {
+    console.log(error)
+  }
+}
+loadnews();
+  }, [roadmap_id]);
+// console.log(roadmaps)
   return (
     <div className="my-2 mt-5 font-sans  md:max-w-sm  w-[350px] mx-auto py-2">
       {articles.length > 0 && <Header text={"TopNews"} />}
       <div className=" flex items-start justify-center md:justify-start md:max-w-sm w-[300px] mx-auto py-2 ">
         {/* Root Section */}
         <div className="flex flex-col items-start relative">
-          {articles.map((article, index) => (
+          {articles?.slice(0,4).map((article, index) => (
             <div
               key={index}
               className="flex items-center  relative"

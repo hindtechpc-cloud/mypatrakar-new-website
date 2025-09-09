@@ -89,11 +89,11 @@ const MenuBar = ({ menuText, setSubcategory, menuItems }) => {
 
       {/* Menu Items */}
       <div
-        className={`mt-3 md:flex flex-wrap gap-2 transition-all duration-300 ease-in-out ${
+        className={`md:flex flex-wrap gap-2 transition-all duration-300 ease-in-out ${
           isOpen ? "block opacity-100" : "hidden md:flex opacity-0 md:opacity-100"
         }`}
       >
-        {menuItems.map((item, index) => (
+        {menuItems?.map((item, index) => (
           <div
             key={index}
             onClick={() => setSubcategory(item)}

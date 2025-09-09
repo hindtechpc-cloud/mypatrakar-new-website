@@ -250,8 +250,10 @@ export const GetElectionYear = (election_poll_id) =>
 
 export const GetElectionPolls = () => getRequest('/election-poll');
 //Roadmap
-export const Roadmaps = () => getRequest('/road-map');
-export const loadNewsByRoadmapId=(params)=>getRequest("/news-road-map",params)
+export const Roadmaps = () => getRequest('/road-map')
+export const loadNewsByRoadmapId = (roadmap_id) =>
+  getRequest(`/news-road-map?roadmap_id=${roadmap_id}`);
+
 // Horoscope
 export const GetHoroscope = (sign) =>
   postRequest('/get-daily-horoscope', { zodiac: sign });

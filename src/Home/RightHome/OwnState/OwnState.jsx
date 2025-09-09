@@ -27,10 +27,10 @@ export default function OwnState() {
         const trendingArticles = response?.data?.response;
 
         const formattedArticles = trendingArticles.filter(
-          (item) => item.position == 1
+          (item) => item.position == "1"
         );
-
-        setRoadmap_id(formattedArticles.roadmap_id);
+console.log(formattedArticles)
+        setRoadmap_id(formattedArticles[0].roadmap_id);
       } catch (err) {
         console.error(err);
         setError("Failed to load road maps");
@@ -51,7 +51,7 @@ const loadnews=async()=>{
   }
 }
 loadnews();
-  }, []);
+  }, [roadmap_id]);
 console.log(roadmaps)
   return (
     <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2">
@@ -61,7 +61,7 @@ console.log(roadmaps)
       ) : (
         <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-2">
           <div className="flex flex-col items-start relative">
-            {articles?.map((article, index) => (
+            {articles?.slice(0,4).map((article, index) => (
               <div
                 key={index}
                 className="flex items-center relative"

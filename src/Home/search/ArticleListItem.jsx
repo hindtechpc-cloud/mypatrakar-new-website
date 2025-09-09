@@ -53,7 +53,7 @@ const ArticleListItem = ({ article }) => {
       </div>
 
       <div className="flex flex-col justify-center">
-        <h3 className="text-xl font-bold mb-2 text-gray-900 hover:text-red-700 transition-colors">
+        <h3 className="text-xl font-bold mb-2 text-gray-900 hover:underline transition-colors">
           <a href={article.url || "#"}>{article.title}</a>
         </h3>
         <div

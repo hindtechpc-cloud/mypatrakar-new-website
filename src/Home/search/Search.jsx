@@ -356,6 +356,7 @@
 //   );
 // }
 
+
 import { useContext, useEffect, useState, useCallback, useMemo } from "react";
 import debounce from "lodash.debounce";
 import {
@@ -405,9 +406,9 @@ export default function Search() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [locations, setLocations] = useState([]);
-  const [current, setCurrent] = useState("");
   const { webTheme } = useContext(WebThemeContext);
 
+  // 🔹 fetch news
   const fetchFilteredNews = useCallback(async (page = 1, currentFilters) => {
     if (!currentFilters.searchTerm.trim() && !currentFilters.category) {
       setArticles([]);
@@ -431,7 +432,6 @@ export default function Search() {
 
       const res = await NewsSortBy("MYAWR241227001", payload);
       const newArticles = res?.data?.response || [];
-      // console.log(res)
       setArticles(newArticles);
       setTotalPages(
         Math.ceil((res?.data?.total_count || newArticles.length) / 10) || 1
@@ -446,6 +446,7 @@ export default function Search() {
     }
   }, []);
 
+  // 🔹 debounce search
   const debouncedSearch = useMemo(
     () =>
       debounce(
@@ -455,6 +456,7 @@ export default function Search() {
     []
   );
 
+  // 🔹 manual search submit
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -463,6 +465,7 @@ export default function Search() {
     [fetchFilteredNews, filters]
   );
 
+  // 🔹 clear filters
   const handleClear = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
     setArticles([]);
@@ -471,6 +474,7 @@ export default function Search() {
     setTotalPages(1);
   }, []);
 
+  // 🔹 pagination
   const loadPage = useCallback(
     (page) => {
       if (page < 1 || page > totalPages) return;
@@ -479,6 +483,7 @@ export default function Search() {
     [totalPages, fetchFilteredNews, filters]
   );
 
+  // 🔹 load initial data (categories + ads)
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -486,16 +491,35 @@ export default function Search() {
           GetNewsCategories("MYAWR241227001"),
           GetSearchPageTopAds("MYAWR241227001"),
         ]);
-        setCategories(catRes?.data?.response || []);
+        const cats = catRes?.data?.response || [];
+        setCategories(cats);
         setTopAds(adRes?.data?.response?.top_banner || null);
-        console.log(adRes);
+
+        // ✅ first category load hone ke baad uska news fetch
+        if (cats.length > 0) {
+          const firstCatId = cats[0].cat_id;
+
+          // filters update
+          setFilters((prev) => ({
+            ...prev,
+            category: firstCatId,
+            subcategory: "",
+          }));
+
+          // news fetch
+          fetchFilteredNews(1, {
+            ...DEFAULT_FILTERS,
+            category: firstCatId,
+          });
+        }
       } catch (err) {
         console.error("Initial load failed:", err);
       }
     };
     loadInitialData();
-  }, []);
+  }, [fetchFilteredNews]);
 
+  // 🔹 fetch subcategories when category changes
   useEffect(() => {
     const fetchSubcategories = async () => {
       if (!filters.category) return setSubcategories([]);
@@ -513,6 +537,7 @@ export default function Search() {
     fetchSubcategories();
   }, [filters.category]);
 
+  // 🔹 fetch locations
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -525,16 +550,6 @@ export default function Search() {
     fetchLocations();
   }, []);
 
-  useEffect(() => {
-    if (filters.searchTerm || filters.category||categories) {
-      fetchFilteredNews(1, filters);
-    } else {
-      setArticles([]);
-      setTotalPages(1);
-      setCurrentPage(1);
-    }
-  }, [filters, fetchFilteredNews,categories]);
-console.log(topAds)
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Sticky Search Header */}
@@ -584,6 +599,7 @@ console.log(topAds)
       </div>
 
       <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* 🔹 Filters */}
         <section className="mb-6 p-6 rounded-lg bg-white shadow-sm">
           <div className={`${showMobileFilters ? "block" : "hidden"} md:block`}>
             <DropdownFilters
@@ -591,28 +607,28 @@ console.log(topAds)
               subcategories={subcategories}
               locations={locations}
               sortOptions={SORT_OPTIONS}
-              current={current}
-              setCurrent={setCurrent}
-              setCategory={(v) =>
+              setCategory={(val) =>
                 setFilters((prev) => ({
                   ...prev,
-                  category: v,
+                  category: val,
                   subcategory: "",
                 }))
               }
-              setSubcategory={(v) =>
-                setFilters((prev) => ({ ...prev, subcategory: v }))
+              setSubcategory={(val) =>
+                setFilters((prev) => ({ ...prev, subcategory: val }))
               }
-              setSortBy={(v) => setFilters((prev) => ({ ...prev, sortBy: v }))}
-              setLocation={(v) =>
-                setFilters((prev) => ({ ...prev, location: v }))
+              setSortBy={(val) => setFilters((prev) => ({ ...prev, sortBy: val }))}
+              setLocation={(val) =>
+                setFilters((prev) => ({ ...prev, location: val }))
               }
               currentFilters={filters}
               disabled={isLoading}
+              fetchNews={fetchFilteredNews}
             />
           </div>
         </section>
 
+        {/* 🔹 Buttons */}
         <div className="flex items-center justify-center gap-4 my-6">
           <button
             onClick={handleSubmit}
@@ -635,12 +651,14 @@ console.log(topAds)
           </button>
         </div>
 
-        {topAds && topAds != null && (
+        {/* 🔹 Ads */}
+        {topAds && (
           <div className="flex justify-center my-6">
             <HeaderAd adData={topAds} />
           </div>
         )}
 
+        {/* 🔹 Articles */}
         <section className="mt-8 bg-white p-6 rounded-lg shadow-sm flex flex-col items-center justify-center min-h-[40vh]">
           {isLoading ? (
             <div className="flex justify-center items-center py-20 w-full">
@@ -681,6 +699,7 @@ console.log(topAds)
           )}
         </section>
 
+        {/* 🔹 Pagination */}
         {!isLoading && articles.length > 0 && totalPages > 1 && (
           <div className="mt-8 flex justify-center items-center gap-4">
             <button
