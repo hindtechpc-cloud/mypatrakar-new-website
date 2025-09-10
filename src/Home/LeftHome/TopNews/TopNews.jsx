@@ -17,7 +17,7 @@ const TopNews = ({ category_id, section_title }) => {
     try {
       setLoading(true);
       const { data } = await loadNewsByCategory(category_id);
-      console.log(data);
+      // console.log(data);
       setArticles(data?.response || []);
     } catch (err) {
       console.log("News fetch error:", err);
@@ -60,7 +60,7 @@ const TopNews = ({ category_id, section_title }) => {
   const featuredImageUrl = `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
     featuredArticle?.news_img_url
   }`;
-  console.log(featuredImageUrl);
+  // console.log(featuredImageUrl);
   if (loading || error) {
     <div>
       <Menu menuText={section_title || "State"} menu={[]} />

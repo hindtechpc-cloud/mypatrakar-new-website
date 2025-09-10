@@ -25,7 +25,7 @@ export default function OwnState({
     try {
       setLoading(true);
       const { data } = await loadNewsByCategory(category_id);
-      console.log(data);
+      // console.log(data);
       setArticles(data?.response || []);
     } catch (err) {
       console.error("News fetch error:", err);

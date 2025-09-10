@@ -13,7 +13,7 @@ export default function OwnState() {
   const [roadmap_id, setRoadmap_id] = useState(null);
   const navigate = useNavigate();
   const handleNewsContent = (article) => {
-    console.log(article);
+    // console.log(article);
     navigate(`/read-news/${article.title}/${encryptData(article.news_id)}`);
   };
   const { roadmaps, loadNewsByRoadmapId } = useRoadmapList();
@@ -23,13 +23,13 @@ export default function OwnState() {
       try {
         setloading(true);
         const response = await Roadmaps();
-        console.log(response);
+        // console.log(response);
         const trendingArticles = response?.data?.response;
 
         const formattedArticles = trendingArticles.filter(
           (item) => item.position == "1"
         );
-console.log(formattedArticles)
+// console.log(formattedArticles)
         setRoadmap_id(formattedArticles[0].roadmap_id);
       } catch (err) {
         console.error(err);
@@ -52,7 +52,7 @@ const loadnews=async()=>{
 }
 loadnews();
   }, [roadmap_id]);
-console.log(roadmaps)
+// console.log(roadmaps)
   return (
     <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2">
       {articles.length >= 0 && <Header text={"उत्तर प्रदेश"} />}

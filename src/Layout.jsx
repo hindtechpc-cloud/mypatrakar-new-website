@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useSettingsContext } from "./context/SettingsContext";
 import { AdDetailPage } from "./Home/market/pages/AdDetailPage";
 import SellerQueryForm from "./Home/market/pages/QueryForm";
-import { AdListingPage } from "./Home/market/pages/AdListingPage";
+import { AdListingPage } from "./Home/market/pages/AdListingPage"; 
 // import { useAds } from "./AdProvider"; // Import useAds hook
 import { useAds } from "./context/AdsContext";
 import NewsSkeleton from "./utils/NewsSkeleton";
@@ -81,7 +81,7 @@ function Layout() {
   const loadAds = async () => {
     try {
       const res = await GetTopBannerAds();
-      console.log(res);
+      // console.log(res);
       setAds(res.data.response.top_banner)
     } catch (error) {
       console.log(error);
@@ -90,7 +90,7 @@ function Layout() {
   useEffect(() => {
     loadAds();
   }, []);
-  console.log(ads);
+  // console.log(ads);
   return (
     <>
       {!isShorts && <Header />}

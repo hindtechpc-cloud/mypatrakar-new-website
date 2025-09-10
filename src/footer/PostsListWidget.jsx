@@ -158,7 +158,7 @@ const PostsListWidget = () => {
       setLoading(true);
       setError(null);
       const res = await newsRoadMapBottom("");
-      console.log(res)
+      // console.log(res)
       if (res?.data?.response) {
         setArticles(res.data.response.slice(0, 3)); // limit to 4 articles
       } else {

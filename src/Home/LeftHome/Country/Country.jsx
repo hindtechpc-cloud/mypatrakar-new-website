@@ -67,7 +67,7 @@ const Country = ({
 // Memoized News List Component (named inner function to fix ESLint warning)
 const CountryNewsListComponent = ({ articles }) => (
   <div className="container mx-auto px-4 py-6">
-    {articles.map((article) => (
+    {articles?.slice(0,10).map((article) => (
       <div key={article.news_id} className="mb-10">
         <TopNewsItems
           topNewsItems={[article]}

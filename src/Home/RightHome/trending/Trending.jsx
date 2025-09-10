@@ -75,9 +75,9 @@ const Trending = () => {
   useEffect(() => {
 const loadnews=async()=>{
   try {
-    console.log(roadmap_id)
+    // console.log(roadmap_id)
     const res=await loadNewsByRoadmapId(roadmap_id);
-    console.log(res)
+    // console.log(res)
     setArticles(res?.data?.response);
   } catch (error) {
     console.log(error)

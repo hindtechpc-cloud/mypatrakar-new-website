@@ -6,7 +6,7 @@ const useRoadmapList = ( id) => {
   const loadRoadmap = useCallback(async () => {
     try {
       const response = await loadNewsByRoadmapId({roadmap_id:id})
-      console.log(response);
+      // console.log(response);
       setRoadmaps(response.data.response);
     } catch (err) {
       console.log("Error loading news:", err);

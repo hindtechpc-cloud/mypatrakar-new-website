@@ -35,11 +35,11 @@ const Navbar = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const res = await menuWithSubNavMenuList("MYAWR241227001");
+        const res = await menuWithSubNavMenuList("");
         setMenuItems(res.data.response || []);
       } catch (error) {
         // toast.error("Failed to load menu items");
-console.log(error)
+        console.log(error);
       }
     };
     fetchMenuItems();
@@ -67,10 +67,11 @@ console.log(error)
   const fetchHoverNews = async (subcategoryId) => {
     try {
       const res = await loadNewsBySubCategory(subcategoryId);
+      console.log(res)
       setHoveredNews(res.data.response || []);
-    } catch(error) {
+    } catch (error) {
       // toast.error("Failed to load news preview");
-console.log(error)
+      console.log(error);
     }
   };
 
@@ -79,15 +80,18 @@ console.log(error)
       {hoveredNews.slice(0, 3).map((newsItem) => (
         <Link
           key={newsItem.news_id}
-          to={`/read-news/${newsItem.news_headline}/${encryptData(newsItem.news_id)}`}
+          to={`/read-news/${newsItem.news_headline}/${encryptData(
+            newsItem.news_id
+          )}`}
           className="block mb-4 last:mb-0 group w-[250px] px-2"
         >
-
           <div className="w-full h-32 rounded overflow-hidden">
             <img
               src={
                 newsItem?.news_img_url
-                  ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${newsItem.news_img_url}`
+                  ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                      newsItem.news_img_url
+                    }`
                   : "https://picsum.photos/300/500"
               }
               alt={newsItem.news_headline}
@@ -111,7 +115,7 @@ console.log(error)
       ))}
     </div>
   );
-
+// menu items or categories as nav menu 
   const DesktopMenuItem = ({ item }) => (
     <div
       key={item.cat_id}
@@ -142,10 +146,11 @@ console.log(error)
       </button>
       {item.submenus?.length > 0 && activeDropdown === item.cat_id && (
         <div
-          className="absolute -left-60 z-50 mt-0 px-4 shadow-lg pb-5 w-full min-w-[600px] "
+          className="absolute -left-40 z-50 mt-0 px-4 shadow-lg pb-5 w-full min-w-[600px] "
           style={{ backgroundColor: themeColor }}
         >
           <div className="flex items-start ">
+{/* // submenu items or subcategories as subnav menu  */}
             {item.submenus.map((submenu) => (
               <Link
                 key={submenu.subcategory_id}
@@ -187,7 +192,9 @@ console.log(error)
             );
           } else {
             handleMenuClick(
-              `/topic/${item.nav_name.toLowerCase()}/${encryptData(item.cat_id)}`
+              `/topic/${item.nav_name.toLowerCase()}/${encryptData(
+                item.cat_id
+              )}`
             );
           }
         }}
@@ -202,7 +209,7 @@ console.log(error)
         )}
       </button>
       {item.submenus?.length > 0 && mobileActiveDropdown === item.cat_id && (
-        <div className="pl-6">
+        <div className="pl-20">
           {item.submenus.map((submenu) => (
             <Link
               key={submenu.subcategory_id}
@@ -244,7 +251,9 @@ console.log(error)
         style={{ backgroundColor: themeColor }}
       >
         <div className="container mx-auto flex justify-between items-center px-4">
-          <div className={`${isFixed ? "flex" : "lg:hidden flex"} items-center`}>
+          <div
+            className={`${isFixed ? "flex" : "lg:hidden flex"} items-center`}
+          >
             <Link to="/">
               <img
                 src={logo}
@@ -266,7 +275,9 @@ console.log(error)
             <Link
               to="/"
               className={`flex items-center p-4 hover:bg-gray-200 hover:text-black transition-colors ${
-                location.pathname === "/" ? "bg-gray-200 text-black shadow-xl" : ""
+                location.pathname === "/"
+                  ? "bg-gray-200 text-black shadow-xl"
+                  : ""
               }`}
               aria-label="Home"
             >
@@ -312,7 +323,9 @@ console.log(error)
           <Link
             to="/"
             className={`block px-4 py-3 text-white font-semibold ${
-              location.pathname === "/" ? "bg-gray-200 rounded-md text-black" : ""
+              location.pathname === "/"
+                ? "bg-gray-200 rounded-md text-black"
+                : ""
             }`}
             onClick={() => handleMenuClick("/")}
           >
@@ -337,10 +350,6 @@ console.log(error)
 };
 
 export default Navbar;
-
-
-
-
 
 // // src/navigation/Navbar.jsx
 // import React, { useState, useEffect, useContext, useCallback } from "react";
@@ -374,7 +383,7 @@ export default Navbar;
 
 //   // Function to calculate a lighter/darker variant of the theme color
 //   const adjustColor = (color, amount) => {
-//     return '#' + color.replace(/^#/, '').replace(/../g, color => 
+//     return '#' + color.replace(/^#/, '').replace(/../g, color =>
 //       ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2)
 //     );
 //   };
@@ -491,8 +500,8 @@ export default Navbar;
 //           )
 //         }
 //         style={{
-//           backgroundColor: activePath.includes(`/topic/${item.nav_name.toLowerCase()}`) 
-//             ? 'white' 
+//           backgroundColor: activePath.includes(`/topic/${item.nav_name.toLowerCase()}`)
+//             ? 'white'
 //             : 'transparent'
 //         }}
 //       >
@@ -506,9 +515,9 @@ export default Navbar;
 //           />
 //         )}
 //       </button>
-      
+
 //       {item.submenus?.length > 0 && activeDropdown === item.cat_id && (
-//         <div 
+//         <div
 //           className="absolute left-0 z-50 shadow-xl rounded-b-lg overflow-hidden min-w-[280px]"
 //           style={{ backgroundColor: lighterTheme }}
 //           onMouseEnter={() => handleDropdownHover(item.cat_id)}
@@ -612,7 +621,7 @@ export default Navbar;
 //             ? "fixed top-0 left-0 shadow-xl z-50 animate-slideDown"
 //             : "relative"
 //         }`}
-//         style={{ 
+//         style={{
 //           backgroundColor: themeColor,
 //           background: `linear-gradient(145deg, ${lighterTheme} 0%, ${themeColor} 50%, ${darkerTheme} 100%)`
 //         }}
@@ -634,8 +643,8 @@ export default Navbar;
 //             <Link
 //               to="/"
 //               className={`flex items-center p-5 transition-all duration-300 ${
-//                 location.pathname === "/" 
-//                   ? "bg-white text-gray-900 shadow-inner" 
+//                 location.pathname === "/"
+//                   ? "bg-white text-gray-900 shadow-inner"
 //                   : "hover:bg-white/10 text-white"
 //               } rounded-t-md font-medium`}
 //               aria-label="Home"
@@ -683,7 +692,7 @@ export default Navbar;
 //         className={`fixed lg:hidden top-0 left-0 w-80 h-full z-50 transform transition-transform duration-500 ease-in-out ${
 //           menuOpen ? "translate-x-0" : "-translate-x-full"
 //         } shadow-2xl`}
-//         style={{ 
+//         style={{
 //           backgroundColor: themeColor,
 //           background: `linear-gradient(135deg, ${lighterTheme} 0%, ${themeColor} 100%)`
 //         }}
@@ -692,14 +701,14 @@ export default Navbar;
 //           <Link to="/" onClick={() => setMenuOpen(false)}>
 //             <img src={logo} alt="Logo" className="w-12 h-12" />
 //           </Link>
-//           <button 
-//             onClick={toggleMenu} 
+//           <button
+//             onClick={toggleMenu}
 //             className="text-white text-xl p-2 rounded-full hover:bg-white/20 transition-colors"
 //           >
 //             <FaTimes />
 //           </button>
 //         </div>
-        
+
 //         <div className="overflow-y-auto h-full pb-20">
 //           <Link
 //             to="/"
@@ -711,11 +720,11 @@ export default Navbar;
 //             <FaHome className="mr-3" />
 //             Home
 //           </Link>
-          
+
 //           {menuItems.map((item) => (
 //             <MobileMenuItem key={item.cat_id} item={item} />
 //           ))}
-          
+
 //           <Link
 //             to="/search"
 //             className="flex items-center px-5 py-4 text-white font-medium border-b border-white/10 hover:bg-white/10"
