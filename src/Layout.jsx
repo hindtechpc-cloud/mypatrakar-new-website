@@ -96,7 +96,7 @@ function Layout() {
       {!isShorts && <Header />}
       {!isCommonPage && !isShorts && (
         <>
-          {ads?.topBanner?.top_banner !== null && (
+          {ads?.ad_image_url?.length>0 && (
             <div className="flex items-center justify-center mx-auto">
               <HeaderAd
                 className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 rounded sm:w-[728px]  w-[320px] "

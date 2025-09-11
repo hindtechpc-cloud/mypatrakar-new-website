@@ -136,7 +136,8 @@ import { useEffect, useState } from "react";
 import Header from "../shared/Header";
 import Loader from "../../../utils/Loader";
 import { GetHoroscope } from "../../../../api";
-
+import { Link } from "react-router-dom";
+import horoscope from "../../../assets/horoscop.png"
 const zodiacSigns = [
   { name: "Aries", symbol: "♈", color: "bg-red-100 text-red-600" },
   { name: "Taurus", symbol: "♉", color: "bg-green-100 text-green-600" },
@@ -209,11 +210,15 @@ export default function Rashiphal() {
   }, []);
 
   return (
-    <>
-      {rashis.length > 0 && (
-        <div className="max-w-md w-full mx-auto p-4 font-sans">
+    <div className="max-w-md w-full mx-auto p-4 font-sans">
+      <Header
+                text=" आज का राशिफल"
+                className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"
+              />
+      {rashis.length >0 ? (
+        <div className="">
           {/* Header */}
-          {!error && (
+          {/* {!error && (
             <div className="relative mb-6">
               <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg blur opacity-20"></div>
               <Header
@@ -221,7 +226,7 @@ export default function Rashiphal() {
                 className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"
               />
             </div>
-          )}
+          )} */}
 
           {/* Error message */}
           {/* {error && (
@@ -262,7 +267,7 @@ export default function Rashiphal() {
 
           {/* Valid Horoscope Grid */}
           {!loading && rashis.length > 0 && (
-            <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[600px]">
+            <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[450px]">
               {rashis.map((item, index) => (
                 <div
                   key={index}
@@ -316,7 +321,11 @@ export default function Rashiphal() {
             </div>
           )}
         </div>
-      )}
-    </>
+      ):
+      <Link to="https://www.bhaskar.com/rashifal" target="_blanck" >
+        <img src={horoscope} alt="Horoscop" className="w-full h-full object-center rounded-sm"/>
+      </Link>
+      }
+    </div>
   );
 }

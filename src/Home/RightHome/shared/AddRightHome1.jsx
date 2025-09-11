@@ -1,9 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSettingsContext } from "../../../context/SettingsContext";
 
 export default function AddRightHome1({ adsData, text }) {
   // console.log(text + " " + adsData);
+  const { getSettingStatus } = useSettingsContext();
 
+  const isAdvertiseWithUsPageEnabled = getSettingStatus(
+    "Apply for Advertisement"
+  );
   const isAdDataValid =
     adsData &&
     Array.isArray(adsData.ad_image_url) &&
@@ -104,13 +109,15 @@ export default function AddRightHome1({ adsData, text }) {
         </div>
 
         {/* CTA */}
-        <Link to="/advertise-with-us">
-          <button className="relative w-full py-3 px-6 mb-4 font-extrabold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group">
-            <span className="relative z-10">आज ही संपर्क करें</span>
-            <span className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-            <span className="absolute animate-pulse-slow top-0 left-0 w-2 h-full bg-white/30 -translate-x-10 group-hover:translate-x-[400px] transition-transform duration-1000" />
-          </button>
-        </Link>
+        {isAdvertiseWithUsPageEnabled && (
+          <Link to="/advertise-with-us">
+            <button className="relative w-full py-3 px-6 mb-4 font-extrabold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group">
+              <span className="relative z-10">आज ही संपर्क करें</span>
+              <span className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+              <span className="absolute animate-pulse-slow top-0 left-0 w-2 h-full bg-white/30 -translate-x-10 group-hover:translate-x-[400px] transition-transform duration-1000" />
+            </button>
+          </Link>
+        )}
 
         {/* Contact Info */}
         <div className="flex items-center justify-center mb-2 animate-float">

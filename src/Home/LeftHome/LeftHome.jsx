@@ -293,13 +293,13 @@ export default function LeftHome() {
   })
   const { getSettingStatus } = useSettingsContext();
   const isElectionEnabled = getSettingStatus("Exit Polls");
-console.log((ads))
+// console.log((ads))
   const loadFeaturedSection = async () => {
     try {
       const res = await GetFeaturedSection(); // ✅ param wapas daala
       // console.log(res);
       const sorted = res.data.response.sort((a, b) => a.order - b.order);
-      console.log(res)
+      // console.log(res)
       setFeatured(sorted);
     } catch (error) {
       console.log("Featured section load error:", error);
@@ -345,27 +345,8 @@ console.log((ads))
               <div className="h-3 w-24 bg-gray-300 rounded"></div>
             </div>
           </div>
-        ) : adError || !adData ? (
-          <div className="w-full h-40 bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-xl flex flex-col items-center justify-center p-4 shadow-md">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-red-400 mb-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
-            <span className="text-sm text-red-500 text-center">
-              {adError || `${label} not available`}
-            </span>
-          </div>
-        ) : (
+        ) : adError || !adData ? null
+         : (
           <HeaderAd adData={adData} text="leftHome" />
         )}
       </div>
@@ -375,7 +356,7 @@ console.log((ads))
   return (
     <div className="w-full space-y-6 px-4 md:px-0">
       {/* ✅ Top Ad */}
-      {ads.top && renderAd(ads.top, "Top Banner")}
+      {ads?.top&& ads?.top?.ad_image_url?.length>0 && renderAd(ads?.top, "Top Banner")}
 
       {/* ✅ Featured Components */}
       <div className="grid grid-cols-1 gap-6">
@@ -413,7 +394,7 @@ console.log((ads))
               </div>
 
               {/* ✅ Mid Ad after 2nd component */}
-              {index === 2 && ads.main && (
+              {index === 2 && ads?.main&& ads.main.ad_image_url?.length>0 && (
                 <div className="my-4">{renderAd(ads.main, "Main Banner")}</div>
               )}
             </React.Fragment>

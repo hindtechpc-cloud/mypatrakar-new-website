@@ -240,7 +240,8 @@ import { GetLiveCrickeScore } from "../../../../api";
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
 import { motion, AnimatePresence } from "framer-motion";
-
+import liveCricket from "../../../assets/live-cricket.png"
+import { Link } from "react-router-dom";
 export default function LiveCricket() {
   const [matches, setMatches] = useState([]);
   const [fallbackInfo, setFallbackInfo] = useState(null);
@@ -299,10 +300,11 @@ export default function LiveCricket() {
   };
 
   return (
-    <>
-      {matches.length > 0 && (
-        <div className="max-w-md w-[350px] mx-auto p-4 font-sans overflow-x-hidden">
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2  ">
           <Header text="Live Cricket" />
+
+      {!error && !loading && matches?.length > 0 ? (
+        <div >
 
           {/* Fallback UI */}
           {fallbackInfo && (
@@ -324,7 +326,7 @@ export default function LiveCricket() {
             </div>
           )}
 
-          <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+          <div className=" ">
             {/* Loading State */}
             {loading && (
               <motion.div
@@ -337,13 +339,13 @@ export default function LiveCricket() {
                   Fetching live scores...
                 </p>
                 <p className="text-sm text-gray-400 mt-1">
-                  This won't take long
+                  This {`won't`} take long
                 </p>
               </motion.div>
             )}
 
             {/* Error State */}
-            {error && !loading && (
+            {/* {error && !loading && (
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -362,7 +364,7 @@ export default function LiveCricket() {
                   </motion.button>
                 </div>
               </motion.div>
-            )}
+            )} */}
 
             {/* No Matches */}
             {!error && !loading && matches.length === 0 && !fallbackInfo && (
@@ -371,7 +373,7 @@ export default function LiveCricket() {
                 animate={{ opacity: 1 }}
                 className="p-8 text-center"
               >
-                <div className="inline-block p-4 bg-blue-50 rounded-full mb-3">
+                <div className="inline-block p-4  mb-3">
                   <FaCalendarAlt className="text-blue-400 text-3xl" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-700">
@@ -383,7 +385,7 @@ export default function LiveCricket() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   onClick={fetchLiveMatches}
-                  className="mt-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2 rounded-lg shadow-sm transition-all"
+                  className="mt-4 transition-all"
                 >
                   Check Again
                 </motion.button>
@@ -403,12 +405,12 @@ export default function LiveCricket() {
                     <motion.div
                       key={match?.match_id}
                       variants={itemVariants}
-                      className="border-b border-gray-200 last:border-b-0 p-6 hover:bg-gray-50 transition-colors"
+                      className=""
                       whileHover={{ scale: 1.01 }}
                       layout
                     >
                       <div className="flex justify-between items-start mb-4">
-                        <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 text-transparent bg-clip-text">
+                        <h2 className="text-xl font-bold">
                           {match.teams}
                         </h2>
                         <span
@@ -446,7 +448,7 @@ export default function LiveCricket() {
                           className="mt-5"
                         >
                           <h3 className="text-md font-semibold text-gray-800 mb-3 flex items-center">
-                            <span className="bg-blue-500 w-2 h-2 rounded-full mr-2"></span>
+                            <span className=""></span>
                             Scorecard
                           </h3>
                           <div className="space-y-3">
@@ -489,7 +491,11 @@ export default function LiveCricket() {
             )}
           </div>
         </div>
-      )}
-    </>
+      ):
+      <Link to="https://www.cricbuzz.com/" className="" target="_blanck">
+      <img src={liveCricket} alt="Live cricket " className="w-full h-full object-center rounded-sm"/>
+      </Link>
+      }
+    </div>
   );
 }

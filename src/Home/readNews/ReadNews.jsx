@@ -20,7 +20,7 @@ export default function ReadNews() {
   const [loadingAds, setLoadingAds] = useState(true);
   const { getSettingStatus } = useSettingsContext();
   const isCommentEbaled = getSettingStatus("Comments");
-  const [articales,setArticles]=useState([]);
+  const [articales, setArticles] = useState([]);
 
   const { type } = useParams();
   const loadAds = useCallback(async () => {
@@ -46,7 +46,7 @@ export default function ReadNews() {
   useEffect(() => {
     loadAds();
   }, [loadAds]);
-// console.log(bottomAds)
+  // console.log(bottomAds)
   const renderAd = (adData) => {
     if (loadingAds) {
       return (
@@ -59,11 +59,7 @@ export default function ReadNews() {
     }
 
     if (adError || !adData) {
-      return (
-        <div className="my-4 h-[200px] w-full bg-gray-100 flex items-center justify-center rounded shadow">
-          <span className="text-red-500">{adError || "No ad available"}</span>
-        </div>
-      );
+      return null;
     }
 
     return (
@@ -80,16 +76,16 @@ export default function ReadNews() {
       {/* Left Section */}
       <div className="w-full lg:w-8/12">
         <News />
-     <div className="flex items-center justify-center mx-auto">
-         {topAds && renderAd(topAds)}
-     </div>
+        <div className="flex items-center justify-center mx-auto">
+          {topAds&& topAds?.ad_image_url.length>0 && renderAd(topAds)}
+        </div>
         {type !== "shorts" && isCommentEbaled && <Feedback />}
         {type !== "shorts" && isCommentEbaled && <TotalCommnets />}
         {/* <NewsFeed newsCard={articlesCard} /> */}
         {/* <NewsAppAd /> */}
-     <div className="flex items-center justify-center mx-auto">
-         {renderAd(bottomAds)}
-     </div>
+        <div className="flex items-center justify-center mx-auto">
+          {bottomAds&& bottomAds?.ad_image_url.length>0  &&renderAd(bottomAds)}
+        </div>
         {/* <OwnState /> */}
         <VideoGallery />
       </div>

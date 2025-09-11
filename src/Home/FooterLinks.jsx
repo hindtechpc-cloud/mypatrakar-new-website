@@ -7,9 +7,9 @@ export default function FooterLinks() {
   const isOurReportersPageEnabled = getSettingStatus("Our Reporters");
   const isAboutPageEnabled = getSettingStatus("About Us");
   const isAdvertiseWithUsPageEnabled = getSettingStatus("Apply for Advertisement");
-    console.log(isOurReportersPageEnabled)
-    console.log(isAboutPageEnabled)
-    console.log(isAdvertiseWithUsPageEnabled)
+    // console.log(isOurReportersPageEnabled)
+    // console.log(isAboutPageEnabled)
+    // console.log(isAdvertiseWithUsPageEnabled)
 
   const links = [
     isAboutPageEnabled && { label: "ABOUT US", path: "/about-us" },

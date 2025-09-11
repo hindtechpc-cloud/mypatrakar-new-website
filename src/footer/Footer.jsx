@@ -90,7 +90,7 @@ export default function Footer() {
       setBannerError(false);
 
       const res = await GetBottomBannerAds("");
-      console.log(res);
+      // console.log(res);
       if (res) {
         setTopBanner(res.data.response.top_banner);
       } else {
@@ -120,25 +120,7 @@ export default function Footer() {
                 <div className="h-3 w-24 bg-gray-300 rounded"></div>
               </div>
             </div>
-          ) : bannerError ? (
-            <div className="w-full h-24 bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-lg flex flex-col items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-red-400 mb-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-              <span className="text-sm text-red-500">Ad failed to load</span>
-            </div>
-          ) : topBanner && topBanner.ad_image_url.length > 0 ? (
+          )  : topBanner && topBanner.ad_image_url.length > 0 ? (
             <div className="flex justify-center">
               <HeaderAd
                 adData={topBanner}
