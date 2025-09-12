@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Roadmaps } from "../../../../api";
 import { encryptData } from "../../../utils/cryptoHelper";
 import useRoadmapList from "../shared/useRoadmapList";
+import Loader from "../../../utils/Loader";
 
 export default function OwnState() {
   const [articles, setArticles] = useState([]);
@@ -57,7 +58,7 @@ loadnews();
     <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2">
       {articles.length >= 0 && <Header text={"उत्तर प्रदेश"} />}
       {loading ? (
-        <p>Loading...</p>
+     <Loader></Loader>
       ) : (
         <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-2">
           <div className="flex flex-col items-start relative">

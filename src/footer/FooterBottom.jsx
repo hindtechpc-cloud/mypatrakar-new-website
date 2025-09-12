@@ -58,25 +58,25 @@ export default function FooterBottom() {
         {/* Additional Links */}
         <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap justify-center gap-4 text-xs text-gray-300">
           <a
-            href="/privacy"
+            href="/privacy-policy"
             className="hover:text-yellow-400 transition-colors duration-300"
           >
             Privacy Policy
           </a>
           <a
-            href="/terms"
+            href="/terms-and-conditions"
             className="hover:text-yellow-400 transition-colors duration-300"
           >
             Terms of Service
           </a>
           <a
-            href="/about"
+            href="/about-us"
             className="hover:text-yellow-400 transition-colors duration-300"
           >
             About Us
           </a>
           <a
-            href="/contact"
+            href="/contact-us"
             className="hover:text-yellow-400 transition-colors duration-300"
           >
             Contact

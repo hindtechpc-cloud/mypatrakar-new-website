@@ -5,18 +5,19 @@ import TotalreplyOnComment from "./TotalReplyOnComment";
 import { useParams } from "react-router-dom";
 import { decryptData } from "../../../utils/cryptoHelper";
 
-export default function TotalCommnets() {
+export default function TotalCommnets({ isComment }) {
   const { newsId } = useParams();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [replyingTo, setReplyingTo] = useState(null);
+  const [isReply, setIsReply] = useState(false);
 
   useEffect(() => {
     const loadComments = async () => {
       try {
         const response = await GetCommentsOnNews(decryptData(newsId));
-        console.log(response)
+        // console.log(response)
         if (response.status === 200) {
           // Map the response to add empty replies array if not present
           const formattedComments = response.data.response.map((comment) => ({
@@ -28,7 +29,7 @@ export default function TotalCommnets() {
           setError("Failed to load comments");
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -36,7 +37,7 @@ export default function TotalCommnets() {
     };
 
     loadComments();
-  }, [newsId]);
+  }, [newsId, isComment]);
 
   const handleReplySuccess = (newReply, parentCommentId) => {
     setComments((prevComments) =>
@@ -51,9 +52,8 @@ export default function TotalCommnets() {
 
   if (loading)
     return <div className="text-center py-8">Loading comments...</div>;
-  if (error)
-    null
-    // return <div className="text-red-500 text-center py-8">{error}</div>;
+  if (error) null;
+  // return <div className="text-red-500 text-center py-8">{error}</div>;
 
   return (
     <div className="space-y-6">
@@ -66,7 +66,7 @@ export default function TotalCommnets() {
           No comments yet. Be the first to comment!
         </p>
       ) : (
-        comments.map((comment) => (
+        comments?.slice(0, 10)?.map((comment) => (
           <div
             key={comment?.user_id} // Changed from news_is to user_id for unique key
             className="bg-white rounded-lg shadow-sm p-4 border border-gray-100"
@@ -127,13 +127,15 @@ export default function TotalCommnets() {
                       onSuccess={(newReply) =>
                         handleReplySuccess(newReply, comment.user_id)
                       }
+                      setIsReply={setIsReply}
+                      isReply={isReply}
                     />
                   </div>
                 )}
 
                 {comment && (
                   <div className="mt-4 pl-4 border-l-2 border-gray-100">
-                    <TotalreplyOnComment id={comment.id} />
+                    <TotalreplyOnComment id={comment.id}ß isReply={isReply} />
                   </div>
                 )}
               </div>

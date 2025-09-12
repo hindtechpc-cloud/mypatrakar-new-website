@@ -398,7 +398,7 @@ export default function LiveCricket() {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-                className="max-h-[600px] overflow-y-auto"
+                className="max-h-[450px] overflow-y-auto"
               >
                 <AnimatePresence>
                   {matches.map((match) => (

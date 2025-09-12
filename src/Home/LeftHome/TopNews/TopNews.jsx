@@ -85,20 +85,21 @@ const TopNews = ({ category_id, section_title }) => {
         </div>
       ) : (
         articles.length > 0 && (
-          <div className="w-full">
+          <div className="w-full mt-4">
             {/* <Menu menuText={section_title || "TopNews"} menu={[]} /> */}
 
             {/* Featured Article - Layout preserved exactly */}
             <div className="w-full flex items-start justify-start">
               <NewsCard
-                className="sm:flex flex-1 w-full items-start justify-start gap-4 max-w-xl mx-auto"
-                classNameToImage="md:w-2/3 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
-                image={featuredImageUrl}
+                className="sm:flex flex-1 w-full items-start justify-start gap-4 mx-auto"
+                classNameToImage="md:w-full md:h-56 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative rounded"
+                image={featuredArticle?.news_img_url}
                 ctaText={featuredArticle?.news_category_name}
                 classNameForContent="w-5/6"
                 title={featuredArticle?.news_headline}
                 description={featuredArticle?.news_description_html}
                 newsId={featuredArticle?.news_id}
+                maxLength={160}
                 news={{
                   title: featuredArticle?.news_headline,
                   urlToImage: featuredArticle?.news_img_url,
@@ -108,10 +109,10 @@ const TopNews = ({ category_id, section_title }) => {
             </div>
 
             {/* News List - Layout preserved exactly */}
-            <div className="w-full">
+            <div className="w-full mt-4">
               <TopNewsItems
                 topNewsItems={articles}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-2"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4" maxLength={60}
               />
             </div>
           </div>

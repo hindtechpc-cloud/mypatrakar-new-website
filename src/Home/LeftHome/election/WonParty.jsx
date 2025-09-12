@@ -110,8 +110,8 @@ const TopResultTable = ({ parties }) => {
   // console.log(`${import.meta.env.VITE_REACT_APP_API_URL_Image}/${parties.key_candidates[0].image}`)
   // Use sample data if no parties are provided
   const data = parties && parties.key_candidates ? parties : {};
-  const keyCandidates = data.key_candidates || [];
-
+  const keyCandidates = data?.key_candidates||[];
+console.log(keyCandidates)
   // Get party information for each candidate
   const getPartyInfo = (partyId) => {
     return (
@@ -133,7 +133,7 @@ const TopResultTable = ({ parties }) => {
       </div>
 
       <div className="p-4">
-        {keyCandidates.length > 0 ? (
+        {keyCandidates?.length > 0 ? (
           <div className="overflow-x-auto rounded-lg">
             <table className="w-full text-sm border-collapse">
               <thead>
@@ -150,7 +150,7 @@ const TopResultTable = ({ parties }) => {
                 </tr>
               </thead>
               <tbody>
-                {keyCandidates.map((candidate, index) => {
+                {keyCandidates?.map((candidate, index) => {
                   const partyInfo = getPartyInfo(candidate.political_party);
                   return (
                     <tr
@@ -167,7 +167,7 @@ const TopResultTable = ({ parties }) => {
                           <div className="mr-3 flex-shrink-0">
                             <img
                               src={`${
-                                import.meta.env.VITE_REACT_APP_API_URL_Image}/${candidate.image}`}
+                                import.meta.env.VITE_REACT_APP_API_URL_Image}/${candidate?.image}`}
                               alt={candidate.name}
                               className="h-12 w-12 rounded-full object-cover border-2 border-white shadow"
                               onError={(e) => {
@@ -178,7 +178,7 @@ const TopResultTable = ({ parties }) => {
                           </div>
                           <div>
                             <div className="font-semibold text-gray-800">
-                              {candidate.name}
+                              {candidate?.name}
                             </div>
                             <div className="text-xs text-gray-500">
                               उम्मीदवार

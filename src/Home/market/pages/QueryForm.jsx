@@ -266,8 +266,8 @@ const SellerQueryForm = () => {
     if (!name) newErrors.name = "Name is required";
     if (!contact) {
       newErrors.contact = "Contact number is required";
-    } else if (contact.length < 10 || contact.length > 12) {
-      newErrors.contact = "Contact must be 10-12 digits";
+    } else if (contact.length < 10 || contact.length > 10) {
+      newErrors.contact = "Contact must be 10 digits";
     }
     if (!description) newErrors.description = "Description is required";
 
@@ -387,11 +387,11 @@ Description: ${description}`;
               label="Contact Number*"
               name="contact"
               type="tel"
-              maxLength={12}
+              maxLength={10}
               value={formData.contact}
               onChange={handleChange}
               error={errors.contact}
-              placeholder="10-12 digit mobile number"
+              placeholder="10 digit mobile number"
             />
 
             <div>

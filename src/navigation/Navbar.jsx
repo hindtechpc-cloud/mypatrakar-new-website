@@ -9,7 +9,7 @@ import { LanguageContext } from "../context/LanguageContext";
 // import { NewsContext } from "../context/NewsContext";
 import { WebThemeContext } from "../context/ThemeContext";
 import { loadNewsBySubCategory, menuWithSubNavMenuList } from "../../api";
-import defaultLogo from "../assets/MyPatrakarLogo1.png";
+import defaultLogo from "../assets/Ellipse.svg";
 // import toast from "react-hot-toast";
 import { encryptData } from "../utils/cryptoHelper";
 

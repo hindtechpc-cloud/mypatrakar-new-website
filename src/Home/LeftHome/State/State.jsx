@@ -5,6 +5,7 @@ import NewsCard from "../shared/NewsCard";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
+import TopNewsItems from "../TopNews/TopNewsItems";
 
 const State = ({
   section_id,
@@ -36,15 +37,15 @@ const State = ({
     fetchNews();
   }, [fetchNews]);
 
-  if(loading ||error){
- <div>
-  <Menu menuText={section_title || "State"} menu={[]} />
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
-                <AdCardSkeleton key={i} />
-              ))}
-            </div>
- </div>
+  if (loading || error) {
+    <div>
+      <Menu menuText={section_title || "State"} menu={[]} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(3)].map((_, i) => (
+          <AdCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>;
   }
   return (
     <div className="">
@@ -59,8 +60,8 @@ const State = ({
       {!articles.length ? (
         <EmptyCard> Nothing to show in {section_title}</EmptyCard>
       ) : (
-        <div className="flex flex-col  md:items-center md:justify-center gap-6 mt-3">
-          {articles?.map((article) => (
+        <div className="md:flex flex-1  md:items-center md:justify-center gap-4 mt-0">
+          {/* {articles?.map((article) => (
             <NewsCard
               key={article.news_id}
               className="flex flex-col md:flex-row items-center md:items-start justify-start  gap-5 w-full  "
@@ -84,7 +85,13 @@ const State = ({
                 news_id: article.news_id,
               }}
             />
-          ))}
+            
+          ))} */}
+          <TopNewsItems
+            topNewsItems={articles}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4"
+            maxLength={60}
+          />
         </div>
       )}
     </div>

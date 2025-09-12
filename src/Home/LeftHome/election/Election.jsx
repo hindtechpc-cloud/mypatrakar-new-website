@@ -116,7 +116,7 @@ export default function Election() {
   const [currentYear, setCurrentYear] = useState();
   const [state, setCurrentState] = useState();
   const [polls, setPolls] = useState([]);
-  const [pollIndex, setPollIndex] = useState(1);
+  const [pollIndex, setPollIndex] = useState(0);
   const [currentYearData, setCurrentYearData] = useState();
   const [years, setYears] = useState([]);
   const [parties, setParties] = useState([]);
@@ -190,7 +190,7 @@ export default function Election() {
 
   useEffect(() => {
     if (polls.length > 0) {
-      loadYears(polls[pollIndex].poll_id);
+      loadYears(polls[pollIndex]?.poll_id);
     }
   }, [polls, pollIndex]);
 

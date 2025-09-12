@@ -365,7 +365,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
   if (!poll) {
     return (
       <div className="flex justify-center items-center h-40">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
       </div>
     );
   }
@@ -386,7 +386,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
             <SourceWidget
               redirectTo={window.location.pathname}
               onSuccess={handleLoginSuccess}
-              className="border-0"
+              className="border-0 bg-black py-5 rounded-md"
               setShowLoginOverlay={setShowLoginOverlay}
               showLoginOverlay={showLoginOverlay}
             />
@@ -443,7 +443,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
           </button>
 
           <button
-            className={`flex-1 py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${submitted ? 'bg-green-100 text-green-700' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+            className={`flex-1 py-2 px-1  rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${submitted ? 'bg-green-100 text-green-700' : 'bg-red-600 text-white hover:bg-red-700'}`}
             onClick={handleSubmit}
             disabled={!selectedOptionId || submitted || isSubmitting}
           >
@@ -455,7 +455,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
             ) : submitted ? (
               'Vote Submitted'
             ) : (
-              'Submit Vote'
+              'Submit'
             )}
           </button>
 

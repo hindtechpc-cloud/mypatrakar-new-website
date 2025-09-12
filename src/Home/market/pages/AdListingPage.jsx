@@ -137,7 +137,7 @@ export const AdListingPage = () => {
             className={`w-full sm:w-auto py-2 sm:py-3 px-4 rounded-full transition-all ${
               mode === "seller"
                 ? "bg-white shadow-md font-medium"
-                : "text-gray-600 hover:bg-gray-200"
+                : "text-gray-600 hover:underline"
             }`}
             onClick={() => {
               setMode("seller");
@@ -149,8 +149,8 @@ export const AdListingPage = () => {
           <button
             className={`w-full sm:w-auto py-2 sm:py-3 px-4 rounded-full transition-all ${
               mode === "buyer"
-                ? "bg-white shadow-md font-medium"
-                : "text-gray-600 hover:bg-gray-200"
+                ? " text-gray-600 hover:underline"
+                : "text-gray-600 hover:underline"
             }`}
             onClick={() => {
               setMode("buyer");

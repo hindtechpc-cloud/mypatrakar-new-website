@@ -43,7 +43,7 @@ import React from "react";
 
 const TopResultTable = ({ results }) => {
   const totalVotes = results.reduce((acc, party) => acc + parseInt(party.seats_won), 0);
-
+console.log(results);
   // Define a color scheme for the top parties
   const rankColors = [
     "linear-gradient(135deg, #FFD700, #FFA500)", // Gold for 1st
@@ -98,7 +98,7 @@ const TopResultTable = ({ results }) => {
                     <div className="flex justify-center items-center">
                       <div className="bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
                         <img 
-                          src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${party.party_image}`} 
+                          src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}/${party.party_image}`} 
                           alt={party.party_name} 
                           className="h-10 w-10 object-contain" 
                           onError={(e) => {

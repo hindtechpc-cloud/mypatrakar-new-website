@@ -49,6 +49,7 @@ export default function AboutMypatrakar() {
         <div className="flex flex-col w-full items-start justify-start mt-6">
           <HtmlToPlainText
             htmlContent={aboutData.content}
+            maxLength={15000}
             className="mb-5 text-gray-700 text-base leading-relaxed"
           />
           <p className="text-sm text-gray-400 mt-2">

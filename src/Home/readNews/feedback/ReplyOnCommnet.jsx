@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { decryptData } from "../../../utils/cryptoHelper";
 
-export default function ReplyOnComment({ parentCommentId, onSuccess }) {
+export default function ReplyOnComment({ parentCommentId, onSuccess,setIsReply,isReply }) {
   const [formData, setFormData] = useState({ reply: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -55,6 +55,7 @@ export default function ReplyOnComment({ parentCommentId, onSuccess }) {
 
       if (response) {
         toast.success("Reply posted successfully!");
+        setIsReply(!isReply)
         setFormData({ reply: "" });
         if (!isAuthenticated) {
           setFormData({ name: "", email: "", reply: "" });

@@ -5,7 +5,7 @@ import { checkAuth } from "../../../utils/checkAuth";
 import { decryptData } from "../../../utils/cryptoHelper";
 // import toast from "react-hot-toast";
 
-export default function Feedback() {
+export default function Feedback({setIsComment,isComment}) {
   const user = checkAuth(); // ⬅️ Authenticated user, if any
   // console.log(user)
   const isAuthenticated = !!user && user !== null;
@@ -76,12 +76,13 @@ export default function Feedback() {
       };
 
       const res = await SubmitComment(payload);
-      console.log(res)
+      // console.log(res)
       // const res="success";
       // if(is)
       if (res?.status === 200 || res?.status_code === 200) {
         setFormData({ name: "", email: "", comment: "" });
         setCharacterCount(0);
+        setIsComment(!isComment);
         setSuccessMessage(
           "Thank you for your feedback! Your comment has been posted successfully."
         );

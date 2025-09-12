@@ -50,7 +50,7 @@ export default function OwnState({
     </div>;
   }
   return (
-    <div className="my-2 mb-5">
+    <div className="mt-4">
       {/* {(loading || error) && (
         <div className="">
           <Menu />
@@ -72,19 +72,20 @@ export default function OwnState({
           {!articles.length ? (
             <EmptyCard> Nothing to show in {section_title}</EmptyCard>
           ) : (
-            <div>
+            <div className="mt-4">
               {articles.length && (
-                <div className="md:flex flex-1 items-start gap-4">
+                <div className="md:flex flex-1 items-start -gap-10">
                   <div className="">
                     <NewsCard
-                      className="md:flex flex-col items-start gap-4 max-w-4xl mx-auto"
-                      classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative"
+                      className="md:flex flex-col items-start gap-0 max-w-4xl mx-auto"
+                      classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative rounded"
                       classNameForContent="w-5/6"
                       image={featuredArticle?.news_img_url}
                       ctaText={featuredArticle.category}
                       title={featuredArticle.news_headline}
                       description={featuredArticle.news_description_html}
                       newsId={featuredArticle.news_id}
+                      maxLength={300}
                       news={{
                         title: featuredArticle.news_headline,
                         urlToImage: featuredArticle?.news_img_url,
@@ -94,7 +95,9 @@ export default function OwnState({
                   <div className="w-full">
                     <TopNewsItems
                       topNewsItems={articles}
-                      className={"grid gap-3"}
+                      className={"grid gap-4"}
+                      maxLength={50}
+                      headingLength={300}
                     />
                   </div>
                 </div>

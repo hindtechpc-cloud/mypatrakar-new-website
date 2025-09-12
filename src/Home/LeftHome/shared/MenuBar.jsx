@@ -69,7 +69,7 @@ const MenuBar = ({ menuText, setSubcategory, menuItems }) => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md rounded-xl p-3 mt-5">
+    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md rounded-xl p-3 ">
       {/* Menu Header */}
       <div className="flex items-center justify-between cursor-pointer" onClick={toggleMenu}>
         <span className="text-base font-bold tracking-wide">{menuText}</span>

@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 
 const HeaderAd = ({
   adData,
-  className = "",
+  className = "w-full",
   height = "200px",
-  maxWidth = "728px",
+  maxWidth = "1000px",
 }) => {
   const imageBaseURL = import.meta.env.VITE_REACT_APP_API_URL_Image;
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -20,6 +20,7 @@ export default function ReadNews() {
   const [loadingAds, setLoadingAds] = useState(true);
   const { getSettingStatus } = useSettingsContext();
   const isCommentEbaled = getSettingStatus("Comments");
+  const [isComment,setIsComment]=useState(false);
   const [articales, setArticles] = useState([]);
 
   const { type } = useParams();
@@ -79,8 +80,8 @@ export default function ReadNews() {
         <div className="flex items-center justify-center mx-auto">
           {topAds&& topAds?.ad_image_url.length>0 && renderAd(topAds)}
         </div>
-        {type !== "shorts" && isCommentEbaled && <Feedback />}
-        {type !== "shorts" && isCommentEbaled && <TotalCommnets />}
+        {type !== "shorts" && isCommentEbaled && <Feedback setIsComment={setIsComment} isComment={isComment}/>}
+        {type !== "shorts" && isCommentEbaled && <TotalCommnets setIsComment={setIsComment} isComment={isComment}/>}
         {/* <NewsFeed newsCard={articlesCard} /> */}
         {/* <NewsAppAd /> */}
         <div className="flex items-center justify-center mx-auto">

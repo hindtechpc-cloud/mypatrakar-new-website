@@ -337,7 +337,7 @@ export default function LeftHome() {
 // console.log(ads)
   const renderAd = (adData, label) => {
     return (
-      <div className="w-full mb-2 flex items-center justify-center">
+      <div className="w-full  flex items-center justify-center">
         {loadingAds ? (
           <div className="w-full h-40 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl shadow-md flex items-center justify-center">
             <div className="animate-pulse flex flex-col items-center">
@@ -347,7 +347,7 @@ export default function LeftHome() {
           </div>
         ) : adError || !adData ? null
          : (
-          <HeaderAd adData={adData} text="leftHome" />
+          <HeaderAd adData={adData} text="leftHome" className="w-full"/>
         )}
       </div>
     );
@@ -395,7 +395,7 @@ export default function LeftHome() {
 
               {/* ✅ Mid Ad after 2nd component */}
               {index === 2 && ads?.main&& ads.main.ad_image_url?.length>0 && (
-                <div className="my-4">{renderAd(ads.main, "Main Banner")}</div>
+                <div className="mt-4">{renderAd(ads.main, "Main Banner")}</div>
               )}
             </React.Fragment>
           );
