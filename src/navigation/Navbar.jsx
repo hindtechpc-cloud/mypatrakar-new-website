@@ -99,15 +99,18 @@ const Navbar = () => {
             />
           </div>
           <div className="mt-2">
-            <h3 className="text-sm font-medium text-gray-800 line-clamp-2">
+            <h3 className="text-sm font-medium text-white hover:text-gray-200 hover:underline line-clamp-2">
               {newsItem.news_headline}
             </h3>
-            <div className="flex items-center mt-1 text-xs text-gray-500">
-              <MdOutlineAccessTime className="mr-1" />
+            <div className="flex items-center mt-1 text-xs text-white">
+               {newsItem?.publishedAt
+                  ? <MdOutlineAccessTime className="mr-1" />
+                  : " "}
+              
               <span>
-                {newsItem.publishedAt
-                  ? new Date(newsItem.publishedAt).toLocaleDateString()
-                  : "No date"}
+                {newsItem?.publishedAt
+                  ? new Date(newsItem?.publishedAt).toLocaleDateString()
+                  : " "}
               </span>
             </div>
           </div>

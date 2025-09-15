@@ -17,6 +17,7 @@ import { AdListingPage } from "./Home/market/pages/AdListingPage";
 import { useAds } from "./context/AdsContext";
 import NewsSkeleton from "./utils/NewsSkeleton";
 import axios from "axios";
+import JournalistYouTubeFeed from "./JournalistYouTubeFeed";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));
@@ -143,6 +144,7 @@ function Layout() {
       </Routes>
 
       {!isCommonPage && !isShorts && <Footer />}
+      <JournalistYouTubeFeed/>
       {isCommonPage && !isShorts && <FooterLinks />}
 
       {/* <NewsSkeleton/> */}

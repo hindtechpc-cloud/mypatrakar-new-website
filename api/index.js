@@ -12,6 +12,8 @@ if (import.meta.env.VITE_REACT_APP_API_URL === null) {
 /**
  Route::prefix('v1')->group(function () {
 
+
+ 
 // Public routes
 
 Route::middleware('custom.api.token')->group(function () {
