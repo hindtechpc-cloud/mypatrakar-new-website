@@ -48,9 +48,6 @@
 //   );
 // }
 
-
-
-
 // src/Home/category/Category.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -58,22 +55,29 @@ import NewsFeed from "../readNews/newsfeed/NewsFeed";
 import RightHome from "../RightHome/RightHome";
 import { loadNewsByCategory } from "../../../api";
 import { decryptData } from "../../utils/cryptoHelper";
+import Loader from "../../utils/Loader";
 
 export default function Category() {
   const { category, categoryId } = useParams();
   const [articles, setArticles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const itemsPerPage = 10;
   const catId = decryptData(categoryId);
 
   // Load all articles once
   const loadNewsByCategories = async () => {
+    setLoading(true);
     try {
       const res = await loadNewsByCategory(catId);
       setArticles(res.data.response || []);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error loading news by category:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,36 +107,41 @@ export default function Category() {
       <div className="flex flex-col lg:flex-row items-start justify-center gap-5">
         {/* Left Section */}
         <div className="w-full lg:w-8/12">
-          <h1 className="text-2xl font-bold my-3 capitalize">{category}</h1>
+          {!loading ? (
+            <div className="">
+              <h1 className="text-2xl font-bold my-3 capitalize">{category}</h1>
 
-          <NewsFeed newsCard={currentArticles} />
+              <NewsFeed newsCard={currentArticles} />
 
-          {/* Pagination Buttons */}
-          {articles.length > itemsPerPage && (
-            <div className="flex items-center justify-between mt-6">
-              <button
-                onClick={handlePrevious}
-                disabled={currentPage === 1}
-                className={`px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:opacity-50`}
-              >
-                Previous
-              </button>
+              {/* Pagination Buttons */}
+              {articles.length > itemsPerPage && (
+                <div className="flex items-center justify-between mt-6">
+                  <button
+                    onClick={handlePrevious}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:opacity-50`}
+                  >
+                    Previous
+                  </button>
 
-              <span className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
-              </span>
+                  <span className="text-sm text-gray-600">
+                    Page {currentPage} of {totalPages}
+                  </span>
 
-              <button
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:opacity-50`}
-              >
-                Next
-              </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:opacity-50`}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
+          ) : (
+            <Loader />
           )}
         </div>
-
         {/* Right Section */}
         <div className="w-full lg:w-4/12">
           <RightHome />
