@@ -1,20 +1,42 @@
 // src/navigation/Navbar.jsx
-import React, { useState, useEffect } from "react";
-import { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaBars, FaHome, FaSearch, FaTimes } from "react-icons/fa";
 import { CgChevronUp } from "react-icons/cg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { LanguageContext } from "../context/LanguageContext";
-// import { NewsContext } from "../context/NewsContext";
 import { WebThemeContext } from "../context/ThemeContext";
 import { loadNewsBySubCategory, menuWithSubNavMenuList } from "../../api";
 import defaultLogo from "../assets/Ellipse.svg";
-// import toast from "react-hot-toast";
 import { encryptData } from "../utils/cryptoHelper";
 
+// --------------------
+// Cache Helpers
+// --------------------
+const CACHE_MAX_AGE = 1800000; // 30 minutes
+
+const setCache = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
+  localStorage.setItem(`${key}_time`, Date.now().toString());
+};
+
+const getCache = (key, maxAge = CACHE_MAX_AGE) => {
+  const cached = localStorage.getItem(key);
+  const cacheTime = localStorage.getItem(`${key}_time`);
+
+  if (!cached || !cacheTime) return null;
+
+  const age = Date.now() - parseInt(cacheTime, 10);
+  if (age > maxAge) {
+    localStorage.removeItem(key);
+    localStorage.removeItem(`${key}_time`);
+    return null;
+  }
+
+  return JSON.parse(cached);
+};
+
 const Navbar = () => {
-  // const { setNews } = useContext(NewsContext);
   const { webTheme } = useContext(WebThemeContext);
   const { language } = useContext(LanguageContext);
 
@@ -32,13 +54,23 @@ const Navbar = () => {
   const themeColor = webTheme["bg-color"] || "#b91c1c";
   const logo = webTheme["web-logo"] || defaultLogo;
 
+  // --------------------
+  // Fetch Menu Items (with Cache)
+  // --------------------
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
+        const cached = getCache("menu_items");
+        if (cached) {
+          setMenuItems(cached);
+          return;
+        }
+
         const res = await menuWithSubNavMenuList("");
-        setMenuItems(res.data.response || []);
+        const data = res.data.response || [];
+        setMenuItems(data);
+        setCache("menu_items", data);
       } catch (error) {
-        // toast.error("Failed to load menu items");
         console.log(error);
       }
     };
@@ -67,10 +99,8 @@ const Navbar = () => {
   const fetchHoverNews = async (subcategoryId) => {
     try {
       const res = await loadNewsBySubCategory(subcategoryId);
-      console.log(res)
       setHoveredNews(res.data.response || []);
     } catch (error) {
-      // toast.error("Failed to load news preview");
       console.log(error);
     }
   };
@@ -103,10 +133,7 @@ const Navbar = () => {
               {newsItem.news_headline}
             </h3>
             <div className="flex items-center mt-1 text-xs text-white">
-               {newsItem?.publishedAt
-                  ? <MdOutlineAccessTime className="mr-1" />
-                  : " "}
-              
+              {newsItem?.publishedAt ? <MdOutlineAccessTime className="mr-1" /> : " "}
               <span>
                 {newsItem?.publishedAt
                   ? new Date(newsItem?.publishedAt).toLocaleDateString()
@@ -118,7 +145,8 @@ const Navbar = () => {
       ))}
     </div>
   );
-// menu items or categories as nav menu 
+
+  // Desktop Menu Item
   const DesktopMenuItem = ({ item }) => (
     <div
       key={item.cat_id}
@@ -153,7 +181,6 @@ const Navbar = () => {
           style={{ backgroundColor: themeColor }}
         >
           <div className="flex items-start ">
-{/* // submenu items or subcategories as subnav menu  */}
             {item.submenus.map((submenu) => (
               <Link
                 key={submenu.subcategory_id}
@@ -180,6 +207,7 @@ const Navbar = () => {
     </div>
   );
 
+  // Mobile Menu Item
   const MobileMenuItem = ({ item }) => (
     <div key={item.cat_id} className="border-b border-gray-600">
       <button

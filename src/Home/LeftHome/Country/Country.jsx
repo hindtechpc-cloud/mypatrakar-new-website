@@ -16,43 +16,71 @@ const Country = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Session key unique per category
+  const sessionKey = `country_news_${category_id}`;
+  const sessionExpiry = 30 * 60 * 1000; // 30 minutes in ms
+
   const fetchNews = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const { data } = await loadNewsByCategory(category_id);
-      setArticles(data?.response || []);
+      const response = data?.response || [];
+console.log(data)
+      // Save in session with timestamp
+      const cacheData = {
+        articles: response,
+        timestamp: Date.now(),
+      };
+      sessionStorage.setItem(sessionKey, JSON.stringify(cacheData));
+
+      setArticles(response);
     } catch (err) {
       console.error("News fetch error:", err);
       setError(err.response?.message || "Failed to load news.");
     } finally {
       setLoading(false);
     }
-  }, [category_id]);
+  }, [category_id, sessionKey]);
 
   useEffect(() => {
-    fetchNews();
-  }, [fetchNews]);
+    // Check session cache
+    const cached = sessionStorage.getItem(sessionKey);
+    if (cached) {
+      const { articles, timestamp } = JSON.parse(cached);
+      const isExpired = Date.now() - timestamp > sessionExpiry;
 
-  if(loading ||error){
- <div>
-  <Menu menuText={section_title || "State"} menu={[]} />
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
-                <AdCardSkeleton key={i} />
-              ))}
-            </div>
- </div>
+      if (!isExpired && articles?.length) {
+        setArticles(articles);
+        setLoading(false);
+        return; // no fetch if not expired
+      }
+    }
+    // Otherwise fetch new data
+    fetchNews();
+  }, [fetchNews, sessionKey]);
+
+  if (loading || error) {
+    return (
+      <div>
+        <Menu menuText={section_title || "State"} menu={[]} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
   }
+
   return (
     <div className="">
       <Menu menuText={section_title} menu={[]} />
-{/* 
-      {loading && <LoadingState />}
-      {error && <ErrorState error={error} onRetry={fetchNews} />} */}
-      {!loading && !error && !articles.length&& (
+
+      {!loading && !error && !articles.length && (
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       )}
+
       {!loading && !error && articles.length > 0 && (
         <CountryNewsList articles={articles} />
       )}
@@ -60,14 +88,10 @@ const Country = ({
   );
 };
 
-
-
-
-
-// Memoized News List Component (named inner function to fix ESLint warning)
+// Memoized News List Component
 const CountryNewsListComponent = ({ articles }) => (
   <div className="container mx-auto px-4 py-6">
-    {articles?.slice(0,10).map((article) => (
+    {articles?.slice(0, 10).map((article) => (
       <div key={article.news_id} className="mb-10">
         <TopNewsItems
           topNewsItems={[article]}

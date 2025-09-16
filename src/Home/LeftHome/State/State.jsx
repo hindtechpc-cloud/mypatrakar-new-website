@@ -1,92 +1,102 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Menu from "../shared/MenuBar";
-import NewsCard from "../shared/NewsCard";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
 import TopNewsItems from "../TopNews/TopNewsItems";
 
+/* ---------------- Main Component ---------------- */
 const State = ({
   section_id,
   category_id,
-  category,
+  category = "General",
   section_type,
   web_section_id,
-  section_title,
+  section_title = "State",
 }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchNews = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { data } = await loadNewsByCategory(category_id);
-      setArticles(data?.response || []);
-    } catch (err) {
-      console.error("News fetch error:", err);
-      setError(err.response?.message || "Failed to load news");
-    } finally {
-      setLoading(false);
-    }
-  }, [category_id]);
+  const CACHE_KEY = `state_news_${category_id}`;
+  const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in ms
+
+  /* -------- Fetch News -------- */
+  const fetchNews = useCallback(
+    async (forceRefresh = false) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        if (!forceRefresh) {
+          // check cache
+          const cached = localStorage.getItem(CACHE_KEY);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            const now = Date.now();
+
+            if (now - parsed.timestamp < CACHE_DURATION) {
+              setArticles(parsed.data || []);
+              setLoading(false);
+              return;
+            }
+          }
+        }
+
+        // if no cache or expired → fetch from API
+        const { data } = await loadNewsByCategory(category_id);
+        const freshArticles = data?.response || [];
+        setArticles(freshArticles);
+
+        // save to cache
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ data: freshArticles, timestamp: Date.now() })
+        );
+      } catch (err) {
+        console.error("News fetch error:", err);
+        setError(err.response?.message || "Failed to load news");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [category_id]
+  );
 
   useEffect(() => {
     fetchNews();
   }, [fetchNews]);
 
-  if (loading || error) {
-    <div>
-      <Menu menuText={section_title || "State"} menu={[]} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => (
-          <AdCardSkeleton key={i} />
-        ))}
+  /* -------- Loading -------- */
+  if (loading) {
+    return (
+      <div>
+        <Menu menuText={section_title} menu={[]} />
+        <LoadingState />
       </div>
-    </div>;
+    );
   }
+
+  /* -------- Error -------- */
+  if (error) {
+    return (
+      <div>
+        <Menu menuText={section_title} menu={[]} />
+        <ErrorState error={error} onRetry={() => fetchNews(true)} />
+      </div>
+    );
+  }
+
+  /* -------- Main Render -------- */
   return (
     <div className="">
-      {/* {(error || loading) && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
-      )} */}
-      <Menu menuText={section_title || "State"} menu={[]} />
+      <Menu menuText={section_title} menu={[]} />
+
       {!articles.length ? (
-        <EmptyCard> Nothing to show in {section_title}</EmptyCard>
+        <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       ) : (
-        <div className="md:flex flex-1  md:items-center md:justify-center gap-4 mt-0">
-          {/* {articles?.map((article) => (
-            <NewsCard
-              key={article.news_id}
-              className="flex flex-col md:flex-row items-center md:items-start justify-start  gap-5 w-full  "
-              classNameToImage="w-full md:w-[400px] h- aspect-video object-cover rounded-lg"
-              image={article?.news_img_url}
-              ctaText={category || "General"}
-              title={article.news_headline || "Untitled Article"}
-              description={article.news_description_html}
-              newsId={article.news_id}
-              classNameForContent={
-                "w-full md:w-2/3 flex flex-col items-start justify-start gap-"
-              }
-              news={{
-                title: article.news_headline,
-                urlToImage: article?.news_img_url
-                  ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
-                      article.news_img_url
-                    }`
-                  : "https://via.placeholder.com/800x400?text=No+Image",
-                content: article.news_description_html,
-                news_id: article.news_id,
-              }}
-            />
-            
-          ))} */}
+        <div className="md:flex flex-1 md:items-start md:justify-center gap-4 mt-0">
           <TopNewsItems
             topNewsItems={articles}
             className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4"
@@ -98,6 +108,35 @@ const State = ({
   );
 };
 
+/* ----------------- Sub-components ----------------- */
+const LoadingState = () => (
+  <div className="p-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...Array(6)].map((_, i) => (
+        <AdCardSkeleton key={i} />
+      ))}
+    </div>
+  </div>
+);
+
+const ErrorState = ({ error, onRetry }) => (
+  <div className="flex flex-col items-center justify-center p-6 gap-4">
+    <p className="text-red-600 font-semibold text-center">{error}</p>
+    <button
+      onClick={onRetry}
+      className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
+    >
+      Retry
+    </button>
+  </div>
+);
+
+ErrorState.propTypes = {
+  error: PropTypes.string.isRequired,
+  onRetry: PropTypes.func.isRequired,
+};
+
+/* ----------------- PropTypes ----------------- */
 State.propTypes = {
   section_id: PropTypes.string,
   category_id: PropTypes.string.isRequired,

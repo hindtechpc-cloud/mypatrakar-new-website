@@ -6,16 +6,35 @@ import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 import { motion, AnimatePresence } from "framer-motion";
 import { ImSpinner2 } from "react-icons/im";
 
+const CACHE_KEY = "shorts_cache";
+const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes
+
 export default function Shorts() {
   const [articles, setArticles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadShorts = useCallback(async () => {
+  const loadShorts = useCallback(async (forceRefresh = false) => {
     try {
       setLoading(true);
       setError(null);
+
+      // check sessionStorage first
+      if (!forceRefresh) {
+        const cached = sessionStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp < CACHE_EXPIRY) {
+            setArticles(data);
+            setCurrentIndex(Math.floor(Math.random() * data.length));
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
+      // fresh API call
       const res = await GetShortsNews("MYAWR241227001");
       const shorts = res?.data?.response?.news;
 
@@ -28,10 +47,15 @@ export default function Shorts() {
           description: short.news_des?.replace(/<[^>]*>?/gm, "") || "",
           id: short.news_id || Math.random().toString(36).substring(2, 9),
         }));
-        setArticles(formattedArticles);
 
-        // Start with a random index
+        setArticles(formattedArticles);
         setCurrentIndex(Math.floor(Math.random() * formattedArticles.length));
+
+        // cache data
+        sessionStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ data: formattedArticles, timestamp: Date.now() })
+        );
       } else {
         setError("No shorts available");
       }
@@ -48,7 +72,7 @@ export default function Shorts() {
     if (articles.length > 1) {
       const interval = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % articles.length);
-      }, 5000); // Changed to 5 seconds (2 seconds might be too fast)
+      }, 5000);
       return () => clearInterval(interval);
     }
   }, [articles.length]);
@@ -64,6 +88,12 @@ export default function Shorts() {
 
   useEffect(() => {
     loadShorts();
+    // setup auto-refresh every 30 min
+    const interval = setInterval(() => {
+      loadShorts(true);
+    }, CACHE_EXPIRY);
+
+    return () => clearInterval(interval);
   }, [loadShorts]);
 
   if (loading)
@@ -71,30 +101,13 @@ export default function Shorts() {
       <div className="flex justify-center items-center h-96">
         <div className="animate-pulse flex flex-col items-center">
           <div className=" text-center">
-                        <ImSpinner2 className="animate-spin text-red-500" size={50} />
-                      </div>
+            <ImSpinner2 className="animate-spin text-red-500" size={50} />
+          </div>
         </div>
       </div>
     );
 
-  // if (error)
-  //   return (
-  //     <div className="text-center mt-10 text-red-500">
-  //       {error}
-  //       <button
-  //         onClick={loadShorts}
-  //         className="ml-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-  //       >
-  //         Retry
-  //       </button>
-  //     </div>
-  //   );
-
-  if (!articles.length)
-    return null
-    // return (
-    //   <div className="text-center mt-10 text-gray-500">No shorts found</div>
-    // );
+  if (!articles.length) return null;
 
   const currentArticle = articles[currentIndex];
 

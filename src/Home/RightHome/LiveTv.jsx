@@ -1,104 +1,138 @@
-import React from "react";
-import { GoDotFill } from "react-icons/go";
+import React, { useEffect, useState } from "react";
+import { GetLiveYouTube } from "../../../api";
 import Header from "./shared/Header";
-// import { GetLiveYouTube } from "../../../api";
-const GetLiveYouTube = () =>
-  Promise.resolve({
-    status_code: 200,
-    message: "Fetched Successfully",
-    response: {
-      is_live: "0", // Change to "1" to test live stream
-      share_url: "https://youtu.be/xyz",
-      live_url: "https://www.youtube.com/embed/live_stream?channel=UCXYZ", // or demo YouTube embed
-    },
-  });
+import { BsYoutube, BsArrowRepeat, BsBroadcast } from "react-icons/bs";
+import { RiLiveLine } from "react-icons/ri";
 
-const LiveTv = () => {
-  const defaultVideoUrl =
-    "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1";
+function LiveTv() {
+  const [liveUrl, setLiveUrl] = useState("");
+  const [isLive, setIsLive] = useState();
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const [liveUrl, setLiveUrl] = React.useState("");
-  const [isLive, setIsLive] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState("");
-
-  const loadVideo = async () => {
-    setLoading(true);
-    setError("");
+  const loadLiveMode = async () => {
     try {
+      setRefreshing(true);
       const res = await GetLiveYouTube();
-      if (res.status_code === 200) {
-        const data = res.response;
-        if (data.is_live === "1" && data.live_url) {
-          setIsLive(true);
-          setLiveUrl(data.live_url);
-        } else {
-          setIsLive(false);
-          setLiveUrl(defaultVideoUrl);
-        }
-      } else {
-        setError("Failed to fetch live video.");
-        setLiveUrl(defaultVideoUrl);
-      }
-    } catch (err) {
-      setError("Something went wrong. Try again later.");
-      setLiveUrl(defaultVideoUrl);
+      console.log(res);
+      setIsLive(res?.data?.response?.is_live);
+      setLiveUrl(
+        `https://www.youtube.com/embed/${res?.data?.response?.live_url}`
+      );
+    } catch (error) {
+      console.error("Error loading live stream:", error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
-  React.useEffect(() => {
-    loadVideo();
+  useEffect(() => {
+    loadLiveMode();
   }, []);
 
   return (
-    <div className="min-h-1/2 bg-gradient-to-br py-8 px-4 flex justify-center items-center">
-      <div className="w-full max-w-xl">
-        <Header text="📺 Live TV Stream" />
-        <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-3xl p-6 shadow-2xl">
-          {loading ? (
-            <div className="animate-pulse text-center text-white text-lg">
-              Loading live stream...
+    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2">
+       {/* <Header text="Live " /> */}
+      <div className="bg-white shadow-xl rounded-2xl overflow-hidden border-0">
+        {/* Header with gradient and animation */}
+        <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-4 px-5 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <div className="w-40 h-40 bg-red-500 rounded-full opacity-10 -mt-20 -ml-20"></div>
+            <div className="w-40 h-40 bg-red-500 rounded-full opacity-10 -mb-20 -mr-20"></div>
+          </div>
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center">
+              <div className="bg-white p-2 rounded-full mr-3">
+                <BsYoutube className="text-2xl text-red-600" />
+              </div>
+             
             </div>
-          ) : error ? (
-            <div className="text-center text-red-400 font-semibold">
-              {error}
-            </div>
-          ) : (
-            <>
-              {isLive && (
-                <div className="flex items-center justify-center gap-2 text-white text-2xl font-semibold mb-4 animate-pulse">
-                  <GoDotFill className="text-4xl text-red-500" />
-                  <span>Live Now</span>
-                </div>
-              )}
+            {isLive == 0 && (
+              <div className="flex items-center bg-red-800 px-3 py-1 rounded-full">
+                <div className="h-2 w-2 bg-red-300 rounded-full animate-pulse mr-2"></div>
+                <span className="text-xs font-semibold">LIVE</span>
+              </div>
+            )}
+          </div>
+        </div>
 
-              <div className="relative overflow-hidden rounded-xl shadow-lg border-4 border-white/30 hover:scale-[1.01] transition-transform ">
+        <div className="p-5">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-10">
+              <div className="w-16 h-16 border-4 border-red-100 border-t-red-600 rounded-full animate-spin mb-4"></div>
+              <p className="text-gray-500 font-medium">Checking live status...</p>
+            </div>
+          ) : isLive == 0 ? (
+            <>
+              <div className="aspect-video mb-2 rounded-xl overflow-hidden shadow-lg relative">
                 <iframe
-                  className="w-full h-64 md:h-80 rounded-xl"
-                  src={liveUrl + (liveUrl.includes('youtube.com') ? (liveUrl.includes('?') ? '&controls=1' : '?controls=1') : '')}
-                  title="Live Stream"
+                  width="100%"
+                  height="100%"
+                  src={liveUrl}
+                  title="YouTube Live Stream"
+                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  frameBorder="0"
-                ></iframe>
-
-                {/* Subtle border glow */}
-                <div className="absolute inset-0 rounded-xl border-2 border-white opacity-10 animate-pulse"></div>
+                  className="rounded-xl"
+                />
+                <div className="absolute top-3 right-3 bg-red-600 text-white text-xs px-2 py-1 rounded-full flex items-center">
+                  <BsBroadcast className="mr-1" />
+                  <span>Live</span>
+                </div>
               </div>
-
-              {!isLive && (
-                <p className="mt-4 text-center text-white text-sm font-medium">
-                  ⚠️ Currently not live. Showing default video.
-                </p>
-              )}
+              
+              {/* <div className="bg-red-50 border border-red-100 rounded-xl p-3 mb-5">
+                <div className="flex items-center text-red-700">
+                  <RiLiveLine className="text-lg mr-2" />
+                  <span className="text-sm font-medium">We're live now! Join the conversation.</span>
+                </div>
+              </div> */}
             </>
+          ) : (
+            <div className="text-center py-8">
+              <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <BsYoutube className="text-3xl text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Not Currently Live</h3>
+              <p className="text-gray-500 text-sm mb-2">We're not broadcasting at the moment.</p>
+              <p className="text-gray-400 text-xs">Check back later for our next live stream.</p>
+            </div>
           )}
+{/* 
+          <div className="text-center mt-2">
+            <button
+              onClick={loadLiveMode}
+              disabled={refreshing}
+              className={`px-5 py-2.5 text-sm font-semibold rounded-xl transition-all duration-300 flex items-center justify-center mx-auto ${
+                refreshing 
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed" 
+                  : "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow hover:shadow-md"
+              }`}
+            >
+              {refreshing ? (
+                <>
+                  <BsArrowRepeat className="animate-spin mr-2" />
+                  Refreshing...
+                </>
+              ) : (
+                <>
+                  <BsArrowRepeat className="mr-2" />
+                  Refresh Status
+                </>
+              )}
+            </button>
+            
+            {!loading && isLive != 0 && (
+              <p className="text-xs text-gray-400 mt-4">
+                Last checked: {new Date().toLocaleTimeString()}
+              </p>
+            )}
+          </div> */}
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default LiveTv;
+export default React.memo(LiveTv);

@@ -266,8 +266,154 @@
 //   );
 // }
 
-// src/Home/LeftHome/LeftHome.jsx
-import React, { useEffect, useState } from "react";
+// // src/Home/LeftHome/LeftHome.jsx
+// import React, { useEffect, useState } from "react";
+// import { componentsMap } from "./componentsMap";
+// import {
+//   GetFeaturedSection,
+//   GetLeftBannerAds,
+//   GetLeftHomeMainAds,
+// } from "../../../api";
+// import HeaderAd from "../../TopBar/HeaderAd";
+// import Election from "./election/Election";
+// import { useSettingsContext } from "../../context/SettingsContext";
+// import { AdCardSkeleton } from "../market/components/Skeleton";
+// import { useAds } from "../../context/AdsContext";
+
+// export default function LeftHome() {
+//   const [featured, setFeatured] = useState([]);
+//   const [loadingAds, setLoadingAds] = useState(true);
+//   const [adError, setAdError] = useState(null);
+
+//   // const { ads, setAds } = useAds();
+//   //  // ✅ useAds me setAds hona chahiye
+//   const [ads,setAds]=useState({
+//     top:{},
+//     main:{}
+//   })
+//   const { getSettingStatus } = useSettingsContext();
+//   const isElectionEnabled = getSettingStatus("Exit Polls");
+// // console.log((ads))
+//   const loadFeaturedSection = async () => {
+//     try {
+//       const res = await GetFeaturedSection(); // ✅ param wapas daala
+//       // console.log(res);
+//       const sorted = res.data.response.sort((a, b) => a.order - b.order);
+//       // console.log(res)
+//       setFeatured(sorted);
+//     } catch (error) {
+//       console.log("Featured section load error:", error);
+//       setAdError("Failed to load featured section");
+//     }
+//   };
+// // console.log("s")
+//   const loadAds = async () => {
+//     setLoadingAds(true);
+//     try {
+//       const [topRes, mainRes] = await Promise.all([
+//         GetLeftBannerAds(),
+//         GetLeftHomeMainAds(),
+//       ]);
+// // console.log(topRes.data.response.top_banner)
+//       // ✅ ads state ko update karna (immutably)
+//       setAds((prev) => ({
+//         ...prev,
+//         top: topRes.data.response.top_banner || null,
+//         main: mainRes.data.response.top_banner|| null,
+//       }));
+//     } catch (err) {
+//       console.error("Ad loading error:", err);
+//       setAdError("Ads could not be loaded.");
+//     } finally {
+//       setLoadingAds(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     loadFeaturedSection();
+//     loadAds();
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, []);
+// // console.log(ads)
+//   const renderAd = (adData, label) => {
+//     return (
+//       <div className="w-full  flex items-center justify-center">
+//         {loadingAds ? (
+//           <div className="w-full h-40 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl shadow-md flex items-center justify-center">
+//             <div className="animate-pulse flex flex-col items-center">
+//               <div className="h-4 w-32 bg-gray-300 rounded mb-2"></div>
+//               <div className="h-3 w-24 bg-gray-300 rounded"></div>
+//             </div>
+//           </div>
+//         ) : adError || !adData ? null
+//          : (
+//           <HeaderAd adData={adData} text="leftHome" className="w-full"/>
+//         )}
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <div className="w-full space-y-6 px-4 md:px-0">
+//       {/* ✅ Top Ad */}
+//       {ads?.top&& ads?.top?.ad_image_url?.length>0 && renderAd(ads?.top, "Top Banner")}
+
+//       {/* ✅ Featured Components */}
+//       <div className="grid grid-cols-1 gap-6">
+//         {featured.map((section, index) => {
+//           const match = componentsMap.find(
+//             (item) => item.order === section.order
+//           );
+
+//           const Component = match?.component;
+
+//           return (
+//             <React.Fragment key={index}>
+//               <div className=" ">
+//                 {Component ? (
+//                   <Component
+//                     section_id={section.section_id}
+//                     category_id={section.category_id}
+//                     category={section.category}
+//                     section_title={section.section_title}
+                    
+//                     web_section_id={section.web_section_id}
+//                   />
+//                 ) : (
+//                   <div className="p-4">
+//                     <h3 className="text-lg font-semibold text-gray-800 mb-4">
+//                       {section.section_title}
+//                     </h3>
+//                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+//                       {[...Array(6)].map((_, i) => (
+//                         <AdCardSkeleton key={i} />
+//                       ))}
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+
+//               {/* ✅ Mid Ad after 2nd component */}
+//               {index === 2 && ads?.main&& ads.main.ad_image_url?.length>0 && (
+//                 <div className="mt-4">{renderAd(ads.main, "Main Banner")}</div>
+//               )}
+//             </React.Fragment>
+//           );
+//         })}
+//       </div>
+
+//       {/* ✅ Election Section */}
+//       {!isElectionEnabled && (
+//         <div className="mt-6">
+//           <Election />
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+
+import React, { useEffect, useState, useRef } from "react";
 import { componentsMap } from "./componentsMap";
 import {
   GetFeaturedSection,
@@ -278,49 +424,61 @@ import HeaderAd from "../../TopBar/HeaderAd";
 import Election from "./election/Election";
 import { useSettingsContext } from "../../context/SettingsContext";
 import { AdCardSkeleton } from "../market/components/Skeleton";
-import { useAds } from "../../context/AdsContext";
 
 export default function LeftHome() {
   const [featured, setFeatured] = useState([]);
   const [loadingAds, setLoadingAds] = useState(true);
   const [adError, setAdError] = useState(null);
+  const [ads, setAds] = useState({ top: null, main: null });
 
-  // const { ads, setAds } = useAds();
-  //  // ✅ useAds me setAds hona chahiye
-  const [ads,setAds]=useState({
-    top:{},
-    main:{}
-  })
   const { getSettingStatus } = useSettingsContext();
   const isElectionEnabled = getSettingStatus("Exit Polls");
-// console.log((ads))
+
+  // ✅ Prevent multiple API calls (even on re-render)
+  const fetchedRef = useRef(false);
+
   const loadFeaturedSection = async () => {
     try {
-      const res = await GetFeaturedSection(); // ✅ param wapas daala
-      // console.log(res);
+      // ✅ check cache
+      const cached = sessionStorage.getItem("featured_sections");
+      if (cached) {
+        setFeatured(JSON.parse(cached));
+        return;
+      }
+
+      const res = await GetFeaturedSection();
       const sorted = res.data.response.sort((a, b) => a.order - b.order);
-      // console.log(res)
+
       setFeatured(sorted);
+      sessionStorage.setItem("featured_sections", JSON.stringify(sorted));
     } catch (error) {
-      console.log("Featured section load error:", error);
+      console.error("Featured section load error:", error);
       setAdError("Failed to load featured section");
     }
   };
-// console.log("s")
+
   const loadAds = async () => {
-    setLoadingAds(true);
     try {
+      // ✅ check cache
+      const cached = sessionStorage.getItem("left_home_ads");
+      if (cached) {
+        setAds(JSON.parse(cached));
+        setLoadingAds(false);
+        return;
+      }
+
       const [topRes, mainRes] = await Promise.all([
         GetLeftBannerAds(),
         GetLeftHomeMainAds(),
       ]);
-// console.log(topRes.data.response.top_banner)
-      // ✅ ads state ko update karna (immutably)
-      setAds((prev) => ({
-        ...prev,
-        top: topRes.data.response.top_banner || null,
-        main: mainRes.data.response.top_banner|| null,
-      }));
+
+      const newAds = {
+        top: topRes?.data?.response?.top_banner || null,
+        main: mainRes?.data?.response?.top_banner || null,
+      };
+
+      setAds(newAds);
+      sessionStorage.setItem("left_home_ads", JSON.stringify(newAds));
     } catch (err) {
       console.error("Ad loading error:", err);
       setAdError("Ads could not be loaded.");
@@ -330,33 +488,34 @@ export default function LeftHome() {
   };
 
   useEffect(() => {
+    if (fetchedRef.current) return; // ✅ prevent duplicate calls
+    fetchedRef.current = true;
+
     loadFeaturedSection();
     loadAds();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-// console.log(ads)
+
   const renderAd = (adData, label) => {
-    return (
-      <div className="w-full  flex items-center justify-center">
-        {loadingAds ? (
-          <div className="w-full h-40 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl shadow-md flex items-center justify-center">
-            <div className="animate-pulse flex flex-col items-center">
-              <div className="h-4 w-32 bg-gray-300 rounded mb-2"></div>
-              <div className="h-3 w-24 bg-gray-300 rounded"></div>
-            </div>
+    if (loadingAds) {
+      return (
+        <div className="w-full h-40 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl shadow-md flex items-center justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-4 w-32 bg-gray-300 rounded mb-2"></div>
+            <div className="h-3 w-24 bg-gray-300 rounded"></div>
           </div>
-        ) : adError || !adData ? null
-         : (
-          <HeaderAd adData={adData} text="leftHome" className="w-full"/>
-        )}
-      </div>
-    );
+        </div>
+      );
+    }
+
+    if (adError || !adData) return null;
+
+    return <HeaderAd adData={adData} text="leftHome" className="w-full" />;
   };
 
   return (
     <div className="w-full space-y-6 px-4 md:px-0">
       {/* ✅ Top Ad */}
-      {ads?.top&& ads?.top?.ad_image_url?.length>0 && renderAd(ads?.top, "Top Banner")}
+      {ads?.top?.ad_image_url && renderAd(ads.top, "Top Banner")}
 
       {/* ✅ Featured Components */}
       <div className="grid grid-cols-1 gap-6">
@@ -369,14 +528,13 @@ export default function LeftHome() {
 
           return (
             <React.Fragment key={index}>
-              <div className=" ">
+              <div>
                 {Component ? (
                   <Component
                     section_id={section.section_id}
                     category_id={section.category_id}
                     category={section.category}
                     section_title={section.section_title}
-                    
                     web_section_id={section.web_section_id}
                   />
                 ) : (
@@ -394,7 +552,7 @@ export default function LeftHome() {
               </div>
 
               {/* ✅ Mid Ad after 2nd component */}
-              {index === 2 && ads?.main&& ads.main.ad_image_url?.length>0 && (
+              {index === 2 && ads?.main?.ad_image_url && (
                 <div className="mt-4">{renderAd(ads.main, "Main Banner")}</div>
               )}
             </React.Fragment>

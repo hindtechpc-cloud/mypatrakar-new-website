@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Menu from "../shared/MenuBar";
 import NewsCard from "../shared/NewsCard";
 import TopNewsItems from "../TopNews/TopNewsItems";
-import { articlesCard } from "../../search/news";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
@@ -13,7 +12,7 @@ export default function OwnState({
   category,
   section_typetype,
   web_section_id,
-  section_title,
+  section_title = "State",
 }) {
   const [subcategory, setSubcategory] = useState("");
   const menu = [];
@@ -21,89 +20,135 @@ export default function OwnState({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchNews = useCallback(async () => {
-    try {
-      setLoading(true);
-      const { data } = await loadNewsByCategory(category_id);
-      // console.log(data);
-      setArticles(data?.response || []);
-    } catch (err) {
-      console.error("News fetch error:", err);
-      setError(err.response?.message || "Failed to load news");
-    } finally {
-      setLoading(false);
-    }
-  }, [category_id]);
+  const CACHE_KEY = `own_state_news_${category_id}`;
+  const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes
+
+  const fetchNews = useCallback(
+    async (forceRefresh = false) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        if (!forceRefresh) {
+          const cached = sessionStorage.getItem(CACHE_KEY);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            const now = Date.now();
+
+            if (now - parsed.timestamp < CACHE_EXPIRY) {
+              setArticles(parsed.data || []);
+              setLoading(false);
+              return;
+            }
+          }
+        }
+
+        const { data } = await loadNewsByCategory(category_id);
+        const freshData = data?.response || [];
+        setArticles(freshData);
+
+        sessionStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ data: freshData, timestamp: Date.now() })
+        );
+      } catch (err) {
+        console.error("News fetch error:", err);
+        setError(err.response?.message || "Failed to load news");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [category_id]
+  );
 
   useEffect(() => {
     fetchNews();
+
+    // Auto refresh after 30 minutes
+    const interval = setInterval(() => {
+      fetchNews(true);
+    }, CACHE_EXPIRY);
+
+    return () => clearInterval(interval);
   }, [fetchNews]);
+
   const featuredArticle = articles[0];
-  if (loading || error) {
-    <div>
-      <Menu menuText={section_title || "State"} menu={[]} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => (
-          <AdCardSkeleton key={i} />
-        ))}
+
+  /* -------- Loading -------- */
+  if (loading) {
+    return (
+      <div>
+        <Menu menuText={section_title} menu={[]} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <AdCardSkeleton key={i} />
+          ))}
+        </div>
       </div>
-    </div>;
+    );
   }
+
+  /* -------- Error -------- */
+  if (error) {
+    return (
+      <div>
+        <Menu menuText={section_title} menu={[]} />
+        <p className="text-red-600 font-semibold text-center my-4">{error}</p>
+        <button
+          onClick={() => fetchNews(true)}
+          className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  /* -------- Main Render -------- */
   return (
     <div className="mt-4">
-      {/* {(loading || error) && (
-        <div className="">
-          <Menu />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, i) => (
-              <AdCardSkeleton key={i} />
-            ))}
-          </div>
-        </div>
-      )} */}
+      <Menu
+        menuText={section_title}
+        menu={menu}
+        setSubcategory={setSubcategory}
+      />
 
-      {!error && !loading && (
-        <div>
-          <Menu
-            menuText={section_title}
-            menu={menu}
-            setSubcategory={setSubcategory}
-          />
-          {!articles.length ? (
-            <EmptyCard> Nothing to show in {section_title}</EmptyCard>
-          ) : (
-            <div className="mt-4">
-              {articles.length && (
-                <div className="md:flex flex-1 items-start -gap-10">
-                  <div className="">
-                    <NewsCard
-                      className="md:flex flex-col items-start gap-0 max-w-4xl mx-auto"
-                      classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative rounded"
-                      classNameForContent="w-5/6"
-                      image={featuredArticle?.news_img_url}
-                      ctaText={featuredArticle.category}
-                      title={featuredArticle.news_headline}
-                      description={featuredArticle.news_description_html}
-                      newsId={featuredArticle.news_id}
-                      maxLength={300}
-                      news={{
-                        title: featuredArticle.news_headline,
-                        urlToImage: featuredArticle?.news_img_url,
-                      }}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <TopNewsItems
-                      topNewsItems={articles}
-                      className={"grid gap-4"}
-                      maxLength={50}
-                      headingLength={300}
-                    />
-                  </div>
-                </div>
-              )}
+      {!articles.length ? (
+        <EmptyCard> Nothing to show in {section_title}</EmptyCard>
+      ) : (
+        <div className="mt-4">
+          <div className="md:flex flex-1 items-start -gap-10">
+            {/* Featured Article */}
+            {featuredArticle && (
+              <div className="">
+                <NewsCard
+                  className="md:flex flex-col items-start gap-0 max-w-4xl mx-auto"
+                  classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative rounded"
+                  classNameForContent="w-5/6"
+                  image={featuredArticle?.news_img_url}
+                  ctaText={featuredArticle.category}
+                  title={featuredArticle.news_headline}
+                  description={featuredArticle.news_description_html}
+                  newsId={featuredArticle.news_id}
+                  maxLength={300}
+                  news={{
+                    title: featuredArticle.news_headline,
+                    urlToImage: featuredArticle?.news_img_url,
+                  }}
+                />
+              </div>
+            )}
+
+            {/* List of Other Articles */}
+            <div className="w-full">
+              <TopNewsItems
+                topNewsItems={articles}
+                className={"grid gap-4"}
+                maxLength={50}
+                headingLength={300}
+              />
             </div>
-          )}
+          </div>
         </div>
       )}
     </div>

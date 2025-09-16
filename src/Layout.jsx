@@ -144,7 +144,7 @@ function Layout() {
       </Routes>
 
       {!isCommonPage && !isShorts && <Footer />}
-      <JournalistYouTubeFeed/>
+      {/* <JournalistYouTubeFeed/> */}
       {isCommonPage && !isShorts && <FooterLinks />}
 
       {/* <NewsSkeleton/> */}
