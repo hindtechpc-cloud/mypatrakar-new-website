@@ -64,7 +64,7 @@ console.log(data)
     return (
       <div>
         <Menu menuText={section_title || "State"} menu={[]} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {[...Array(3)].map((_, i) => (
             <AdCardSkeleton key={i} />
           ))}
@@ -90,12 +90,12 @@ console.log(data)
 
 // Memoized News List Component
 const CountryNewsListComponent = ({ articles }) => (
-  <div className="container mx-auto px-4 py-6">
+  <div className="container mx-auto px-2 py-6">
     {articles?.slice(0, 10).map((article) => (
       <div key={article.news_id} className="mb-10">
         <TopNewsItems
           topNewsItems={[article]}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-2"
         />
       </div>
     ))}

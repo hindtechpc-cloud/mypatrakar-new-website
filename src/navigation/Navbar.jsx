@@ -1,5 +1,5 @@
 // src/navigation/Navbar.jsx
-import React, { useState, useEffect, useContext } from "react";
+import  { useState, useEffect, useContext } from "react";
 import { FaBars, FaHome, FaSearch, FaTimes } from "react-icons/fa";
 import { CgChevronUp } from "react-icons/cg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -113,7 +113,7 @@ const Navbar = () => {
           to={`/read-news/${newsItem.news_headline}/${encryptData(
             newsItem.news_id
           )}`}
-          className="block mb-4 last:mb-0 group w-[250px] px-2"
+          className="block mb-4 last:mb-0 group w-[200px] px-2"
         >
           <div className="w-full h-32 rounded overflow-hidden">
             <img
@@ -125,7 +125,7 @@ const Navbar = () => {
                   : "https://picsum.photos/300/500"
               }
               alt={newsItem.news_headline}
-              className="w-full h-full object-cover transition-transform group-hover:scale-105"
+              className="w-full h-full object-center transition-transform group-hover:scale-105"
             />
           </div>
           <div className="mt-2">

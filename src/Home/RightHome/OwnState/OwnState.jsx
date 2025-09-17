@@ -88,7 +88,7 @@ export default function OwnState() {
 
   return (
     <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2">
-      {articles.length >= 0 && <Header text={"उत्तर प्रदेश"} />}
+      {articles.length > 0 && <Header text={"उत्तर प्रदेश"} />}
 
       {loading ? (
         <Loader />

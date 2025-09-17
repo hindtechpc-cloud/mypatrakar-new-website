@@ -6,6 +6,7 @@ import TopNewsItems from "../TopNews/TopNewsItems";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
 import { loadNewsByCategory } from "../../../../api";
+import EnterTainmentSkelton from "./EnterTainmentSkelton";
 
 // Helper functions for cache
 const setCache = (key, data) => {
@@ -73,10 +74,8 @@ const Entertainment = ({
       <div>
         <Menu menuText={section_title || "State"} menu={[]} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
+          <EnterTainmentSkelton />
+     </div>
       </div>
     );
   }
@@ -132,7 +131,9 @@ const FeaturedEntertainmentCard = ({ articles }) => {
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
     >
       <motion.img
-        src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${articles[0]?.news_img_url}`}
+        src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+          articles[0]?.news_img_url
+        }`}
         alt={articles[0].news_headline}
         className="w-full h-full object-cover"
         loading="lazy"

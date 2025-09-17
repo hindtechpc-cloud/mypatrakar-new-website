@@ -330,6 +330,7 @@ export default function News() {
           views: news?.clap_clount || news.views_count || news.views || 0,
           comments: news?.comments || news.comments_count || 0,
           category: news?.news_category_name || news.category || "General",
+          video:news?.news_video_url
         }}
       />
 

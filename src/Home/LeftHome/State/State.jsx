@@ -96,10 +96,10 @@ const State = ({
       {!articles.length ? (
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       ) : (
-        <div className="md:flex flex-1 md:items-start md:justify-center gap-4 mt-0">
+        <div className="md:flex flex-1 md:items-start md:justify-center gap-2 mt-0">
           <TopNewsItems
             topNewsItems={articles}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4"
             maxLength={60}
           />
         </div>

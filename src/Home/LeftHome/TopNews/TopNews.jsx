@@ -138,6 +138,7 @@ import TopNewsItems from "./TopNewsItems";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
+import TopnewsSkeleton from "./TopnewsSkeleton";
 
 const TopNews = ({ category_id, section_title }) => {
   const [articles, setArticles] = useState([]);
@@ -189,12 +190,8 @@ const TopNews = ({ category_id, section_title }) => {
       <Menu menuText={section_title || "TopNews"} menu={[]} />
 
       {loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
-      )}
+        
+        <TopnewsSkeleton />)}
 
       {!loading && !articles.length && (
         <EmptyCard> Nothing to show in {section_title}</EmptyCard>
@@ -205,7 +202,7 @@ const TopNews = ({ category_id, section_title }) => {
           {/* Featured Article */}
           <div className="w-full flex items-start justify-start">
             <NewsCard
-              className="sm:flex flex-1 w-full items-start justify-start gap-4 mx-auto"
+              className="sm:flex flex-1 w-full items-start justify-start gap-3 mx-auto"
               classNameToImage="md:w-full md:h-56 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative rounded"
               image={featuredArticle?.news_img_url}
               ctaText={featuredArticle?.news_category_name}
@@ -223,10 +220,10 @@ const TopNews = ({ category_id, section_title }) => {
           </div>
 
           {/* News List */}
-          <div className="w-full mt-4">
+          <div className="w-full mt-2">
             <TopNewsItems
               topNewsItems={articles}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-2 "
               maxLength={60}
             />
           </div>

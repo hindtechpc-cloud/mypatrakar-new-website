@@ -90,7 +90,7 @@ const Game = ({
       {!articles.length ? (
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       ) : (
-        <div className="flex flex-wrap gap-3 p-4">
+        <div className="flex flex-wrap gap-2 p-4">
           {articles?.slice(0, 5)?.map((article) => (
             <ArticleCard
               key={article.news_id}
@@ -134,7 +134,7 @@ const ArticleCard = ({ article, category, imageUrl }) => {
       <NewsCard
         className="flex flex-col md:flex-row items-start gap-2 transition-transform duration-300 overflow-hidden"
         classNameToImage="w-full md:w-64 h-60 md:h-40 object-cover rounded-xl"
-        classNameForContent="flex-1 text-lg flex flex-col justify-between p-2"
+        classNameForContent="flex-1 text-lg flex flex-col justify-between"
         image={imageUrl}
         ctaText={category}
         title={article.news_headline.slice(0, 100) || "Untitled Article"}

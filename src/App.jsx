@@ -95,7 +95,43 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+
+
+<Toaster
+  position="top-center"
+  toastOptions={{
+    // Default options
+    style: {
+      width: "500px",
+      height: "70px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "18px",
+      color: "#000",
+      fontWeight: "bold",
+      marginTop:'340px'
+    },
+    success: {
+      style: {
+        background: "#B0F7BF",
+      },
+    },
+    error: {
+      style: {
+        background: "#EBC0BC",
+      },
+    },
+    custom: {
+      style: {
+        background: "orange",
+      },
+    },
+  }}
+/>
+
+
+
       <SocialMediaProvider>
         <WebThemeContext.Provider value={{ webTheme, setWebTheme, refreshWebTheme: () => loadWebTheme(true) }}>
           <LanguageContext.Provider value={{ language, setLanguage }}>

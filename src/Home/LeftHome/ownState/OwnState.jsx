@@ -5,6 +5,7 @@ import TopNewsItems from "../TopNews/TopNewsItems";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
+import OwnStateSkeleton from "./OwnStateSkeleton";
 
 export default function OwnState({
   section_id,
@@ -79,11 +80,7 @@ export default function OwnState({
     return (
       <div>
         <Menu menuText={section_title} menu={[]} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
-            <AdCardSkeleton key={i} />
-          ))}
-        </div>
+        <OwnStateSkeleton />
       </div>
     );
   }
@@ -117,14 +114,16 @@ export default function OwnState({
         <EmptyCard> Nothing to show in {section_title}</EmptyCard>
       ) : (
         <div className="mt-4">
-          <div className="md:flex flex-1 items-start -gap-10">
+          <div className="w-full flex items-start justify-start gap-3 ">
             {/* Featured Article */}
             {featuredArticle && (
-              <div className="">
-                <NewsCard
-                  className="md:flex flex-col items-start gap-0 max-w-4xl mx-auto"
-                  classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-end justify-end relative rounded"
-                  classNameForContent="w-5/6"
+            
+                <div className="w-1/2">
+
+                  <NewsCard
+                  className="md:flex flex-col items-start gap-0 w-full mx-auto"
+                  classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-start justify-start relative rounded"
+                  classNameForContent="w-full mt-1"
                   image={featuredArticle?.news_img_url}
                   ctaText={featuredArticle.category}
                   title={featuredArticle.news_headline}
@@ -136,14 +135,15 @@ export default function OwnState({
                     urlToImage: featuredArticle?.news_img_url,
                   }}
                 />
-              </div>
+                </div>
+            
             )}
 
             {/* List of Other Articles */}
-            <div className="w-full">
+            <div className="w-full flex items-start justify-start ">
               <TopNewsItems
                 topNewsItems={articles}
-                className={"grid gap-4"}
+                className={"grid gap-2"}
                 maxLength={50}
                 headingLength={300}
               />
