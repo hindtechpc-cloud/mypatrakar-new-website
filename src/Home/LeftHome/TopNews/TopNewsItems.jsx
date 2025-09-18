@@ -72,7 +72,8 @@ export default function TopNewsItems({
   className,
   itemsToShow = 6,
   maxLength,
-  headingLength
+  headingLength,
+  start=1
 }) {
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);
@@ -89,7 +90,7 @@ export default function TopNewsItems({
 
   return (
     <div className={className}>
-      {topNewsItems.slice(0, itemsToShow).map((item, index) => (
+      {topNewsItems.slice(start, itemsToShow).map((item, index) => (
         <NewsItem
           key={item.news_id}
           news={item}

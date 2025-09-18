@@ -155,7 +155,7 @@ const Navbar = () => {
       onMouseLeave={() => setActiveDropdown(null)}
     >
       <button
-        className={`flex items-center px-3 py-3 ml-1 font-semibold text-xs transition-colors ${
+        className={`flex items-center px-3 py-3 ml-1 font-semibold text-md transition-colors ${
           activePath.includes(`/topic/${item.nav_name.toLowerCase()}`)
             ? "bg-gray-200 rounded-md text-black"
             : "hover:bg-gray-200 rounded-md hover:text-black"

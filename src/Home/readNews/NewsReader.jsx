@@ -58,6 +58,8 @@ export default function NewsReader({ language, news }) {
       );
       utterance.voice = selectedVoice;
       utterance.lang = selectedVoice?.lang || langMap[language] || "en-US";
+      utterance.rate = 0.1;
+
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
       speechSynthesis.speak(utterance);

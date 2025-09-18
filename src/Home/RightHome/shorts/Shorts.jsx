@@ -114,7 +114,7 @@ export default function Shorts() {
   return (
     <>
       {articles.length > 0 && (
-        <div className="my-8 font-sans max-w-m  w-[350px] mx-auto">
+        <div className="font-sans md:max-w-sm w-[350px] mx-auto mt-[5px] mb-[9px]">
           <Header text="Shorts" />
           <div className="flex items-center justify-center relative">
             {/* Mobile Frame */}

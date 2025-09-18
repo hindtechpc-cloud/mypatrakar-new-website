@@ -97,6 +97,7 @@ Route::post('menu-with-sub-nav-list',[WebMenuManagementController::class, 'menuW
 });
 });
  */
+
 const API = axios.create({
   // baseURL: "/api",  // Correct concatenation
   baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}`
@@ -123,11 +124,11 @@ const postRequest = (endpoint, data = {}, params = {}) => {
     ...API_CONFIG
   });
 };
-
-
 // featured section 
 export const GetFeaturedSection = (portal_id) =>
   postRequest('/featured-section', { portal_id });
+export const featuredmenulist = (portal_id) =>
+  postRequest('/featured-menu-list', { portal_id });
 
 export const GetFeaturedNews = (portal_id) =>
   postRequest('/featured-news', { secttion_id:portal_id });

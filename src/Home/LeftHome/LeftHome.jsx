@@ -101,14 +101,14 @@ export default function LeftHome() {
   };
 
   return (
-    <div className="w-full space-y-6 px-4 md:px-0">
+    <div className="w-full  md:px-0">
       {/* ✅ Top Ad */}
       {ads?.top?.ad_image_url && renderAd(ads.top)}
 
       {/* ✅ Featured Components */}
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 ">
         {featured.map((section, index) => {
-          const Component = componentsMap[section.order]; // ✅ अब सीधे order से match
+          const Component = componentsMap[section.web_section_id]; // ✅ अब सीधे order से match
 
           return (
             <React.Fragment key={section.section_id || index}>
@@ -138,7 +138,7 @@ export default function LeftHome() {
 
               {/* ✅ Mid Ad after 3nd component */}
               {index === 2 && ads?.main?.ad_image_url && (
-                <div className="mt-4">{renderAd(ads.main)}</div>
+                <div className="mt-[10]">{renderAd(ads.main)}</div>
               )}
             </React.Fragment>
           );
@@ -147,7 +147,7 @@ export default function LeftHome() {
 
       {/* ✅ Election Section */}
       {!isElectionEnabled && (
-        <div className="mt-5">
+        <div className="mt-[9px]">
           <Election />
         </div>
       )}

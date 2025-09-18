@@ -34,6 +34,7 @@ const Game = ({
   category = "General",
   section_title = "Game News",
 }) => {
+  const [articlList, setArticlList] = useState([]);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -71,7 +72,13 @@ const Game = ({
   if (loading) {
     return (
       <div>
-        <Menu menuText={section_title || "State"} menu={[]} />
+        <Menu
+          menuText={section_title || "State"}
+          menu={[]}
+          setArticlList={setArticlList}
+          articles={articles}
+          totalArticles={articles.length}
+        />
         <LoadingState />
       </div>
     );
@@ -82,20 +89,26 @@ const Game = ({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-[9px]">
       {/* Menu/Header */}
-      <Menu menuText={section_title || "Game"} menu={[]} />
+      <Menu
+        menuText={section_title || "Game"}
+        menu={[]}
+        setArticlList={setArticlList}
+        articles={articles}
+        totalArticles={articles.length}
+      />
 
       {/* No Articles */}
       {!articles.length ? (
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       ) : (
-        <div className="flex flex-wrap gap-2 p-4">
-          {articles?.slice(0, 5)?.map((article) => (
+        <div className="flex flex-wrap gap-[11px] mt-[9px]">
+          {articlList?.map((article) => (
             <ArticleCard
               key={article.news_id}
               article={article}
-              category={category}
+              category={article?.is_breaking==1 ? "Breaking" : ""}
               imageUrl={article?.news_img_url}
             />
           ))}
@@ -132,9 +145,9 @@ const ArticleCard = ({ article, category, imageUrl }) => {
   return (
     <div className="flex w-full transition-transform rounded-xl ">
       <NewsCard
-        className="flex flex-col md:flex-row items-start gap-2 transition-transform duration-300 overflow-hidden"
-        classNameToImage="w-full md:w-64 h-60 md:h-40 object-cover rounded-xl"
-        classNameForContent="flex-1 text-lg flex flex-col justify-between"
+        className="flex flex-col md:flex-row items-start gap-5 transition-transform duration-300 overflow-hidden"
+        classNameToImage="w-[230px] h-[129px] object-cover rounded-lg"
+        classNameForContent="flex-1 text-[20px] flex flex-col justify-between"
         image={imageUrl}
         ctaText={category}
         title={article.news_headline.slice(0, 100) || "Untitled Article"}

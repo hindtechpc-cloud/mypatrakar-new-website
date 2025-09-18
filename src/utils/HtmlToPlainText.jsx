@@ -75,8 +75,6 @@
 //   return <div className="container mx-auto px-4 py-8" style={style}>{elements}</div>;
 // }
 
-
-
 // src/utils/HtmlToPlainText.jsx
 import React, { useState } from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
@@ -92,9 +90,9 @@ const convertNodeToJSX = (node, id, style) => {
   );
 
   const styles = {
-    h1: "text-3xl font-bold text-gray-800 mb-4",
+    h1: "text-[20px] font-bold text-gray-800 mb-4",
     h2: "text-2xl font-semibold text-gray-700 mb-3",
-    p: "text-base text-gray-600 leading-relaxed mb-4",
+    p: "text-[16px] text-gray-600 leading-relaxed mb-4 font-Noto Sans Dev",
     li: "text-sm text-gray-600 mb-2",
     a: "text-blue-600 hover:text-blue-700 inline-flex items-center gap-2",
     img: "w-full max-w-4xl h-auto rounded-lg shadow-md mb-6",
@@ -111,7 +109,7 @@ const convertNodeToJSX = (node, id, style) => {
       return <h3 className={styles.h2}>{children}</h3>;
     case "p":
       return (
-        <p className={styles.p} style={style}>
+        <p className={styles.p} style={{ fontFamily: "Noto Sans Devanagari" }}>
           {children}
         </p>
       );
@@ -146,7 +144,12 @@ const convertNodeToJSX = (node, id, style) => {
 };
 
 // Main component
-export default function HtmlToPlainText({ htmlContent, id, style, maxLength=100 }) {
+export default function HtmlToPlainText({
+  htmlContent,
+  id,
+  style,
+  maxLength = 100,
+}) {
   const [expanded, setExpanded] = useState(false);
 
   const parser = new DOMParser();
@@ -158,9 +161,8 @@ export default function HtmlToPlainText({ htmlContent, id, style, maxLength=100 
 
   // Check length
   const shouldTruncate = maxLength && plainText.length > maxLength;
-  const displayText = shouldTruncate && !expanded
-    ? plainText.substring(0, maxLength) 
-    : plainText;
+  const displayText =
+    shouldTruncate && !expanded ? plainText.substring(0, maxLength) : plainText;
 
   // Parse again for JSX (only if not truncated)
   const elements = Array.from(body.childNodes).map((node) =>
@@ -168,7 +170,7 @@ export default function HtmlToPlainText({ htmlContent, id, style, maxLength=100 
   );
 
   return (
-    <div className="container mx-auto px-2 py-2" style={style}>
+    <div className="container mx-auto px- py-2" style={style}>
       {shouldTruncate && !expanded ? (
         <p className="text-base text-gray-600 leading-relaxed mb-4">
           {displayText}
@@ -176,7 +178,7 @@ export default function HtmlToPlainText({ htmlContent, id, style, maxLength=100 
             onClick={() => setExpanded(true)}
             className="ml-2 text-blue-600 hover:text-blue-700 font-medium"
           >
-           ...
+            {/* ... */}
           </button>
         </p>
       ) : (

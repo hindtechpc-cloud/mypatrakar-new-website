@@ -62,12 +62,13 @@ const NewsCard = ({
           className="text-lg md:text-xl font-semibold text-gray-800  cursor-pointer hover:underline"
           onClick={handleNewsClick}
           aria-label={`Read news: ${title}`}
+          
         >
           {title}
         </h2>
 
         {/* Description */}
-        <p className="text-sm md:text-sm text-gray-600 mb-3">
+        <p className="text-sm md:text-sm text-gray-600 ">
           <HtmlToPlainText htmlContent={description} maxLength={maxLength}/>
         </p>
       </div>

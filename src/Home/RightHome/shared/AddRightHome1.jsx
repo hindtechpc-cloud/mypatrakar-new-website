@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSettingsContext } from "../../../context/SettingsContext";
 
-export default function AddRightHome1({ adsData, text }) {
+export default function AddRightHome1({ adsData, text, className }) {
   // console.log(text + " " + adsData);
   const { getSettingStatus } = useSettingsContext();
 
@@ -18,8 +18,8 @@ export default function AddRightHome1({ adsData, text }) {
   if (isAdDataValid) {
     return (
       <div
-        className="w-[350px]  border rounded-lg shadow-sm 
-       mx-auto"
+        className={`w-[350px]  border rounded-lg shadow-sm 
+       mx-auto ${className}`}
       >
         <img
           src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
@@ -60,7 +60,7 @@ export default function AddRightHome1({ adsData, text }) {
       <div className="absolute top-0 right-0 w-16 h-16 bg-red-400 rounded-full filter blur-xl opacity-20"></div>
       <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-400 rounded-full filter blur-xl opacity-20"></div>
 
-      <div className="relative z-10 py-6 px-4 text-center">
+      <div className="relative z-10  px-4 text-center">
         {/* Header */}
         <div className="mb-5">
           <h3 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600 inline-block">

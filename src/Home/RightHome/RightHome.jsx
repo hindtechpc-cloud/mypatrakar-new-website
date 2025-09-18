@@ -156,7 +156,7 @@ function RightHome() {
 
       <Shorts />
 
-      <AddRightHome1 adsData={ads.main} text="main" />
+      <AddRightHome1 adsData={ads.main} text="main" className="mt-[9px]"/>
 
       {isHoroscopeEnabled && <Rashiphal />}
 

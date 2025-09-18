@@ -422,10 +422,10 @@ export default function Election() {
   }, [polls, pollIndex]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-[0px]">
       <Menu menuText={"चुनाव"} setSubcategory={setCurrentState} menu={[]} />
 
-      <div className="max-w-6xl mx-auto mt-6">
+      <div className="max-w-6xl mx-auto mt-[9px]">
         {/* Header Section */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border border-blue-100">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">

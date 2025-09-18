@@ -87,7 +87,7 @@ export default function OwnState() {
   }, [loadNewsByRoadmapId]);
 
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-2">
+    <div className=" font-sans md:max-w-sm w-[350px] mx-auto mt-[12px]">
       {articles.length > 0 && <Header text={"उत्तर प्रदेश"} />}
 
       {loading ? (
@@ -95,7 +95,7 @@ export default function OwnState() {
       ) : error ? (
         <p className="text-red-600 text-center">{error}</p>
       ) : (
-        <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto py-2">
+        <div className="flex items-start justify-center md:justify-start md:max-w-sm w-[350px] mx-auto">
           <div className="flex flex-col items-start relative">
             {articles?.slice(0, 4).map((article, index) => (
               <div
