@@ -104,14 +104,24 @@ const Game = ({
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       ) : (
         <div className="flex flex-wrap gap-[11px] mt-[9px]">
-          {articlList?.map((article) => (
-            <ArticleCard
-              key={article.news_id}
-              article={article}
-              category={article?.is_breaking==1 ? "Breaking" : ""}
-              imageUrl={article?.news_img_url}
-            />
-          ))}
+          {articlList.length > 0
+  ? articlList.map((article) => (
+      <ArticleCard
+        key={article.news_id}
+        article={article}
+        category={article?.is_breaking == 1 ? "Breaking" : ""}
+        imageUrl={article?.news_img_url}
+      />
+    ))
+  : articles.slice(0, 4).map((article) => (
+      <ArticleCard
+        key={article.news_id}
+        article={article}
+        category={article?.is_breaking == 1 ? "Breaking" : ""}
+        imageUrl={article?.news_img_url}
+      />
+    ))}
+
         </div>
       )}
     </div>
