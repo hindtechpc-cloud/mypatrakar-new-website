@@ -14,9 +14,9 @@ import Election from "./election/Election";
 export const componentsMap = {
   "MYFS28052025001": TopNews,
   "MYFS28052025002": OwnState,
-  "MYFS28052025004": State,
-  "MYFS28052025003": Game,
+  3: State,
+  "MYFS28052025004": Game,
   "MYFS28052025005": Entertainment,
-  6: Country,
+  "MYFS28052025003": Country,
   7: Election,
 };

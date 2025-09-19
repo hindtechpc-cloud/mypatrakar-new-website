@@ -4,6 +4,7 @@ import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 import { encryptData } from "../../../utils/cryptoHelper";
+import { motion } from "framer-motion";
 
 const NewsCard = ({
   news,
@@ -30,9 +31,11 @@ const NewsCard = ({
   const imageUrl = image
     ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${image}`
     : "https://via.placeholder.com/800x400?text=No+Image";
-
   return (
-    <div className={`relative ${className}`}>
+    <motion.div
+      className={`relative ${className}`}
+      
+    >
       {/* Image Section */}
       <div className={`relative select-none ${classNameToImage}`}>
         <img
@@ -59,20 +62,21 @@ const NewsCard = ({
       <div className={classNameForContent}>
         {/* Title */}
         <h2
-          className="text-lg md:text-xl font-semibold text-gray-800  cursor-pointer hover:underline"
+          className="text-lg md:text-xl font-semibold text-black cursor-pointer hover:underline"
           onClick={handleNewsClick}
           aria-label={`Read news: ${title}`}
-          
         >
           {title}
         </h2>
 
         {/* Description */}
-        <p className="text-sm md:text-sm text-gray-600 ">
-          <HtmlToPlainText htmlContent={description} maxLength={maxLength}/>
+        <p className="text-sm md:text-sm text-black">
+          <HtmlToPlainText htmlContent={description} maxLength={maxLength} />
         </p>
       </div>
-    </div>
+    </motion.div>
+
+
   );
 };
 

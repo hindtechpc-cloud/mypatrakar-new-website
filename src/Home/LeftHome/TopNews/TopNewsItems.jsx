@@ -1,5 +1,3 @@
-
-
 import { useCallback, useContext } from "react";
 import { NewsContext } from "../../../context/NewsContext";
 import { useNavigate } from "react-router-dom";
@@ -8,17 +6,18 @@ import { encryptData } from "../../../utils/cryptoHelper";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 import { motion } from "framer-motion";
 
-const NewsItem = ({ news, onNewsClick, index ,maxLength,headingLength}) => {
+const NewsItem = ({ news, onNewsClick, index, maxLength, headingLength }) => {
   return (
     <motion.div
-      className="flex items-start justify-start gap-2  w-full  cursor-pointer"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.4 }}
+      className="flex items-start justify-start gap-[15px]  w-full  cursor-pointer"
+      initial={{ opacity: 0, y: 20, x: 100 }}
+      animate={{ opacity: 1, y: 0, x: 0 }}
+      exit={{ x: -100, y: -20, opacity: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.6 }}
       // whileHover={{ y: -5, backgroundColor: "#f8fafc" }}
       onClick={() => onNewsClick(news)}
     >
-      <div className="flex-shrink-0 w-24 h-16 relative overflow-hidden rounded-md shadow-md">
+      <div className="flex-shrink-0 w-[110px] h-[74px] relative overflow-hidden rounded-md shadow-md">
         <img
           src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${
             news?.news_img_url
@@ -31,8 +30,14 @@ const NewsItem = ({ news, onNewsClick, index ,maxLength,headingLength}) => {
       </div>
 
       <div className="flex-1 min-w-0">
-        <h2 className="text-gray-800 text-sm font-semibold leading-tight hover:underline transition-colors duration-300">
-          {news?.news_headline?.length > 0 && news?.news_headline?.length > headingLength
+        <h2
+          className="text-black text-sm font-bold leading-[21px] tracking-wider hover:underline transition-colors duration-300"
+          style={{
+            fontFamily: "",
+          }}
+        >
+          {news?.news_headline?.length > 0 &&
+          news?.news_headline?.length > headingLength
             ? `${news.news_headline.slice(0, headingLength)}...`
             : news.news_headline}
         </h2>
@@ -72,8 +77,8 @@ export default function TopNewsItems({
   className,
   itemsToShow = 6,
   maxLength,
-  headingLength,
-  start=1
+  headingLength = 70,
+  start = 0,
 }) {
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);
@@ -97,7 +102,7 @@ export default function TopNewsItems({
           onNewsClick={handleNewsClick}
           index={index}
           maxLength={maxLength}
-          headingLength={headingLength||300}
+          headingLength={headingLength || 300}
         />
       ))}
     </div>

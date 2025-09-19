@@ -67,6 +67,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { WebThemeContext } from "../../../context/ThemeContext";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { loadNewsBySubCategory } from "../../../../api";
+import Subcategories from "./Subcategories";
 
 const MenuBar = ({
   menuText,
@@ -98,16 +100,20 @@ const MenuBar = ({
     setArticlList(currentArticles);
   };
 
-  // ✅ Jab page ya articles change ho tabhi list update karo
-  // useEffect(() => {
-  //   setArticlList(currentArticles);
-  // }, [ articles]); // <-- currentArticles ko dependency me mat daalo
-
   // ✅ Jab articles list update ho to page ko 1 pe reset karo
-  useEffect(() => {
-    setPage(1);
-  }, [articles]);
+  // useEffect(() => {
+  //   setPage(1);
+  //   // setArticlList(currentArticles);
 
+  // }, []);
+  const handleArticlList = async (id) => {
+    try {
+      const res = await loadNewsBySubCategory(id);
+      setArticlList(res.data.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div
       className="text-white shadow-md flex items-center justify-between rounded-md py-[7px] px-[10px]"
@@ -122,49 +128,43 @@ const MenuBar = ({
           <span className="text-[15px] font-bold tracking-wide">
             {menuText}
           </span>
-
-          {menuItems?.length > 0 && (
-            <button className="md:hidden focus:outline-none transition-transform duration-300">
-              {isOpen ? (
-                <IoIosArrowUp size={22} className="text-yellow-300" />
-              ) : (
-                <IoIosArrowDown size={22} className="text-yellow-300" />
-              )}
-            </button>
-          )}
         </div>
       </div>
 
       {/* Pagination */}
-      <div className="mt text-sm text-gray-200">
-        {totalPages > 1 && (
-          <Stack spacing={2}>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={handlePageChange}
-              shape="rounded"
-              sx={{
-                "& .MuiPaginationItem-root": {
-                  color: "#374151", // text color for unselected
-                  backgroundColor: "#d1d5db", // gray bg
-                  borderRadius: "8px",
-                  border: "1px solid #fff",
-                },
-                "& .MuiPaginationItem-root.Mui-selected": {
-                  backgroundColor: "#ffffff", // white bg for selected
-                  color: "#000000", // black text
-                  fontWeight: "bold",
-                },
-                "& .MuiPaginationItem-root:hover": {
-                  backgroundColor: "#9ca3af", // darker gray on hover
-                  color: "blue",
-                },
-              }}
-            />
-          </Stack>
-        )}
-      </div>
+      {menuItems.length <= 0 ? (
+        <div className="mt text-sm text-gray-200">
+          {totalPages > 1 && (
+            <Stack spacing={2}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={handlePageChange}
+                shape="rounded"
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    color: "#374151", // text color for unselected
+                    backgroundColor: "#d1d5db80", // gray bg
+                    borderRadius: "8px",
+                    border: "1px solid #fff",
+                  },
+                  "& .MuiPaginationItem-root.Mui-selected": {
+                    backgroundColor: "#ffffff", // white bg for selected
+                    color: "#000000", // black text
+                    fontWeight: "bold",
+                  },
+                  "& .MuiPaginationItem-root:hover": {
+                    backgroundColor: "#9ca3af", // darker gray on hover
+                    color: "black",
+                  },
+                }}
+              />
+            </Stack>
+          )}
+        </div>
+      ) : (
+       <Subcategories menuItems={menuItems} handleArticlList={handleArticlList}/>
+      )}
     </div>
   );
 };

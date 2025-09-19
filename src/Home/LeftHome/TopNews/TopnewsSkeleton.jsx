@@ -17,7 +17,7 @@ export default function TopnewsSkeleton() {
           <div className="md:w-1/2 w-full bg-gray-300 h-1.5 rounded-full"></div>
         </div>
       </section>
-      <section className="w-full sm:flex flex-1 sm:flex-wrap  items-start justify-start gap-2">
+      <section className="w-full grid grid-cols-2   items-start justify-start gap-2">
         {[1, 2, 3, 4, 5, 6].map((_, index) => {
           return (
             <div key={index} className="flex items-start justify-start gap-2 md:mt-0 mt-2">

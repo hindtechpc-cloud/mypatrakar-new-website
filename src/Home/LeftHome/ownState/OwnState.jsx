@@ -20,7 +20,7 @@ export default function OwnState({
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+const [articlList,setArticlList]=useState([])
   const CACHE_KEY = `own_state_news_${category_id}`;
   const CACHE_EXPIRY = 30 * 60 * 1000; // 30 minutes
 
@@ -73,13 +73,20 @@ export default function OwnState({
     return () => clearInterval(interval);
   }, [fetchNews]);
 
-  const featuredArticle = articles[0];
+  const featuredArticle = articlList.length > 0 ? articlList[0] : articles[0];
+
 
   /* -------- Loading -------- */
   if (loading) {
     return (
-      <div>
-        <Menu menuText={section_title} menu={[]} />
+      <div className="mb-3">
+        <Menu
+               menuText={section_title}
+               menu={[]}
+               setArticlList={setArticlList}
+               articles={articles}
+               totalArticles={articles.length}
+             />
         <OwnStateSkeleton />
       </div>
     );
@@ -89,7 +96,13 @@ export default function OwnState({
   if (error) {
     return (
       <div>
-        <Menu menuText={section_title} menu={[]} />
+        <Menu
+        menuText={section_title }
+        menu={[]}
+        setArticlList={setArticlList}
+        articles={articles}
+        totalArticles={articles.length}
+      />
         <p className="text-red-600 font-semibold text-center my-4">{error}</p>
         <button
           onClick={() => fetchNews(true)}
@@ -104,28 +117,30 @@ export default function OwnState({
   /* -------- Main Render -------- */
   return (
     <div className="mt-4">
-      <Menu
-        menuText={section_title}
-        menu={menu}
-        setSubcategory={setSubcategory}
-      />
+       <Menu
+              menuText={section_title }
+              menu={[]}
+              setArticlList={setArticlList}
+              articles={articles}
+              totalArticles={articles.length}
+            />
 
       {!articles.length ? (
         <EmptyCard> Nothing to show in {section_title}</EmptyCard>
       ) : (
-        <div className="mt-4">
-          <div className="w-full flex items-start justify-start gap-3 ">
+        <div className="mt-[9px]">
+          <div className="w-full flex items-start justify-start gap-[32px] ">
             {/* Featured Article */}
             {featuredArticle && (
             
-                <div className="w-1/2">
+                <div className="w-[363px]">
 
                   <NewsCard
-                  className="md:flex flex-col items-start gap-0 w-full mx-auto"
-                  classNameToImage="md:w-96 md:h-48 sm:w-full w-full h-96 sm:h-96 items-start justify-start relative rounded"
-                  classNameForContent="w-full mt-1"
+                  className="md:flex flex-col items-start gap-[5px] w-full mx-auto"
+                  classNameToImage="md:w-[363px] md:h-48 sm:w-full w-full h-96 sm:h-96 items-start justify-start relative rounded"
+                  classNameForContent="w-full mt-1 gap-1"
                   image={featuredArticle?.news_img_url}
-                  ctaText={featuredArticle.category}
+                  ctaText={featuredArticle?.is_breaking == 1 ? "Breaking" : ""}
                   title={featuredArticle.news_headline}
                   description={featuredArticle.news_description_html}
                   newsId={featuredArticle.news_id}
@@ -140,12 +155,12 @@ export default function OwnState({
             )}
 
             {/* List of Other Articles */}
-            <div className="w-full flex items-start justify-start ">
+            <div className="w-2/3 flex items-start justify-start ">
               <TopNewsItems
-                topNewsItems={articles}
+                topNewsItems={articlList.length > 0 ? articlList : articles}
                 className={"grid gap-2"}
                 maxLength={50}
-                headingLength={300}
+                headingLength={100}
               />
             </div>
           </div>

@@ -5,7 +5,7 @@ import NewsCard from "../shared/NewsCard";
 import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
-
+import { motion } from "framer-motion";
 /* ----------------- Cache Helpers ----------------- */
 const setCache = (key, data) => {
   sessionStorage.setItem(key, JSON.stringify(data));
@@ -105,23 +105,26 @@ const Game = ({
       ) : (
         <div className="flex flex-wrap gap-[11px] mt-[9px]">
           {articlList.length > 0
-  ? articlList.map((article) => (
-      <ArticleCard
-        key={article.news_id}
-        article={article}
-        category={article?.is_breaking == 1 ? "Breaking" : ""}
-        imageUrl={article?.news_img_url}
-      />
-    ))
-  : articles.slice(0, 4).map((article) => (
-      <ArticleCard
-        key={article.news_id}
-        article={article}
-        category={article?.is_breaking == 1 ? "Breaking" : ""}
-        imageUrl={article?.news_img_url}
-      />
-    ))}
-
+            ? articlList.map((article, index) => (
+                <ArticleCard
+                  index={index}
+                  key={article.news_id}
+                  article={article}
+                  category={article?.is_breaking == 1 ? "Breaking" : ""}
+                  imageUrl={article?.news_img_url}
+                />
+              ))
+            : articles
+                .slice(0, 2)
+                .map((article, index) => (
+                  <ArticleCard
+                    index={index}
+                    key={article.news_id}
+                    article={article}
+                    category={article?.is_breaking == 1 ? "Breaking" : ""}
+                    imageUrl={article?.news_img_url}
+                  />
+                ))}
         </div>
       )}
     </div>
@@ -151,9 +154,15 @@ const ErrorState = ({ error, onRetry }) => (
   </div>
 );
 
-const ArticleCard = ({ article, category, imageUrl }) => {
+const ArticleCard = ({ article, category, imageUrl, index }) => {
   return (
-    <div className="flex w-full transition-transform rounded-xl ">
+    <motion.div
+      className="flex w-full transition-transform rounded-xl"
+      initial={{ x: 50, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -50, opacity: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.4 }}
+    >
       <NewsCard
         className="flex flex-col md:flex-row items-start gap-5 transition-transform duration-300 overflow-hidden"
         classNameToImage="w-[230px] h-[129px] object-cover rounded-lg"
@@ -171,7 +180,7 @@ const ArticleCard = ({ article, category, imageUrl }) => {
           news_id: article.news_id,
         }}
       />
-    </div>
+    </motion.div>
   );
 };
 
