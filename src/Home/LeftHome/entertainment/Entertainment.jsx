@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 import Menu from "../shared/MenuBar";
 import TopNewsItems from "../TopNews/TopNewsItems";
-import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
 import { GetNewsSubcategories, loadNewsByCategory } from "../../../../api";
 import EnterTainmentSkelton from "./EnterTainmentSkelton";
@@ -67,30 +66,43 @@ const Entertainment = ({
       setLoading(false);
     }
   }, [category_id]);
-  // console.log(articles[0])
 
   const loadSubcategories = async () => {
     try {
-      // console.log(category_id)
       const res = await GetNewsSubcategories("", category_id);
-      // console.log(res)
       setMenu(res.data.response);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchNews();
     loadSubcategories();
   }, [fetchNews]);
 
-  if (loading || error) {
+  // ✅ Loading case
+  if (loading) {
     return (
       <div>
         <Menu menuText={section_title || "State"} menu={[]} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <EnterTainmentSkelton />
-        </div>
+        <EnterTainmentSkelton />
+      </div>
+    );
+  }
+
+  // ✅ Error case with Retry
+  if (error) {
+    return (
+      <div className="text-center py-8">
+        <Menu menuText={section_title || "State"} menu={[]} />
+        <p className="text-red-600 mb-4">{error}</p>
+        <button
+          onClick={fetchNews}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -122,23 +134,27 @@ const Entertainment = ({
 
             {/* News Items Section */}
             <motion.div
-              className="sm:my-0 w-1/2 flex items-start"
+              className=" md:w-1/2 w-full flex items-start md:mt-0 mt-[14px]"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
               <TopNewsItems
                 topNewsItems={articlList.length > 0 ? articlList : articles}
-                className="flex flex-col items-start justify-center gap-[22px]"
+                className="flex flex-col items-start justify-center md:gap-[22px] gap-[15px]"
+                start={1}
               />
             </motion.div>
           </motion.div>
         </div>
       )}
-      <div className="relative flex items-end justify-end   -top-7">
-      <ArticlesPagination setArticlList={setArticlList} articles={articles} totalArticles={articles.length}/>
-        
-        </div>{" "}
+      <div className="relative flex items-end justify-end -top-7">
+        <ArticlesPagination
+          setArticlList={setArticlList}
+          articles={articles}
+          totalArticles={articles.length}
+        />
+      </div>
     </div>
   );
 };
@@ -149,7 +165,7 @@ const FeaturedEntertainmentCard = ({ articles }) => {
 
   return (
     <motion.div
-      className="relative md:w-[365px] w-full h-[471px] rounded overflow-hidden  shadow-2xl  "
+      className="relative md:w-[365px] w-full md:h-[471px] sm:h-[365px] h-[228px] rounded overflow-hidden shadow-2xl"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
@@ -174,7 +190,7 @@ const FeaturedEntertainmentCard = ({ articles }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {articles[0]?.is_breaking == 1 ? "Breaking" : ""}
+            Breaking
           </motion.button>
         )}
         <motion.h2
@@ -182,34 +198,9 @@ const FeaturedEntertainmentCard = ({ articles }) => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          style={{
-            fontFamily: "",
-          }}
         >
           {articles[0].news_headline}
         </motion.h2>
-        {/* <motion.div
-          className="flex items-center mt-3 text-gray-200 text-sm"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          {new Date(articles[0]?.created_at).toLocaleDateString()}
-        </motion.div> */}
       </div>
     </motion.div>
   );

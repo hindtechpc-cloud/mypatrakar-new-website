@@ -75,7 +75,7 @@ NewsItem.propTypes = {
 export default function TopNewsItems({
   topNewsItems = [],
   className,
-  itemsToShow = 6,
+  itemsToShow = 5,
   maxLength,
   headingLength = 70,
   start = 0,

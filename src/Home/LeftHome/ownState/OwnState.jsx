@@ -103,13 +103,16 @@ const [articlList,setArticlList]=useState([])
         articles={articles}
         totalArticles={articles.length}
       />
-        <p className="text-red-600 font-semibold text-center my-4">{error}</p>
+        <div className="flex flex-col items-center justify-center mx-auto mb-3">
+
+          <p className="text-red-600  text-center my-4">{error}</p>
         <button
           onClick={() => fetchNews(true)}
           className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
         >
           Retry
         </button>
+        </div>
       </div>
     );
   }
@@ -129,15 +132,15 @@ const [articlList,setArticlList]=useState([])
         <EmptyCard> Nothing to show in {section_title}</EmptyCard>
       ) : (
         <div className="mt-[9px]">
-          <div className="w-full flex items-start justify-start gap-[32px] ">
+          <div className="w-full md:flex flex-1 items-start justify-start gap-[32px] ">
             {/* Featured Article */}
             {featuredArticle && (
             
-                <div className="w-[363px]">
+                <div className="md:w-[363px] w-full">
 
                   <NewsCard
                   className="md:flex flex-col items-start gap-[5px] w-full mx-auto"
-                  classNameToImage="md:w-[363px] md:h-48 sm:w-full w-full h-96 sm:h-96 items-start justify-start relative rounded"
+                  classNameToImage="md:w-[363px] w-full md:h-48 sm:h-[365px] h-[228px] sm:w-full w-full h-96 sm:h-96 items-start justify-start relative rounded"
                   classNameForContent="w-full mt-1 gap-1"
                   image={featuredArticle?.news_img_url}
                   ctaText={featuredArticle?.is_breaking == 1 ? "Breaking" : ""}
@@ -155,12 +158,13 @@ const [articlList,setArticlList]=useState([])
             )}
 
             {/* List of Other Articles */}
-            <div className="w-2/3 flex items-start justify-start ">
+            <div className="md:w-2/3 w-full flex items-start justify-start ">
               <TopNewsItems
                 topNewsItems={articlList.length > 0 ? articlList : articles}
-                className={"grid gap-2"}
+                className={"grid md:gap-2 gap-[13px]"}
                 maxLength={50}
                 headingLength={100}
+                start={1}
               />
             </div>
           </div>

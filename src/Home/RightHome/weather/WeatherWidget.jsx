@@ -199,7 +199,7 @@ const WeatherWidget = () => {
   };
 
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4">
+    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
       <Header text="Weather" />
       <div className="bg-gray-800 text-white rounded-lg shadow-lg p-4 w-full">
         {error && (

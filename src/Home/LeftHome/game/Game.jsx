@@ -6,6 +6,7 @@ import { loadNewsByCategory } from "../../../../api";
 import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
 import { motion } from "framer-motion";
+import GameSkeleton from "./GameSkeleton";
 /* ----------------- Cache Helpers ----------------- */
 const setCache = (key, data) => {
   sessionStorage.setItem(key, JSON.stringify(data));
@@ -79,13 +80,33 @@ const Game = ({
           articles={articles}
           totalArticles={articles.length}
         />
-        <LoadingState />
+
+        <GameSkeleton />
       </div>
     );
   }
 
   if (error) {
-    return <ErrorState error={error} onRetry={fetchNews} />;
+    return (
+      <>
+        <Menu
+          menuText={section_title}
+          menu={[]}
+          setArticlList={setArticlList}
+          articles={articles}
+          totalArticles={articles.length}
+        />
+        <div className="flex flex-col items-center justify-center p-6 gap-4">
+          <p className="text-red-600  text-center">{error} </p>
+          <button
+            onClick={fetchNews}
+            className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
+          >
+            Retry
+          </button>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -103,8 +124,8 @@ const Game = ({
       {!articles.length ? (
         <EmptyCard>Nothing to show in {section_title}</EmptyCard>
       ) : (
-        <div className="flex flex-wrap gap-[11px] mt-[9px]">
-          {articlList.length > 0
+        <div className="md:flex md:flex-wrap md:gap-[11px] gap-0 mt-[9px]">
+          {!loading && articlList.length > 0
             ? articlList.map((article, index) => (
                 <ArticleCard
                   index={index}
@@ -115,7 +136,7 @@ const Game = ({
                 />
               ))
             : articles
-                .slice(0, 2)
+                .slice(0, 5)
                 .map((article, index) => (
                   <ArticleCard
                     index={index}
@@ -131,42 +152,19 @@ const Game = ({
   );
 };
 
-/* ----------------- Sub-components ----------------- */
-const LoadingState = () => (
-  <div className="p-6">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[...Array(6)].map((_, i) => (
-        <AdCardSkeleton key={i} />
-      ))}
-    </div>
-  </div>
-);
-
-const ErrorState = ({ error, onRetry }) => (
-  <div className="flex flex-col items-center justify-center p-6 gap-4">
-    <p className="text-red-600 font-semibold text-center">{error}</p>
-    <button
-      onClick={onRetry}
-      className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
-    >
-      Retry
-    </button>
-  </div>
-);
-
 const ArticleCard = ({ article, category, imageUrl, index }) => {
   return (
     <motion.div
-      className="flex w-full transition-transform rounded-xl"
+      className="flex w-full transition-transform rounded-xl md:mb-2"
       initial={{ x: 50, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -50, opacity: 0 }}
       transition={{ delay: index * 0.1, duration: 0.4 }}
     >
       <NewsCard
-        className="flex flex-col md:flex-row items-start gap-5 transition-transform duration-300 overflow-hidden"
-        classNameToImage="w-[230px] h-[129px] object-cover rounded-lg"
-        classNameForContent="flex-1 text-[20px] flex flex-col justify-between"
+        className="md:flex flex-1 md:flex-row items-start gap-5 transition-transform duration-300 overflow-hidden"
+        classNameToImage="md:w-[230px]  w-full md:h-[129px] sm:h-[365px]  h-[228px] object-cover rounded-lg"
+        classNameForContent="flex-1 md:text-[20px] text-[18px] flex flex-col justify-between "
         image={imageUrl}
         ctaText={category}
         title={article.news_headline.slice(0, 100) || "Untitled Article"}

@@ -10,16 +10,16 @@ export default function Home() {
   const location=useLocation();
   return (
     <div>
-      <div className="flex flex-col lg:flex-row items-start justify-center gap-[45px] my-2 xl:mx-[149px] lg:mx-[50px] md:mx-[17px] sm:mx-8 mx-2 ">
+      <div className="flex flex-col lg:flex-row items-start justify-center gap-[45px] my-2 xl:mx-[149px] lg:mx-2  mx-2 ">
         {/* Left Section */}
-        <div className="w-full lg:w-[760px]">
+        <div className="w-full xl:w-[760px]">
          {/* { <LeftHome />} */}
           {location.pathname === "/" ? <LeftHome /> : <Category/>}
 
         </div>
 
         {/* Right Section */}
-        <div className="w-full  lg:w-[310px]">
+        <div className="w-full  xl:w-[335px] lg:w-[295px] md:w-1/2 lg:flex flex-1 ">
           <RightHome />
           {/* <Right/> */}
         </div>

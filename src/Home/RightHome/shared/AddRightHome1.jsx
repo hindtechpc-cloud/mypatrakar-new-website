@@ -55,7 +55,7 @@ export default function AddRightHome1({ adsData, text, className }) {
 
   // 🧱 Fallback: Custom Promotional UI
   return (
-    <div className="relative md:max-w-sm w-[350px] mx-auto rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-red-100 via-blue-50 to-purple-100 border-2 border-white hover:shadow-3xl transition-all duration-500 group">
+    <div className="relative mt-[9px] py-6 font-sans xl:w-[335px] lg:w-[295px] w-full mx-auto  rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-red-100 via-blue-50 to-purple-100 border-2 border-white hover:shadow-3xl transition-all duration-500 group">
       {/* Decorative Backgrounds */}
       <div className="absolute top-0 right-0 w-16 h-16 bg-red-400 rounded-full filter blur-xl opacity-20"></div>
       <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-400 rounded-full filter blur-xl opacity-20"></div>

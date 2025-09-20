@@ -82,7 +82,7 @@ const MenuBar = ({
 
   // pagination states
   const [page, setPage] = useState(1);
-  const articlesPerPage = 2;
+  const articlesPerPage = 5;
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const themeColor = webTheme["bg-color"] || "#b91c1c";
@@ -163,7 +163,9 @@ const MenuBar = ({
           )}
         </div>
       ) : (
-       <Subcategories menuItems={menuItems} handleArticlList={handleArticlList}/>
+       <div className="md:flex hidden">
+        <Subcategories menuItems={menuItems} handleArticlList={handleArticlList} articles={articles} setArticlList={setArticlList}/>
+       </div>
       )}
     </div>
   );

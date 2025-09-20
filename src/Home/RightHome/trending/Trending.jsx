@@ -87,7 +87,7 @@ loadnews();
   }, [roadmap_id]);
 // console.log(roadmaps)
   return (
-    <div className="font-sans md:max-w-sm w-[350px] mx-auto mt-[12px]">
+    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
       {articles.length > 0 && <Header text={"TopNews"} />}
       <div className=" flex items-start justify-center md:justify-start md:max-w-sm w-[300px] mx-auto  ">
         {/* Root Section */}

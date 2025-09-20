@@ -108,7 +108,7 @@ export default function Rashiphal() {
   }, []);
 
   return (
-    <div className="font-sans md:max-w-sm w-[350px] mx-auto mt-[12px]">
+    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
       <Header
         text=" आज का राशिफल"
         className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"

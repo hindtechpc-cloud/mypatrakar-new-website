@@ -87,7 +87,7 @@ export default function OwnState() {
   }, [loadNewsByRoadmapId]);
 
   return (
-    <div className=" font-sans md:max-w-sm w-[350px] mx-auto mt-[12px]">
+    <div className=" mt-[9px] font-sans xl:w-[335px] lg:w-[295px] w-full mx-auto">
       {articles.length > 0 && <Header text={"उत्तर प्रदेश"} />}
 
       {loading ? (

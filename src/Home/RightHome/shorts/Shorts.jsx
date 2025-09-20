@@ -114,11 +114,11 @@ export default function Shorts() {
   return (
     <>
       {articles.length > 0 && (
-        <div className="font-sans md:max-w-sm w-[350px] mx-auto mt-[5px] mb-[9px]">
+        <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
           <Header text="Shorts" />
           <div className="flex items-center justify-center relative">
             {/* Mobile Frame */}
-            <div className="relative w-[300px] h-[550px] bg-gradient-to-b from-gray-900 to-gray-800 rounded-[3rem] shadow-xl border-[10px] border-black overflow-hidden transition-all duration-300 hover:shadow-2xl">
+            <div className="relative xl:w-[335px] lg:w-[295px] bg-gradient-to-b from-gray-900 to-gray-800 rounded-[3rem] shadow-xl border-[10px] border-black overflow-hidden transition-all duration-300 hover:shadow-2xl">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[25px] bg-black rounded-b-2xl z-10"></div>
               <div className="absolute top-3 left-1/2 -translate-x-1/2 w-[60px] h-[5px] bg-gray-700 rounded-full z-10"></div>
 

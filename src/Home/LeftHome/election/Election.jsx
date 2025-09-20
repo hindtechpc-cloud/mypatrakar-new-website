@@ -422,13 +422,13 @@ export default function Election() {
   }, [polls, pollIndex]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-[0px]">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-[0px] shadow-lg">
       <Menu menuText={"चुनाव"} setSubcategory={setCurrentState} menu={[]} />
 
       <div className="max-w-6xl mx-auto mt-[9px]">
         {/* Header Section */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border border-blue-100">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div className=" rounded-xl px-3  mb-6 ">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4  mb-6">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
                 <IoStatsChart className="text-blue-600" />
@@ -442,7 +442,7 @@ export default function Election() {
 
             <div className="flex items-center gap-2">
               <button
-                className="bg-white hover:bg-blue-50 text-blue-600 p-3 rounded-full shadow-md transition-all duration-200 border border-blue-200 hover:shadow-lg"
+                className=" hover:bg-blue-50 text-blue-600 p-3 rounded-full  transition-all duration-200 border border-blue-200 hover:shadow-lg"
                 onClick={handleLeftScroll}
                 aria-label="Previous election"
               >

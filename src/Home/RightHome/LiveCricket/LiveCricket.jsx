@@ -67,7 +67,7 @@ export default function LiveCricket() {
   };
 
   return (
-    <div className="font-sans md:max-w-sm w-[350px] mx-auto mt-[12px]">
+    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
           <Header text="Live Cricket" />
 
       {!error && !loading && matches?.length > 0 ? (

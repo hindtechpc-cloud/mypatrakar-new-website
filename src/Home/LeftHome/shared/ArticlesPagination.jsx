@@ -9,7 +9,7 @@ export const ArticlesPagination = ({
 }) => {
   // pagination states
   const [page, setPage] = useState(1);
-  const articlesPerPage = 2;
+  const articlesPerPage = 5;
   // calculate current articles
   const startIndex = (page - 1) * articlesPerPage;
   const currentArticles = articles.slice(

@@ -3,7 +3,7 @@ import { FaWhatsapp, FaTelegramPlane } from "react-icons/fa";
 
 const JoinChannels = () => {
   return (
-   <div className="font-sans md:max-w-sm w-[350px] mx-auto mt-[12px]">
+   <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
 
      <div className="flex flex-col items-center   rounded-lg  font-sans md:max-w-sm  w-[300px] mx-auto ">
       {/* WhatsApp Button */}

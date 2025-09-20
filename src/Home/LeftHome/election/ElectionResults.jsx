@@ -113,7 +113,7 @@ export default function ElectionResults({ results }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-gray-100">
+    <div className=" rounded-2xl  mb-6 px-3 border border-gray-100">
       <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
         {/* Visualization Section */}
         <div className="w-full lg:w-2/5 flex flex-col items-center">

@@ -1,4 +1,3 @@
-
 import { useContext, useEffect, useState, useCallback, useMemo } from "react";
 import debounce from "lodash.debounce";
 import {
@@ -23,6 +22,9 @@ import ArticleListItem from "./ArticleListItem";
 import { encryptData } from "../../utils/cryptoHelper";
 import toast from "react-hot-toast";
 import SpeakMessage from "../../utils/SpeakMessage";
+import RightHome from "../RightHome/RightHome";
+import GameSkeleton from "../LeftHome/game/GameSkeleton";
+import NoData from "../NoData";
 
 const DEFAULT_FILTERS = {
   searchTerm: "",
@@ -75,15 +77,15 @@ export default function Search() {
       );
 
       const res = await NewsSortBy("MYAWR241227001", payload);
-      console.log(res)
+      console.log(res);
       const newArticles = res?.data?.response || [];
       setArticles(newArticles);
       setTotalPages(
         Math.ceil((res?.data?.total_count || newArticles.length) / 10) || 1
       );
       setCurrentPage(page);
-      toast.success("Fetched news successfully")
-      newArticles && <SpeakMessage message="Fetched news successfully!" />
+      toast.success("Fetched news successfully");
+      newArticles && <SpeakMessage message="Fetched news successfully!" />;
     } catch (err) {
       console.error("API Error:", err);
       setArticles([]);
@@ -108,7 +110,6 @@ export default function Search() {
     (e) => {
       e.preventDefault();
       fetchFilteredNews(1, filters);
-
     },
     [fetchFilteredNews, filters]
   );
@@ -120,7 +121,7 @@ export default function Search() {
     setError("");
     setCurrentPage(1);
     setTotalPages(1);
-    toast.error("Clear all filters successfully")
+    toast.error("Clear all filters successfully");
   }, []);
 
   // 🔹 pagination
@@ -199,178 +200,190 @@ export default function Search() {
     fetchLocations();
   }, []);
 
+
+
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Sticky Search Header */}
-      <div
-        className="py-4 sticky top-0 z-20 shadow-md"
-        style={{ backgroundColor: webTheme["bg-color"] || "#b91c1c" }}
-      >
-        <div className="max-w-5xl mx-auto px-4 flex items-center gap-4">
-          <form onSubmit={handleSubmit} className="flex-1">
-            <div className="flex items-center bg-white rounded-sm p-2 shadow-sm">
-              <button
-                type="submit"
-                className="text-gray-500 pl-2 pr-3"
-                disabled={isLoading}
-              >
-                <FaSearch />
-              </button>
+    <div className="flex flex-col lg:flex-row items-start justify-center gap-[45px] my-2 xl:mx-[149px] lg:mx-2  mx-2">
+      <div className="w-full xl:w-[760px]">
+        {/* Sticky Search Header */}
+        <div className="w-full text-start my-4">
+          {/* Heading */}
+          <h3
+            className="font-bold text-3xl mb-6"
+            style={{
+              fontFamily: "Noto Sans Devanagari",
+            }}
+          >
+            Search Results for:{" "}
+            <span className="capitalize">{filters?.searchTerm}</span>
+          </h3>
+
+          {/* Search Box */}
+          <div className="flex items-center justify-center gap-4 max-w-4xl mx-auto">
+            <form onSubmit={handleSubmit} className="flex-1">
               <input
                 type="text"
                 placeholder="Search news..."
-                onChange={(e) => debouncedSearch(e.target.value)}
-                className="border-none outline-none text-gray-800 placeholder-gray-500 w-full"
+                value={filters.searchTerm}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    searchTerm: e.target.value,
+                  }))
+                }
+                className="w-full px-4 py-3 border border-yellow-400 rounded-sm focus:outline-none text-gray-800 shadow-sm"
                 disabled={isLoading}
               />
-              {filters.searchTerm && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFilters((prev) => ({ ...prev, searchTerm: "" }))
-                  }
-                  className="p-1 text-gray-400 hover:text-gray-600"
-                  disabled={isLoading}
-                >
-                  <FaTimes />
-                </button>
-              )}
-            </div>
-          </form>
-          <button
-            onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="md:hidden p-2 bg-white rounded-lg shadow-sm text-gray-700 hover:bg-gray-100"
-            aria-label="Toggle filters"
-          >
-            <FaFilter />
-          </button>
-        </div>
-      </div>
+            </form>
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        {/* 🔹 Filters */}
-        <section className="mb-6 p-6 rounded-lg bg-white shadow-sm">
-          <div className={`${showMobileFilters ? "block" : "hidden"} md:block`}>
-            <DropdownFilters
-              categories={categories}
-              subcategories={subcategories}
-              locations={locations}
-              sortOptions={SORT_OPTIONS}
-              setCategory={(val) =>
-                setFilters((prev) => ({
-                  ...prev,
-                  category: val,
-                  subcategory: "",
-                }))
-              }
-              setSubcategory={(val) =>
-                setFilters((prev) => ({ ...prev, subcategory: val }))
-              }
-              setSortBy={(val) => setFilters((prev) => ({ ...prev, sortBy: val }))}
-              setLocation={(val) =>
-                setFilters((prev) => ({ ...prev, location: val }))
-              }
-              currentFilters={filters}
+            {/* Search Button */}
+            <button
+              type="submit"
+              onClick={handleSubmit}
               disabled={isLoading}
-              fetchNews={fetchFilteredNews}
-            />
+              className="bg-red-700 text-white px-8 py-3 rounded-full font-medium shadow-md hover:bg-red-800 transition"
+            >
+              Search
+            </button>
           </div>
-        </section>
-
-        {/* 🔹 Buttons */}
-        <div className="flex items-center justify-center gap-4 my-6">
-          <button
-            onClick={handleSubmit}
-            disabled={isLoading || (!filters.searchTerm && !filters.category)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-10 rounded shadow-md hover:shadow-lg flex items-center gap-2 disabled:opacity-70"
-          >
-            {isLoading ? (
-              <>
-                <ImSpinner8 className="animate-spin" /> Searching...
-              </>
-            ) : (
-              "SEARCH"
-            )}
-          </button>
-          <button
-            onClick={handleClear}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-10 rounded shadow-md hover:shadow-lg disabled:opacity-70"
-          >
-            CLEAR
-          </button>
         </div>
 
-        {/* 🔹 Ads */}
-        {topAds && (
-          <div className="flex justify-center my-6">
-            <HeaderAd adData={topAds} />
-          </div>
-        )}
+        <main className="max-w-7xl mx-auto my-2">
+          {/* 🔹 Filters */}
+          <section className="">
+            <div
+              className={`${showMobileFilters ? "block" : "hidden"} md:block`}
+            >
+              <DropdownFilters
+                categories={categories}
+                subcategories={subcategories}
+                locations={locations}
+                sortOptions={SORT_OPTIONS}
+                setCategory={(val) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    category: val,
+                    subcategory: "",
+                  }))
+                }
+                setSubcategory={(val) =>
+                  setFilters((prev) => ({ ...prev, subcategory: val }))
+                }
+                setSortBy={(val) =>
+                  setFilters((prev) => ({ ...prev, sortBy: val }))
+                }
+                setLocation={(val) =>
+                  setFilters((prev) => ({ ...prev, location: val }))
+                }
+                currentFilters={filters}
+                disabled={isLoading}
+                fetchNews={fetchFilteredNews}
+              />
+            </div>
+          </section>
 
-        {/* 🔹 Articles */}
-        <section className="mt-8 bg-white p-6 rounded-lg shadow-sm flex flex-col items-center justify-center min-h-[40vh]">
-          {isLoading ? (
-            <div className="flex justify-center items-center py-20 w-full">
-              <ImSpinner8 className="animate-spin text-4xl text-gray-400" />
-            </div>
-          ) : articles.length > 0 ? (
-            <div className="w-full max-w-4xl">
-              {articles.map((article) => (
-                <ArticleListItem
-                  key={article.news_id}
-                  article={{
-                    image: article.news_img_url,
-                    title: article.news_headline,
-                    description:
-                      article.news_description_html ||
-                      "No description available.",
-                    category: article.news_category_name,
-                    url: `/read-news/${article.news_headline}/${encryptData(
-                      article.news_id
-                    )}`,
-                  }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 w-full">
-              <h3 className="text-xl font-medium text-gray-600 mb-2">
-                {filters.searchTerm || filters.category
-                  ? "No articles found"
-                  : "Search for news or select a category"}
-              </h3>
-              <p className={filters.searchTerm || filters.category ?"text-green-500":"text-red-500"}>
-                {filters.searchTerm || filters.category
-                  ? "Try adjusting your search criteria"
-                  : "Browse news by selecting a category or using the search bar"}
-              </p>
+          {/* 🔹 Buttons */}
+          <div className="flex items-center justify-center gap-4 my-3">
+            <button
+              onClick={handleSubmit}
+              disabled={isLoading || (!filters.searchTerm && !filters.category)}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-10 rounded shadow-md hover:shadow-lg flex items-center gap-2 disabled:opacity-70"
+            >
+              {isLoading ? (
+                <>
+                  <ImSpinner8 className="animate-spin" /> Searching...
+                </>
+              ) : (
+                "SEARCH"
+              )}
+            </button>
+            <button
+              onClick={handleClear}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-10 rounded shadow-md hover:shadow-lg disabled:opacity-70"
+            >
+              CLEAR
+            </button>
+          </div>
+
+          {/* 🔹 Ads */}
+          {topAds && (
+            <div className="flex justify-center my-6">
+              <HeaderAd adData={topAds} />
             </div>
           )}
-        </section>
 
-        {/* 🔹 Pagination */}
-        {!isLoading && articles.length > 0 && totalPages > 1 && (
-          <div className="mt-8 flex justify-center items-center gap-4">
-            <button
-              onClick={() => loadPage(currentPage - 1)}
-              disabled={currentPage <= 1}
-              className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm disabled:opacity-50"
-            >
-              <FaArrowLeft /> Previous
-            </button>
-            <span className="text-gray-700 font-medium">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() => loadPage(currentPage + 1)}
-              disabled={currentPage >= totalPages}
-              className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm disabled:opacity-50"
-            >
-              Next <FaArrowRight />
-            </button>
-          </div>
-        )}
-      </main>
+          {/* 🔹 Articles */}
+          <section className="mt-4  flex flex-col items-center justify-center min-h-[40vh]">
+            {!isLoading ? (
+              <GameSkeleton />
+             
+            ) : articles.length > 0 ? (
+              <div className="w-full max-w-4xl">
+                {articles.map((article) => (
+                  <ArticleListItem
+                    key={article.news_id}
+                    article={article}
+                    // news={article}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 w-full">
+                <h3 className="text-xl font-medium text-gray-600 mb-2">
+                  {filters.searchTerm || filters.category
+                    ? "No articles found"
+                    : "Search for news or select a category"}
+                </h3>
+                <p
+                  className={
+                    filters.searchTerm || filters.category
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }
+                >
+                  {filters.searchTerm || filters.category
+                    ? "Try adjusting your search criteria"
+                    : "Browse news by selecting a category or using the search bar"}
+                </p>
+              </div>
+            )}
+          </section>
+
+          {/* 🔹 Pagination */}
+          {!isLoading && articles.length > 0 && totalPages >1 ? (
+            <div className="mt-8 flex justify-center items-center gap-4">
+              <button
+                onClick={() => loadPage(currentPage - 1)}
+                disabled={currentPage <= 1}
+                className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm disabled:opacity-50"
+              >
+                <FaArrowLeft /> Previous
+              </button>
+              <span className="text-gray-700 font-medium">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => loadPage(currentPage + 1)}
+                disabled={currentPage >= totalPages}
+                className="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm disabled:opacity-50"
+              >
+                Next <FaArrowRight />
+              </button>
+            </div>
+          ):
+         <div className="mt-0">
+ <NoData/>
+
+         </div>
+          }
+        </main>
+      </div>
+
+      {/* Right Section */}
+      <div className="w-full  xl:w-[335px] lg:w-[295px] md:w-1/2 lg:flex flex-1 ">
+        <RightHome />
+        {/* <Right/> */}
+      </div>
     </div>
   );
 }

@@ -121,8 +121,8 @@ console.log(keyCandidates)
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 mt-6">
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4">
+    <div className="w-full  px-5 rounded-2xl shadow-lg overflow-hidden  mt-6">
+      <div className="bg-gradient-to-r from-red-600 to-red-700 p-4 rounded">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <FaTrophy className="text-yellow-300" />
           प्रमुख उम्मीदवार ({data.year})
@@ -245,7 +245,7 @@ console.log(keyCandidates)
         )}
       </div>
 
-      <div className="bg-gray-50 p-3 text-center text-xs text-gray-500 border-t border-gray-200">
+      <div className=" p-3 text-center text-xs text-gray-500 border-t border-gray-200">
         {parties && parties.key_candidates ? (
           <>चुनाव वर्ष {data.year} के प्रमुख उम्मीदवार</>
         ) : (

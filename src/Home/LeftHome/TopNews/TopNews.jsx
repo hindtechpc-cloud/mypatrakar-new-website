@@ -8,6 +8,7 @@ import { AdCardSkeleton } from "../../market/components/Skeleton";
 import EmptyCard from "../shared/EmptyCard";
 import TopnewsSkeleton from "./TopnewsSkeleton";
 import { motion } from "framer-motion";
+
 const TopNews = ({ category_id, section_title }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,11 +24,11 @@ const TopNews = ({ category_id, section_title }) => {
 
     try {
       setLoading(true);
+      setError(null);
 
       // ✅ cache check
       const cacheKey = `news_${category_id}`;
       const cachedData = sessionStorage.getItem(cacheKey);
-      console.log(cachedData);
       if (cachedData) {
         setArticles(JSON.parse(cachedData));
         setLoading(false);
@@ -36,7 +37,6 @@ const TopNews = ({ category_id, section_title }) => {
 
       const { data } = await loadNewsByCategory(category_id);
       const news = data?.response || [];
-      console.log(news);
       setArticles(news);
 
       // ✅ save to cache (sessionStorage)
@@ -52,10 +52,34 @@ const TopNews = ({ category_id, section_title }) => {
   useEffect(() => {
     fetchNews();
   }, [fetchNews]);
-  console.log(articlList);
-  console.log(articles);
-  const featuredArticle = articlList.length > 0 ? articlList[0] : articles[0];
 
+  const featuredArticle = articlList.length > 0 ? articlList[0] : articles[0];
+  if (loading) {
+    return <TopnewsSkeleton />;
+  }
+
+  if (error) {
+    return (
+     <div>
+            <Menu
+            menuText={section_title }
+            menu={[]}
+            setArticlList={setArticlList}
+            articles={articles}
+            totalArticles={articles.length}
+          />
+           <div className="flex flex-col items-center justify-center mx-auto my-5">
+             <p className="text-red-600  text-center my-4">{error}  </p>
+            <button
+              onClick={() => fetchNews(true)}
+              className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
+            >
+              Retry
+            </button>
+           </div>
+          </div>
+    );
+  }
   return (
     <div>
       <Menu
@@ -66,27 +90,43 @@ const TopNews = ({ category_id, section_title }) => {
         totalArticles={articles.length}
       />
 
-      {loading && <TopnewsSkeleton />}
+      {/* ✅ Reload Button if error */}
+      {/* {error && (
+        <div className="w-full flex items-center justify-center my-3">
+          <button
+            onClick={() => {
+              fetchedRef.current = false; // reset ref so fetch works again
+              fetchNews();
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
+          >
+            Reload News
+          </button>
+        </div>
+      )} */}
 
-      {!loading && !articles.length && (
+      {/* {loading && <TopnewsSkeleton />} */}
+
+      {!loading && !articles.length && !error && (
         <EmptyCard> Nothing to show in {section_title}</EmptyCard>
       )}
 
-      {!loading && articles.length > 0 && (
+      {!loading && articles.length > 0 && !error && (
         <div className="w-full mt-[12px]">
           {/* Featured Article */}
-          <motion.div className="w-full flex items-start justify-start" 
-          initial={{ x: 50, opacity: 0}}   
-      animate={{ x: 0, opacity: 1 }}    
-      exit={{ x: -50, opacity: 0, }}    
-      transition={{  duration: 0.4 }}
+          <motion.div
+            className="w-full flex items-start justify-start"
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -50, opacity: 0 }}
+            transition={{ duration: 0.4 }}
           >
             <NewsCard
-              className="sm:flex flex-1 w-full items-start justify-start gap-[27px] mx-auto"
-              classNameToImage="sm:w-[365px] md:h-[205px]  w-full h-96 sm:h-96 items-end justify-end relative rounded"
+              className="md:flex flex-1 w-full items-start justify-start gap-[27px] mx-auto"
+              classNameToImage="md:w-[365px] md:h-[205px] w-full sm:h-[365px] h-[228px] h-[] items-end justify-end relative rounded"
               image={featuredArticle?.news_img_url}
               ctaText={featuredArticle?.is_breaking == 1 ? "Breaking" : ""}
-              classNameForContent="w-1/2 flex-1 text-[20px] flex flex-col justify-between"
+              classNameForContent="md:w-1/2 w-full md:mt-0 mt-[4px] flex-1 text-[20px] flex flex-col justify-between"
               title={featuredArticle?.news_headline}
               description={featuredArticle?.news_description_html}
               newsId={featuredArticle?.news_id}
@@ -100,11 +140,12 @@ const TopNews = ({ category_id, section_title }) => {
           </motion.div>
 
           {/* News List */}
-          <div className="w-full mt-[23px] mb-[4px]">
+          <div className="w-full md:mt-[23px] mb-[4px]">
             <TopNewsItems
               topNewsItems={articlList.length > 0 ? articlList : articles}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-[35px] "
+              className="grid grid-cols-1 sm:grid-cols-2 xl:gap-[35px] md:gap-[25px] gap-[17px]"
               maxLength={60}
+              start={1}
             />
           </div>
         </div>

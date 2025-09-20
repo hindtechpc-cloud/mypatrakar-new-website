@@ -371,7 +371,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
   }
 
   return (
-    <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4 relative">
+    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto relative">
       {/* Login Overlay */}
       {showLoginOverlay && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">

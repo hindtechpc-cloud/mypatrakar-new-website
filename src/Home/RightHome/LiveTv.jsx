@@ -32,11 +32,11 @@ function LiveTv() {
   }, []);
 
   return (
-    <div className="mt-[9px] font-sans md:max-w-sm w-[350px] mx-auto">
+    <div className="mt-[px] font-sans xl:w-[335px] lg:w-[295px] w-full mx-auto">
        {/* <Header text="Live " /> */}
-      <div className="bg-white shadow-xl rounded overflow-hidden border-0">
+      <div className="bg-white shadow-xl rounded overflow-hidden border-0 h-90">
         {/* Header with gradient and animation */}
-        <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-2 px-5 relative overflow-hidden">
+        <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-2 px-5 relative overflow-hidden ">
           <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
             <div className="w-40 h-40 bg-red-500 rounded-full opacity-10 -mt-20 -ml-20"></div>
             <div className="w-40 h-40 bg-red-500 rounded-full opacity-10 -mb-20 -mr-20"></div>
@@ -65,7 +65,7 @@ function LiveTv() {
             </div>
           ) : isLive == 0 ? (
             <>
-              <div className="aspect-video rounded overflow-hidden shadow-lg relative">
+              <div className="-video rounded overflow-hidden shadow-lg relative">
                 <iframe
                   width="100%"
                   height="100%"
@@ -74,7 +74,7 @@ function LiveTv() {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  className="rounded"
+                  className="rounded  h-72"
                 />
                 <div className="absolute top-3 right-3 bg-red-600 text-white text-xs px-2 py-1 rounded-full flex items-center">
                   <BsBroadcast className="mr-1" />
