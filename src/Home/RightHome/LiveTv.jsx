@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GetLiveYouTube } from "../../../api";
 import Header from "./shared/Header";
 import { BsYoutube, BsArrowRepeat, BsBroadcast } from "react-icons/bs";
 import { RiLiveLine } from "react-icons/ri";
+import { WebThemeContext } from "../../context/ThemeContext";
 
 function LiveTv() {
   const [liveUrl, setLiveUrl] = useState("");
   const [isLive, setIsLive] = useState();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
+  const { webTheme } = useContext(WebThemeContext);
   const loadLiveMode = async () => {
     try {
       setRefreshing(true);
@@ -33,10 +34,16 @@ function LiveTv() {
 
   return (
     <div className="mt-[px] font-sans xl:w-[335px] lg:w-[295px] w-full mx-auto">
-       {/* <Header text="Live " /> */}
+      {/* <Header text="Live " /> */}
       <div className="bg-white shadow-xl rounded overflow-hidden border-0 h-90">
         {/* Header with gradient and animation */}
-        <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-2 px-5 relative overflow-hidden ">
+        <div
+          className=" text-white py-2 px-5 relative overflow-hidden "
+          style={{
+            background:
+              webTheme["bg-color"] == "#fff" ? "#000" : webTheme["bg-color"],
+          }}
+        >
           <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
             <div className="w-40 h-40 bg-red-500 rounded-full opacity-10 -mt-20 -ml-20"></div>
             <div className="w-40 h-40 bg-red-500 rounded-full opacity-10 -mb-20 -mr-20"></div>
@@ -44,9 +51,9 @@ function LiveTv() {
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center justify-center ">
               <div className="bg-white p-2 rounded-full mr-3">
-                <BsYoutube className="text-2xl text-red-600" /> 
+                <BsYoutube className="text-2xl text-red-600" />
               </div>
-             <p className="text-[16px] font-semibold">Live Stream</p>
+              <p className="text-[16px] font-semibold">Live Stream</p>
             </div>
             {isLive == 0 && (
               <div className="flex items-center bg-red-800 px-3 py-1 rounded-full">
@@ -61,7 +68,9 @@ function LiveTv() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-10">
               <div className="w-16 h-16 border-4 border-red-100 border-t-red-600 rounded-full animate-spin mb-4"></div>
-              <p className="text-gray-500 font-medium">Checking live status...</p>
+              <p className="text-gray-500 font-medium">
+                Checking live status...
+              </p>
             </div>
           ) : isLive == 0 ? (
             <>
@@ -81,7 +90,7 @@ function LiveTv() {
                   <span>Live</span>
                 </div>
               </div>
-              
+
               {/* <div className="bg-red-50 border border-red-100 rounded-xl p-3 mb-5">
                 <div className="flex items-center text-red-700">
                   <RiLiveLine className="text-lg mr-2" />
@@ -94,12 +103,18 @@ function LiveTv() {
               <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                 <BsYoutube className="text-3xl text-gray-400" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">Not Currently Live</h3>
-              <p className="text-gray-500 text-sm mb-2">{`We're`} not broadcasting at the moment.</p>
-              <p className="text-gray-400 text-xs">Check back later for our next live stream.</p>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                Not Currently Live
+              </h3>
+              <p className="text-gray-500 text-sm mb-2">
+                {`We're`} not broadcasting at the moment.
+              </p>
+              <p className="text-gray-400 text-xs">
+                Check back later for our next live stream.
+              </p>
             </div>
           )}
-{/* 
+          {/* 
           <div className="text-center mt-2">
             <button
               onClick={loadLiveMode}

@@ -1,117 +1,13 @@
-// import React from "react";
-// import bjp from "../../../assets/bjp.png";
-// import sp from "../../../assets/sp.jpg";
-// import inc from "../../../assets/inc.png";
-// import { FaThumbsUp } from "react-icons/fa6";
-// import { AiOutlineDash } from "react-icons/ai";
 
-// const TopResultTable = ({ parties }) => {
-//   // console.log(parties)
-//   // const parties = [
-//   //   {
-//   //     name: "BJP",
-//   //     symbol: bjp,
-//   //     icon: <FaThumbsUp className="text-green-500 text-xl" />,
-//   //     text: "जीत दर्ज",
-//   //   },
-//   //   {
-//   //     name: "SP",
-//   //     symbol: sp,
-//   //     icon: <AiOutlineDash className="text-gray-500 text-xl" />,
-//   //     text: "दूसरे स्थान",
-//   //   },
-//   //   {
-//   //     name: "INC",
-//   //     symbol: inc,
-//   //     icon: <AiOutlineDash className="text-gray-500 text-xl" />,
-//   //     text: "तीसरे स्थान",
-//   //   },
-//   // ];
-
-//   return (
-//     <div className="w-full max-w-3xl mx-auto mt-4 bg-white rounded-xl ">
-//       <h2 className="text-xl font-bold text-gray-800 mb-4">प्रमुख उम्मीदवार</h2>
-//       <div className="overflow-x-auto">
-//         <table className="w-full text-sm border-collapse rounded-lg overflow-hidden">
-//           <thead>
-//             <tr className="bg-blue-600 text-white text-left">
-//               <th className="p-3">उम्मीदवार का नाम</th>
-//               <th className="p-3 text-center">चिन्ह</th>
-//               <th className="p-3 text-right">परिणाम</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {parties?.map((party, index) => (
-//               <tr
-//                 key={index}
-//                 className="border-t border-gray-200 hover:bg-gray-50 transition-all"
-//               >
-//                 <td className="p-3 font-semibold text-gray-800">
-//                   {party.party_name}
-//                 </td>
-//                 <td className="p-3 text-center">
-//                   <img
-//                     src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${party.party_image}`}
-//                     alt={party.party_name}
-//                     className="h-8 w-8 object-contain mx-auto"
-//                   />
-//                 </td>
-//                 <td className="p-3 text-right text-gray-700 flex flex-col items-end">
-//                   {party?.icon}
-//                   <span className="text-xs mt-1">{party?.text}</span>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default TopResultTable;
-
-import React from "react";
+import React, { useContext } from "react";
 import { FaTrophy, FaMedal, FaAward } from "react-icons/fa";
+import { WebThemeContext } from "../../../context/ThemeContext";
 
 const TopResultTable = ({ parties }) => {
-  // console.log(parties);
-  // Sample data structure for demonstration
-  // const sampleData = {
-  //   date: "2025-05-02",
-  //   id: 9,
-  //   key_candidates: [
-  //     {
-  //       constituency_name: "Atrauli",
-  //       image: "polls-management/election-year//y435WoDSfybvCiCwKg9phdJNYtXn2SaPHnXHoVTB.png",
-  //       name: "Moana Odom",
-  //       political_party: "MYPP06032025001",
-  //       winner: "1"
-  //     }
-  //   ],
-  //   political_parties: [
-  //     {
-  //       party_name: "MYPP06032025004",
-  //       seats_won: "15",
-  //       party_image: "MYPP06032025004"
-  //     },
-  //     {
-  //       party_name: "MYPP06032025001",
-  //       seats_won: "52",
-  //       party_image: "MYPP06032025001"
-  //     }
-  //   ],
-  //   status: "Active",
-  //   total_seats: 600,
-  //   type: "Result",
-  //   year: "1982",
-  //   year_id: "MYEY02052025002"
-  // };
-  // console.log(`${import.meta.env.VITE_REACT_APP_API_URL_Image}/${parties.key_candidates[0].image}`)
-  // Use sample data if no parties are provided
   const data = parties && parties.key_candidates ? parties : {};
   const keyCandidates = data?.key_candidates||[];
-console.log(keyCandidates)
+  const {webTheme}=useContext(WebThemeContext);
+// console.log(keyCandidates)
   // Get party information for each candidate
   const getPartyInfo = (partyId) => {
     return (
@@ -122,7 +18,9 @@ console.log(keyCandidates)
 
   return (
     <div className="w-full  px-5 rounded-2xl shadow-lg overflow-hidden  mt-6">
-      <div className="bg-gradient-to-r from-red-600 to-red-700 p-4 rounded">
+      <div className=" p-4 rounded" style={{
+        background:webTheme['bg-color']=="#fff"?"#000":webTheme['bg-color'],
+      }}>
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <FaTrophy className="text-yellow-300" />
           प्रमुख उम्मीदवार ({data.year})

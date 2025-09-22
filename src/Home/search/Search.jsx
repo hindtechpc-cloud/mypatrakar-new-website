@@ -250,37 +250,90 @@ export default function Search() {
 
         <main className="max-w-7xl mx-auto my-2">
           {/* 🔹 Filters */}
-          <section className="">
-            <div
-              className={`${showMobileFilters ? "block" : "hidden"} md:block`}
-            >
-              <DropdownFilters
-                categories={categories}
-                subcategories={subcategories}
-                locations={locations}
-                sortOptions={SORT_OPTIONS}
-                setCategory={(val) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    category: val,
-                    subcategory: "",
-                  }))
-                }
-                setSubcategory={(val) =>
-                  setFilters((prev) => ({ ...prev, subcategory: val }))
-                }
-                setSortBy={(val) =>
-                  setFilters((prev) => ({ ...prev, sortBy: val }))
-                }
-                setLocation={(val) =>
-                  setFilters((prev) => ({ ...prev, location: val }))
-                }
-                currentFilters={filters}
-                disabled={isLoading}
-                fetchNews={fetchFilteredNews}
-              />
-            </div>
-          </section>
+      <section className="mb-6">
+  {/* Mobile Filter Toggle */}
+  <div className="md:hidden mb-4">
+    <button
+      onClick={() => setShowMobileFilters(!showMobileFilters)}
+      className="flex items-center justify-center w-full py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
+    >
+      <FaFilter className="mr-2 text-gray-600" />
+      <span className="font-medium text-gray-700">
+        {showMobileFilters ? "Hide Filters" : "Show Filters"}
+      </span>
+    </button>
+  </div>
+
+  {/* Filters Panel */}
+  <div
+    className={`${showMobileFilters ? "block" : "hidden"} md:block transition-all duration-300`}
+  >
+    <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+      <div className="flex justify-between items-center mb-4">
+        <h4 className="font-semibold text-lg text-gray-800">Filter News</h4>
+        {showMobileFilters && (
+          <button
+            onClick={() => setShowMobileFilters(false)}
+            className="md:hidden p-1 text-gray-500 hover:text-gray-700"
+            aria-label="Close filters"
+          >
+            <FaTimes size={18} />
+          </button>
+        )}
+      </div>
+      
+      <DropdownFilters
+        categories={categories}
+        subcategories={subcategories}
+        locations={locations}
+        sortOptions={SORT_OPTIONS}
+        fetchNews={fetchFilteredNews}
+        setCategory={(val) =>
+          setFilters((prev) => ({
+            ...prev,
+            category: val,
+            subcategory: "",
+          }))
+        }
+        setSubcategory={(val) =>
+          setFilters((prev) => ({ ...prev, subcategory: val }))
+        }
+        setSortBy={(val) =>
+          setFilters((prev) => ({ ...prev, sortBy: val }))
+        }
+        setLocation={(val) =>
+          setFilters((prev) => ({ ...prev, location: val }))
+        }
+        currentFilters={filters}
+        disabled={isLoading}
+      />
+      
+      {/* Quick Actions */}
+      {/* <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+        <button
+          onClick={handleSubmit}
+          disabled={isLoading}
+          className="px-4 py-2 bg-blue-100 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-200 transition-colors disabled:opacity-50"
+        >
+          Apply Filters
+        </button>
+        <button
+          onClick={() => {
+            setFilters(prev => ({
+              ...prev,
+              subcategory: "",
+              sortBy: "",
+              location: "lucknow"
+            }));
+          }}
+          className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors disabled:opacity-50"
+        >
+          Reset Filters
+        </button>
+      </div> */}
+    </div>
+  </div>
+</section>
 
           {/* 🔹 Buttons */}
           <div className="flex items-center justify-center gap-4 my-3">
@@ -313,8 +366,8 @@ export default function Search() {
           )}
 
           {/* 🔹 Articles */}
-          <section className="mt-4  flex flex-col items-center justify-center min-h-[40vh]">
-            {!isLoading ? (
+          <section className="mt-[50px]">
+            {isLoading ? (
               <GameSkeleton />
              
             ) : articles.length > 0 ? (
@@ -350,7 +403,7 @@ export default function Search() {
           </section>
 
           {/* 🔹 Pagination */}
-          {!isLoading && articles.length > 0 && totalPages >1 ? (
+          {!isLoading && articles.length > 0 && totalPages >1 && (
             <div className="mt-8 flex justify-center items-center gap-4">
               <button
                 onClick={() => loadPage(currentPage - 1)}
@@ -370,11 +423,7 @@ export default function Search() {
                 Next <FaArrowRight />
               </button>
             </div>
-          ):
-         <div className="mt-0">
- <NoData/>
-
-         </div>
+          )
           }
         </main>
       </div>
