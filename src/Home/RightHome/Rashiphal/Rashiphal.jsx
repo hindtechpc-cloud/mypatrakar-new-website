@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Header from "../shared/Header";
 import Loader from "../../../utils/Loader";
 import { GetHoroscope } from "../../../../api";
 import { Link } from "react-router-dom";
 import horoscope from "../../../assets/horoscop.png";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const zodiacSigns = [
   { name: "Aries", symbol: "♈", color: "bg-red-100 text-red-600" },
@@ -25,9 +26,39 @@ export default function Rashiphal() {
   const [fallbackInfo, setFallbackInfo] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   const CACHE_KEY = "rashiphal_data";
   const CACHE_EXPIRY = 30 * 60 * 1000; // 30 min
+
+  // Scroll functions
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: -300,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: 300,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const checkScrollPosition = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
 
   const fetchAllRashis = async () => {
     try {
@@ -107,15 +138,49 @@ export default function Rashiphal() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', checkScrollPosition);
+      // Initial check
+      setTimeout(checkScrollPosition, 100);
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', checkScrollPosition);
+      }
+    };
+  }, [rashis]);
+
   return (
-    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
+    <div className="mt-[9px] xl:w-[335px] lg:w-[295px] w-full mx-auto">
       <Header
         text=" आज का राशिफल"
         className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600"
       />
 
       {rashis.length > 0 ? (
-        <div className="">
+        <div className="relative">
+          {/* Navigation Arrows */}
+          {showLeftArrow && (
+            <button
+              onClick={scrollLeft}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-gray-200 transition-all duration-200 hover:scale-110"
+            >
+              <FaChevronLeft className="text-gray-700" />
+            </button>
+          )}
+
+          {showRightArrow && (
+            <button
+              onClick={scrollRight}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-gray-200 transition-all duration-200 hover:scale-110"
+            >
+              <FaChevronRight className="text-gray-700" />
+            </button>
+          )}
+
           {loading && (
             <div className="flex flex-col items-center justify-center p-8">
               <Loader />
@@ -145,11 +210,15 @@ export default function Rashiphal() {
           )}
 
           {!loading && rashis.length > 0 && (
-            <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[450px]">
+            <div 
+              ref={scrollContainerRef}
+              className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {rashis.map((item, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
+                  className="flex-shrink-0 w-80 bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden"
                 >
                   <div
                     className={`flex items-center justify-between p-4 ${item.color}`}
@@ -164,7 +233,7 @@ export default function Rashiphal() {
                   </div>
 
                   <div className="p-4">
-                    <p className="text-gray-700 text-sm leading-relaxed">
+                    <p className="text-gray-700 text-sm leading-relaxed line-clamp-4">
                       {item.rashifal}
                     </p>
                     <div className="mt-3 flex justify-end">
@@ -207,6 +276,17 @@ export default function Rashiphal() {
           />
         </Link>
       )}
+
+      {/* Add this to your global CSS or Tailwind config */}
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 }

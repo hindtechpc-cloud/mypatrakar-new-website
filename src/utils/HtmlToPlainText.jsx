@@ -92,7 +92,7 @@ const convertNodeToJSX = (node, id, style) => {
   const styles = {
     h1: "text-[20px] font-bold text-gray-800 mb-4",
     h2: "text-2xl font-semibold text-gray-700 mb-3",
-    p: "text-[16px] text-black leading-relaxed md:mb-4 mb- font-Noto Sans Dev",
+    p: " text-black leading-relaxed md:mb-4 mb- font-Noto Sans Dev",
     li: "text-sm text-gray-600 mb-2",
     a: "text-blue-600 hover:text-blue-700 inline-flex items-center gap-2",
     img: "w-full max-w-4xl h-auto rounded-lg shadow-md mb-6",
@@ -182,7 +182,7 @@ export default function HtmlToPlainText({
           </button>
         </p>
       ) : (
-        elements
+        <div style={style}>{elements}</div>
       )}
     </div>
   );

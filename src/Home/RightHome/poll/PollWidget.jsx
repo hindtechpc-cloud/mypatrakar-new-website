@@ -1,195 +1,18 @@
-// import { useEffect, useState } from "react";
-// import Header from "../shared/Header";
-// import { getPollByCategoryId, getPollsIds, submitVote } from "../../../../api";
-// import toast from "react-hot-toast";
-// import { checkAuth } from "../../../utils/checkAuth";
-
-// export const PollWidget = () => {
-//   const [pollIds, setPollIds] = useState([]);
-//   const [currentIndex, setCurrentIndex] = useState(0);
-//   const [poll, setPoll] = useState(null);
-//   const [selectedOptionId, setSelectedOptionId] = useState(null);
-//   const [submitted, setSubmitted] = useState(false);
-//   // const userId = "MYAU30042025001"; // ✅ Replace with dynamic user ID when available
-//   const user = checkAuth(); // ⬅️ Authenticated user, if any
-//   const userId = user?.user_id; // ✅ Replace with dynamic user ID when available
-//   const handleVoteChange = (optionId) => {
-//     if (submitted) return;
-//     setSelectedOptionId(optionId);
-//   };
-
-//   const handleSubmit = async () => {
-//     if (!selectedOptionId || !poll || !poll.question_id) return;
-//     // console.log(poll.question_id, selectedOptionId,userId);
-//     if (!userId) {
-//       toast.error("Please login to vote");
-//       return;
-//     }
-//     if (submitted) {
-//       toast.error("You have already submitted your vote");
-//       return;
-//     }
-//     if (!poll.options.some((opt) => opt.option_id === selectedOptionId)) {
-//       toast.error("Please select a valid option");
-//       return;
-//     }
-
-//     try {
-//       // ✅ Submit vote to backend
-//       const res = await submitVote({
-//         user_id: userId,
-//         question_id: poll.question_id,
-//         option_id: selectedOptionId,
-//       });
-//       console.log("Submitted vote:", res);
-
-//       // ✅ Update local UI
-//       const updatedOptions = poll.options.map((option) =>
-//         option.option_id === selectedOptionId
-//           ? { ...option, votes: option.votes + 1 }
-//           : option
-//       );
-
-//       setPoll((prev) => ({
-//         ...prev,
-//         options: updatedOptions,
-//         totalVotes: prev.totalVotes + 1,
-//       }));
-
-//       setSubmitted(true);
-//       toast.success(
-//         res?.data?.response?.message || "Poll submitted successfully"
-//       );
-//     } catch (error) {
-//       toast.error(
-//         error?.response?.data?.response?.message || "Failed to submit vote"
-//       );
-//     }
-//   };
-
-//   const fetchPollData = async (categoryId) => {
-//     try {
-//       const res = await getPollByCategoryId(categoryId);
-//       const data = res?.data?.response?.[0];
-//       if (data) {
-//         const formattedPoll = {
-//           question_id: data.poll_id,
-//           question: data.poll_title,
-//           options: data.options.map((opt) => ({
-//             option_id: opt.option_id,
-//             option: opt.option,
-//             votes: parseInt(opt.votes || 0),
-//           })),
-//           totalVotes: parseInt(data.total_poll_votes || 0),
-//         };
-//         setPoll(formattedPoll);
-//       }
-//     } catch (error) {
-//       console.error("Error fetching poll:", error);
-//     }
-//   };
-
-//   const loadPollIds = async () => {
-//     const res = await getPollsIds();
-//     const ids = res?.data?.response || [];
-//     setPollIds(ids);
-//     if (ids.length > 0) {
-//       fetchPollData(ids[0].category_id);
-//     }
-//   };
-
-//   const goToPoll = async (index) => {
-//     if (index >= 0 && index < pollIds.length) {
-//       setSelectedOptionId(null);
-//       setSubmitted(false);
-//       setCurrentIndex(index);
-//       await fetchPollData(pollIds[index].category_id);
-//     }
-//   };
-
-//   useEffect(() => {
-//     loadPollIds();
-//   }, []);
-
-//   if (!poll) return <div className="text-center py-4">लोड हो रहा है...</div>;
-
-//   return (
-//     <>
-//       {pollIds.length > 0 && (
-//         <div className="my-2 mt-5 font-sans md:max-w-sm w-[350px] mx-auto py-4">
-//           <Header text="Poll" />
-//           <div className="bg-gray-200 p-4 shadow-lg rounded-lg w-full">
-//             <h3 className="text-lg font-bold mb-3">{poll.question}</h3>
-
-//             <div className="space-y-2">
-//               {poll.options.map((option) => (
-//                 <div
-//                   key={option.option_id}
-//                   className="flex items-center justify-between"
-//                 >
-//                   <label className="flex items-center">
-//                     <input
-//                       type="radio"
-//                       name="poll"
-//                       className="mr-2"
-//                       disabled={submitted}
-//                       checked={selectedOptionId === option.option_id}
-//                       onChange={() => handleVoteChange(option.option_id)}
-//                     />
-//                     {option.option}
-//                   </label>
-//                   <span className="text-sm text-gray-600">
-//                     {option.votes} वोट्स (
-//                     {poll.totalVotes > 0
-//                       ? ((option.votes / poll.totalVotes) * 100).toFixed(1)
-//                       : 0}
-//                     %)
-//                   </span>
-//                 </div>
-//               ))}
-//             </div>
-
-//             <p className="text-sm text-gray-500 mt-3">
-//               कुल वोट्स: {poll.totalVotes}
-//             </p>
-
-//             <div className="flex justify-between items-center gap-2 mt-4">
-//               <button
-//                 className="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300 disabled:opacity-50"
-//                 onClick={() => goToPoll(currentIndex - 1)}
-//                 disabled={currentIndex <= 0}
-//               >
-//                 Previous
-//               </button>
-
-//               <button
-//                 className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:opacity-50"
-//                 onClick={handleSubmit}
-//                 disabled={!selectedOptionId || submitted}
-//               >
-//                 Submit
-//               </button>
-
-//               <button
-//                 className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300 disabled:opacity-50"
-//                 onClick={() => goToPoll(currentIndex + 1)}
-//                 disabled={currentIndex >= pollIds.length - 1}
-//               >
-//                 Next
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// };import { useEffect, useState } from "react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import Header from "../shared/Header";
 import { getPollByCategoryId, getPollsIds, submitVote } from "../../../../api";
 import toast from "react-hot-toast";
 import SourceWidget from "../../../footer/SourceWidget";
 import PropTypes from "prop-types";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaCheck,
+  FaChartBar,
+  FaUsers,
+  FaVoteYea,
+} from "react-icons/fa";
+import { WebThemeContext } from "../../../context/ThemeContext";
 
 /**
  * PollWidget - A component that displays polls and handles voting
@@ -204,21 +27,22 @@ export const PollWidget = () => {
   const [submitted, setSubmitted] = useState(false);
   const [showLoginOverlay, setShowLoginOverlay] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  const { webTheme } = useContext(WebThemeContext);
   // Authentication
-const user = JSON.parse(sessionStorage.getItem("user"));
-
+  const user = JSON.parse(sessionStorage.getItem("user"));
   const userId = user?.user_id;
-  // console.log(user);
-
+  const bgColor = webTheme["bg-color"];
   /**
    * Handle vote selection
-   * @param {string} optionId - The ID of the selected option
    */
-  const handleVoteChange = useCallback((optionId) => {
-    if (submitted) return;
-    setSelectedOptionId(optionId);
-  }, [submitted]);
+  const handleVoteChange = useCallback(
+    (optionId) => {
+      if (submitted) return;
+      setSelectedOptionId(optionId);
+    },
+    [submitted]
+  );
 
   /**
    * Submit the vote to the server
@@ -234,7 +58,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
         option_id: selectedOptionId,
       });
 
-      // Optimistic UI update
+      // Optimistic UI update with animation
       const updatedOptions = poll.options.map((option) =>
         option.option_id === selectedOptionId
           ? { ...option, votes: option.votes + 1 }
@@ -248,7 +72,9 @@ const user = JSON.parse(sessionStorage.getItem("user"));
       }));
 
       setSubmitted(true);
-      toast.success(res?.data?.response?.message || "Vote submitted successfully");
+      toast.success(
+        res?.data?.response?.message || "🎉 Vote submitted successfully!"
+      );
     } catch (error) {
       console.error("Vote submission error:", error);
       toast.error(
@@ -263,8 +89,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
    * Handle vote submission
    */
   const handleSubmit = useCallback(async () => {
-    // Validation checks
-    if (!selectedOptionId || !poll || !poll.question_id) {
+    if (!selectedOptionId) {
       toast.error("Please select an option to vote");
       return;
     }
@@ -274,27 +99,20 @@ const user = JSON.parse(sessionStorage.getItem("user"));
       return;
     }
 
-    if (!poll.options.some((opt) => opt.option_id === selectedOptionId)) {
-      toast.error("Invalid option selected");
-      return;
-    }
-
-    // Authentication check
     if (!user || !userId) {
       setShowLoginOverlay(true);
       toast.error("Please login to vote");
       return;
     }
 
-    // Submit vote
     await submitVoteToServer();
-  }, [selectedOptionId, poll, submitted, user, userId, submitVoteToServer]);
+  }, [selectedOptionId, submitted, user, userId, submitVoteToServer]);
 
   /**
-   * Fetch poll data for a specific category
-   * @param {string} categoryId - The category ID to fetch
+   * Fetch poll data
    */
   const fetchPollData = useCallback(async (categoryId) => {
+    setLoading(true);
     try {
       const res = await getPollByCategoryId(categoryId);
       const data = res?.data?.response?.[0];
@@ -306,13 +124,15 @@ const user = JSON.parse(sessionStorage.getItem("user"));
             option_id: opt.option_id,
             option: opt.option,
             votes: parseInt(opt.votes || 0),
+            percentage: 0,
           })),
           totalVotes: parseInt(data.total_poll_votes || 0),
         });
       }
     } catch (error) {
       console.error("Poll fetch error:", error);
-      // toast.error("Failed to load poll data");
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -329,56 +149,88 @@ const user = JSON.parse(sessionStorage.getItem("user"));
       }
     } catch (error) {
       console.error("Poll IDs fetch error:", error);
-      // toast.error("Failed to load polls");
+      setLoading(false);
     }
   }, [fetchPollData]);
 
   /**
    * Navigate to a specific poll
-   * @param {number} index - The index of the poll to navigate to
    */
-  const goToPoll = useCallback(async (index) => {
-    if (index >= 0 && index < pollIds.length) {
-      setSelectedOptionId(null);
-      setSubmitted(false);
-      setCurrentIndex(index);
-      await fetchPollData(pollIds[index].category_id);
-    }
-  }, [pollIds, fetchPollData]);
+  const goToPoll = useCallback(
+    async (index) => {
+      if (index >= 0 && index < pollIds.length) {
+        setSelectedOptionId(null);
+        setSubmitted(false);
+        setCurrentIndex(index);
+        await fetchPollData(pollIds[index].category_id);
+      }
+    },
+    [pollIds, fetchPollData]
+  );
 
   /**
    * Handle successful login
    */
   const handleLoginSuccess = useCallback(() => {
     setShowLoginOverlay(false);
-    // If user had selected an option before logging in, submit automatically
     if (selectedOptionId) {
       submitVoteToServer();
     }
   }, [selectedOptionId, submitVoteToServer]);
+
+  // Calculate percentages when poll data changes
+  useEffect(() => {
+    if (poll && poll.options.length > 0) {
+      const updatedOptions = poll.options.map((option) => ({
+        ...option,
+        percentage:
+          poll.totalVotes > 0 ? (option.votes / poll.totalVotes) * 100 : 0,
+      }));
+      setPoll((prev) => ({ ...prev, options: updatedOptions }));
+    }
+  }, [poll?.totalVotes]);
 
   // Load polls on component mount
   useEffect(() => {
     loadPollIds();
   }, [loadPollIds]);
 
+  if (loading) {
+    return (
+      <div className="mt-4 xl:w-[335px] lg:w-[295px] w-full mx-auto">
+        <Header text="Poll" />
+        <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-md border border-gray-100 p-8 flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"></div>
+          <p className="text-gray-600 font-medium">Loading poll...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!poll) {
     return (
-      <div className="flex justify-center items-center h-40">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+      <div className="mt-4 xl:w-[335px] lg:w-[295px] w-full mx-auto">
+        <Header text="Poll" />
+        <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-md border border-gray-100 p-8 text-center">
+          <FaChartBar className="text-4xl text-gray-400 mx-auto mb-3" />
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            No Polls Available
+          </h3>
+          <p className="text-gray-500">Check back later for new polls</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto relative">
+    <div className="mt-4 xl:w-[335px] lg:w-[295px] w-full mx-auto relative">
       {/* Login Overlay */}
       {showLoginOverlay && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="relative bg-white rounded-lg max-w-md w-full animate-fade-in">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className="relative bg-white rounded-2xl max-w-md w-full shadow-lg animate-scale-in">
             <button
               onClick={() => setShowLoginOverlay(false)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl transition-colors"
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl transition-colors z-10"
               aria-label="Close login"
             >
               &times;
@@ -386,7 +238,7 @@ const user = JSON.parse(sessionStorage.getItem("user"));
             <SourceWidget
               redirectTo={window.location.pathname}
               onSuccess={handleLoginSuccess}
-              className="border-0 bg-black py-5 rounded-md"
+              className="border-0"
               setShowLoginOverlay={setShowLoginOverlay}
               showLoginOverlay={showLoginOverlay}
             />
@@ -394,84 +246,204 @@ const user = JSON.parse(sessionStorage.getItem("user"));
         </div>
       )}
 
-      <Header text="Poll" />
-      <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">{poll.question}</h3>
+      <Header text="📊 Live Poll" />
 
-        <div className="space-y-3 mb-4">
-          {poll.options.map((option) => (
-            <div
-              key={option.option_id}
-              className={`flex items-center justify-between p-3 rounded-lg transition-colors ${selectedOptionId === option.option_id ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'}`}
-            >
-              <label className="flex items-center w-full cursor-pointer">
-                <input
-                  type="radio"
-                  name="poll"
-                  className="mr-3 h-5 w-5 text-blue-600 focus:ring-blue-500"
-                  disabled={submitted}
-                  checked={selectedOptionId === option.option_id}
-                  onChange={() => handleVoteChange(option.option_id)}
-                />
-                <span className="flex-1 text-gray-700">{option.option}</span>
-                <span className="text-sm text-gray-500 ml-2">
-                  {option.votes} votes (
-                  {poll.totalVotes > 0
-                    ? ((option.votes / poll.totalVotes) * 100).toFixed(1)
-                    : 0}
-                  %)
-                </span>
-              </label>
-            </div>
-          ))}
+      <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300">
+        {/* Poll Header */}
+        <div className="flex items-center justify-between mb-5">
+          <span className="px-3 py-1 bg-red-50 text-red-600 text-xs font-semibold rounded-full">
+            Poll {currentIndex + 1}/{pollIds.length}
+          </span>
+          <span className="flex items-center space-x-1 text-sm text-gray-600">
+            <FaUsers className="text-blue-500" />
+            <span>{poll.totalVotes} votes</span>
+          </span>
         </div>
 
-        <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-          <span>Total votes: {poll.totalVotes}</span>
+        {/* Question */}
+        <h3 className="text-lg font-bold text-gray-900 mb-6 text-center leading-snug">
+          {poll.question}
+        </h3>
+
+        {/* Options */}
+        <div className="space-y-3 mb-6">
+          {poll.options.map((option) => {
+            const isSelected = selectedOptionId === option.option_id;
+            const isWinning =
+              Math.max(...poll.options.map((o) => o.percentage)) ===
+                option.percentage && poll.totalVotes > 0;
+
+            return (
+              <div
+                key={option.option_id}
+                onClick={() => !submitted && handleVoteChange(option.option_id)}
+                className={`relative px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300
+                  ${
+                    isSelected
+                      ? " text-white shadow-md scale-[1.02]"
+                      : "bg-gray-50 hover:bg-gray-100"
+                  }
+                  ${submitted && isWinning ? "ring-2 ring-green-400" : ""}
+                `}
+                style={{
+                  background: isSelected ? bgColor : "",
+                }}
+              >
+                {/* Progress Bar Background */}
+                {submitted && (
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-blue-100 to-purple-50 rounded-2xl"
+                    style={{
+                      width: `${option.percentage}%`,
+                      opacity: 0.3,
+                    }}
+                  />
+                )}
+
+                <div className="relative z-10 flex items-center justify-between">
+                  <div className="flex items-center space-x-3 flex-1">
+                    <div
+                      className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300
+                        ${
+                          isSelected
+                            ? "border-white bg-white/30"
+                            : "border-gray-300 bg-white"
+                        }`}
+                    >
+                      {isSelected && !submitted && (
+                        <div
+                          className="w-2 h-2  rounded-full"
+                          style={{
+                            background: isSelected ? bgColor : "",
+                          }}
+                        ></div>
+                      )}
+                      {submitted && isSelected && (
+                        <FaCheck className="text-white text-xs" />
+                      )}
+                    </div>
+                    <span
+                      className={`font-medium ${
+                        isSelected ? "text-white" : "text-gray-700"
+                      }`}
+                    >
+                      {option.option}
+                    </span>
+                  </div>
+
+                  {/* Vote Count */}
+                  {submitted && (
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-semibold text-gray-700">
+                        {option.percentage.toFixed(1)}%
+                      </span>
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                        {option.votes} votes
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
+          <div>
+            {submitted ? (
+              <div className="flex items-center space-x-1 text-green-600 font-medium">
+                <FaCheck />
+                <span>You've voted!</span>
+              </div>
+            ) : (
+              <span>Select an option to vote</span>
+            )}
+          </div>
+
           {submitted && (
-            <span className="text-green-600 font-medium">✓ You voted</span>
+            <span className="flex items-center space-x-1 text-green-600 font-medium">
+              <FaChartBar />
+              <span>Results Live</span>
+            </span>
           )}
         </div>
 
-        <div className="flex justify-between items-center gap-3">
+        {/* Navigation Buttons */}
+        <div className="flex justify-between items-center space-x-3">
           <button
-            className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition disabled:opacity-40"
             onClick={() => goToPoll(currentIndex - 1)}
             disabled={currentIndex <= 0 || isSubmitting}
           >
-            Previous
+            <FaChevronLeft />
           </button>
 
           <button
-            className={`flex-1 py-2 px-1  rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${submitted ? 'bg-green-100 text-green-700' : 'bg-red-600 text-white hover:bg-red-700'}`}
+            className={`flex items-center justify-center space-x-2 py-3 px-6 rounded-full transition-all duration-200 font-semibold shadow-md
+              ${
+                submitted
+                  ? "bg-green-100 text-green-700 hover:bg-green-200"
+                  : ""
+              }`}
             onClick={handleSubmit}
             disabled={!selectedOptionId || submitted || isSubmitting}
+           style={{
+                  background: !submitted ? bgColor : "",
+                  color: !submitted ? 'white' : "",
+                }}
           >
             {isSubmitting ? (
-              <span className="flex items-center justify-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                Submitting...
-              </span>
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                <span>Voting...</span>
+              </>
             ) : submitted ? (
-              'Vote Submitted'
+              <>
+                <FaCheck />
+                <span>Voted</span>
+              </>
             ) : (
-              'Submit'
+              <>
+                <FaVoteYea />
+                <span>Vote Now</span>
+              </>
             )}
           </button>
 
           <button
-            className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition disabled:opacity-40"
             onClick={() => goToPoll(currentIndex + 1)}
             disabled={currentIndex >= pollIds.length - 1 || isSubmitting}
           >
-            Next
+            <FaChevronRight />
           </button>
         </div>
+
+        {/* Progress Dots */}
+        {pollIds.length > 1 && (
+          <div className="flex justify-center space-x-2 mt-6">
+            {pollIds.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToPoll(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? " w-6"
+                    : "bg-gray-300 w-2 hover:bg-gray-400"
+                }`}
+                style={
+                  {
+                    background:index===currentIndex?bgColor:""
+                  }
+                }
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-PollWidget.propTypes = {
-  // Add any prop types if this component receives props
-};
+PollWidget.propTypes = {};

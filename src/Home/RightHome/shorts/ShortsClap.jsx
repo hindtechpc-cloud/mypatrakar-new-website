@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CheckShortsClapped, SubmitShortsClap } from "../../../../api";
 import toast from "react-hot-toast";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
@@ -12,84 +12,75 @@ export default function ShortsClap({ news_id, user_id }) {
   const [isChecking, setIsChecking] = useState(true);
   const [showSourcePopup, setShowSourcePopup] = useState(false);
 
-  const currentPage = window.location.href;
-
-  const fetchClapStatus = async () => {
+  // ✅ Fetch current status + count
+  const fetchClapStatus = useCallback(async () => {
     if (!news_id) return;
 
     try {
       const res = await CheckShortsClapped(news_id, user_id);
-      const { is_clapped } = res?.data?.response || {};
-      setIsClapped(is_clapped || false);
+      const { is_clapped, clap_count } = res?.data?.response || {};
+      setIsClapped(!!is_clapped);
+      setClapCount(clap_count || 0);
     } catch (error) {
       console.error("Error fetching clap status:", error);
     } finally {
       setIsChecking(false);
     }
-  };
+  }, [news_id, user_id]);
 
-  // const handleClap = async () => {
-  //   if (!news_id || !user_id) {
-  //     setShowSourcePopup(true);
-  //     return;
-  //   }
-
-  //   const optimisticNewClap = !isClapped;
-
-  //   // 1. Immediate UI update
-  //   setIsClapped(optimisticNewClap);
-
-  //   // 2. Fire to backend
-  //   try {
-  //     setLoading(true);
-  //     const res = await SubmitShortsClap(news_id, user_id);
-  //     console.log(res);
-  //     const is_clapped = res?.data?.response || {};
-
-  //     // 3. Set backend-confirmed state (in case optimistic and backend differ)
-  //     setIsClapped(is_clapped);
-
-  //     toast.success(is_clapped ? "👏 You clapped this!" : "❌ Clap removed");
-  //   } catch (error) {
-  //     // 4. Revert UI if backend failed
-  //     console.error("Error submitting clap:", error);
-  //     setIsClapped(!optimisticNewClap);
-  //     toast.error("Something went wrong while clapping.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
+  // ✅ Handle clap toggle
   const handleClap = async () => {
     if (!news_id || !user_id) {
       setShowSourcePopup(true);
       return;
     }
 
+    // 🔥 Optimistic update (instant UI update)
     const optimisticNewClap = !isClapped;
-    setIsClapped(optimisticNewClap); // UI immediately reflects
+    setIsClapped(optimisticNewClap);
+    setClapCount((prev) =>
+      optimisticNewClap ? prev + 1 : Math.max(prev - 1, 0)
+    );
 
     try {
       setLoading(true);
       const res = await SubmitShortsClap(news_id, user_id);
-      const is_clapped = res?.data?.response;
+      if (res.data.status_code == 200) {
+        try {
+          const response = await CheckShortsClapped(news_id, user_id);
+          console.log(response);
+          setIsClapped(response.data.response.is_clapped);
+          toast.success(
+            response.data.response.is_clapped
+              ? "👏 You clapped this!"
+              : "👏 Clap removed"
+          );
+          // setClapCount(clap_count || 0);
+        } catch (error) {
+          console.log(error);
+        }
+      }
 
-      // ✅ Convert to Boolean (0 or 1 => false or true)
-      setIsClapped(!is_clapped);
-      let msg = !is_clapped ? "👏 You unclapped this!" : "👏 You clapped this!";
-      toast.success(msg);
+      // ✅ Sync with server
     } catch (error) {
       console.error("Error submitting clap:", error);
-      setIsClapped(!optimisticNewClap); // rollback
+
+      // ❌ Rollback
+      setIsClapped(!optimisticNewClap);
+      setClapCount((prev) =>
+        optimisticNewClap ? Math.max(prev - 1, 0) : prev + 1
+      );
+
       toast.error("Something went wrong while clapping.");
     } finally {
       setLoading(false);
     }
   };
 
+  // ✅ Run only on mount or id change
   useEffect(() => {
     fetchClapStatus();
-  }, [news_id, user_id]);
+  }, [fetchClapStatus]);
 
   return (
     <>
@@ -108,9 +99,9 @@ export default function ShortsClap({ news_id, user_id }) {
         {loading || isChecking ? (
           <ImSpinner2 className="animate-spin text-gray-500 text-lg" />
         ) : isClapped ? (
-          <FaHeart className="text-red-500 animate-pulse text-lg" />
+          <FaHeart className="text-red-500 text-lg transition-colors" />
         ) : (
-          <FaRegHeart className="text-gray-700 text-lg" />
+          <FaRegHeart className="text-gray-700 text-lg transition-colors" />
         )}
       </button>
 
@@ -131,7 +122,6 @@ export default function ShortsClap({ news_id, user_id }) {
               redirectTo={"/shorts"}
               showLoginOverlay={showSourcePopup}
               setShowLoginOverlay={setShowSourcePopup}
-             
             />
           </div>
         </div>

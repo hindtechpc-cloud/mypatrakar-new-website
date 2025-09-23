@@ -277,7 +277,6 @@
 //   );
 // }
 
-
 import React, { useEffect, useState } from "react";
 import Menu from "../shared/MenuBar";
 import ElectionResults from "./ElectionResults";
@@ -431,30 +430,33 @@ export default function Election() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4  mb-6">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
-                <IoStatsChart className="text-blue-600" />
+                <IoStatsChart className="text-blue-800" />
                 {polls[pollIndex]?.name || "Loading Election Data..."}
               </h1>
-              <p className="text-gray-600 mt-1 flex items-center gap-1">
-                <BsCalendar2Event className="text-blue-400" />
-                Explore historical election results and trends
-              </p>
+              <div className="md:flex flex-1 items-center justify-between">
+                <p className="text-gray-600 mt-1 flex items-center gap-1">
+                  <BsCalendar2Event className="text-blue-400" />
+                  Explore historical election results and trends
+                </p>
+                <p className="text-green-600 font-bold px-3">1 K = 1000 seats</p>
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
               <button
-                className=" hover:bg-blue-50 text-blue-600 p-3 rounded-full  transition-all duration-200 border border-blue-200 hover:shadow-lg"
+                className=" hover:bg-blue-50 text-blue-800 p-3 rounded-full  transition-all duration-200 border border-blue-200 hover:shadow-lg"
                 onClick={handleLeftScroll}
                 aria-label="Previous election"
               >
                 <GrPrevious className="text-lg" />
               </button>
 
-              <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+              <div className="bg-gradient-to-b from-blue-900 to-blue-950 text-gray-200  px-3 py-1 rounded-full text-sm font-medium">
                 {pollIndex + 1} / {polls.length}
               </div>
 
               <button
-                className="bg-white hover:bg-blue-50 text-blue-600 p-3 rounded-full shadow-md transition-all duration-200 border border-blue-200 hover:shadow-lg"
+                className="bg-white hover:bg-blue-50 text-blue-800 p-3 rounded-full shadow-md transition-all duration-200 border border-blue-200 hover:shadow-lg"
                 onClick={handleRightScroll}
                 aria-label="Next election"
               >
@@ -466,7 +468,7 @@ export default function Election() {
           {/* Year Selector */}
           <div className="mb-2">
             <div className="flex items-center gap-2 text-gray-600 mb-3">
-              <BsArrowLeftRight className="text-blue-500" />
+              <BsArrowLeftRight className="text-blue-800" />
               <span className="font-medium">Select Election Year:</span>
             </div>
             <div className="flex items-center overflow-x-auto gap-3 py-2 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-blue-100 scrollbar-thumb-rounded-full">
@@ -475,7 +477,7 @@ export default function Election() {
                   key={i}
                   className={`whitespace-nowrap px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
                     currentYear === year.year
-                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
+                      ? "bg-gradient-to-b from-blue-900 to-blue-950 text-gray-200 shadow-lg"
                       : "bg-white text-gray-700 border border-gray-200 hover:bg-blue-50 hover:border-blue-200 shadow-sm"
                   }`}
                   onClick={() => handleCurrentYear(year.year)}

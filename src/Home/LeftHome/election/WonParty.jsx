@@ -56,7 +56,7 @@ const TopResultTable = ({ parties }) => {
                       className="border-t border-gray-100 hover:bg-blue-50 transition-all duration-200"
                     >
                       <td className="p-3 text-center">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold">
                           {index + 1}
                         </div>
                       </td>

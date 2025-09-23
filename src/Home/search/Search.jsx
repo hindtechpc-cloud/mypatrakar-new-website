@@ -9,7 +9,7 @@ import {
 } from "../../../api";
 import { WebThemeContext } from "../../context/ThemeContext";
 import {
-  FaSearch,
+
   FaTimes,
   FaFilter,
   FaArrowLeft,
@@ -19,12 +19,12 @@ import { ImSpinner8 } from "react-icons/im";
 import DropdownFilters from "./DropdownFilters";
 import HeaderAd from "../../TopBar/HeaderAd";
 import ArticleListItem from "./ArticleListItem";
-import { encryptData } from "../../utils/cryptoHelper";
+
 import toast from "react-hot-toast";
 import SpeakMessage from "../../utils/SpeakMessage";
 import RightHome from "../RightHome/RightHome";
 import GameSkeleton from "../LeftHome/game/GameSkeleton";
-import NoData from "../NoData";
+
 
 const DEFAULT_FILTERS = {
   searchTerm: "",

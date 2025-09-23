@@ -77,7 +77,9 @@ const TopResultTable = ({ results }) => {
                     <div className="flex flex-col">
                       <span>{party.party_name}</span>
                       <span className="text-xs text-gray-500">
-                        {party.seats_won} सीटें
+                        {party.seats_won > 999
+                        ? `${(party.seats_won)/1000} K`
+                        : party.seats_won} सीटें
                       </span>
                     </div>
                   </td>
@@ -100,12 +102,12 @@ const TopResultTable = ({ results }) => {
                   </td>
                   <td className="py-3 px-4">
                     <div className="flex flex-col items-end">
-                      <span className="text-lg font-bold text-blue-700">
+                      <span className="text-lg font-bold text-blue-800">
                         {percentage}%
                       </span>
                       <div className="w-24 h-2 bg-gray-200 rounded-full mt-1">
                         <div
-                          className="h-full rounded-full bg-blue-600"
+                          className="h-full rounded-full bg-blue-800"
                           style={{ width: `${percentage}%` }}
                         ></div>
                       </div>

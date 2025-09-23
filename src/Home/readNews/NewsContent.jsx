@@ -9,9 +9,9 @@ export default function NewsContent({ news, type, zoomText }) {
       >
         {type === "shorts" ? news.news_title : news.news_headline}
       </div>
-      <div>
+      <div style={{ fontSize: `${zoomText + 5}px` }}>
         <HtmlToPlainText
-        maxLength={2000}
+          maxLength={2000}
           htmlContent={
             type === "shorts"
               ? news.news_des

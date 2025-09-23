@@ -394,7 +394,7 @@ const StockInfo = () => {
                 <span>{company.label}</span>
                 <button
                   onClick={() => fetchStockData(company)}
-                  className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  className="px-3 py-1 bg-gradient-to-b from-blue-900 to-blue-950 text-gray-200 text-sm rounded hover:bg-blue-700"
                 >
                   View Stock
                 </button>
@@ -506,7 +506,7 @@ const StockInfo = () => {
                 }}
                 className="w-full py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
               >
-                ⬅ Back to Company List
+                Back to Company List
               </button>
             </div>
           </motion.div>

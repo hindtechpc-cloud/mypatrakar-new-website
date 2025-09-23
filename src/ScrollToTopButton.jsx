@@ -1,10 +1,11 @@
 // src/ScrollToTopButton.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { WebThemeContext } from "./context/ThemeContext";
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
-
+const {webTheme}=useContext(WebThemeContext);
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
@@ -25,9 +26,12 @@ const ScrollToTopButton = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-8 right-8 p-3 bg-red-600 text-white rounded-full shadow-lg transition-opacity ${
+      className={`fixed bottom-8 right-8 p-3  text-white rounded-full shadow-lg transition-opacity ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
+      style={{
+        background:webTheme["bg-color"]
+      }}
     >
       <FaArrowUp size={20} />
     </button>

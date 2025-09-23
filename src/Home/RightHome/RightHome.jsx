@@ -79,8 +79,6 @@
 
 // export default React.Memo(RightHome);
 
-
-
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -102,6 +100,7 @@ import {
   GetRightBottomAds,
 } from "../../../api";
 import { useSettingsContext } from "../../context/SettingsContext";
+import MobileFrame from "./shorts/MobileFrame";
 
 function RightHome() {
   const { pathname } = useLocation();
@@ -140,10 +139,14 @@ function RightHome() {
   const isQuizEnabled = getSettingStatus("Quiz Polls");
   const isSportsEnabled = getSettingStatus("Sports");
   const isStockEnabled = getSettingStatus("Stock");
-  const isWhatsAppTelegramEnabled = getSettingStatus("Whats App & Telegram Button");
+  const isWhatsAppTelegramEnabled = getSettingStatus(
+    "Whats App & Telegram Button"
+  );
 
   return (
-    <div>
+   <div className="">
+
+     <div >
       {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
 
       <OwnState />
@@ -152,24 +155,25 @@ function RightHome() {
 
       <Trending />
 
-      {isSportsEnabled && <LiveCricket />}
+      {!isSportsEnabled && <LiveCricket />}
 
       <Shorts />
 
-      <AddRightHome1 adsData={ads.main} text="main" className="mt-[9px]"/>
+      <AddRightHome1 adsData={ads.main} text="main" className="mt-[9px]" />
 
       {isHoroscopeEnabled && <Rashiphal />}
 
-      {isWhatsAppTelegramEnabled && <JoinChannels />}
+      {!isWhatsAppTelegramEnabled && <JoinChannels />}
 
-      {isStockEnabled && <StockInfo />}
+      {!isStockEnabled && <StockInfo />}
 
-      {isQuizEnabled && <PollWidget />}
+      {!isQuizEnabled && <PollWidget />}
 
       <WeatherWidget />
-
+      <MobileFrame />
       <AddRightHome1 adsData={ads.bottom} text="bottom" />
     </div>
+   </div>
   );
 }
 
