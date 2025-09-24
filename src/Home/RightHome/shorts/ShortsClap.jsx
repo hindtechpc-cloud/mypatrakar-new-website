@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CheckShortsClapped, SubmitShortsClap } from "../../../../api";
 import toast from "react-hot-toast";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+// import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im";
 import SourceWidget from "../../../footer/SourceWidget";
+import { PiHandsClappingDuotone } from "react-icons/pi";
 
 export default function ShortsClap({ news_id, user_id }) {
   const [isClapped, setIsClapped] = useState(false);
@@ -99,9 +100,9 @@ export default function ShortsClap({ news_id, user_id }) {
         {loading || isChecking ? (
           <ImSpinner2 className="animate-spin text-gray-500 text-lg" />
         ) : isClapped ? (
-          <FaHeart className="text-red-500 text-lg transition-colors" />
+          <PiHandsClappingDuotone className="text-red-500 text-lg transition-colors" />
         ) : (
-          <FaRegHeart className="text-gray-700 text-lg transition-colors" />
+          <PiHandsClappingDuotone className="text-gray-700 text-lg transition-colors" />
         )}
       </button>
 

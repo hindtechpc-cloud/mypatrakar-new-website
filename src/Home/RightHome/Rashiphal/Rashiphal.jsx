@@ -166,7 +166,7 @@ export default function Rashiphal() {
           {showLeftArrow && (
             <button
               onClick={scrollLeft}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-gray-200 transition-all duration-200 hover:scale-110"
+              className="absolute left-[2px] top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-gray-200 transition-all duration-200 hover:scale-110"
             >
               <FaChevronLeft className="text-gray-700" />
             </button>
@@ -175,7 +175,7 @@ export default function Rashiphal() {
           {showRightArrow && (
             <button
               onClick={scrollRight}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-gray-200 transition-all duration-200 hover:scale-110"
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-gray-200 transition-all duration-200 hover:scale-110"
             >
               <FaChevronRight className="text-gray-700" />
             </button>

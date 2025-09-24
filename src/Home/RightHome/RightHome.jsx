@@ -146,7 +146,7 @@ function RightHome() {
   return (
    <div className="">
 
-     <div >
+     <div className="">
       {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
 
       <OwnState />

@@ -193,12 +193,12 @@ const Navbar = () => {
         
         {item.submenus?.length > 0 && activeDropdown === item.cat_id && (
           <div
-            className="absolute -left-40 z-50 mt-0 px-4 shadow-lg pb-5 w-full min-w-[600px]"
+            className="absolute -left-40 z-50 mt-0 px-4 shadow-lg pb-5 w-[650px] min-w-[600px]"
             style={{ backgroundColor: themeColor }}
             onMouseEnter={() => setLocalHovered(true)}
             onMouseLeave={() => setLocalHovered(false)}
           >
-            <div className="flex items-start flex-wrap max-h-48 overflow-y-auto">
+            <div className="flex items-start flex-wrap  overflow-y-auto">
               {item.submenus.map((submenu) => (
                 <Link
                   key={submenu.subcategory_id}

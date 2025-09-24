@@ -1,20 +1,17 @@
-//   );
-// }
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../shared/Header";
 import { GetLiveCrickeScore } from "../../../../api";
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaClock, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
-import { motion, AnimatePresence } from "framer-motion";
-import liveCricket from "../../../assets/live-cricket.png"
-import { Link } from "react-router-dom";
+import liveCricket from "../../../assets/live-cricket.png";
+
 export default function LiveCricket() {
   const [matches, setMatches] = useState([]);
-  const [fallbackInfo, setFallbackInfo] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState("");
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   const fetchLiveMatches = async () => {
     try {
@@ -23,25 +20,15 @@ export default function LiveCricket() {
       const res = await GetLiveCrickeScore();
       const resData = res?.data?.data;
 
-      // Check for fallback response
-      if (resData?.is_fallback) {
-        setFallbackInfo({
-          image: resData.fallback_image,
-          website: resData.fallback_website,
-        });
-        setMatches([]);
-      } else if (Array.isArray(resData) && resData.length > 0) {
+      if (Array.isArray(resData) && resData.length > 0) {
         setMatches(resData);
-        setFallbackInfo(null);
       } else {
         setMatches([]);
-        setFallbackInfo(null);
       }
-
-      setLastUpdated(new Date().toLocaleTimeString());
     } catch (err) {
       console.error(err);
       setError(err.message || "Failed to fetch live matches");
+      setMatches([]);
     } finally {
       setLoading(false);
     }
@@ -51,218 +38,188 @@ export default function LiveCricket() {
     fetchLiveMatches();
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
+  // Scroll functions
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -280, behavior: "smooth" });
+    }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 280, behavior: "smooth" });
+    }
+  };
+
+  const checkScrollPosition = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", checkScrollPosition);
+      setTimeout(checkScrollPosition, 100);
+    }
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", checkScrollPosition);
+      }
+    };
+  }, [matches]);
+
+  // Match Card
+  const MatchCard = ({ match = {} }) => {
+    const innings = match?.score?.innings || [];
+
+    return (
+      <div className="flex-shrink-0 w-80 bg-white/90 backdrop-blur-md rounded border border-gray-100 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 mr-4">
+        {/* Header */}
+        <div className="p-2">
+          <div className="flex justify-between items-center">
+            <span className="text-[13px] font-semibold truncate drop-shadow-sm">
+              {match?.teams || "Unknown Match"}
+            </span>
+ 
+          </div>
+        </div>
+
+        {/* Teams/Innings */}
+        <div className="px-4 py-2">
+          {innings.length > 0 ? (
+            innings.map((inn, idx) => (
+              <div
+                key={idx}
+                className="flex justify-between items-center py-1 border-b last:border-b-0 border-gray-100"
+              >
+                <span className="font-semibold text-gray-800 text-sm">
+                  {inn?.team || `Team ${idx + 1}`}
+                </span>
+                <span className="text-[13px] text-gray-700 font-medium">
+                  {inn?.runs || 0}/{inn?.wickets || 0} ({inn?.overs || 0} ov)
+                </span>
+              </div>
+            ))
+          ) : (
+            <p className="text-xs text-gray-500">No score yet</p>
+          )}
+
+          {/* Match Time + Status */}
+          <div className="flex justify-between items-center mt-3 pt-2 border-t border-gray-100">
+            <div className="flex items-center space-x-1 text-[11px] text-gray-500">
+              <FaClock className="text-gray-400 text-[10px]" />
+              <span>{match?.match_time || "Today, 08:00 PM"}</span>
+            </div>
+            <span
+              className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+                match?.match_status?.toLowerCase().includes("live")
+                  ? "bg-green-100 text-green-800 animate-pulse"
+                  : "bg-blue-100 text-blue-800"
+              }`}
+            >
+              {match?.match_status || "Upcoming"}
+            </span>
+          </div>
+
+          {/* Venue */}
+          {match?.venue && (
+            <div className="mt-2 text-[11px] text-gray-500 leading-snug">
+              {match.venue}
+            </div>
+          )}
+        </div>
+
+        {/* Bottom Tabs */}
+        <div className="flex border-t border-gray-200">
+          <button className="flex-1 py-2 text-center text-xs font-medium text-blue-600 border-r border-gray-200 hover:bg-gray-50">
+            POINTS
+          </button>
+          <button className="flex-1 py-2 text-center text-xs font-medium text-gray-600 hover:bg-gray-50">
+            SCHEDULE
+          </button>
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className="mt-[9px]  xl:w-[335px] lg:w-[295px] w-full mx-auto">
-          <Header text="Live Cricket" />
+    <div className="mt-[9px] xl:w-[335px] lg:w-[295px] w-full mx-auto">
+      <Header text="Live Cricket" />
 
+      {/* Matches Section */}
       {!error && !loading && matches?.length > 0 ? (
-        <div >
-
-          {/* Fallback UI */}
-          {fallbackInfo && (
-            <div className="mb-6 text-center">
-              <a
-                href={fallbackInfo.website}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={fallbackInfo.image}
-                  alt="Live Score Fallback"
-                  className="rounded-xl shadow-md mx-auto"
-                />
-              </a>
-              <p className="text-sm text-gray-500 mt-2">
-                Showing fallback data. For real-time updates, visit Cricbuzz.
-              </p>
-            </div>
+        <div className="relative">
+          {showLeftArrow && (
+            <button
+              onClick={scrollLeft}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-7 h-7 flex items-center justify-center shadow border border-gray-200 transition-all duration-200 hover:scale-110"
+            >
+              <FaChevronLeft className="text-gray-700 text-xs" />
+            </button>
+          )}
+          {showRightArrow && (
+            <button
+              onClick={scrollRight}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full w-7 h-7 flex items-center justify-center shadow border border-gray-200 transition-all duration-200 hover:scale-110"
+            >
+              <FaChevronRight className="text-gray-700 text-xs" />
+            </button>
           )}
 
-          <div className=" ">
-            {/* Loading State */}
-            {loading && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center p-8"
-              >
-                <ImSpinner8 className="animate-spin text-blue-600 text-4xl mb-4" />
-                <p className="text-gray-600 font-medium">
-                  Fetching live scores...
-                </p>
-                <p className="text-sm text-gray-400 mt-1">
-                  This {`won't`} take long
-                </p>
-              </motion.div>
-            )}
-
-            {/* Error State */}
-            {/* {error && !loading && (
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="p-6 text-center"
-              >
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                  <p className="font-medium text-red-600">Error Loading Data</p>
-                  <p className="text-red-500 mt-1">{error}</p>
-                  <motion.button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={fetchLiveMatches}
-                    className="mt-3 bg-gradient-to-r from-red-500 to-orange-500 text-white px-5 py-2 rounded-lg shadow-sm transition-all"
-                  >
-                    Try Again
-                  </motion.button>
-                </div>
-              </motion.div>
-            )} */}
-
-            {/* No Matches */}
-            {!error && !loading && matches.length === 0 && !fallbackInfo && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="p-8 text-center"
-              >
-                <div className="inline-block p-4  mb-3">
-                  <FaCalendarAlt className="text-blue-400 text-3xl" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-700">
-                  No Live Matches
-                </h3>
-                <p className="text-gray-500 mt-1">
-                  Currently no matches being played
-                </p>
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  onClick={fetchLiveMatches}
-                  className="mt-4 transition-all"
-                >
-                  Check Again
-                </motion.button>
-              </motion.div>
-            )}
-
-            {/* Live Matches */}
-            {!error && !loading && matches.length > 0 && (
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                className="max-h-[450px] overflow-y-auto"
-              >
-                <AnimatePresence>
-                  {matches.map((match) => (
-                    <motion.div
-                      key={match?.match_id}
-                      variants={itemVariants}
-                      className=""
-                      whileHover={{ scale: 1.01 }}
-                      layout
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                        <h2 className="text-xl font-bold">
-                          {match.teams}
-                        </h2>
-                        <span
-                          className={`px-3 py-1 text-xs rounded-full font-medium ${
-                            match.match_status?.includes("Live")
-                              ? "animate-pulse bg-gradient-to-r from-green-500 to-emerald-500 text-white"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
-                        >
-                          {match.match_status}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 mb-5">
-                        <div className="flex items-center">
-                          <FaCalendarAlt className="mr-2 text-blue-400" />
-                          <span>{match.date}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <FaClock className="mr-2 text-blue-400" />
-                          <span>{match.match_time}</span>
-                        </div>
-                        <div className="col-span-2 flex items-start">
-                          <FaMapMarkerAlt className="mr-2 mt-0.5 text-blue-400" />
-                          <span className="text-gray-700">{match.venue}</span>
-                        </div>
-                      </div>
-
-                      {/* Scores */}
-                      {match.score?.innings?.length > 0 && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.2 }}
-                          className="mt-5"
-                        >
-                          <h3 className="text-md font-semibold text-gray-800 mb-3 flex items-center">
-                            <span className=""></span>
-                            Scorecard
-                          </h3>
-                          <div className="space-y-3">
-                            {match.score.innings.map((inning, index) => (
-                              <div
-                                key={index}
-                                className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
-                              >
-                                <div className="flex justify-between items-center mb-2">
-                                  <span className="font-medium text-gray-800">
-                                    {inning.team}
-                                  </span>
-                                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                    {inning.overs} overs
-                                  </span>
-                                </div>
-                                <div className="flex justify-between items-end">
-                                  <div>
-                                    <span className="text-2xl font-bold text-gray-900">
-                                      {inning.runs}
-                                    </span>
-                                    <span className="text-gray-500">
-                                      /{inning.wickets}
-                                    </span>
-                                  </div>
-                                  <div className="text-xs text-gray-500">
-                                    Run Rate:{" "}
-                                    {(inning.runs / inning.overs).toFixed(2)}
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </motion.div>
-            )}
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto pb-3 scrollbar-hide scroll-smooth"
+          >
+            <div className="flex space-x-3 pl-2">
+              {matches.map((match, index) => (
+                <MatchCard key={match?.match_id || index} match={match} />
+              ))}
+            </div>
           </div>
         </div>
-      ):
-      <Link to="https://www.cricbuzz.com/" className="" target="_blanck">
-      <img src={liveCricket} alt="Live cricket " className="w-full h-full object-center rounded-sm"/>
-      </Link>
-      }
+      ) : null}
+
+      {/* Loading */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center p-6 bg-white/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-md">
+          <ImSpinner8 className="animate-spin text-indigo-600 text-3xl mb-3" />
+          <p className="text-gray-700 text-sm font-medium">
+            Fetching live scores...
+          </p>
+        </div>
+      )}
+
+      {/* Error / Empty → Show Cricbuzz Image */}
+      {(error || (!loading && matches.length === 0)) && (
+        <div className="text-center">
+          <a
+            href="https://www.cricbuzz.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={liveCricket}
+              alt="Live cricket fallback"
+              className="w-full h-full object-cover rounded-lg shadow-md hover:shadow-xl transition"
+            />
+          </a>
+        </div>
+      )}
+
+      {/* Hide Scrollbar */}
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 }

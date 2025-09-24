@@ -103,11 +103,11 @@ export default function App() {
     // Default options
     style: {
       width: "500px",
-      height: "70px",
+      height: "45px",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontSize: "18px",
+      fontSize: "14px",
       color: "#000",
       fontWeight: "bold",
       marginTop:'340px'
@@ -117,11 +117,12 @@ export default function App() {
         background: "#B0F7BF",
       },
     },
-    error: {
-      style: {
-        background: "#EBC0BC",
-      },
-    },
+  error: {
+  style: {
+    background: "#fef2f2", // Tailwind bg-red-50 का hex code
+  },
+},
+
     custom: {
       style: {
         background: "orange",

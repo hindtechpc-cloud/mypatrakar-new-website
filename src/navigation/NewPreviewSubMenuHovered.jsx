@@ -46,7 +46,7 @@ const NewPreviewSubMenuHovered = ({ hoveredNews }) => {
 
               {/* Content */}
               <div className="pt-[8px] flex flex-col flex-1">
-                <h3 className="text-sm font-medium text-gray-50 mb-1 line-clamp-2">
+                <h3 className="text-sm font-medium text-gray-50 mb-1 line-clamp-2 hover:underline">
                   {newsItem.news_headline}
                 </h3>
                 <div className="flex items-center text-xs text-gray-50 mt-auto">

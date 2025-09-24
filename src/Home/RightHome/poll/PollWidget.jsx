@@ -197,9 +197,9 @@ export const PollWidget = () => {
 
   if (loading) {
     return (
-      <div className="mt-4 xl:w-[335px] lg:w-[295px] w-full mx-auto">
+      <div className="mt-4 xl:w-[335px] lg:w-[295px]  w-full mx-auto">
         <Header text="Poll" />
-        <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-md border border-gray-100 p-8 flex flex-col items-center space-y-4">
+        <div className="bg-white/80 backdrop-blur-md h-96  justify-center rounded-3xl shadow-md border border-gray-100 p-8 flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"></div>
           <p className="text-gray-600 font-medium">Loading poll...</p>
         </div>
@@ -261,12 +261,12 @@ export const PollWidget = () => {
         </div>
 
         {/* Question */}
-        <h3 className="text-lg font-bold text-gray-900 mb-6 text-center leading-snug">
+        <h3 className="text-lg font-bold text-gray-900 mb-3 text-center leading-snug">
           {poll.question}
         </h3>
 
         {/* Options */}
-        <div className="space-y-3 mb-6">
+        <div className="space-y-2 mb-3 flex flex-col items-center justify-center ">
           {poll.options.map((option) => {
             const isSelected = selectedOptionId === option.option_id;
             const isWinning =
@@ -277,11 +277,11 @@ export const PollWidget = () => {
               <div
                 key={option.option_id}
                 onClick={() => !submitted && handleVoteChange(option.option_id)}
-                className={`relative px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300
+                className={`relative w-full px-4 py-[5px] rounded-3xl cursor-pointer transition-all duration-300
                   ${
                     isSelected
                       ? " text-white shadow-md scale-[1.02]"
-                      : "bg-gray-50 hover:bg-gray-100"
+                      : "bg-gray-200 hover:bg-gray-100"
                   }
                   ${submitted && isWinning ? "ring-2 ring-green-400" : ""}
                 `}
@@ -303,7 +303,7 @@ export const PollWidget = () => {
                 <div className="relative z-10 flex items-center justify-between">
                   <div className="flex items-center space-x-3 flex-1">
                     <div
-                      className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300
+                      className={`flex-shrink-0 w-5 h-5 rounded-full borde flex items-center justify-center transition-all duration-300
                         ${
                           isSelected
                             ? "border-white bg-white/30"
@@ -323,7 +323,7 @@ export const PollWidget = () => {
                       )}
                     </div>
                     <span
-                      className={`font-medium ${
+                      className={`text-sm font-medium ${
                         isSelected ? "text-white" : "text-gray-700"
                       }`}
                     >
@@ -349,7 +349,7 @@ export const PollWidget = () => {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
+        <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
           <div>
             {submitted ? (
               <div className="flex items-center space-x-1 text-green-600 font-medium">
@@ -380,7 +380,7 @@ export const PollWidget = () => {
           </button>
 
           <button
-            className={`flex items-center justify-center space-x-2 py-3 px-6 rounded-full transition-all duration-200 font-semibold shadow-md
+            className={`flex items-center justify-center space-x-2 py-2 px-6 rounded-full transition-all duration-200 font-semibold shadow-md
               ${
                 submitted
                   ? "bg-green-100 text-green-700 hover:bg-green-200"
@@ -388,10 +388,10 @@ export const PollWidget = () => {
               }`}
             onClick={handleSubmit}
             disabled={!selectedOptionId || submitted || isSubmitting}
-           style={{
-                  background: !submitted ? bgColor : "",
-                  color: !submitted ? 'white' : "",
-                }}
+            style={{
+              background: !submitted ? bgColor : "",
+              color: !submitted ? "white" : "",
+            }}
           >
             {isSubmitting ? (
               <>
@@ -432,11 +432,9 @@ export const PollWidget = () => {
                     ? " w-6"
                     : "bg-gray-300 w-2 hover:bg-gray-400"
                 }`}
-                style={
-                  {
-                    background:index===currentIndex?bgColor:""
-                  }
-                }
+                style={{
+                  background: index === currentIndex ? bgColor : "",
+                }}
               />
             ))}
           </div>

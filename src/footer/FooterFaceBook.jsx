@@ -150,13 +150,13 @@ export default function FooterFaceBook() {
     <div className="w-full flex flex-col items-center justify-center">
       {/* If we don't have a normalized Facebook href — show placeholder */}
       {!facebookHref ? (
-        <div className="w-full p-4 border border-gray-200 rounded-md text-center bg-white shadow-sm">
+        <div className="w-[300px] h-[300px] p-1 border border-gray-200 rounded-md text-center bg-white shadow-sm">
           <h4 className="text-lg font-semibold mb-2">Facebook unavailable</h4>
           <p className="text-sm text-gray-600 mb-3">
             कोई वैध Facebook लिंक नहीं मिली। कृपया सुनिश्चित करें कि आपने
             अपना Facebook page URL/username सही दिया है — जैसे:
           </p>
-          <code className="block bg-gray-100 p-2 rounded text-xs mb-2">
+          <code className="block bg-gray-100 p-1 rounded text-xs mb-2">
             https://www.facebook.com/hindtechLucknow
           </code>
           <div className="flex items-center justify-center gap-3">

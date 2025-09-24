@@ -92,7 +92,7 @@ export default function ReadNews() {
       </div>
 
       {/* Right Section */}
-      <div className="w-full lg:w-4/12">
+      <div className="w-[335px]  xl:w-[335px] lg:w-[295px]  lg:flex flex-1 items-center justify-center mx-auto">
         <RightHome />
       </div>
     </div>

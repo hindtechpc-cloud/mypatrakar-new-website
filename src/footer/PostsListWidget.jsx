@@ -193,8 +193,8 @@ const PostsListWidget = () => {
 
   if (loading) {
     return (
-      <div className="w-[300px] bg-gradient-to-br from-blue-900/70 to-blue-800/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-600/30 shadow-2xl h-auto min-h-[330px]">
-        <div className="flex items-center justify-between mb-6">
+      <div className="w-[300px] bg-gradient-to-br from-blue-900/70 to-blue-800/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-600/30 shadow-2xl min-h-[300px]">
+        <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-yellow-400 font-sans">
             #BS_Exclusive
           </h2>

@@ -118,7 +118,7 @@ export default function Subcategory() {
       </div>
 
       {/* Right Section */}
-      <div className="w-full  xl:w-[335px] lg:w-[295px] md:w-1/2 lg:flex flex-1">
+      <div className="w-[335px]  xl:w-[335px] lg:w-[295px]  lg:flex flex-1 items-center justify-center mx-auto">
         <RightHome />
       </div>
     </div>
