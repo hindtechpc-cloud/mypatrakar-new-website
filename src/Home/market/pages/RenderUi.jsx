@@ -20,7 +20,7 @@ export default function RenderUi({
 
 }) {
   return (
-    <div>
+    <div className='mb-3'>
        {/* Search Bar */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="relative flex-grow">

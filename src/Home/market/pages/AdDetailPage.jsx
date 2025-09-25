@@ -11,8 +11,10 @@ import {
 import { FiAlertCircle } from "react-icons/fi";
 import { Skeleton } from "../components/Skeleton";
 import { toast } from "react-hot-toast";
+import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 export const AdDetailPage = ({ setIsOpenDetailCard, initialAd }) => {
   const defaultAds = initialAd;
+  console.log(defaultAds);
   // console.log(initialAd)
   const { AdsId } = useParams();
   const [ad, setAd] = useState(defaultAds || null);
@@ -21,7 +23,7 @@ export const AdDetailPage = ({ setIsOpenDetailCard, initialAd }) => {
   const [activeImage, setActiveImage] = useState(0);
   // console.log(initialAd);
   // Mock data - replace with your actual data source
-// console.log(ad)
+  // console.log(ad)
   // useEffect(() => {
   //   if (!initialAd) return; // Skip if ad is passed as prop
 
@@ -241,25 +243,27 @@ export const AdDetailPage = ({ setIsOpenDetailCard, initialAd }) => {
       <div className="mt-4">
         <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
         <p className="text-gray-700 whitespace-pre-line text-justify">
-          {ad.description}
+          <HtmlToPlainText htmlContent={ad.long_desc} />
         </p>
       </div>
 
       {/* Company & Date */}
-      <div className="mt-4 flex items-center justify-between">
-        <div className="flex items-center">
-          <span className="text-sm text-gray-500">
-            Posted by: <span className="font-medium">{ad.company}</span>
+      {ad?.date && (
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <span className="text-sm text-gray-500">
+              Posted by: <span className="font-medium">{ad.company}</span>
+            </span>
+          </div>
+          <span className="text-sm text-gray-400">
+            {new Date(ad.date).toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
           </span>
         </div>
-        <span className="text-sm text-gray-400">
-          {new Date(ad.date).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          })}
-        </span>
-      </div>
+      )}
 
       {/* Contact Info */}
       <div className="mt-6 space-y-3">

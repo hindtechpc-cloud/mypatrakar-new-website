@@ -46,7 +46,7 @@ export default function ReplyOnComment({ parentCommentId, onSuccess,setIsReply,i
       const payload = {
         comment_id: parentCommentId,
         news_id: decryptData(newsId),
-        name: isAuthenticated ? user.user_name : formData.name,
+        name: isAuthenticated ? user.name : formData.name,
         email: isAuthenticated ? user.email : formData.email,
         reply: formData.reply,
       };

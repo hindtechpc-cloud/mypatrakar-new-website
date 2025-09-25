@@ -5,11 +5,11 @@ import { checkAuth } from "../../../utils/checkAuth";
 import { decryptData } from "../../../utils/cryptoHelper";
 // import toast from "react-hot-toast";
 
-export default function Feedback({setIsComment,isComment}) {
-  const user = checkAuth(); // ⬅️ Authenticated user, if any
+export default function Feedback({ setIsComment, isComment }) {
+  const user = JSON.parse(sessionStorage.getItem("user")); // ⬅️ Authenticated user, if any
   // console.log(user)
   const isAuthenticated = !!user && user !== null;
-
+  console.log(user);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -66,10 +66,9 @@ export default function Feedback({setIsComment,isComment}) {
     setLoading(true);
     setSubmitError("");
     setSuccessMessage("");
-
     try {
       const payload = {
-        name: isAuthenticated ? user?.user_name : formData?.name,
+        name: isAuthenticated ? user?.name : formData?.name,
         email: isAuthenticated ? user.email : formData?.email,
         comment: formData?.comment,
         news_id: decryptData(newsId),
@@ -80,6 +79,8 @@ export default function Feedback({setIsComment,isComment}) {
       // const res="success";
       // if(is)
       if (res?.status === 200 || res?.status_code === 200) {
+        sessionStorage.setItem("user", JSON.stringify(payload));
+
         setFormData({ name: "", email: "", comment: "" });
         setCharacterCount(0);
         setIsComment(!isComment);
@@ -106,9 +107,6 @@ export default function Feedback({setIsComment,isComment}) {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">
         Share Your Thoughts
       </h2>
-
-   
-     
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {!isAuthenticated && (
@@ -189,21 +187,19 @@ export default function Feedback({setIsComment,isComment}) {
             rows="5"
             maxLength="500"
           ></textarea>
-          {errors.comment && (
-            <p className="mt-1 text-sm text-red-600">{""}</p>
-          )}
+          {errors.comment && <p className="mt-1 text-sm text-red-600">{""}</p>}
         </div>
- {submitError && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
-          <p className="text-sm text-red-700">{" "}</p>
-        </div>
-      )}
-         {/* Success and Error Messages */}
-      {successMessage && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start">
-          <p className="text-sm text-green-700">{successMessage}</p>
-        </div>
-      )}
+        {submitError && submitError!=""&& (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
+            <p className="text-sm text-red-700">{submitError} </p>
+          </div>
+        )}
+        {/* Success and Error Messages */}
+        {successMessage && (
+          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start">
+            <p className="text-sm text-green-700">{successMessage}</p>
+          </div>
+        )}
         <div className="pt-2">
           <button
             type="submit"

@@ -50,8 +50,22 @@ export default function TotalCommnets({ isComment }) {
     setReplyingTo(null);
   };
 
-  if (loading)
-    return <div className="text-center py-8">Loading comments...</div>;
+  if (loading) {
+    return (
+      <div className="space-y-4 py-8">
+        {[...Array(3)].map((_, index) => (
+          <div key={index} className="animate-pulse flex space-x-4 px-4">
+            <div className="rounded-full bg-gray-300 h-10 w-10"></div>
+            <div className="flex-1 space-y-2 py-1">
+              <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (error) null;
   // return <div className="text-red-500 text-center py-8">{error}</div>;
 
@@ -89,15 +103,17 @@ export default function TotalCommnets({ isComment }) {
               <div className="flex-1">
                 <div className="flex items-center space-x-2">
                   <h4 className="font-medium text-gray-900">
-                    {comment.user?.name || comment.name}
+                    {(comment.date && comment.user?.name) || comment.name}
                   </h4>
-                  <span className="text-xs text-gray-500">
-                    {new Date(comment.date).toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </span>
+                  {
+                    <span className="text-xs text-gray-500">
+                      {new Date(comment.date).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  }
                 </div>
                 <p className="mt-1 text-gray-700">{comment.comment}</p>
 
@@ -135,7 +151,7 @@ export default function TotalCommnets({ isComment }) {
 
                 {comment && (
                   <div className="mt-4 pl-4 border-l-2 border-gray-100">
-                    <TotalreplyOnComment id={comment.id}ß isReply={isReply} />
+                    <TotalreplyOnComment id={comment.id} ß isReply={isReply} />
                   </div>
                 )}
               </div>

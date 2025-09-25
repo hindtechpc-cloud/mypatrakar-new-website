@@ -75,7 +75,7 @@ export default function ReadNews() {
   return (
     <div className="flex flex-col lg:flex-row items-start justify-center gap-12 my-2 md:mx-[149px] sm:mx-8 mx-2">
       {/* Left Section */}
-      <div className="w-full lg:w-8/12">
+      <div className="w-full">
         <News />
         <div className="flex items-center justify-center mx-auto">
           {topAds&& topAds?.ad_image_url.length>0 && renderAd(topAds)}

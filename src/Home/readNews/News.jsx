@@ -27,7 +27,7 @@ export default function News() {
   useEffect(() => {
     loadNewsDetails();
   }, [type, newsId]);
-
+console.log(news)
   if (!news) return <div className="text-center py-8"><Loader/></div>;
 
   return (

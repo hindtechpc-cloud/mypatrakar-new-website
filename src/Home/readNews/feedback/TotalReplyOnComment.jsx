@@ -149,9 +149,15 @@ export default function TotalReplyOnComment({ id, isReply }) {
                     {user.email || reply.email}
                   </p>
                 </div>
-                <span className="text-xs text-gray-400">
+                {/* <span className="text-xs text-gray-400">
                   {new Date(reply.date).toLocaleDateString()}
-                </span>
+                </span> */}
+  {new Date(reply.date).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+
               </div>
               <p className="mt-2 text-sm text-gray-700">{reply.comment}</p>
             </div>

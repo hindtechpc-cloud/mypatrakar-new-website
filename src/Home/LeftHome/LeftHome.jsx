@@ -170,6 +170,9 @@ import Election from "./election/Election";
 import { useSettingsContext } from "../../context/SettingsContext";
 import { AdCardSkeleton } from "../market/components/Skeleton";
 import NoData from "../NoData";
+import TopNews from "./TopNews/TopNews";
+import GameSkeleton from "./game/GameSkeleton";
+import TopnewsSkeleton from "./TopNews/TopnewsSkeleton";
 
 export default function LeftHome() {
   const [featured, setFeatured] = useState([]);
@@ -269,15 +272,9 @@ export default function LeftHome() {
       {/* ✅ Featured Components */}
       <div className="grid grid-cols-1">
         {loadingFeatured ? (
-          <div className="p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Loading Sections...
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[...Array(6)].map((_, i) => (
-                <AdCardSkeleton key={i} />
-              ))}
-            </div>
+          <div className="">
+         <TopnewsSkeleton/>
+         <GameSkeleton/>
           </div>
         ) : featured.length === 0 ? (
           // ✅ No data fallback
