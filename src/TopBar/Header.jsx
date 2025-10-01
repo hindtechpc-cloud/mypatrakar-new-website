@@ -212,8 +212,9 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo1 from "../assets/Ellipse.svg";
 import SocialIcons from "./SocialIcons";
-import { WebThemeContext } from "../context/ThemeContext";
+// import { WebThemeContext } from "../context/ThemeContext";
 import { useSettingsContext } from "../context/SettingsContext";
+import { useWebThemeContext } from "../context/WebThemeContext";
 
 const languages = [
   { code: "hi", label: "हिंदी" },
@@ -227,7 +228,7 @@ const languages = [
 ];
 
 const Header = () => {
-  const { webTheme } = useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
   const location = useLocation();
   const { getSettingStatus } = useSettingsContext();
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);

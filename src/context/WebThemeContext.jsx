@@ -1,11 +1,11 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { GetWebTheme } from "../../api"; // adjust the path
 
 const WebThemeContext = createContext();
 
 export const WebThemeProvider = ({ children }) => {
   const [webTheme, setWebTheme] = useState({});
-
+// console.log(webTheme)
   // Session keys
   const SESSION_KEY = "webTheme";
 
@@ -15,16 +15,18 @@ export const WebThemeProvider = ({ children }) => {
 
   const loadFromSession = () => {
     const stored = sessionStorage.getItem(SESSION_KEY);
+    // console.log(stored)
     return stored ? JSON.parse(stored) : null;
   };
-
-  const fetchWebTheme = async () => {
+  const fetchWebTheme = useCallback(async () => {
     try {
       const cached = loadFromSession();
-      if (cached) {
+      if (cached!==null) {
         setWebTheme(cached);
       } else {
-        const res = await GetWebTheme("MYAWR241227001"); // dynamic if needed
+        const res = await GetWebTheme("MYAWR2508050057"); // dynamic if needed
+        console.log(res)
+        // console.log(object)
         if (res?.data?.response) {
           setWebTheme(res.data.response);
           saveToSession(res.data.response);
@@ -33,11 +35,11 @@ export const WebThemeProvider = ({ children }) => {
     } catch (error) {
       console.error("Failed to fetch web theme:", error);
     }
-  };
+  },[]);
 
   useEffect(() => {
     fetchWebTheme();
-  }, []);
+  }, [fetchWebTheme]);
 
   return (
     <WebThemeContext.Provider value={{ webTheme, fetchWebTheme }}>

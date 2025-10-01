@@ -36,6 +36,7 @@ export const handleReadAloud = ({
         news.news_des || news.news_description_html
       )}`
     );
+    utterance.rate = 0.7;
     utterance.voice = selectedVoice;
     utterance.lang = selectedVoice?.lang || langMap[language] || "en-US";
     utterance.onstart = () => setIsSpeaking(true);

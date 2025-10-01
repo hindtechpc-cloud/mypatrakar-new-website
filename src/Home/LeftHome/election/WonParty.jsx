@@ -2,11 +2,13 @@
 import React, { useContext } from "react";
 import { FaTrophy, FaMedal, FaAward } from "react-icons/fa";
 import { WebThemeContext } from "../../../context/ThemeContext";
+import { useWebThemeContext } from "../../../context/WebThemeContext";
 
 const TopResultTable = ({ parties }) => {
   const data = parties && parties.key_candidates ? parties : {};
   const keyCandidates = data?.key_candidates||[];
-  const {webTheme}=useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
+
 // console.log(keyCandidates)
   // Get party information for each candidate
   const getPartyInfo = (partyId) => {
@@ -19,9 +21,9 @@ const TopResultTable = ({ parties }) => {
   return (
     <div className="w-full  px-5 rounded-2xl shadow-lg overflow-hidden  mt-6">
       <div className=" p-4 rounded" style={{
-        background:webTheme['bg-color']=="#fff"?"#000":webTheme['bg-color'],
+        background:webTheme['bg-color']||"#0f3493",
       }}>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
+        <h2 className="text-xl font-bold text-[#fff] flex items-center gap-2">
           <FaTrophy className="text-yellow-300" />
           प्रमुख उम्मीदवार ({data.year})
         </h2>

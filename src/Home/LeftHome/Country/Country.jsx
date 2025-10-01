@@ -7,6 +7,7 @@ import NewsCard from "../shared/NewsCard";
 import { ArticlesPagination } from "../shared/ArticlesPagination";
 import { motion } from "framer-motion";
 import GameSkeleton from "../game/GameSkeleton";
+import NoData from "../../NoData";
 
 // Main Country Component
 const Country = ({
@@ -20,18 +21,19 @@ const Country = ({
   const [articlList, setArticlList] = useState([]);
   const [menu, setMenu] = useState([]);
 
-  // Session key unique per category
   const sessionKey = `country_news_${category_id}`;
   const sessionExpiry = 30 * 60 * 1000; // 30 minutes
 
+  // Fetch news articles
   const fetchNews = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
       const { data } = await loadNewsByCategory(category_id);
       const response = data?.response || [];
 
-      // Save in session with timestamp
+      // Save to sessionStorage
       const cacheData = {
         articles: response,
         timestamp: Date.now(),
@@ -39,6 +41,7 @@ const Country = ({
       sessionStorage.setItem(sessionKey, JSON.stringify(cacheData));
 
       setArticles(response);
+      setArticlList(response); // Default list shown = all articles
     } catch (err) {
       console.error("News fetch error:", err);
       setError(err.response?.message || "Failed to load news.");
@@ -47,35 +50,41 @@ const Country = ({
     }
   }, [category_id, sessionKey]);
 
+  // Load subcategories
   const loadSubcategories = async () => {
     try {
       const res = await GetNewsSubcategories("", category_id);
       setMenu(res.data.response);
     } catch (error) {
-      console.log(error);
+      console.log("Subcategory load error:", error);
     }
   };
 
+  // On component mount - check session cache
   useEffect(() => {
-    // Check session cache
     const cached = sessionStorage.getItem(sessionKey);
+
     if (cached) {
-      const { articles, timestamp } = JSON.parse(cached);
+      const { articles: cachedArticles, timestamp } = JSON.parse(cached);
       const isExpired = Date.now() - timestamp > sessionExpiry;
 
-      if (!isExpired && articles?.length) {
-        setArticles(articles);
+      if (!isExpired && cachedArticles?.length) {
+        setArticles(cachedArticles);
+        setArticlList(cachedArticles); // Show cached articles
         setLoading(false);
-        return; // no fetch if not expired
+        return;
       }
     }
-    fetchNews();
-  }, [fetchNews, sessionExpiry, sessionKey]);
 
+    fetchNews();
+  }, [fetchNews, sessionKey, sessionExpiry]);
+
+  // Load menu on first mount
   useEffect(() => {
     loadSubcategories();
   }, []);
 
+  // Handle loading state
   if (loading) {
     return (
       <div>
@@ -85,6 +94,7 @@ const Country = ({
     );
   }
 
+  // Handle error state
   if (error) {
     return (
       <div>
@@ -102,34 +112,44 @@ const Country = ({
     );
   }
 
+  // Main render
   return (
     <div className="w-full mt-[9px]">
       {/* Menu/Header */}
       <Menu
         menuText={section_title}
         menu={menu}
-        setArticlList={setArticlList}
+        setArticlList={(list) => {
+          if (list === "all") {
+            setArticlList(articles);
+          } else {
+            setArticlList(list);
+          }
+        }}
       />
 
       {/* No Articles */}
-      {!articles.length ? (
-        <EmptyCard>Nothing to show in {section_title}</EmptyCard>
+      {!articles.length || articlList.length <= 0 ? (
+        <NoData />
       ) : (
-        <div className="md:flex flex-1 md:flex-wrap md:gap-[11px] gap-[] mt-[9px] ">
-          {(articlList.length > 0 ? articlList : articles.slice(0, 5)).map(
-            (article, index) => (
+        <div className="md:flex flex-1 md:flex-wrap md:gap-[11px] mt-[9px]">
+          {articlList?.length > 0 ? (
+            articlList.map((article, index) => (
               <ArticleCard
                 key={article.news_id}
                 article={article}
-                category={article?.is_breaking == 1 ? "Breaking" : ""}
+                category={article?.is_breaking === 1 ? "Breaking" : ""}
                 imageUrl={article?.news_img_url}
                 index={index}
               />
-            )
+            ))
+          ) : (
+            <NoData />
           )}
         </div>
       )}
 
+      {/* Pagination */}
       <div className="relative flex items-end justify-end md:-top-2 my-1 top-1">
         <ArticlesPagination
           setArticlList={setArticlList}
@@ -141,6 +161,7 @@ const Country = ({
   );
 };
 
+// Animated article card
 const ArticleCard = ({ article, category, imageUrl, index }) => {
   return (
     <motion.div

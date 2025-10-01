@@ -169,7 +169,7 @@ import React, { useEffect, useState, useCallback, createContext, useContext } fr
 
 // CACHE CONSTANTS
 const CACHE_EXPIRY_MINUTES = 30;
-const DEFAULT_PORTAL_ID = "MYAWR241227001";
+const DEFAULT_PORTAL_ID = "MYAWR2508050057";
 
 export const AdContext = createContext();
 

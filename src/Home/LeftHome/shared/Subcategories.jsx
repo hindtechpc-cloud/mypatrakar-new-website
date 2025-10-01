@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Subcategories({ menuItems, handleArticlList ,articles,setArticlList}) {
+export default function Subcategories({ menuItems, handleArticlList, articles, setArticlList }) {
   const [active, setActive] = useState(null); // ✅ store active sub_category_id
   const [showAll, setShowAll] = useState(false); // ✅ control "All" visibility
 
@@ -16,9 +16,20 @@ export default function Subcategories({ menuItems, handleArticlList ,articles,se
 
   const handleAllClick = () => {
     setActive(null); // reset subcategory
-    setArticlList(articles); // show all articles
+    setArticlList("all"); // show all articles
     setShowAll(false); // ✅ फिर से "All" हटाओ
   };
+
+  // ✅ Skeleton while loading
+  if (!menuItems || menuItems.length === 0) {
+    return (
+      <ul className="flex items-center gap-[14px] animate-pulse">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <li key={i} className="h-4 w-12 bg-gray-300 rounded" />
+        ))}
+      </ul>
+    );
+  }
 
   return (
     <div>
@@ -28,9 +39,7 @@ export default function Subcategories({ menuItems, handleArticlList ,articles,se
           <li
             onClick={handleAllClick}
             className={`text-xs cursor-pointer transition-all ${
-              active === null
-                ? "underline underline-offset-4 font-semibold"
-                : ""
+              active === null ? "underline underline-offset-4 font-semibold" : ""
             }`}
           >
             All
@@ -38,21 +47,20 @@ export default function Subcategories({ menuItems, handleArticlList ,articles,se
         )}
 
         {/* ✅ Subcategories */}
-        {menuItems?.length > 0 &&
-          menuItems.map((menu) => {
-            const isActive = active === menu.sub_category_id;
-            return (
-              <li
-                key={menu.sub_category_id}
-                onClick={() => handleClick(menu.sub_category_id)}
-                className={`text-xs cursor-pointer transition-all ${
-                  isActive ? "underline underline-offset-4 font-semibold " : ""
-                }`}
-              >
-                {menu.name}
-              </li>
-            );
-          })}
+        {menuItems.map((menu) => {
+          const isActive = active === menu.sub_category_id;
+          return (
+            <li
+              key={menu.sub_category_id}
+              onClick={() => handleClick(menu.sub_category_id)}
+              className={`text-xs cursor-pointer transition-all ${
+                isActive ? "underline underline-offset-4 font-semibold " : ""
+              }`}
+            >
+              {menu.name}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

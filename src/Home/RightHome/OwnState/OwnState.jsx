@@ -87,7 +87,7 @@ export default function OwnState() {
 
   // ✅ Skeleton Loader (timeline style)
   const SkeletonLoader = () => (
-    <div className="flex flex-col gap-4 w-full max-w-sm mx-auto animate-pulse">
+    <div className="flex flex-col gap-4 w-full max-w-sm mx-auto animate-pulse my-3">
       {[1, 2, 3, 4].map((i) => (
         <div
           key={i}
@@ -122,7 +122,7 @@ export default function OwnState() {
           </button>
         </div>
       ) : (
-        <div className=" relative flex flex-col gap-3 w-full max-w-sm mx-auto">
+        <div className=" relative flex flex-col gap-3 w-full max-w-sm mx-auto my-2">
           {articles?.slice(0, 4).map((article, index) => (
             <div
               key={index}

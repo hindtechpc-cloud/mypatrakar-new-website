@@ -69,7 +69,7 @@ const State = ({
   }, [fetchNews]);
 
   /* -------- Loading -------- */
-  if (loading) {
+  if (!loading) {
     return (
       <div>
         <Menu menuText={section_title} menu={[]} />

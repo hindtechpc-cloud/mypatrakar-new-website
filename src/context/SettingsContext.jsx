@@ -49,7 +49,7 @@ export const SettingsProvider = ({ children }) => {
         // console.log(cached);
         setSettings(cached);
       } else {
-        const res = await getSettings("MYAWR241227001"); // assuming it's async
+        const res = await getSettings("MYAWR2508050057"); // assuming it's async
         // console.log(res.data.response);
         if (res?.data.response) {
           setSettings(res.data.response);

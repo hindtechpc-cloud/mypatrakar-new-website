@@ -5,9 +5,9 @@ import NewsFeed from "../readNews/newsfeed/NewsFeed";
 import RightHome from "../RightHome/RightHome";
 import { loadNewsByCategory } from "../../../api";
 import { decryptData } from "../../utils/cryptoHelper";
-
 import NoData from "../NoData";
 import GameSkeleton from "../LeftHome/game/GameSkeleton";
+import { Pagination, Stack } from "@mui/material"; // ✅ MUI Pagination import
 
 export default function Category() {
   const { category, categoryId } = useParams();
@@ -16,7 +16,7 @@ export default function Category() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 2;
   const catId = decryptData(categoryId);
 
   // ✅ API Call with retry support
@@ -45,17 +45,9 @@ export default function Category() {
   const currentArticles = articles.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(articles.length / itemsPerPage);
 
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-  };
-
-  const handlePrevious = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
-
   return (
     <div className="">
-      <div className="flex flex-col lg:flex-row items-start justify-center gap-[45px] my-2 xl:mx-[149px] lg:mx-2  mx-2">
+      <div className="flex flex-col lg:flex-row items-start justify-center gap-[45px] my-2 xl:mx-[149px] lg:mx-2 mx-2">
         {/* Left Section */}
         <div className="w-full xl:w-[760px]">
           {loading ? (
@@ -78,28 +70,34 @@ export default function Category() {
 
               <NewsFeed newsCard={currentArticles} />
 
-              {/* Pagination */}
+              {/* ✅ MUI Pagination */}
               {articles.length > itemsPerPage && (
-                <div className="flex items-center justify-between mt-6">
-                  <button
-                    onClick={handlePrevious}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:opacity-50"
-                  >
-                    Previous
-                  </button>
-
-                  <span className="text-sm text-gray-600">
-                    Page {currentPage} of {totalPages}
-                  </span>
-
-                  <button
-                    onClick={handleNext}
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 rounded bg-gray-200 text-black hover:bg-gray-300 disabled:opacity-50"
-                  >
-                    Next
-                  </button>
+                <div className="flex justify-end mt-6">
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={totalPages}
+                      page={currentPage}
+                      onChange={(event, value) => setCurrentPage(value)}
+                      shape="rounded"
+                      sx={{
+                        "& .MuiPaginationItem-root": {
+                          color: "#374151", // unselected text
+                          backgroundColor: "#d1d5db80", // gray bg
+                          borderRadius: "8px",
+                          border: "1px solid #fff",
+                        },
+                        "& .MuiPaginationItem-root.Mui-selected": {
+                          backgroundColor: "#0f3493", // active bg
+                          color: "#fff", // active text
+                          fontWeight: "bold",
+                        },
+                        "& .MuiPaginationItem-root:hover": {
+                          backgroundColor: "#9ca3af",
+                          color: "black",
+                        },
+                      }}
+                    />
+                  </Stack>
                 </div>
               )}
             </>
@@ -107,7 +105,7 @@ export default function Category() {
         </div>
 
         {/* Right Section */}
-        <div className="w-[335px]  xl:w-[335px] lg:w-[295px]  lg:flex flex-1 items-center justify-center mx-auto">
+        <div className="w-[335px] xl:w-[335px] lg:w-[295px] lg:flex flex-1 items-center justify-center mx-auto">
           <RightHome />
         </div>
       </div>

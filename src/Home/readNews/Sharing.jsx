@@ -1,5 +1,3 @@
-// import { Eye, MessageCircle, Layers } from "lucide-react";
-
 import { BsEye, BsLayers } from "react-icons/bs";
 import { FaYoutube } from "react-icons/fa";
 import { FiMessageCircle } from "react-icons/fi";

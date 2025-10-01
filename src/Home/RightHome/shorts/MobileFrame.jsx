@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { ImSpinner2 } from "react-icons/im";
 import { useContext } from "react";
 import { WebThemeContext } from "../../../context/ThemeContext";
+import defaultLogo from "../../../assets/Ellipse.svg"
+import { useWebThemeContext } from "../../../context/WebThemeContext";
+
 
 const MobileFrame = ({
   articles = [],
@@ -13,7 +16,8 @@ const MobileFrame = ({
   loading = false,
   error = null,
 }) => {
-  const { webTheme } = useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
+
 
   const logo = webTheme["web-logo"] || defaultLogo;
   if (loading) {

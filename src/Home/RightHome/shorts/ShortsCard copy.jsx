@@ -14,10 +14,12 @@ import {
 
 } from "react-icons/fa";
 import { WebThemeContext } from "../../../context/ThemeContext";
+import { useWebThemeContext } from "../../../context/WebThemeContext";
 
 const ShortsCard = ({ short, user }) => {
   const { setNews } = useContext(NewsContext);
-  const { webTheme } = useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
+
   const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   //   const [isSaved, setIsSaved] = useState(false);

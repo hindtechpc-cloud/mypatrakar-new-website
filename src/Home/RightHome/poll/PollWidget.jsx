@@ -13,6 +13,7 @@ import {
   FaVoteYea,
 } from "react-icons/fa";
 import { WebThemeContext } from "../../../context/ThemeContext";
+import { useWebThemeContext } from "../../../context/WebThemeContext";
 
 /**
  * PollWidget - A component that displays polls and handles voting
@@ -28,7 +29,8 @@ export const PollWidget = () => {
   const [showLoginOverlay, setShowLoginOverlay] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { webTheme } = useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
+
   // Authentication
   const user = JSON.parse(sessionStorage.getItem("user"));
   const userId = user?.user_id;

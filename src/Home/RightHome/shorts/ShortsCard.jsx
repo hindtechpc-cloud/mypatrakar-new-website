@@ -6,10 +6,12 @@ import { encryptData } from "../../../utils/cryptoHelper";
 import ShortsClap from "./ShortsClap";
 import { FaShareAlt } from "react-icons/fa";
 import { WebThemeContext } from "../../../context/ThemeContext";
-
+import defaultLogo from "../../../assets/Ellipse.svg"
+import { useWebThemeContext } from "../../../context/WebThemeContext";
 const ShortsCard = ({ short, user }) => {
   const { setNews } = useContext(NewsContext);
-  const { webTheme } = useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
+
   const navigate = useNavigate();
 
   const handleNewsContent = () => {
@@ -54,7 +56,7 @@ const ShortsCard = ({ short, user }) => {
       {/* Header Image Section */}
       <div className="relative rounded-t-2xl h-[200px] overflow-hidden">
         <img
-          src={webTheme["web-logo"]}
+          src={webTheme["web-logo"]||defaultLogo}
           alt="Source"
           className="w-10 h-10 rounded-full object-cover absolute m-3 z-10 border-2 border-white shadow-sm"
         />
@@ -88,8 +90,11 @@ const ShortsCard = ({ short, user }) => {
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
           <button
-            className="bg-red-600 text-white text-sm font-medium py-2 px-5 rounded-full hover:bg-red-700 transition-colors shadow-sm"
+            className=" text-white text-sm font-medium py-2 px-5 rounded-full transition-colors shadow-sm"
             onClick={handleNewsContent}
+            style={{
+              background:webTheme["bg-color"]||"red"
+            }}
           >
             Read Full Article
           </button>

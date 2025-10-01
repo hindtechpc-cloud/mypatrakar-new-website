@@ -103,7 +103,8 @@ const SocialIcons = () => {
       {socialLinks.map((item, index) => {
         const iconName = item?.icon?.trim();
         const IconComponent = iconMap[iconName];
-        const url = item?.url?.startsWith("http") ? item.url : `https://${item?.url}`;
+        // const url = item?.url?.startsWith("http") ? item.url : `https://${item?.url}`;
+        const url = item?.url;
         const color = colorMap[iconName] || "#333";
 
         if (!IconComponent || !url) return null;

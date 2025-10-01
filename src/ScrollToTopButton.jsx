@@ -30,7 +30,7 @@ const {webTheme}=useContext(WebThemeContext);
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       style={{
-        background:webTheme["bg-color"]
+        background:webTheme["bg-color"]||"#0f3493"
       }}
     >
       <FaArrowUp size={20} />

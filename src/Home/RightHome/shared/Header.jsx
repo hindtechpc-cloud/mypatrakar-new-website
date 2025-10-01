@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import { GoDotFill } from "react-icons/go";
-import { WebThemeContext } from "../../../context/ThemeContext";
+
+import { useWebThemeContext } from "../../../context/WebThemeContext";
 
 export default function Header({text}) {
-  const {webTheme}=useContext(WebThemeContext)
+  const { webTheme } = useWebThemeContext();
+
     const themeColor = webTheme["bg-color"] || "#b91c1c"
   return (
     <div>

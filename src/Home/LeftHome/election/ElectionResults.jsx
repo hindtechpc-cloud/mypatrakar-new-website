@@ -77,9 +77,11 @@
 
 import React from "react";
 import TopResultTable from "./TopResultTable";
-import image from "../../../assets/election.svg";
+import result from "../../../assets/election.svg";
+import poll from "../../../assets/poll.webp";
 
 export default function ElectionResults({ results }) {
+  console.log(results)
   // Sort parties by seats won in descending order and get top 3
   const topParties = [...results]
     .sort((a, b) => parseInt(b.seats_won) - parseInt(a.seats_won))
@@ -156,15 +158,16 @@ export default function ElectionResults({ results }) {
             <div className="absolute inset-0 flex flex-col justify-center items-center bg-white rounded-full w-32 h-32 m-auto shadow-md border border-gray-100">
               <div className="mb-1">
                 <img
-                  src={image}
+                  src={result}
                   alt="Election related image"
                   className="h-10 w-auto"
                 />
               </div>
               <p className="text-gray-600 text-sm font-medium">Total Seats</p>
-              <p className="text-gray-800 font-bold text-xl"> {totalSeats > 999
-                        ? `${totalSeats/1000} K`
-                        : totalSeats}</p>
+              <p className="text-gray-800 font-bold text-xl">
+                {" "}
+                {totalSeats > 999 ? `${totalSeats / 1000} K` : totalSeats}
+              </p>
             </div>
 
             {/* Dynamic Labels for Top 3 Parties */}
@@ -236,7 +239,7 @@ export default function ElectionResults({ results }) {
                   <div>
                     <p className="text-2xl font-bold text-gray-800">
                       {party.seats_won > 999
-                        ? `${(party.seats_won)/1000} K`
+                        ? `${party.seats_won / 1000} K`
                         : party.seats_won}
                     </p>
                     <p className="text-xs text-gray-500">seats won</p>

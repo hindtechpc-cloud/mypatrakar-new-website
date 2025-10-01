@@ -239,7 +239,7 @@ const WeatherWidget = () => {
                 {weatherData?.main?.temp}°C
               </h1>
               <p className="text-sm mt-2 opacity-90">
-                🌧️ बारिश:{" "}
+                🌧️ Rain:{" "}
                 {weatherData.rain ? `${weatherData?.rain["1h"]} mm` : "0 mm"} | 💧{" "}
                 {weatherData?.main?.humidity}% | 🌬️ {weatherData?.wind?.speed} km/h
               </p>

@@ -24,6 +24,7 @@ import toast from "react-hot-toast";
 import SpeakMessage from "../../utils/SpeakMessage";
 import RightHome from "../RightHome/RightHome";
 import GameSkeleton from "../LeftHome/game/GameSkeleton";
+import { useWebThemeContext } from "../../context/WebThemeContext";
 
 
 const DEFAULT_FILTERS = {
@@ -52,7 +53,8 @@ export default function Search() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [locations, setLocations] = useState([]);
-  const { webTheme } = useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
+
 
   // 🔹 fetch news
   const fetchFilteredNews = useCallback(async (page = 1, currentFilters) => {

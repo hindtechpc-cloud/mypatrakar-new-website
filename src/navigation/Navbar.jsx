@@ -9,6 +9,7 @@ import { loadNewsBySubCategory, menuWithSubNavMenuList } from "../../api";
 import defaultLogo from "../assets/Ellipse.svg";
 import { encryptData } from "../utils/cryptoHelper";
 import NewPreviewSubMenuHovered from "./NewPreviewSubMenuHovered";
+import { useWebThemeContext } from "../context/WebThemeContext";
 
 // --------------------
 // Cache Helpers
@@ -37,7 +38,7 @@ const getCache = (key, maxAge = CACHE_MAX_AGE) => {
 };
 
 const Navbar = () => {
-  const { webTheme } = useContext(WebThemeContext);
+  const { webTheme } =useWebThemeContext();
   const { language } = useContext(LanguageContext);
 
   const [menuOpen, setMenuOpen] = useState(false);

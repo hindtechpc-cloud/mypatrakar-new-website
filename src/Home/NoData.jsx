@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 import { motion } from "framer-motion"; // ✅ framer-motion
 import { SearchX } from "lucide-react";
 import { WebThemeContext } from "../context/ThemeContext";
-
+import nodata from "../assets/no_data.png"
+import { useWebThemeContext } from "../context/WebThemeContext";
 export default function NoData() {
-  const { webTheme } = useContext(WebThemeContext);
-  const themeColor = webTheme["bg-color"] || "#b91c1c"; // fallback color
+  const { webTheme } = useWebThemeContext();
+
+  const themeColor = webTheme["bg-color"] || ""; // fallback color
 
   return (
     <motion.div
@@ -16,8 +18,8 @@ export default function NoData() {
     >
       {/* Circle Icon */}
       <motion.div
-        className="flex items-center justify-center rounded-full p-6 shadow-md cursor-pointer animate-bounce"
-        style={{ backgroundColor: themeColor }}
+        className="flex items-center justify-center rounded-full p-3 shadow-md cursor-pointer animate-bounce bg-red-200"
+        // style={{ backgroundColor: themeColor }}
         whileHover={{
           scale: 1.2,
           rotate: 10,
@@ -26,7 +28,7 @@ export default function NoData() {
         whileTap={{ scale: 0.9, rotate: -10 }}
         transition={{ type: "spring", stiffness: 200, damping: 12 }}
       >
-        <SearchX size={40} color="white" strokeWidth={2.5} />
+       <img src={nodata} alt="no data found " className="w-[60px] h-[60px]"/>
       </motion.div>
 
       {/* Title */}
@@ -53,7 +55,7 @@ export default function NoData() {
       <motion.button
         onClick={() => window.location.reload()}
         className="mt-6 px-5 py-2 rounded-md text-white text-sm font-medium shadow-md transition"
-        style={{ backgroundColor: themeColor }}
+        style={{ backgroundColor: themeColor||"#e82020" }}
         whileHover={{
           scale: 1.05,
           boxShadow: `0 0 15px ${themeColor}`,
