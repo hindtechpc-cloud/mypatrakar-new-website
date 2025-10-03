@@ -1,41 +1,12 @@
-// import { BsInstagram } from "react-icons/bs";
-// import { FaFacebook, FaPinterest, FaTelegram, FaTwitter, FaYoutube } from "react-icons/fa";
-// import SocialIcons from "../TopBar/SocialIcons";
-
-// export default function FooterBottom() {
-//   const currentYear = new Date().getFullYear();
-
-//   return (
-//     <footer className="bg-gray-900 text-white py-4 text-sm">
-//       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-4">
-//         {/* Left Side: Copyright */}
-//         <p className="text-center md:text-left">
-//           © Copyright {currentYear}, All Rights Reserved to{" "}
-//           <span className="font-bold">MyPatrakar</span>
-//         </p>
-
-//         {/* Right Side: Developed by */}
-//         <div className="flex items-center space-x-4 mt-2 md:mt-0">
-//             {/* <span className="text-gray-400 text-xs font-thin">Social Media</span> */}
-//           {/* Social Media Icons */}
-//           <SocialIcons />
-
-//           {/* Developer Info */}
-//           <p className="text-sm">
-//             Powered by{" "}
-//             <span className="font-semibold text-md">MyPatrakar</span>
-//           </p>
-//         </div>
-//       </div>
-//     </footer>
 //   );
 // }
 
+import { useWebThemeContext } from "../context/WebThemeContext";
 import SocialIcons from "../TopBar/SocialIcons";
 
 export default function FooterBottom() {
   const currentYear = new Date().getFullYear();
-
+const {webTheme}=useWebThemeContext();
   return (
     <footer className="bg-gradient-to-r from-blue-950 to-blue-950 text-white py-6 border-t border-gray-700">
       <div className="container mx-auto px-4">
@@ -44,7 +15,9 @@ export default function FooterBottom() {
           <div className="text-center md:text-left">
             <p className="text-sm md:text-base">
               © Copyright {currentYear}, All Rights Reserved to{" "}
-              <span className="font-bold text-yellow-400 hover:text-yellow-300 transition-colors duration-300">
+              <span className="font-bold  transition-colors duration-300" style={{
+            color:webTheme["bg-color"]
+          }}>
                 MyPatrakar
               </span>
             </p>
@@ -56,7 +29,7 @@ export default function FooterBottom() {
         </div>
 
         {/* Additional Links */}
-        <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap justify-center gap-4 text-xs text-gray-300">
+        {/* <div className="mt-4 pt-4 border-t border-gray-800 flex flex-wrap justify-center gap-4 text-xs text-gray-300">
           <a
             href="/privacy-policy"
             className="hover:text-yellow-400 transition-colors duration-300"
@@ -81,7 +54,7 @@ export default function FooterBottom() {
           >
             Contact
           </a>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

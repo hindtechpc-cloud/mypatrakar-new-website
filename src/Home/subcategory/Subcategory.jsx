@@ -10,6 +10,7 @@ import NoData from "../NoData";
 import GameSkeleton from "../LeftHome/game/GameSkeleton";
 import { Pagination, Stack } from "@mui/material"; // <-- MUI Pagination Import
 import { WebThemeContext } from "../../context/ThemeContext";
+import { useWebThemeContext } from "../../context/WebThemeContext";
 
 
 export default function Subcategory() {
@@ -17,7 +18,7 @@ export default function Subcategory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const {webTheme}=useContext(WebThemeContext);
+  const { webTheme } = useWebThemeContext();
 
   const itemsPerPage = 2;
 const theme=webTheme["bg-color"];

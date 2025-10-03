@@ -78,10 +78,10 @@
 import React from "react";
 import TopResultTable from "./TopResultTable";
 import result from "../../../assets/election.svg";
-import poll from "../../../assets/poll.webp";
+import poll from "../../../assets/exit_poll_img.png";
 
-export default function ElectionResults({ results }) {
-  console.log(results)
+export default function ElectionResults({ results,parties }) {
+  console.log(parties)
   // Sort parties by seats won in descending order and get top 3
   const topParties = [...results]
     .sort((a, b) => parseInt(b.seats_won) - parseInt(a.seats_won))
@@ -158,7 +158,7 @@ export default function ElectionResults({ results }) {
             <div className="absolute inset-0 flex flex-col justify-center items-center bg-white rounded-full w-32 h-32 m-auto shadow-md border border-gray-100">
               <div className="mb-1">
                 <img
-                  src={result}
+                  src={parties?.type=="Poll"?poll:result}
                   alt="Election related image"
                   className="h-10 w-auto"
                 />

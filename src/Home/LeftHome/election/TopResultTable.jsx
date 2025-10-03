@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { WebThemeContext } from "../../../context/ThemeContext";
+import { useWebThemeContext } from "../../../context/WebThemeContext";
 
 const TopResultTable = ({ results }) => {
   const totalVotes = results.reduce(
@@ -7,7 +8,8 @@ const TopResultTable = ({ results }) => {
     0
   );
 
-  const { webTheme } = useContext(WebThemeContext);
+   const { webTheme } = useWebThemeContext();
+ 
   // Define a color scheme for the top parties
   const rankColors = [
     "linear-gradient(135deg, #FFD700, #FFA500)", // Gold for 1st

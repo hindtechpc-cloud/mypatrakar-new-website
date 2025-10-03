@@ -229,7 +229,7 @@ export default function Election() {
           </div>
         </div>
 
-        <ElectionResults results={topThreeParties} />
+        <ElectionResults results={topThreeParties} parties={currentYearData}/>
         <WonParty parties={currentYearData} />
       </div>
     </div>

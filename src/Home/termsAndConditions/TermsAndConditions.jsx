@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { GetTermsAndConditionData } from "../../../api";
 import HtmlToPlainText from "../../utils/HtmlToPlainText";
+import { useWebThemeContext } from "../../context/WebThemeContext";
 
 export default function TermsAndCondition() {
   const [termsData, setTermsData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const { webTheme } = useWebThemeContext();
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -31,7 +32,12 @@ export default function TermsAndCondition() {
     <div className="bg-red-100 w-full min-h-screen py-5 px-4 md:px-10">
       <div className="bg-gray-50 rounded-xl shadow-lg mx-auto max-w-4xl">
         {/* Header */}
-        <header className="bg-red-500 text-gray-50 p-4 rounded-t-xl flex items-center gap-3">
+        <header
+          className=" text-gray-50 p-4 rounded-t-xl flex items-center gap-3"
+          style={{
+            background: webTheme["bg-color"],
+          }}
+        >
           {/* {termsData?.page_icon_url && (
             <img
               src={termsData.page_icon_url}
@@ -55,8 +61,7 @@ export default function TermsAndCondition() {
                 className="text-gray-800 text-sm md:text-base leading-relaxed"
               />
               <p className="text-sm text-gray-400 mt-4">
-                Last updated:{" "}
-                {new Date(termsData.date).toLocaleDateString()}
+                Last updated: {new Date(termsData.date).toLocaleDateString()}
               </p>
             </>
           ) : (

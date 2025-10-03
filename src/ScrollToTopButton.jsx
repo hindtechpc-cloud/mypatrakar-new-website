@@ -1,11 +1,12 @@
 // src/ScrollToTopButton.jsx
 import React, { useState, useEffect, useContext } from "react";
 import { FaArrowUp } from "react-icons/fa";
-import { WebThemeContext } from "./context/ThemeContext";
+import { useWebThemeContext } from "./context/WebThemeContext";
+
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
-const {webTheme}=useContext(WebThemeContext);
+const {webTheme}=useWebThemeContext();
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > 300) {

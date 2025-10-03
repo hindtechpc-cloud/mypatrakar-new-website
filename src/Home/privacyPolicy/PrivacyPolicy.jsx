@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { GetPrivacyPolicyData } from "../../../api";
 
 import HtmlToPlainText from "../../utils/HtmlToPlainText";
+import { useWebThemeContext } from "../../context/WebThemeContext";
 
 export default function PrivacyPolicy() {
   const [policyData, setPolicyData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+const {webTheme}=useWebThemeContext();
   // Fetch data when component mounts
   useEffect(() => {
     const loadData = async () => {
@@ -33,7 +34,9 @@ export default function PrivacyPolicy() {
     <div className="bg-red-100 w-full min-h-screen py-5 px-4 md:px-10">
       <div className="bg-gray-50 rounded-xl shadow-lg mx-auto max-w-4xl">
         {/* Header */}
-        <header className="bg-red-500 text-gray-50 p-4 rounded-t-xl flex items-center gap-3">
+        <header className=" text-gray-50 p-4 rounded-t-xl flex items-center gap-3" style={{
+          background:webTheme["bg-color"]
+        }}>
           {/* {policyData?.page_icon_url && (
             <img
               src={policyData.page_icon_url||}

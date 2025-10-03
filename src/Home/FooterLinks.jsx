@@ -23,17 +23,20 @@ export default function FooterLinks() {
   ].filter(Boolean); // Remove false values
 
   return (
-    <div className="bg-black text-white py-4 text-sm bottom-0">
+   
+    <div className="relative ">
+       <div className="bg-gradient-to-b from-blue-900 to-blue-950  text-white py-4 text-sm bottom-0 ">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center items-center gap-3 md:gap-6">
           {links.map((link, index) => (
             <div key={index} className="flex items-center">
               {index !== 0 && (
-                <span className="text-yellow-500 px-2">|</span>
+                <span className="text-gray-100 px-2">|</span>
               )}
               <Link
                 to={link.path}
-                className="hover:underline focus:text-yellow-300"
+                className="border-b border-transparent hover:border-current focus:border-current pb-[2px] focus:text-gray-300"
+
               >
                 {link.label}
               </Link>
@@ -41,6 +44,7 @@ export default function FooterLinks() {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }

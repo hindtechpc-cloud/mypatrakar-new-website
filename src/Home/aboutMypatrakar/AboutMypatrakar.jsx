@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { GetAboutUsData } from "../../../api";
 import HtmlToPlainText from "../../utils/HtmlToPlainText";
+import { useWebThemeContext } from "../../context/WebThemeContext";
 
 export default function AboutMypatrakar() {
   const [aboutData, setAboutData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const {webTheme}=useWebThemeContext();
 
   // Fetch data on mount
   useEffect(() => {
@@ -29,8 +31,13 @@ export default function AboutMypatrakar() {
   }, []);
 
   return (
-    <div className="p-4 md:p-8">
-       <header className="bg-red-500 text-gray-50 p-4 rounded-t-xl flex items-center gap-3">
+    <div className="bg-red-100 w-full min-h-screen py-5  md:px-10">
+   <div className="bg-gray-50 rounded-xl shadow-lg mx-auto max-w-4xl">
+
+
+        <header className=" text-gray-50 p-4 rounded-t-xl flex items-center gap-3" style={{
+        background:webTheme["bg-color"]
+       }}>
           {/* {termsData?.page_icon_url && (
             <img
               src={termsData.page_icon_url}
@@ -46,7 +53,7 @@ export default function AboutMypatrakar() {
       {loading ? (
         <p className="text-center mt-4 text-gray-500">Loading...</p>
       ) : aboutData ? (
-        <div className="flex flex-col w-full items-start justify-start mt-6">
+        <div className="flex flex-col w-full items-start justify-start mt-6 px-5">
           <HtmlToPlainText
             htmlContent={aboutData.content}
             maxLength={15000}
@@ -61,6 +68,7 @@ export default function AboutMypatrakar() {
           Unable to load About Us content.
         </p>
       )}
+   </div>
     </div>
   );
 }
