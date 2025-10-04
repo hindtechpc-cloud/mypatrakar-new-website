@@ -51,11 +51,11 @@ export default function ShortsClap({ news_id, user_id }) {
           const response = await CheckShortsClapped(news_id, user_id);
           console.log(response);
           setIsClapped(response.data.response.is_clapped);
-          toast.success(
-            response.data.response.is_clapped
-              ? "👏 You clapped this!"
-              : "👏 Clap removed"
-          );
+          // toast.success(
+          //   response.data.response.is_clapped
+          //     ? "👏 You clapped this!"
+          //     : "👏 Clap removed"
+          // );
           // setClapCount(clap_count || 0);
         } catch (error) {
           console.log(error);

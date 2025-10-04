@@ -59,14 +59,14 @@ export default function FooterMenu() {
             style={{
               backgroundColor:
                 hoveredIndex === index ? webTheme["bg-color"] : "transparent",
-              color: hoveredIndex === index ? "blue" : "white",
+              color: hoveredIndex === index ? "white" : "white",
             }}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             <span
               style={{
-                color: hoveredIndex === index ? "blue" : "white",
+                color: hoveredIndex === index ? "white" : "white",
               }}
             >
               {item.icon}

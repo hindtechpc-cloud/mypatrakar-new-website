@@ -1,15 +1,177 @@
 
-import React, { useContext } from "react";
+// import React, { useContext } from "react";
+// import { FaTrophy, FaMedal, FaAward } from "react-icons/fa";
+// import { WebThemeContext } from "../../../context/ThemeContext";
+// import { useWebThemeContext } from "../../../context/WebThemeContext";
+
+// const TopResultTable = ({ parties }) => {
+//   const data = parties && parties.key_candidates ? parties : {};
+//   const keyCandidates = data?.key_candidates||[];
+//   const { webTheme } = useWebThemeContext();
+
+// // console.log(keyCandidates)
+//   // Get party information for each candidate
+//   const getPartyInfo = (partyId) => {
+//     return (
+//       data.political_parties?.find((party) => party.party_name === partyId) ||
+//       {}
+//     );
+//   };
+
+//   return (
+//     <div className="w-full  px-5 rounded-2xl shadow-lg overflow-hidden  mt-6">
+//       <div className=" p-4 rounded" style={{
+//         background:webTheme['bg-color']||"#0f3493",
+//       }}>
+//         <h2 className="text-xl font-bold text-[#fff] flex items-center gap-2">
+//           <FaTrophy className="text-yellow-300" />
+//           प्रमुख उम्मीदवार ({data.year})
+//         </h2>
+//         <p className="text-blue-100 text-sm mt-1">
+//           मुख्य चुनावी उम्मीदवारों का विवरण
+//         </p>
+//       </div>
+
+//       <div className="p-4">
+//         {keyCandidates?.length > 0 ? (
+//           <div className="overflow-x-auto rounded-lg">
+//             <table className="w-full text-sm border-collapse">
+//               <thead>
+//                 <tr className="bg-blue-50 text-blue-800 text-left">
+//                   <th className="p-3 font-semibold rounded-tl-lg">क्रम</th>
+//                   <th className="p-3 font-semibold">उम्मीदवार</th>
+//                   <th className="p-3 font-semibold text-center">
+//                     निर्वाचन क्षेत्र
+//                   </th>
+//                   <th className="p-3 font-semibold text-center">दल</th>
+//                   <th className="p-3 font-semibold text-right rounded-tr-lg">
+//                     परिणाम
+//                   </th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {keyCandidates?.map((candidate, index) => {
+//                   const partyInfo = getPartyInfo(candidate.political_party);
+//                   return (
+//                     <tr
+//                       key={index}
+//                       className="border-t border-gray-100 hover:bg-blue-50 transition-all duration-200"
+//                     >
+//                       <td className="p-3 text-center">
+//                         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold">
+//                           {index + 1}
+//                         </div>
+//                       </td>
+//                       <td className="p-3">
+//                         <div className="flex items-center">
+//                           <div className="mr-3 flex-shrink-0">
+//                             <img
+//                               src={`${
+//                                 import.meta.env.VITE_REACT_APP_API_URL_Image}/${candidate?.image}`}
+//                               alt={candidate.name}
+//                               className="h-12 w-12 rounded-full object-cover border-2 border-white shadow"
+//                               onError={(e) => {
+//                                 e.target.src =
+//                                   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAwLTQtNEg4YTQgNCAwIDAwLTQgNHYyIj48L3BhdGg+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ij48L2NpcmNsZT48L3N2Zz4=";
+//                               }}
+//                             />
+//                           </div>
+//                           <div>
+//                             <div className="font-semibold text-gray-800">
+//                               {candidate?.name}
+//                             </div>
+//                             <div className="text-xs text-gray-500">
+//                               उम्मीदवार
+//                             </div>
+//                           </div>
+//                         </div>
+//                       </td>
+//                       <td className="p-3 text-center text-gray-700">
+//                         {candidate.constituency_name}
+//                       </td>
+//                       <td className="p-3 text-center">
+//                         <div className="flex flex-col items-center">
+//                           <img
+//                             src={`${
+//                               import.meta.env.VITE_REACT_APP_API_URL_Image}/${partyInfo.party_image}`}
+//                             alt={partyInfo.party_name}
+//                             className="h-8 w-8 object-contain mx-auto"
+//                             onError={(e) => {
+//                               e.target.src =
+//                                 "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQgMTlBMiAyIDAgMCAwIDYgMjFIMThBMiAyIDAgMCAwIDIwIDE5VjVBMiAyIDAgMCAwIDE4IDNINkEyIDIgMCAwIDAgNCA1VjE5WiI+PC9wYXRoPjxwYXRoIGQ9Ik04IDVWN0wxMiAxMUwxNiA3VjUiPjwvcGF0aD48cGF0aCBkPSJNOCAxM1YxOSI+PC9wYXRoPjxwYXRoIGQ9Ik0xNiAxM1YxOSI+PC9wYXRoPjwvc3ZnPg==";
+//                             }}
+//                           />
+//                           <span className="text-xs text-gray-600 mt-1">
+//                             {partyInfo.party_name}
+//                           </span>
+//                         </div>
+//                       </td>
+//                       <td className="p-3 text-right">
+//                         <div className="flex flex-col items-end">
+//                           {candidate.winner === "1" ? (
+//                             <>
+//                               <div className="flex items-center text-green-600 font-bold">
+//                                 <FaTrophy className="mr-1 text-yellow-500" />
+//                                 विजयी
+//                               </div>
+//                               <span className="text-xs text-gray-500">
+//                                 जीत दर्ज की
+//                               </span>
+//                             </>
+//                           ) : (
+//                             <>
+//                               <div className="flex items-center text-gray-600">
+//                                 <FaMedal className="mr-1 text-gray-400" />
+//                                 उम्मीदवार
+//                               </div>
+//                               <span className="text-xs text-gray-500">
+//                                 परिणाम अपेक्षित
+//                               </span>
+//                             </>
+//                           )}
+//                         </div>
+//                       </td>
+//                     </tr>
+//                   );
+//                 })}
+//               </tbody>
+//             </table>
+//           </div>
+//         ) : (
+//           <div className="text-center py-8 text-gray-500">
+//             <FaAward className="text-4xl text-gray-300 mx-auto mb-3" />
+//             <p>कोई प्रमुख उम्मीदवार जानकारी उपलब्ध नहीं है</p>
+//           </div>
+//         )}
+//       </div>
+
+//       <div className=" p-3 text-center text-xs text-gray-500 border-t border-gray-200">
+//         {parties && parties.key_candidates ? (
+//           <>चुनाव वर्ष {data.year} के प्रमुख उम्मीदवार</>
+//         ) : (
+//           <>
+//             नमूना डेटा प्रदर्शित किया जा रहा है। वास्तविक डेटा लोड होने पर यह
+//             अपडेट हो जाएगा।
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default TopResultTable;
+
+
+
+import React from "react";
 import { FaTrophy, FaMedal, FaAward } from "react-icons/fa";
-import { WebThemeContext } from "../../../context/ThemeContext";
 import { useWebThemeContext } from "../../../context/WebThemeContext";
 
 const TopResultTable = ({ parties }) => {
   const data = parties && parties.key_candidates ? parties : {};
-  const keyCandidates = data?.key_candidates||[];
+  const keyCandidates = data?.key_candidates || [];
   const { webTheme } = useWebThemeContext();
 
-// console.log(keyCandidates)
   // Get party information for each candidate
   const getPartyInfo = (partyId) => {
     return (
@@ -19,10 +181,14 @@ const TopResultTable = ({ parties }) => {
   };
 
   return (
-    <div className="w-full  px-5 rounded-2xl shadow-lg overflow-hidden  mt-6">
-      <div className=" p-4 rounded" style={{
-        background:webTheme['bg-color']||"#0f3493",
-      }}>
+    <div className="w-full px-5 rounded-2xl shadow-lg overflow-hidden mt-6">
+      {/* Header */}
+      <div
+        className="p-4 rounded"
+        style={{
+          background: webTheme["bg-color"] || "#0f3493",
+        }}
+      >
         <h2 className="text-xl font-bold text-[#fff] flex items-center gap-2">
           <FaTrophy className="text-yellow-300" />
           प्रमुख उम्मीदवार ({data.year})
@@ -34,10 +200,11 @@ const TopResultTable = ({ parties }) => {
 
       <div className="p-4">
         {keyCandidates?.length > 0 ? (
-          <div className="overflow-x-auto rounded-lg">
+          // Scrollable Table Wrapper
+          <div className="overflow-y-auto max-h-[400px] rounded-lg border border-gray-100">
             <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr className="bg-blue-50 text-blue-800 text-left">
+              <thead className="sticky top-0 bg-blue-50 z-10">
+                <tr className="text-blue-800 text-left">
                   <th className="p-3 font-semibold rounded-tl-lg">क्रम</th>
                   <th className="p-3 font-semibold">उम्मीदवार</th>
                   <th className="p-3 font-semibold text-center">
@@ -57,22 +224,26 @@ const TopResultTable = ({ parties }) => {
                       key={index}
                       className="border-t border-gray-100 hover:bg-blue-50 transition-all duration-200"
                     >
+                      {/* क्रम */}
                       <td className="p-3 text-center">
                         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold">
                           {index + 1}
                         </div>
                       </td>
+
+                      {/* उम्मीदवार */}
                       <td className="p-3">
                         <div className="flex items-center">
                           <div className="mr-3 flex-shrink-0">
                             <img
                               src={`${
-                                import.meta.env.VITE_REACT_APP_API_URL_Image}/${candidate?.image}`}
+                                import.meta.env.VITE_REACT_APP_API_URL_Image
+                              }/${candidate?.image}`}
                               alt={candidate.name}
                               className="h-12 w-12 rounded-full object-cover border-2 border-white shadow"
                               onError={(e) => {
                                 e.target.src =
-                                  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAwLTQtNEg4YTQgNCAwIDAwLTQgNHYyIj48L3BhdGg+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ij48L2NpcmNsZT48L3N2Zz4=";
+                                  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv..."; // fallback
                               }}
                             />
                           </div>
@@ -86,19 +257,24 @@ const TopResultTable = ({ parties }) => {
                           </div>
                         </div>
                       </td>
+
+                      {/* निर्वाचन क्षेत्र */}
                       <td className="p-3 text-center text-gray-700">
                         {candidate.constituency_name}
                       </td>
+
+                      {/* दल */}
                       <td className="p-3 text-center">
                         <div className="flex flex-col items-center">
                           <img
                             src={`${
-                              import.meta.env.VITE_REACT_APP_API_URL_Image}/${partyInfo.party_image}`}
+                              import.meta.env.VITE_REACT_APP_API_URL_Image
+                            }/${partyInfo.party_image}`}
                             alt={partyInfo.party_name}
                             className="h-8 w-8 object-contain mx-auto"
                             onError={(e) => {
                               e.target.src =
-                                "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQgMTlBMiAyIDAgMCAwIDYgMjFIMThBMiAyIDAgMCAwIDIwIDE5VjVBMiAyIDAgMCAwIDE4IDNINkEyIDIgMCAwIDAgNCA1VjE5WiI+PC9wYXRoPjxwYXRoIGQ9Ik04IDVWN0wxMiAxMUwxNiA3VjUiPjwvcGF0aD48cGF0aCBkPSJNOCAxM1YxOSI+PC9wYXRoPjxwYXRoIGQ9Ik0xNiAxM1YxOSI+PC9wYXRoPjwvc3ZnPg==";
+                                "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0c..."; // fallback
                             }}
                           />
                           <span className="text-xs text-gray-600 mt-1">
@@ -106,6 +282,8 @@ const TopResultTable = ({ parties }) => {
                           </span>
                         </div>
                       </td>
+
+                      {/* परिणाम */}
                       <td className="p-3 text-right">
                         <div className="flex flex-col items-end">
                           {candidate.winner === "1" ? (
@@ -138,6 +316,7 @@ const TopResultTable = ({ parties }) => {
             </table>
           </div>
         ) : (
+          // Fallback (no candidates)
           <div className="text-center py-8 text-gray-500">
             <FaAward className="text-4xl text-gray-300 mx-auto mb-3" />
             <p>कोई प्रमुख उम्मीदवार जानकारी उपलब्ध नहीं है</p>
@@ -145,14 +324,12 @@ const TopResultTable = ({ parties }) => {
         )}
       </div>
 
-      <div className=" p-3 text-center text-xs text-gray-500 border-t border-gray-200">
+      {/* Footer */}
+      <div className="p-3 text-center text-xs text-gray-500 border-t border-gray-200">
         {parties && parties.key_candidates ? (
           <>चुनाव वर्ष {data.year} के प्रमुख उम्मीदवार</>
         ) : (
-          <>
-            नमूना डेटा प्रदर्शित किया जा रहा है। वास्तविक डेटा लोड होने पर यह
-            अपडेट हो जाएगा।
-          </>
+          <>नमूना डेटा प्रदर्शित किया जा रहा है। वास्तविक डेटा लोड होने पर यह अपडेट हो जाएगा।</>
         )}
       </div>
     </div>

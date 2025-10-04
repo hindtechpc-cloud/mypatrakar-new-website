@@ -79,6 +79,7 @@ import React from "react";
 import TopResultTable from "./TopResultTable";
 import result from "../../../assets/election.svg";
 import poll from "../../../assets/exit_poll_img.png";
+import PartyScroll from "./PartyCard";
 
 export default function ElectionResults({ results,parties }) {
   console.log(parties)
@@ -218,46 +219,44 @@ export default function ElectionResults({ results,parties }) {
         <h3 className="text-lg font-semibold text-gray-700 mb-4">
           Performance Summary
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {topParties.map((party, index) => {
-            const colors = ["red", "green", "orange"];
-            return (
-              <div
-                key={index}
-                className="bg-gray-50 rounded-lg p-4 border border-gray-100"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">
-                    {party.party_name}
-                  </span>
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: colors[index] }}
-                  ></div>
-                </div>
-                <div className="flex justify-between items-end">
-                  <div>
-                    <p className="text-2xl font-bold text-gray-800">
-                      {party.seats_won > 999
-                        ? `${party.seats_won / 1000} K`
-                        : party.seats_won}
-                    </p>
-                    <p className="text-xs text-gray-500">seats won</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-700">
-                      {((parseInt(party.seats_won) / totalSeats) * 100).toFixed(
-                        1
-                      )}
-                      %
-                    </p>
-                    <p className="text-xs text-gray-500">of top 3 total</p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+   {/* <div className="w-[700px] flex items-start justify-start overflow-x-auto gap-4 flex-nowrap scrollbar-hide">
+  {topParties.map((party, index) => {
+    const colors = ["red", "green", "orange"];
+    return (
+      <div
+        key={index}
+        className="bg-gray-50 rounded-lg p-4 border border-gray-100 min-w-[230px] shrink-0"
+      >
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-600">
+            {party.party_name}
+          </span>
+          <div
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: colors[index] }}
+          ></div>
         </div>
+        <div className="flex justify-between items-end">
+          <div>
+            <p className="text-2xl font-bold text-gray-800">
+              {party.seats_won > 999
+                ? `${party.seats_won / 1000} K`
+                : party.seats_won}
+            </p>
+            <p className="text-xs text-gray-500">seats won</p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm font-semibold text-gray-700">
+              {((parseInt(party.seats_won) / totalSeats) * 100).toFixed(1)}%
+            </p>
+            <p className="text-xs text-gray-500">of top 3 total</p>
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div> */}
+<PartyScroll topParties={topParties} totalSeats={totalSeats}/> 
       </div>
     </div>
   );
