@@ -1,7 +1,14 @@
 import React from "react";
 import { FiFilter } from "react-icons/fi";
+import LocationFilter from "./FilterPanel/LocationFilter";
 
-export default function FilterInfo({ ads, defaultAds, loading, showFilters, setShowFilters }) {
+export default function FilterInfo({
+  ads,
+  defaultAds,
+  loading,
+  showFilters,
+  setShowFilters,
+}) {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
       <div className="mb-3 sm:mb-0">
@@ -13,14 +20,18 @@ export default function FilterInfo({ ads, defaultAds, loading, showFilters, setS
             ? "Fetching available listings..."
             : `Showing ${ads.length} of ${defaultAds.length} listings`}
         </p>
+        ;lk
       </div>
-      <button
-        className="flex items-center text-sm text-blue-600 hover:text-blue-800"
-        onClick={() => setShowFilters(!showFilters)}
-      >
-        <FiFilter className="mr-2" />
-        {showFilters ? "Hide Filters" : "Filter Results"}
-      </button>
+      <div className="flex items-center justify-center gap-2">
+        <button
+          className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <FiFilter className="mr-2" />
+          {showFilters ? "Hide Filters" : "Filter Results"}
+        </button>
+        <LocationFilter />
+      </div>
     </div>
   );
 }

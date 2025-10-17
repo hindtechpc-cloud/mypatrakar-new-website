@@ -187,7 +187,6 @@ export default function FilterAds({ icons, onFilterChange }) {
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef(null);
-
   // Load locations from API
   useEffect(() => {
     const loadLocations = async () => {

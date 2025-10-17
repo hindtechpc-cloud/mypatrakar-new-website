@@ -1,15 +1,15 @@
 import React from "react";
 import PriceFilter from "./PriceFilter";
 import CategoryFilter from "./CategoryFilter";
-import LocationFilter from "./LocationFilter";
+// import LocationFilter from "./LocationFilter";
 
-export default function FilterPanel({ filters, setFilters, locations, resetFilters, applyFilters }) {
+export default function FilterPanel({ filters, setFilters, resetFilters, applyFilters }) {
   return (
     <div className="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
         <PriceFilter filters={filters} setFilters={setFilters} />
         <CategoryFilter filters={filters} setFilters={setFilters} />
-        <LocationFilter locations={locations} filters={filters} setFilters={setFilters} />
+        {/* <LocationFilter locations={locations} filters={filters} setFilters={setFilters} /> */}
       </div>
       <div className="flex justify-end space-x-3">
         <button

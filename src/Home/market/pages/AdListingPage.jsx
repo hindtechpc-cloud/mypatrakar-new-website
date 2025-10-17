@@ -134,7 +134,7 @@ export const AdListingPage = () => {
         {/* Mode Switch */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 w-full md:w-auto">
           <button
-            className={`w-full sm:w-auto py-2 sm:py-3 px-4 rounded-full transition-all ${
+            className={`w-full sm:w-auto py-2 sm:py-3 px-4 rounded-full  transition-all ${
               mode === "seller"
                 ? "bg-white shadow-md font-medium"
                 : "text-gray-600 hover:underline"
