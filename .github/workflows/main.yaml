@@ -4,7 +4,7 @@ name: Deploy to Netlify
 on:
   push:
     branches:
-      - main  # agar tera branch "master" hai to yahan "master" likh de
+      - master
 
 jobs:
   build_and_deploy:
