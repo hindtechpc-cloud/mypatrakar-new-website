@@ -1,6 +1,6 @@
 name: Deploy to Netlify
 
-# Trigger workflow on push to main branch
+
 on:
   push:
     branches:
