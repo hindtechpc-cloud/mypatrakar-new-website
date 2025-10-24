@@ -4,10 +4,14 @@ import LocationFilter from "./FilterPanel/LocationFilter";
 
 export default function FilterInfo({
   ads,
+  setAds,
   defaultAds,
   loading,
   showFilters,
   setShowFilters,
+  locations,
+  filters,
+  setFilters,
 }) {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
@@ -20,7 +24,6 @@ export default function FilterInfo({
             ? "Fetching available listings..."
             : `Showing ${ads.length} of ${defaultAds.length} listings`}
         </p>
-        ;lk
       </div>
       <div className="flex items-center justify-center gap-2">
         <button
@@ -30,7 +33,15 @@ export default function FilterInfo({
           <FiFilter className="mr-2" />
           {showFilters ? "Hide Filters" : "Filter Results"}
         </button>
-        <LocationFilter />
+     <LocationFilter
+  ads={ads}
+  setAds={setAds}
+  defaultAds={defaultAds}  
+  locations={locations}
+  filters={filters}
+  setFilters={setFilters}
+/>
+
       </div>
     </div>
   );

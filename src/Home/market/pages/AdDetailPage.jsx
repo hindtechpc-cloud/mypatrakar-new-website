@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { SiWhatsapp } from "react-icons/si";
+
 import {
   FaPhoneAlt,
   FaGlobe,
   FaEnvelope,
-  FaWhatsapp,
   FaShareAlt,
 } from "react-icons/fa";
 import { FiAlertCircle } from "react-icons/fi";
@@ -13,6 +14,7 @@ import { toast } from "react-hot-toast";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 
 export const AdDetailPage = ({ setIsOpenDetailCard, initialAd }) => {
+  console.log(initialAd);
   const { AdsId } = useParams();
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -179,7 +181,7 @@ export const AdDetailPage = ({ setIsOpenDetailCard, initialAd }) => {
       <div className="mt-4 flex justify-between items-start">
         <div>
           <h1 className="font-bold text-xl text-gray-900">{ad.title}</h1>
-          <p className="text-sm text-gray-600 mt-1">{ad.subtitle}</p>
+          <p className="text-sm text-gray-500 mt-1">{ad.subtitle}</p>
         </div>
         <p className="text-xl font-bold text-blue-600 whitespace-nowrap pl-2">
           ₹{ad.amount?.toLocaleString("en-IN")}
@@ -198,43 +200,43 @@ export const AdDetailPage = ({ setIsOpenDetailCard, initialAd }) => {
           />
         </p>
       </div>
-      <p>
-        <p>{ad.company_name}</p>.{ad.location}
+      <p className="text-xs text-gray-500 fo">
+        <span>{ad?.company}</span> . <span>{ad?.location}</span>
       </p>
       {/* Contact Info */}
-      <div className="mt-6 space-y-3">
+      <div className="mt-3 space-y-3">
         <h3 className="font-semibold text-gray-900">Contact Information</h3>
 
         {ad?.phone && (
           <button
             onClick={() => handleContact("phone")}
-            className="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
+            className="w-full flex items-center gap-3 p-3 bg-green-100 rounded-lg hover:bg-green-50"
           >
-            <FaPhoneAlt className="text-green-600" /> {ad?.phone}
+            <FaPhoneAlt className="text-green-700" size={20}/> {ad?.phone}
           </button>
         )}
         {ad?.whatsapp && (
           <button
             onClick={() => handleContact("whatsapp")}
-            className="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
+            className="w-full flex items-center gap-3 p-3 bg-green-100 rounded-lg hover:bg-green-50"
           >
-            <FaWhatsapp className="text-green-600" /> {ad?.whatsapp}
+            <SiWhatsapp className="text-green-700 font-bold" size={20}/> {ad?.whatsapp}
           </button>
         )}
         {ad?.email && (
           <button
             onClick={() => handleContact("email")}
-            className="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
+            className="w-full flex items-center gap-3 p-3 bg-red-100 rounded-lg hover:bg-red-50"
           >
-            <FaEnvelope className="text-red-600" /> {ad?.email}
+            <FaEnvelope className="text-red-600" size={20}/> {ad?.email}
           </button>
         )}
         {ad?.website && (
           <button
             onClick={() => handleContact("website")}
-            className="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
+            className="w-full flex items-center gap-3 p-3 bg-blue-100 rounded-lg hover:bg-blue-50"
           >
-            <FaGlobe className="text-blue-600" />{" "}
+            <FaGlobe className="text-blue-600" size={20}/>{" "}
             {ad?.website.replace(/^https?:\/\//, "")}
           </button>
         )}

@@ -232,10 +232,6 @@
 //   )
 // }
 
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { LocationList } from "../../../../api";
 
@@ -244,20 +240,36 @@ import FilterPanel from "./renderUi/FilterPanel/FilterPanel";
 import AdsGrid from "./renderUi/AdsGrid";
 import SearchBar from "./renderUi/SearchBar";
 
-
 export default function RenderUi(props) {
-  const { searchQuery, setSearchQuery, handleSearch, ads, setAds, defaultAds,
-          loading, filters, setFilters, showFilters, setShowFilters,
-          resetFilters, applyFilters } = props;
+  const {
+    searchQuery,
+    setSearchQuery,
+    handleSearch,
+    ads,
+    setAds,
+    defaultAds,
+    loading,
+    filters,
+    setFilters,
+    showFilters,
+    setShowFilters,
+    resetFilters,
+    applyFilters,
+  } = props;
 
   const [locations, setLocations] = useState([]);
-
+console.log(ads)
   useEffect(() => {
     const fetchLocations = async () => {
       try {
         const res = await LocationList();
         const data = res.data?.response || [];
-        setLocations(data.map(loc => ({ name: loc.location_name, value: loc.location_id })));
+        setLocations(
+          data.map((loc) => ({
+            name: loc.location_name,
+            value: loc.location_id,
+          }))
+        );
       } catch (err) {
         console.log("Error loading locations:", err);
       }
@@ -277,14 +289,21 @@ export default function RenderUi(props) {
 
       <FilterInfo
         ads={ads}
+        setAds={setAds}
         defaultAds={defaultAds}
         loading={loading}
         showFilters={showFilters}
+        locations={locations}
+        // locations={locations}
+        filters={filters}
+        setFilters={setFilters}
         setShowFilters={setShowFilters}
       />
 
       {showFilters && (
         <FilterPanel
+          ads={ads}
+          setAds={setAds}
           filters={filters}
           setFilters={setFilters}
           locations={locations}

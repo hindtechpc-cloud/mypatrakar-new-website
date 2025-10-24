@@ -86,6 +86,10 @@ export const AdCard = ({ ad }) => {
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">
           {ad.short_desc}
         </p>
+          {/* Short Description
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          {ad.long_desc.slice(0,100)}
+        </p> */}
 
         {/* Info grid */}
         <div className="grid grid-cols-2 gap-2 text-sm mb-4">
@@ -164,7 +168,7 @@ export const AdCard = ({ ad }) => {
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
-            <span className="text-gray-700 truncate">{ad.email}</span>
+            <span className="text-gray-700 truncate">{ad.email.slice(0,ad.email.length)}</span>
           </div>
         </div>
 
