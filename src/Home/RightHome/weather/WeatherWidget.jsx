@@ -161,7 +161,9 @@ const WeatherWidget = () => {
       setWeatherData(null);
       try {
         const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=9857ae27919fb1f4e30d14a0bdc145c6`
+          `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${
+            import.meta.env.VITE_REACT_APP_ID
+          }`
         );
 
         const data = await response.json();
@@ -240,8 +242,9 @@ const WeatherWidget = () => {
               </h1>
               <p className="text-sm mt-2 opacity-90">
                 🌧️ Rain:{" "}
-                {weatherData.rain ? `${weatherData?.rain["1h"]} mm` : "0 mm"} | 💧{" "}
-                {weatherData?.main?.humidity}% | 🌬️ {weatherData?.wind?.speed} km/h
+                {weatherData.rain ? `${weatherData?.rain["1h"]} mm` : "0 mm"} |
+                💧 {weatherData?.main?.humidity}% | 🌬️{" "}
+                {weatherData?.wind?.speed} km/h
               </p>
             </div>
           </>
@@ -301,16 +304,28 @@ const WeatherWidget = () => {
             </h2>
 
             <div className="space-y-2 text-gray-700">
-              <p>🌡️ Temperature: <b>{weatherData.main.temp}°C</b></p>
-              <p>💧 Humidity: <b>{weatherData.main.humidity}%</b></p>
-              <p>🌬️ Wind: <b>{weatherData.wind.speed} km/h</b></p>
+              <p>
+                🌡️ Temperature: <b>{weatherData.main.temp}°C</b>
+              </p>
+              <p>
+                💧 Humidity: <b>{weatherData.main.humidity}%</b>
+              </p>
+              <p>
+                🌬️ Wind: <b>{weatherData.wind.speed} km/h</b>
+              </p>
               <p>
                 🌞 Sunrise:{" "}
-                <b>{new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString()}</b>
+                <b>
+                  {new Date(
+                    weatherData.sys.sunrise * 1000
+                  ).toLocaleTimeString()}
+                </b>
               </p>
               <p>
                 🌇 Sunset:{" "}
-                <b>{new Date(weatherData.sys.sunset * 1000).toLocaleTimeString()}</b>
+                <b>
+                  {new Date(weatherData.sys.sunset * 1000).toLocaleTimeString()}
+                </b>
               </p>
             </div>
 
