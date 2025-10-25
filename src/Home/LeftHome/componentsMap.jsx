@@ -5,11 +5,10 @@ import TopNews from "./TopNews/TopNews";
 import OwnState from "./ownState/OwnState";
 import State from "./State/State";
 import Game from "./game/Game";
-import Entertainment from "./enterTainment/EnterTainment";
 import Country from "./Country/Country";
 import Election from "./election/Election";
+import Entertainment from "./entertainment/Entertainment";
 
-// सिर्फ order → component mapping
 
 export const componentsMap = {
   "MYFS28052025001": TopNews,
