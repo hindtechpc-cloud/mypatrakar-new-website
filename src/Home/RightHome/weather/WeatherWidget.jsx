@@ -14,7 +14,7 @@
 //     const fetchWeatherData = async () => {
 //       try {
 //         const response = await fetch(
-//           `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=9857ae27919fb1f4e30d14a0bdc145c6`
+//           `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${import.meta.env.VITE_REACT_APP_ID}`
 //         );
 //         const data = await response.json();
 //         setWeatherData(data);
