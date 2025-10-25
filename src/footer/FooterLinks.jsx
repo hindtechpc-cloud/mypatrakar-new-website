@@ -11,7 +11,7 @@ import { useSettingsContext } from "../context/SettingsContext";
 import { useWebThemeContext } from "../context/WebThemeContext";
 import { useState } from "react";
 
-export default function FooterMenu() {
+export default function FooterLinks() {
   const { getSettingStatus } = useSettingsContext();
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const { webTheme } = useWebThemeContext();
