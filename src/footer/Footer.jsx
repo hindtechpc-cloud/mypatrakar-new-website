@@ -7,7 +7,8 @@ import SourceWidget from "./SourceWidget";
 import FooterBottom from "./FooterBottom";
 import HeaderAd from "../TopBar/HeaderAd";
 import { GetBottomBannerAds } from "../../api";
-import FooterMenu from "./FooterMenu";
+import FooterLinks from "./FooterLinks";
+
 
 export default function Footer() {
   const [topBanner, setTopBanner] = useState(null);
@@ -67,7 +68,7 @@ export default function Footer() {
         <div className=" mx-auto px-4">
           <div className="flex flex-wrap items-center justify-center gap-5">
             <div className="md:col-span-2 lg:col-span-1">
-              <FooterMenu/>
+              <FooterLinks/>
             </div>
             <div>
               <FooterFaceBook />
