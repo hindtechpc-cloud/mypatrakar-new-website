@@ -5,9 +5,9 @@ import Menu from "../shared/MenuBar";
 import TopNewsItems from "../TopNews/TopNewsItems";
 import EmptyCard from "../shared/EmptyCard";
 import { GetNewsSubcategories, loadNewsByCategory } from "../../../../api";
-// import EnterTainmentSkelton from "./EnterTainmentSkelton";
 import { ArticlesPagination } from "../shared/ArticlesPagination";
 import NoData from "../../NoData";
+import EnterTainmentSkelton from "./EnterTainmentSkelton";
 
 // Cache Helpers
 const setCache = (key, data) => {
@@ -30,7 +30,7 @@ const getCache = (key, maxAge = 1800000) => {
   return JSON.parse(cached);
 };
 
-const Entertainment = ({
+const Entertain = ({
   category_id,
   category = "मनोरंजन",
   section_title = "मनोरंजन",
@@ -219,10 +219,10 @@ const FeaturedEntertainmentCard = ({ articles }) => {
   );
 };
 
-Entertainment.propTypes = {
+Entertain.propTypes = {
   category_id: PropTypes.string.isRequired,
   category: PropTypes.string,
   section_title: PropTypes.string,
 };
 
-export default React.memo(Entertainment);
+export default React.memo(Entertain);

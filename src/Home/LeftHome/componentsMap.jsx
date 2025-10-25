@@ -7,7 +7,7 @@ import State from "./State/State";
 import Game from "./game/Game";
 import Country from "./Country/Country";
 import Election from "./election/Election";
-import Entertainment from "./entertainment/Entertainment";
+import Entertain from "./entertain/Entertain";
 
 
 export const componentsMap = {
@@ -15,7 +15,7 @@ export const componentsMap = {
   "MYFS28052025002": OwnState,
   3: State,
   "MYFS28052025004": Game,
-  "MYFS28052025005": Entertainment,
+  "MYFS28052025005": Entertain,
   "MYFS28052025003": Country,
   7: Election,
 };
