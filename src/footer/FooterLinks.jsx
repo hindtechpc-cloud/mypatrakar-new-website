@@ -44,7 +44,7 @@ export default function FooterLinks() {
         className="text-xl font-bold pb-3 mb-6 text-center lg:text-left"
         style={{
           color: webTheme["bg-color"] || "white",
-          borderBottom: `1px solid ${webTheme["bg-color"]}`,
+          borderinsetBlockEnd:`1px solid ${webTheme["bg-color"]}`,
         }}
       >
         Navigation

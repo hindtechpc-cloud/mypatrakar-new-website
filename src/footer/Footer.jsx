@@ -1,7 +1,6 @@
 
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import FooterFaceBook from "./FooterFaceBook";
-import FooterTwitter from "./FooterTwitter";
 import PostsListWidget from "./PostsListWidget";
 import SourceWidget from "./SourceWidget";
 import FooterBottom from "./FooterBottom";
