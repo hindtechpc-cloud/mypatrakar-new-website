@@ -5,7 +5,7 @@ import HeaderAd from "./TopBar/HeaderAd";
 import Navbar from "./navigation/Navbar";
 import Header from "./TopBar/Header";
 import BreakingNewsBar from "./TopBar/BreakingNewsBar";
-import Footer from "./footer/footer";
+import Footer from "./footer/Footer"
 import FooterLinks from "./Home/FooterLinks";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { useTranslation } from "react-i18next";
@@ -143,7 +143,7 @@ function Layout() {
         />
       </Routes>
 
-      {!isCommonPage && !isShorts && <Footer />}
+      {!isCommonPage && !isShorts && <Footer/>}
       {/* <JournalistYouTubeFeed/> */}
       {isCommonPage && !isShorts && <FooterLinks />}
 
