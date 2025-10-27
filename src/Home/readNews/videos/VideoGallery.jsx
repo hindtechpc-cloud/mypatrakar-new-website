@@ -36,13 +36,14 @@ export default function JournalistYouTubeFeed() {
       link.icon?.toLowerCase() === "fayoutube" ||
       link.name?.toLowerCase().includes("youtube")
   )?.url;
-
+console.log(socialLinks)
   useEffect(() => {
     const fetchVideos = async () => {
       setLoading(true);
       setError(null);
       try {
         let channelIdOrUsername = extractChannelIdOrUsername(youtubeUrl);
+console.log(channelIdOrUsername)
 
         if (!channelIdOrUsername) {
           throw new Error("Invalid YouTube channel URL from context");

@@ -83,6 +83,8 @@ export default function FilterAds({ icons, onFilterChange }) {
         className="p-2 rounded-full bg-gray-100 hover:bg-red-100 text-red-500 transition flex items-center gap-1"
       >
         {icons}
+       <span className="flex items-center text-sm hover:bg-red-100 text-red-500">Location</span>
+
         {selectedLocations.length > 0 && (
           <span className="text-sm text-red-600">{selectedLocations.length}</span>
         )}
@@ -122,6 +124,7 @@ export default function FilterAds({ icons, onFilterChange }) {
                     }`}
                   >
                     {loc.name}
+                    
                     {isSelected && <FiX className="text-red-500" />}
                   </button>
                 );

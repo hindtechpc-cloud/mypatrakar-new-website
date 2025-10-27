@@ -285,7 +285,8 @@ export default function AdvertiseWithUs() {
     try {
       setLoading(true);
       const res = await AdvertiseWithUsApi(payload);
-      if (res?.data?.status === "success") {
+      console.log(res)
+      if (res?.data?.response?.status == "0") {
         toast.success("✅ Your advertisement query has been submitted!");
         setAdvertise("");
         setName("");
@@ -293,7 +294,7 @@ export default function AdvertiseWithUs() {
         setDescription("");
       } else toast.error("⚠️ Failed to submit. Please try again later.");
     } catch (err) {
-      console.error("AdvertiseWithUs Error:", err);
+      console.log("AdvertiseWithUs Error:", err);
       toast.error("❌ Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -424,6 +425,7 @@ export default function AdvertiseWithUs() {
             <SourceWidget
               onSuccess={() => setLoginPopUp(false)}
               setShowLoginOverlay={setLoginPopUp}
+              redirectTo={'/advertise-with-us'}
             />
           </div>
         </div>

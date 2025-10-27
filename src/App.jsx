@@ -11,6 +11,7 @@ import { getSettings, GetWebTheme } from "../api";
 import { Toaster } from "react-hot-toast";
 import Layout from "./Layout";
 import { AdProvider } from "./context/AdsContext";
+import GoogleTranslate from "./GoogleTranslate";
 
 // Cache keys
 const WEB_THEME_CACHE_KEY = 'webThemeCache';
@@ -85,9 +86,7 @@ export default function App() {
   //   };
   //   loadSetting();
   // }, []);
-
-  // const isExitPollEnabled = getSettingStatus("Exit Polls");
-
+  // const isExitPollEnabled = getSettingStatus("Exit Polls")
   if (loading) {
     return <Loader />;
   }
@@ -95,8 +94,6 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
-
-
 <Toaster
   position="top-center"
   toastOptions={{
@@ -122,7 +119,6 @@ export default function App() {
     background: "#fef2f2", // Tailwind bg-red-50 का hex code
   },
 },
-
     custom: {
       style: {
         background: "orange",
@@ -130,9 +126,6 @@ export default function App() {
     },
   }}
 />
-
-
-
       <SocialMediaProvider>
         <WebThemeContext.Provider value={{ webTheme, setWebTheme, refreshWebTheme: () => loadWebTheme(true) }}>
           <LanguageContext.Provider value={{ language, setLanguage }}>
@@ -140,6 +133,7 @@ export default function App() {
               <AdProvider>
               <Suspense fallback={<Loader />}>
                 <div className="bg-gray-100 min-h-screen">
+                   {/* <GoogleTranslate /> */}
                   <Layout />
                 </div>
               </Suspense>

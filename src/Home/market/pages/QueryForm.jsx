@@ -482,7 +482,9 @@ Description: ${description}`;
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
               <div className="p-6">
-                <SourceWidget setShowLoginOverlay={setIsOpenLogin} />
+                <SourceWidget setShowLoginOverlay={setIsOpenLogin} redirectTo={isBuyer?
+                  "/buyer-query-form":"/seller-query-form"
+                }/>
               </div>
             </div>
           </div>

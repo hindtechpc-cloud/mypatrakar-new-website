@@ -27,21 +27,26 @@ export default function FilterInfo({
       </div>
       <div className="flex items-center justify-center gap-2">
         <button
-          className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+          className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-500 transition flex items-center gap-1 text-sm"
           onClick={() => setShowFilters(!showFilters)}
         >
-          <FiFilter className="mr-2" />
-          {showFilters ? "Hide Filters" : "Filter Results"}
+          <FiFilter className="mr-2" size={17}/>
+          {showFilters ? "Hide Filters" : "Apply Filter"}
         </button>
-     <LocationFilter
-  ads={ads}
-  setAds={setAds}
-  defaultAds={defaultAds}  
-  locations={locations}
-  filters={filters}
-  setFilters={setFilters}
-/>
+        
+              <button
+          className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+        >
 
+          <LocationFilter
+          ads={ads}
+          setAds={setAds}
+          defaultAds={defaultAds}
+          locations={locations}
+          filters={filters}
+          setFilters={setFilters}
+        />
+        </button>
       </div>
     </div>
   );

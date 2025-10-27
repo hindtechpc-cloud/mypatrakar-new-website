@@ -143,7 +143,7 @@ export const AdListingPage = () => {
             {/* Mode Switch */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 w-full md:w-auto">
               <button
-                className={`w-full sm:w-auto bg-blue-500 text-white hover:bg-blue-600 py-2 sm:py-3 px-5 rounded-full  transition-all ${
+                className={`w-full sm:w-auto bg-blue-500 text-white hover:bg-blue-600 py-2 sm:py-3 px-5 rounded-lg  transition-all ${
                   mode === "seller"
                     ? "bg-white shadow-md font-medium"
                     : "text-gray-600 "
@@ -156,7 +156,7 @@ export const AdListingPage = () => {
                 I Want to Sell
               </button>
               <button
-                className={`w-full sm:w-auto py-2 sm:py-3 px-5 rounded-full bg-red-500 text-white hover:bg-red-600 transition-all ${
+                className={`w-full sm:w-auto py-2 sm:py-3 px-5 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all ${
                   mode === "buyer"
                     ? " text-gray-600 "
                     : "text-gray-600 "
