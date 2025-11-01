@@ -14,8 +14,8 @@ import { AdProvider } from "./context/AdsContext";
 import GoogleTranslate from "./GoogleTranslate";
 
 // Cache keys
-const WEB_THEME_CACHE_KEY = 'webThemeCache';
-const WEB_THEME_TIMESTAMP_KEY = 'webThemeTimestamp';
+const WEB_THEME_CACHE_KEY = "webThemeCache";
+const WEB_THEME_TIMESTAMP_KEY = "webThemeTimestamp";
 
 export default function App() {
   const [language, setLanguage] = useState("hi");
@@ -29,8 +29,13 @@ export default function App() {
     const cacheTimestamp = sessionStorage.getItem(WEB_THEME_TIMESTAMP_KEY);
     const now = new Date().getTime();
     const thirtyMinutes = 30 * 60 * 1000; // 30 minutes in milliseconds
-    
-    if (cachedTheme && cacheTimestamp && !forceRefresh && (now - parseInt(cacheTimestamp)) < thirtyMinutes) {
+
+    if (
+      cachedTheme &&
+      cacheTimestamp &&
+      !forceRefresh &&
+      now - parseInt(cacheTimestamp) < thirtyMinutes
+    ) {
       // Use cached data
       setWebTheme(JSON.parse(cachedTheme));
       setLoading(false);
@@ -43,7 +48,7 @@ export default function App() {
       if (res?.data?.response) {
         const themeData = res.data.response;
         setWebTheme(themeData);
-        
+
         // Cache the data with timestamp
         const timestamp = new Date().getTime();
         sessionStorage.setItem(WEB_THEME_CACHE_KEY, JSON.stringify(themeData));
@@ -51,7 +56,7 @@ export default function App() {
       }
     } catch (error) {
       console.error("Failed to fetch web theme:", error);
-      
+
       // Fallback to cached data if available
       if (cachedTheme) {
         setWebTheme(JSON.parse(cachedTheme));
@@ -68,12 +73,32 @@ export default function App() {
   // Set up interval to refresh data every 30 minutes
   useEffect(() => {
     const intervalId = setInterval(() => {
-      console.log('Auto-refreshing web theme data (30-minute interval)');
+      console.log("Auto-refreshing web theme data (30-minute interval)");
       loadWebTheme(true);
     }, 30 * 60 * 1000); // 30 minutes
 
     return () => clearInterval(intervalId);
   }, []);
+useEffect(() => {
+  window.scrollTo(0, 0);
+  window.dispatchEvent(new Event('resize'));
+}, []);
+
+  useEffect(() => {
+    document.title = webTheme["web_title"];
+
+    // ✅ Correct way to access keys with hyphen
+    if (webTheme["web-logo"]) {
+      const favicon =
+        document.querySelector("link[rel='icon']") ||
+        document.createElement("link");
+      favicon.rel = "icon";
+      favicon.type = "image/png";
+      favicon.sizes = "256x256"; // 🟢 browser ko hint milta hai high-res icon ka
+      favicon.href = webTheme["web-logo"];
+      document.head.appendChild(favicon);
+    }
+  }, [webTheme]);
 
   // useEffect(() => {
   //   const loadSetting = async () => {
@@ -94,49 +119,55 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
-<Toaster
-  position="top-center"
-  toastOptions={{
-    // Default options
-    style: {
-      width: "500px",
-      height: "45px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "14px",
-      color: "#000",
-      fontWeight: "bold",
-      marginTop:'340px'
-    },
-    success: {
-      style: {
-        background: "#B0F7BF",
-      },
-    },
-  error: {
-  style: {
-    background: "#fef2f2", // Tailwind bg-red-50 का hex code
-  },
-},
-    custom: {
-      style: {
-        background: "orange",
-      },
-    },
-  }}
-/>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          // Default options
+          style: {
+            width: "500px",
+            height: "45px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "14px",
+            color: "#000",
+            fontWeight: "bold",
+            marginTop: "340px",
+          },
+          success: {
+            style: {
+              background: "#B0F7BF",
+            },
+          },
+          error: {
+            style: {
+              background: "#fef2f2", // Tailwind bg-red-50 का hex code
+            },
+          },
+          custom: {
+            style: {
+              background: "orange",
+            },
+          },
+        }}
+      />
       <SocialMediaProvider>
-        <WebThemeContext.Provider value={{ webTheme, setWebTheme, refreshWebTheme: () => loadWebTheme(true) }}>
+        <WebThemeContext.Provider
+          value={{
+            webTheme,
+            setWebTheme,
+            refreshWebTheme: () => loadWebTheme(true),
+          }}
+        >
           <LanguageContext.Provider value={{ language, setLanguage }}>
             <NewsContext.Provider value={{ news, setNews }}>
               <AdProvider>
-              <Suspense fallback={<Loader />}>
-                <div className="bg-gray-100 min-h-screen">
-                   {/* <GoogleTranslate /> */}
-                  <Layout />
-                </div>
-              </Suspense>
+                <Suspense fallback={<Loader />}>
+                  <div className="bg-gray-100 min-h-screen">
+                    {/* <GoogleTranslate /> */}
+                    <Layout />
+                  </div>
+                </Suspense>
               </AdProvider>
             </NewsContext.Provider>
           </LanguageContext.Provider>

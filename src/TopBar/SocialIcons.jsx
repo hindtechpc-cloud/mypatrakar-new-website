@@ -72,7 +72,7 @@ import { ImSpinner2 } from "react-icons/im";
 
 const SocialIcons = () => {
   const { socialLinks = [], isLoading, error } = useContext(SocialMediaContext);
-
+// console.log(socialLinks)
   const iconMap = useMemo(() => ({
     ...FaIcons,
     ...TbIcons,

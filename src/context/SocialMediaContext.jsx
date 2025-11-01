@@ -11,7 +11,7 @@ export const SocialMediaProvider = ({ children }) => {
     const fetchSocialLinks = async () => {
       try {
         setIsLoading(true);
-        const res = await GetOwnerSocialLinks("MYAWR2508050057");
+        const res = await GetOwnerSocialLinks();
         if (res?.data?.response) {
           setSocialLinks(res.data.response);
         } else {

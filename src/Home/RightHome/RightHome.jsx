@@ -144,36 +144,39 @@ function RightHome() {
   );
 
   return (
-   <div className="">
+    <div className="">
+      <div className="">
+        {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
 
-     <div className="">
-      {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
+        <OwnState />
 
-      <OwnState />
+<span className="md:flex hidden">
+        <AddRightHome1 adsData={ads.top} text="top" />
 
-      <AddRightHome1 adsData={ads.top} text="top" />
+</span>
+        <Trending />
 
-      <Trending />
+        {!isSportsEnabled && <LiveCricket />}
 
-      {!isSportsEnabled && <LiveCricket />}
+        <Shorts />
 
-      <Shorts />
+<span className="md:flex hidden">
+        <AddRightHome1 adsData={ads.main} text="main" className="mt-[9px]" />
 
-      <AddRightHome1 adsData={ads.main} text="main" className="mt-[9px]" />
+</span>
+        {isHoroscopeEnabled && <Rashiphal />}
 
-      {isHoroscopeEnabled && <Rashiphal />}
+        <span className="md:flex hidden">{!isWhatsAppTelegramEnabled && <JoinChannels />}</span>
 
-      {!isWhatsAppTelegramEnabled && <JoinChannels />}
+        {!isStockEnabled && <StockInfo />}
 
-      {!isStockEnabled && <StockInfo />}
+        {!isQuizEnabled && <PollWidget />}
 
-      {!isQuizEnabled && <PollWidget />}
-
-      <WeatherWidget />
-      <MobileFrame />
-      <AddRightHome1 adsData={ads.bottom} text="bottom" />
+        <WeatherWidget />
+        <MobileFrame />
+        <AddRightHome1 adsData={ads.bottom} text="bottom" />
+      </div>
     </div>
-   </div>
   );
 }
 

@@ -405,8 +405,6 @@
 
 // export default Navbar;
 
-
-
 // src/navigation/Navbar/Navbar.jsx
 import { useState, useEffect, useCallback } from "react";
 import { FaBars, FaHome, FaSearch, FaTimes } from "react-icons/fa";
@@ -419,6 +417,7 @@ import DesktopMenuItem from "./DesktopMenuItem";
 import MobileMenuItem from "./MobileMenuItem";
 import { setCache, getCache } from "./CacheHelpers";
 import ProfileMenu from "./ProfileMenu";
+import SocialIcons from "../TopBar/SocialIcons";
 
 const Navbar = () => {
   const { webTheme } = useWebThemeContext();
@@ -518,7 +517,7 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Desktop Navbar */}
+      {/* mobile Navbar */}
       <nav
         className={`w-full text-white transition-all duration-300 ${
           isFixed
@@ -529,12 +528,19 @@ const Navbar = () => {
       >
         <div className="container mx-auto flex justify-between items-center px-4">
           {/* Logo */}
-          <div className={`${isFixed ? "flex" : "lg:hidden flex"} items-center mr-5`}>
+          <Link to={"/search"} className="lg:hidden flex">
+            <FaSearch size={29}/>
+          </Link>
+          <div
+            className={`${
+              isFixed ? "flex" : "lg:hidden flex"
+            } items-center mr-5`}
+          >
             <Link to="/">
               <img
                 src={logo}
                 alt="Website Logo"
-                className="w-16 h-16 object-contain hover:opacity-90 transition-opacity"
+                className="lg:w-20 lg:h-20 w-24 h-24 object-contain hover:opacity-90 transition-opacity"
               />
             </Link>
           </div>
@@ -544,58 +550,63 @@ const Navbar = () => {
             onClick={toggleMenu}
             className="lg:hidden text-2xl text-white focus:outline-none p-2"
           >
-            {menuOpen ? <FaTimes /> : <FaBars />}
+            {menuOpen ? <FaTimes size={28}/> : <FaBars size={28}/>}
           </button>
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center justify-between w-full">
-          <div>  {/* Home Button */}
-            <Link
-              to="/"
-              className={`flex items-center p-4 hover:bg-gray-200 hover:text-black transition-colors ${
-                location.pathname === "/" ? "bg-gray-200 text-black shadow-xl" : ""
-              }`}
-              onClick={() => handleMenuClick("/")}
-            >
-              <FaHome className="text-2xl" />
-            </Link></div>
+            <div>
+              {" "}
+              {/* Home Button */}
+              <Link
+                to="/"
+                className={`flex items-center p-4 hover:bg-gray-200 hover:text-black transition-colors ${
+                  location.pathname === "/"
+                    ? "bg-gray-200 text-black shadow-xl"
+                    : ""
+                }`}
+                onClick={() => handleMenuClick("/")}
+              >
+                <FaHome className="text-2xl" />
+              </Link>
+            </div>
 
-          <div className="flex">
+            <div className="flex">
               {/* Menu Items */}
-            {menuItems.map((item) => (
-              <DesktopMenuItem
-                key={item.cat_id}
-                item={item}
-                activePath={activePath}
-                activeDropdown={activeDropdown}
-                setActiveDropdown={setActiveDropdown}
-                handleMenuClick={handleMenuClick}
-                hoveredNews={hoveredNews}
-                setHoveredNews={setHoveredNews}
-                handleSubmenuHover={handleSubmenuHover}
-                loadingNews={loadingNews}
-                themeColor={themeColor}
-              />
-            ))}
-          </div>
+              {menuItems.map((item) => (
+                <DesktopMenuItem
+                  key={item.cat_id}
+                  item={item}
+                  activePath={activePath}
+                  activeDropdown={activeDropdown}
+                  setActiveDropdown={setActiveDropdown}
+                  handleMenuClick={handleMenuClick}
+                  hoveredNews={hoveredNews}
+                  setHoveredNews={setHoveredNews}
+                  handleSubmenuHover={handleSubmenuHover}
+                  loadingNews={loadingNews}
+                  themeColor={themeColor}
+                />
+              ))}
+            </div>
 
-         <div className="flex items-center justify-center gap-1">
-             {/* Search Button */}
-            <Link
-              to="/search"
-              className={`flex items-center p-4 rounded-lg hover:bg-gray-200 hover:text-black transition-colors ${
-                location.pathname === "/search"
-                  ? "bg-gray-200 text-black shadow-xl"
-                  : ""
-              }`}
-              onClick={() => handleMenuClick("/search")}
-            >
-              <FaSearch className="text-lg" />
-            </Link>
+            <div className="flex items-center justify-center gap-1">
+              {/* Search Button */}
+              <Link
+                to="/search"
+                className={`flex items-center p-4 rounded-lg hover:bg-gray-200 hover:text-black transition-colors ${
+                  location.pathname === "/search"
+                    ? "bg-gray-200 text-black shadow-xl"
+                    : ""
+                }`}
+                onClick={() => handleMenuClick("/search")}
+              >
+                <FaSearch className="text-lg" />
+              </Link>
 
-            {/* Profile Menu */}
-            <ProfileMenu />
-         </div>
+              {/* Profile Menu */}
+              <ProfileMenu />
+            </div>
           </div>
         </div>
       </nav>
@@ -617,10 +628,10 @@ const Navbar = () => {
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <Link to="/">
-            <img src={logo} alt="Logo" className="w-12 h-12" />
+            <img src={logo} alt="Logo" className="w-20 h-2o" />
           </Link>
           <button onClick={toggleMenu} className="text-white text-xl">
-            <FaTimes />
+            <FaTimes size={29} />
           </button>
         </div>
 
@@ -629,7 +640,9 @@ const Navbar = () => {
           <Link
             to="/"
             className={`block px-4 py-3  font-semibold ${
-              location.pathname === "/" ? "bg-gray-200 text-black" : "text-white"
+              location.pathname === "/"
+                ? "bg-gray-200 text-black"
+                : "text-white"
             }`}
             onClick={() => handleMenuClick("/")}
           >
@@ -648,25 +661,30 @@ const Navbar = () => {
             />
           ))}
 
-         <div className="">
-           {/* Search Link */}
-          <Link
-            to="/search"
-            className={`block px-4 py-3  font-semibold ${
-              location.pathname === "/search" ? "bg-gray-300 text-black" : "text-white"
-            }`}
-            onClick={() => handleMenuClick("/search")}
-          >
-            <span className="flex items-center gap-3">
-              <FaSearch /> <span>Search</span>
-            </span>
-          </Link>
+          <div className="">
+            {/* Search Link */}
+            <Link
+              to="/search"
+              className={`block px-4 py-3  font-semibold ${
+                location.pathname === "/search"
+                  ? "bg-gray-300 text-black"
+                  : "text-white"
+              }`}
+              onClick={() => handleMenuClick("/search")}
+            >
+              <span className="flex items-center gap-3">
+                <FaSearch /> <span>Search</span>
+              </span>
+            </Link>
+   <div className="text-white mt-5">
+     <SocialIcons/>
+   </div>
 
-          {/* Profile Menu in Mobile */}
-          <div className="p-2">
-            <ProfileMenu />
+            {/* Profile Menu in Mobile */}
+            <div className="p-2">
+              <ProfileMenu />
+            </div>
           </div>
-         </div>
         </div>
       </div>
     </>

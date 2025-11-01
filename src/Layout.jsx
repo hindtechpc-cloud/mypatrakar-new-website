@@ -5,19 +5,20 @@ import HeaderAd from "./TopBar/HeaderAd";
 import Navbar from "./navigation/Navbar";
 import Header from "./TopBar/Header";
 import BreakingNewsBar from "./TopBar/BreakingNewsBar";
-import Footer from "./footer/Footer"
+import Footer from "./footer/Footer";
 import FooterLinks from "./Home/FooterLinks";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { useTranslation } from "react-i18next";
 import { useSettingsContext } from "./context/SettingsContext";
 import { AdDetailPage } from "./Home/market/pages/AdDetailPage";
 import SellerQueryForm from "./Home/market/pages/QueryForm";
-import { AdListingPage } from "./Home/market/pages/AdListingPage"; 
+import { AdListingPage } from "./Home/market/pages/AdListingPage";
 // import { useAds } from "./AdProvider"; // Import useAds hook
 import { useAds } from "./context/AdsContext";
 import NewsSkeleton from "./utils/NewsSkeleton";
 import axios from "axios";
 import JournalistYouTubeFeed from "./JournalistYouTubeFeed";
+import { useWebThemeContext } from "./context/WebThemeContext";
 
 // Lazy components
 const Home = lazy(() => import("./Home/Home"));
@@ -46,7 +47,7 @@ function Layout() {
   const { t } = useTranslation();
   const { getSettingStatus } = useSettingsContext();
   // const { ads, isLoading, error, getAds } = useAds(); // Use the useAds hook
-  const [ads,setAds]=useState({});
+  const [ads, setAds] = useState({});
 
   const isBreakingNewsEnabled = getSettingStatus("Breaking Banner");
   const isAboutPageEnabled = getSettingStatus("About Us");
@@ -71,7 +72,8 @@ function Layout() {
   const isShorts = location.pathname.startsWith("/shorts");
   const isCommonPage = commonPaths.includes(location.pathname);
   const isSearchPage = searchPaths.includes(location.pathname);
-
+  const { webTheme } = useWebThemeContext();
+  const logo = webTheme["web-logo"];
   // Fetch top banner ads on mount
   // useEffect(() => {
   //   getAds("topBanner", GetTopBannerAds, "").catch((err) =>
@@ -83,7 +85,7 @@ function Layout() {
     try {
       const res = await GetTopBannerAds();
       // console.log(res);
-      setAds(res.data.response.top_banner)
+      setAds(res.data.response.top_banner);
     } catch (error) {
       console.log(error);
     }
@@ -96,8 +98,14 @@ function Layout() {
     <>
       {!isShorts && <Header />}
       {!isCommonPage && !isShorts && (
-        <>
-          {ads?.ad_image_url?.length>0 && (
+        <div >
+        <div className="flex items-center justify-between mx-0 md:mx-20">
+
+          <div>
+            {" "}
+            <img src={logo} alt="" className="w-28 h-28 md:flex hidden"/>
+          </div>
+          {ads?.ad_image_url?.length0 && (
             <div className="flex items-center justify-center mx-auto">
               <HeaderAd
                 className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 rounded sm:w-[728px]  w-[320px] "
@@ -106,8 +114,9 @@ function Layout() {
               />
             </div>
           )}
+          </div>
           <Navbar />
-        </>
+        </div>
       )}
       {!isSearchPage && !isShorts && isBreakingNewsEnabled && (
         <BreakingNewsBar />
@@ -143,7 +152,7 @@ function Layout() {
         />
       </Routes>
 
-      {!isCommonPage && !isShorts && <Footer/>}
+      {!isCommonPage && !isShorts && <Footer />}
       {/* <JournalistYouTubeFeed/> */}
       {isCommonPage && !isShorts && <FooterLinks />}
 

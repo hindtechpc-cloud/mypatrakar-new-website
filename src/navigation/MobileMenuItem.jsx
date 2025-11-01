@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { CgChevronUp } from "react-icons/cg";
 import { encryptData } from "../utils/cryptoHelper";
+import SocialIcons from "../TopBar/SocialIcons";
 
 const MobileMenuItem = ({
   item,
@@ -10,7 +11,7 @@ const MobileMenuItem = ({
   setMobileActiveDropdown,
   handleMenuClick
 }) => (
-  <div key={item.cat_id} className="border-b border-gray-600">
+  <div key={item.cat_id} className="border-b border-gray-600 text-xl">
     <button
       className={`flex justify-between items-center w-full px-4 py-3  font-semibold ${
         activePath.startsWith("/topic/") &&
@@ -69,6 +70,7 @@ const MobileMenuItem = ({
         ))}
       </div>
     )}
+
   </div>
 );
 

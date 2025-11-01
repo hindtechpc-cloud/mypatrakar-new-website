@@ -27,11 +27,7 @@ export default function Shorts() {
   }
 
   if (error) {
-    return (
-      <div className="flex justify-center items-center h-[400px] text-red-500">
-        {error}
-      </div>
-    );
+    return 
   }
 
   if (!articles.length) return null;

@@ -15,7 +15,7 @@ const {webTheme}=useWebThemeContext();
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await GetContactData("MYAWR241227001");
+        const res = await GetContactData("");
         console.log(res.data.response);
         if (res) {
           setContactData(res.data.response);
@@ -88,14 +88,14 @@ const {webTheme}=useWebThemeContext();
             <div className="mb-6 md:w-1/2">
               <h3 className="text-lg font-semibold">Address:</h3>
               {contactData?.address && (
-                <p className="text-sm mt-2 whitespace-pre-line">
-                  {contactData?.address}
-                  <p className="text-sm mt-2 flex items-center justify-start gap-2">
+                <p className="text-sm  whitespace-pre-line">
+                  {/* {contactData?.address} */}
+                  <p className="text-sm  flex items-start  justify-start gap-2 mt-1">
                     {" "}
-                    <span>
+                    <span className="mt-1">
                       <FiMapPin className=" flex items-center justify-start gap-2 " />
                     </span>
-                    <span>{contactData?.address}</span>
+                    <span className="">{contactData?.address}</span>
                   </p>
                 </p>
               )}

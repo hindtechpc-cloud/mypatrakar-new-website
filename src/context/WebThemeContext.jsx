@@ -24,7 +24,7 @@ export const WebThemeProvider = ({ children }) => {
       if (cached!==null) {
         setWebTheme(cached);
       } else {
-        const res = await GetWebTheme("MYAWR2508050057"); // dynamic if needed
+        const res = await GetWebTheme(""); // dynamic if needed
         console.log(res)
         // console.log(object)
         if (res?.data?.response) {
