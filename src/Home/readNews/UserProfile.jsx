@@ -12,6 +12,9 @@ import {
 import { FaMinimize } from "react-icons/fa6";
 import { MdOutlineEmail, MdTextDecrease, MdTextIncrease } from "react-icons/md";
 import * as Dialog from "@radix-ui/react-dialog";
+import SocialIcons from "../../TopBar/SocialIcons";
+import { WebThemeContext } from "../../context/ThemeContext";
+import { useWebThemeContext } from "../../context/WebThemeContext";
 
 function getDateDifference(dateString) {
   if (!dateString) return null;
@@ -58,7 +61,7 @@ const socialIcons = {
 const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+const {webTheme}=useWebThemeContext()
   const handleZoomOut = () => {
     if (zoomText <= 7) {
       setModalMessage(
@@ -84,7 +87,7 @@ const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
   const handleClose = () => {
     setIsModalOpen(false);
   };
-  console.log(user)
+  console.log(user);
   const dateDifference = getDateDifference(user?.date);
 
   const formattedTime = dateDifference
@@ -96,18 +99,20 @@ const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
     : "N/A";
 
   return (
-    <div className="flex items-center space-x-4">
-     <img
-  src={
-    user?.profileImage && user.profileImage!= ""
-      ? user.profileImage.includes("https://")
-        ? user.profileImage
-        : `${import.meta.env.VITE_REACT_APP_API_URL_Image}${user.profileImage}`
-      : "https://customer.mypatrakar.com/assets/No_Image_Available.JPG"
-  }
-  alt={user?.name || "User"}
-  className="w-12 h-12 rounded-full"
-/>
+    <div className="flex items-center space-x-3 mb-8">
+      <img
+        src={
+          user?.profileImage && user.profileImage != ""
+            ? user.profileImage.includes("https://")
+              ? user.profileImage
+              : `${import.meta.env.VITE_REACT_APP_API_URL_Image}${
+                  user.profileImage
+                }`
+            : "https://customer.mypatrakar.com/assets/No_Image_Available.JPG"
+        }
+        alt={user?.name || "User"}
+        className="w-20 h-20 rounded-full"
+      />
 
       <div className="flex items-center justify-between w-full">
         <div>
@@ -120,7 +125,7 @@ const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
           </p>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-[6px]">
           <div className="flex space-x-2 ml-auto">
             {user?.links?.map((social, index) => (
               <a
@@ -135,36 +140,45 @@ const UserProfile = ({ user, setZoomText, zoomText, handleDownloadPDF }) => {
             ))}
           </div>
 
-          <div className="flex items-start justify-start left-0 space-x-2 ml-auto">
-            <div
-              className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full"
-              title="Print News"
-              onClick={handleDownloadPDF}
-            >
-              <FaPrint className="" title="Print this news" />
-            </div>
-            <div
-              className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full"
-              title="Zoom Out"
-              onClick={handleZoomOut}
-            >
-              <MdTextDecrease />
-            </div>
+          <div className="flex flex-col gap-[6px]">
+           {/* <div style={{
+            color:webTheme["bg-color"]
+           }}> */}
+            <div className="text-gray-700 md:flex hidden">
+             <SocialIcons />
+           </div>
 
-            <div
-              className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full"
-              title="Normal Text"
-              onClick={() => setZoomText(15)}
-            >
-              <BiFont />
-            </div>
+            <div className="flex items-start justify-start left-0 space-x-2 ml-auto mt-1">
+              <div
+                className="p-[6px] bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full border border-gray-900"
+                title="Print News"
+                onClick={handleDownloadPDF}
+              >
+                <FaPrint className="" title="Print this news" size={15}/>
+              </div>
+              <div
+                className="p-[6px] bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full border border-gray-900"
+                title="Zoom Out"
+                onClick={handleZoomOut}
+              >
+                <MdTextDecrease size={15} />
+              </div>
 
-            <div
-              className="p-2 bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full"
-              title="Zoom In"
-              onClick={handleZoomIn}
-            >
-              <MdTextIncrease />
+              <div
+                className="p-[6px] bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full border border-gray-900"
+                title="Normal Text"
+                onClick={() => setZoomText(12)}
+              >
+                <BiFont size={15}/>
+              </div>
+
+              <div
+                className="p-[6px] bg-gray-200 hover:bg-gray-300 cursor-pointer rounded-full border border-gray-900"
+                title="Zoom In"
+                onClick={handleZoomIn}
+              >
+                <MdTextIncrease size={15}/>
+              </div>
             </div>
           </div>
         </div>

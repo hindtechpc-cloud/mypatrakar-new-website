@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 import { encryptData } from "../../../utils/cryptoHelper";
 import { motion } from "framer-motion";
+import { makeSlug } from "../../../utils/makeSlug";
 
 const NewsCard = ({
   news,
@@ -14,6 +15,7 @@ const NewsCard = ({
   newsId,
   image,
   ctaText,
+  category_id,
   title,
   description,maxLength
 }) => {
@@ -24,9 +26,14 @@ const NewsCard = ({
     if (!news) return;
 
     setNews(news);
-    const safeTitle = encodeURIComponent(title || "");
-    navigate(`/read-news/${safeTitle}/${encryptData(newsId)}`);
-  }, [news, setNews, navigate, title, newsId]);
+    // const safeTitle = encodeURIComponent(title || "");
+ navigate(`/read-news/${makeSlug(title)}/${encryptData(newsId)}`, {
+  state: {
+    category_id: category_id
+  }
+});
+
+  }, [news, setNews, navigate, title, newsId, category_id]);
 
   const imageUrl = image
     ? `${import.meta.env.VITE_REACT_APP_API_URL_Image}${image}`

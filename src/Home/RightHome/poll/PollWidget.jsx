@@ -248,7 +248,7 @@ export const PollWidget = () => {
         </div>
       )}
 
-      <Header text="📊 Live Poll" />
+      <Header text="Live Poll" />
 
       <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300">
         {/* Poll Header */}

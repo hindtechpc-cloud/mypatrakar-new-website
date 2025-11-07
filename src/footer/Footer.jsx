@@ -63,8 +63,8 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="bg-gradient-to-b from-blue-900 to-blue-950 text-gray-200 py-10">
-        <div className=" mx-auto px-4">
+      <div className="bg-gradient-to-b from-gray-900 to-gray-950 text-gray-200 py-10">
+        <div className=" mx-auto px-">
           <div className="flex flex-wrap items-center justify-center gap-5">
             <div className="md:col-span-2 lg:col-span-1">
               <FooterLinks/>

@@ -148,6 +148,7 @@ const [articlList,setArticlList]=useState([])
                   description={featuredArticle.news_description_html}
                   newsId={featuredArticle.news_id}
                   maxLength={300}
+                  category_id={category_id}
                   news={{
                     title: featuredArticle.news_headline,
                     urlToImage: featuredArticle?.news_img_url,
@@ -165,6 +166,7 @@ const [articlList,setArticlList]=useState([])
                 maxLength={50}
                 headingLength={100}
                 start={1}
+                category_id={category_id}
               />
             </div>
           </div>

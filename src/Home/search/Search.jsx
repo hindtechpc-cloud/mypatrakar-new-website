@@ -8,13 +8,7 @@ import {
   NewsSortBy,
 } from "../../../api";
 import { WebThemeContext } from "../../context/ThemeContext";
-import {
-
-  FaTimes,
-  FaFilter,
-  FaArrowLeft,
-  FaArrowRight,
-} from "react-icons/fa";
+import { FaTimes, FaFilter, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
 import DropdownFilters from "./DropdownFilters";
 import HeaderAd from "../../TopBar/HeaderAd";
@@ -25,7 +19,7 @@ import SpeakMessage from "../../utils/SpeakMessage";
 import RightHome from "../RightHome/RightHome";
 import GameSkeleton from "../LeftHome/game/GameSkeleton";
 import { useWebThemeContext } from "../../context/WebThemeContext";
-
+import { useSearch } from "../../context/SearchContext";
 
 const DEFAULT_FILTERS = {
   searchTerm: "",
@@ -54,7 +48,7 @@ export default function Search() {
   const [totalPages, setTotalPages] = useState(1);
   const [locations, setLocations] = useState([]);
   const { webTheme } = useWebThemeContext();
-
+  const { searchTerm, setSearchTerm } = useSearch();
 
   // 🔹 fetch news
   const fetchFilteredNews = useCallback(async (page = 1, currentFilters) => {
@@ -202,7 +196,13 @@ export default function Search() {
     fetchLocations();
   }, []);
 
-
+  const handleChange = (e) => {
+    setSearchTerm("");
+    setFilters((prev) => ({
+      ...prev,
+      searchTerm: e.target.value,
+    }));
+  };
 
   return (
     <div className="flex flex-col lg:flex-row items-start justify-center gap-[45px] my-2 xl:mx-[149px] lg:mx-2  mx-2">
@@ -217,7 +217,9 @@ export default function Search() {
             }}
           >
             Search Results for:{" "}
-            <span className="capitalize">{filters?.searchTerm}</span>
+            <span className="capitalize">
+              {filters?.searchTerm !== "" ? filters?.searchTerm : searchTerm}
+            </span>
           </h3>
 
           {/* Search Box */}
@@ -226,13 +228,8 @@ export default function Search() {
               <input
                 type="text"
                 placeholder="Search news..."
-                value={filters.searchTerm}
-                onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    searchTerm: e.target.value,
-                  }))
-                }
+                value={filters.searchTerm || searchTerm}
+                onChange={handleChange}
                 className="w-full px-4 py-3 border border-yellow-400 rounded-sm focus:outline-none text-gray-800 shadow-sm"
                 disabled={isLoading}
               />
@@ -252,66 +249,70 @@ export default function Search() {
 
         <main className="max-w-7xl mx-auto my-2">
           {/* 🔹 Filters */}
-      <section className="mb-6">
-  {/* Mobile Filter Toggle */}
-  <div className="md:hidden mb-4">
-    <button
-      onClick={() => setShowMobileFilters(!showMobileFilters)}
-      className="flex items-center justify-center w-full py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
-    >
-      <FaFilter className="mr-2 text-gray-600" />
-      <span className="font-medium text-gray-700">
-        {showMobileFilters ? "Hide Filters" : "Show Filters"}
-      </span>
-    </button>
-  </div>
+          <section className="mb-6">
+            {/* Mobile Filter Toggle */}
+            <div className="md:hidden mb-4">
+              <button
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
+                className="flex items-center justify-center w-full py-3 px-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
+              >
+                <FaFilter className="mr-2 text-gray-600" />
+                <span className="font-medium text-gray-700">
+                  {showMobileFilters ? "Hide Filters" : "Show Filters"}
+                </span>
+              </button>
+            </div>
 
-  {/* Filters Panel */}
-  <div
-    className={`${showMobileFilters ? "block" : "hidden"} md:block transition-all duration-300`}
-  >
-    <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
-      <div className="flex justify-between items-center mb-4">
-        <h4 className="font-semibold text-lg text-gray-800">Filter News</h4>
-        {showMobileFilters && (
-          <button
-            onClick={() => setShowMobileFilters(false)}
-            className="md:hidden p-1 text-gray-500 hover:text-gray-700"
-            aria-label="Close filters"
-          >
-            <FaTimes size={18} />
-          </button>
-        )}
-      </div>
-      
-      <DropdownFilters
-        categories={categories}
-        subcategories={subcategories}
-        locations={locations}
-        sortOptions={SORT_OPTIONS}
-        fetchNews={fetchFilteredNews}
-        setCategory={(val) =>
-          setFilters((prev) => ({
-            ...prev,
-            category: val,
-            subcategory: "",
-          }))
-        }
-        setSubcategory={(val) =>
-          setFilters((prev) => ({ ...prev, subcategory: val }))
-        }
-        setSortBy={(val) =>
-          setFilters((prev) => ({ ...prev, sortBy: val }))
-        }
-        setLocation={(val) =>
-          setFilters((prev) => ({ ...prev, location: val }))
-        }
-        currentFilters={filters}
-        disabled={isLoading}
-      />
-      
-      {/* Quick Actions */}
-      {/* <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+            {/* Filters Panel */}
+            <div
+              className={`${
+                showMobileFilters ? "block" : "hidden"
+              } md:block transition-all duration-300`}
+            >
+              <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="font-semibold text-lg text-gray-800">
+                    Filter News
+                  </h4>
+                  {showMobileFilters && (
+                    <button
+                      onClick={() => setShowMobileFilters(false)}
+                      className="md:hidden p-1 text-gray-500 hover:text-gray-700"
+                      aria-label="Close filters"
+                    >
+                      <FaTimes size={18} />
+                    </button>
+                  )}
+                </div>
+
+                <DropdownFilters
+                  categories={categories}
+                  subcategories={subcategories}
+                  locations={locations}
+                  sortOptions={SORT_OPTIONS}
+                  fetchNews={fetchFilteredNews}
+                  setCategory={(val) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      category: val,
+                      subcategory: "",
+                    }))
+                  }
+                  setSubcategory={(val) =>
+                    setFilters((prev) => ({ ...prev, subcategory: val }))
+                  }
+                  setSortBy={(val) =>
+                    setFilters((prev) => ({ ...prev, sortBy: val }))
+                  }
+                  setLocation={(val) =>
+                    setFilters((prev) => ({ ...prev, location: val }))
+                  }
+                  currentFilters={filters}
+                  disabled={isLoading}
+                />
+
+                {/* Quick Actions */}
+                {/* <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
         <button
           onClick={handleSubmit}
           disabled={isLoading}
@@ -333,9 +334,9 @@ export default function Search() {
           Reset Filters
         </button>
       </div> */}
-    </div>
-  </div>
-</section>
+              </div>
+            </div>
+          </section>
 
           {/* 🔹 Buttons */}
           <div className="flex items-center justify-center gap-4 my-3">
@@ -371,7 +372,6 @@ export default function Search() {
           <section className="mt-[50px]">
             {isLoading ? (
               <GameSkeleton />
-             
             ) : articles.length > 0 ? (
               <div className="w-full max-w-4xl">
                 {articles.map((article) => (
@@ -405,7 +405,7 @@ export default function Search() {
           </section>
 
           {/* 🔹 Pagination */}
-          {!isLoading && articles.length > 0 && totalPages >1 && (
+          {!isLoading && articles.length > 0 && totalPages > 1 && (
             <div className="mt-8 flex justify-center items-center gap-4">
               <button
                 onClick={() => loadPage(currentPage - 1)}
@@ -425,8 +425,7 @@ export default function Search() {
                 Next <FaArrowRight />
               </button>
             </div>
-          )
-          }
+          )}
         </main>
       </div>
 

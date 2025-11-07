@@ -27,14 +27,14 @@
 //   }, [isReply, loadReplies]);
 
 //   if (loading)
-//     return <div className="text-sm text-gray-500">Loading replies...</div>;
-//   if (error) return <div className="text-sm text-red-500">{""}</div>;
+//     return <div className="text-xs text-gray-500">Loading replies...</div>;
+//   if (error) return <div className="text-xs text-red-500">{""}</div>;
 //   if (replies.length>0 && replies[0].replies?.length === 0)
-//     return <div className="text-sm text-gray-400">No replies found.</div>;
+//     return <div className="text-xs text-gray-400">No replies found.</div>;
 
 //   return (
 //     <div className="space-y-4">
-//       <h4 className="text-sm font-semibold text-gray-700">Replies</h4>
+//       <h4 className="text-xs font-semibold text-gray-700">Replies</h4>
 
 //       {replies.length > 0 &&
 //         replies?.map((reply) => (
@@ -55,7 +55,7 @@
 //             <div className="flex-1">
 //               <div className="flex items-center justify-between">
 //                 <div>
-//                   <h5 className="text-sm font-medium text-gray-900">
+//                   <h5 className="text-xs font-medium text-gray-900">
 //                     {reply.user?.name || reply.name}
 //                   </h5>
 //                   <p className="text-xs text-gray-500">
@@ -66,7 +66,7 @@
 //                   {new Date(reply.date).toLocaleDateString()}
 //                 </span>
 //               </div>
-//               <p className="mt-2 text-sm text-gray-700">{reply.comment}</p>
+//               <p className="mt-2 text-xs text-gray-700">{reply.comment}</p>
 //             </div>
 //           </div>
 //         ))}
@@ -107,20 +107,20 @@ export default function TotalReplyOnComment({ id, isReply }) {
   }, [isReply, loadReplies]);
 
   if (loading) {
-    return <div className="text-sm text-gray-500">Loading replies...</div>;
+    return <div className="text-xs text-gray-500">Loading replies...</div>;
   }
 
   if (error) {
-    return <div className="text-sm text-red-500">{error}</div>;
+    return <div className="text-xs text-red-500">{error}</div>;
   }
 
   if (replies.length === 0) {
-    return <div className="text-sm text-gray-400">No replies found.</div>;
+    return <div className="text-xs text-gray-400">No replies found.</div>;
   }
 
   return (
     <div className="space-y-4">
-      <h4 className="text-sm font-semibold text-gray-700">Replies</h4>
+      <h4 className="text-xs font-semibold text-gray-700">Replies</h4>
 
       {replies?.slice(0,10)?.map((reply) => {
         const user = reply.user || {};
@@ -142,7 +142,7 @@ export default function TotalReplyOnComment({ id, isReply }) {
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <h5 className="text-sm font-medium text-gray-900">
+                  <h5 className="text-xs font-medium text-gray-900">
                     {user.name || reply.name}
                   </h5>
                   <p className="text-xs text-gray-500">
@@ -159,7 +159,7 @@ export default function TotalReplyOnComment({ id, isReply }) {
                     })}
 
               </div>
-              <p className="mt-2 text-sm text-gray-700">{reply.comment}</p>
+              <p className="mt-2 text-xs text-gray-700">{reply.comment}</p>
             </div>
           </div>
         );

@@ -11,13 +11,13 @@ const MobileMenuItem = ({
   setMobileActiveDropdown,
   handleMenuClick
 }) => (
-  <div key={item.cat_id} className="border-b border-gray-600 text-xl">
+  <div key={item.cat_id} className=" border-b border-gray-300/30  text-sm">
     <button
-      className={`flex justify-between items-center w-full px-4 py-3  font-semibold ${
+      className={`flex justify-between items-center w-full px-4 py-5   ${
         activePath.startsWith("/topic/") &&
         activePath.includes(`/topic/${item.nav_name.toLowerCase()}`)
           ? "bg-gray-200 text-black"
-          : "text-white"
+          : "text-gray-100"
       }`}
       onClick={() => {
         if (item.submenus?.length > 0) {
@@ -42,7 +42,7 @@ const MobileMenuItem = ({
     </button>
 
     {item.submenus?.length > 0 && mobileActiveDropdown === item.cat_id && (
-      <div className="pl-20">
+      <div className="pl-5">
         {item.submenus.map((submenu) => (
           <Link
             key={submenu.subcategory_id}

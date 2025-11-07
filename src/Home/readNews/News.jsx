@@ -13,6 +13,7 @@ import { LanguageContext } from "../../context/LanguageContext";
 import { handleDownloadPDF } from "./NewsPDFDownloader";
 import useNewsDetails from "./useNewsDetails";
 import Loader from "../../utils/Loader";
+import NewsArticleSkeleton from "./NewsArticleSkeleton";
 
 export default function News() {
   const { language } = useContext(LanguageContext);
@@ -22,16 +23,17 @@ export default function News() {
   const { type, newsId } = useParams();
 
   const { news, loadNewsDetails } = useNewsDetails(type, newsId);
-  // console.log(news)
+  console.log(news)
 
   useEffect(() => {
     loadNewsDetails();
+    // setNewsCategory(news.news_category_name)
   }, [type, newsId]);
-console.log(news)
-  if (!news) return <div className="text-center py-8"><Loader/></div>;
+
+  if (!news) return <NewsArticleSkeleton/>;
 
   return (
-    <div className="bg-white p-2 rounded-lg animate-fadeIn">
+    <div className="">
       <NewsImage
         news={news}
         type={type}

@@ -154,6 +154,7 @@ const Entertain = ({
                   topNewsItems={articlList}
                   className="flex flex-col items-start justify-center md:gap-[22px] gap-[15px]"
                   start={1}
+                  category_id={category_id}
                 />
               </motion.div>
             </motion.div>

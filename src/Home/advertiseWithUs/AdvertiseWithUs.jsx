@@ -405,7 +405,7 @@ export default function AdvertiseWithUs() {
           </p>
           <button
             onClick={handleWhatsAppClick}
-            className="flex items-center justify-center mx-auto gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 rounded-full text-white transition"
+            className="flex w-full items-center justify-center mx-auto gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 rounded-xl text-white transition"
           >
             <FaWhatsapp size={18} />
             WhatsApp

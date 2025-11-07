@@ -2,6 +2,7 @@ import { BsEye, BsLayers } from "react-icons/bs";
 import { FaYoutube } from "react-icons/fa";
 import { FiMessageCircle } from "react-icons/fi";
 
+
 export default function Sharing({ data }) {
   return (
     <div className="flex items-center space-x-4  my-5 ">

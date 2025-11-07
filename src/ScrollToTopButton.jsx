@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FaArrowUp } from "react-icons/fa";
 import { useWebThemeContext } from "./context/WebThemeContext";
+import { IoIosArrowUp } from "react-icons/io";
 
 
 const ScrollToTopButton = () => {
@@ -34,7 +35,7 @@ const {webTheme}=useWebThemeContext();
         background:webTheme["bg-color"]||"#0f3493"
       }}
     >
-      <FaArrowUp size={20} />
+      <IoIosArrowUp size={20} />
     </button>
   );
 };

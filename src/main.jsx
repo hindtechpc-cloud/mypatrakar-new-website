@@ -8,6 +8,7 @@ import "./i18n"; //
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { SettingsProvider } from "./context/SettingsContext.jsx";
 import { WebThemeProvider } from "./context/WebThemeContext.jsx";
+import { SearchProvider } from "./context/SearchContext.jsx";
 // import { Provider } from "react-redux";
 // import { store } from "./app/store.js";
 createRoot(document.getElementById("news-app")).render(
@@ -17,7 +18,9 @@ createRoot(document.getElementById("news-app")).render(
      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <SettingsProvider>
          <WebThemeProvider>
+           <SearchProvider>
           <App />
+           </SearchProvider>
           </WebThemeProvider>
       </SettingsProvider>
     </GoogleOAuthProvider>

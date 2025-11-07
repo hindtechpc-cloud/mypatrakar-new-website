@@ -131,6 +131,7 @@ const TopNews = ({ category_id, section_title }) => {
               description={featuredArticle?.news_description_html}
               newsId={featuredArticle?.news_id}
               maxLength={140}
+              category_id={category_id}
               news={{
                 title: featuredArticle?.news_headline,
                 urlToImage: featuredArticle?.news_img_url,
@@ -146,6 +147,7 @@ const TopNews = ({ category_id, section_title }) => {
               className="grid grid-cols-1 sm:grid-cols-2 xl:gap-[35px] md:gap-[25px] gap-[17px]"
               maxLength={60}
               start={1}
+              category_id={category_id}
             />
           </div>
         </div>

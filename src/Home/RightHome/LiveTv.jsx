@@ -1,5 +1,3 @@
-
-
 // import React, { useContext, useEffect, useState } from "react";
 // import { GetLiveYouTube } from "../../../api";
 // import {
@@ -19,10 +17,18 @@
 //   const [isLive, setIsLive] = useState();
 //   const [loading, setLoading] = useState(true);
 //   const [videos, setVideos] = useState([]);
+
 //   const { webTheme } = useWebThemeContext();
 //   const { socialLinks = [], isLoading, error } = useContext(SocialMediaContext);
-//   const fallbackChannel = "NDTV"; // default channel
-// console.log(socialLinks)
+
+//   // ✅ Get YouTube URL from backend social links
+//   const youtubeLink = socialLinks.find(
+//     (item) => item.name?.toLowerCase() === "youtube"
+//   )?.url;
+
+//   // ✅ Fallback YouTube channel if not available
+//   const fallbackChannel = youtubeLink || "https://www.youtube.com/@NDTV";
+
 //   const loadLiveMode = async () => {
 //     try {
 //       const res = await GetLiveYouTube();
@@ -30,7 +36,7 @@
 //       setIsLive(liveStatus);
 
 //       if (liveStatus === 1) {
-//         // ✅ Live stream show
+//         // ✅ Show live stream
 //         const liveId = res?.data?.response?.live_url;
 //         setLiveUrl(`https://www.youtube.com/embed/${liveId}`);
 //       } else {
@@ -40,13 +46,12 @@
 //         const now = Date.now();
 
 //         if (cachedData && cachedTime && now - cachedTime < 24 * 60 * 60 * 1000) {
-//           // ✅ Use cached videos (24 hours validity)
 //           setVideos(JSON.parse(cachedData));
 //         } else {
-//           // ✅ Fetch new videos
+//           // ✅ Use YouTube link from backend or fallback
 //           const youtubeUrl =
-//             res?.data?.response?.channel_url ||
-//             `https://www.youtube.com/@${fallbackChannel}`;
+//             res?.data?.response?.channel_url || fallbackChannel;
+
 //           const channelIdOrUsername = extractChannelIdOrUsername(youtubeUrl);
 
 //           if (channelIdOrUsername) {
@@ -56,7 +61,7 @@
 //             );
 //             const videoList = await getVideosFromPlaylist(playlistId);
 
-//             // ✅ Store only 10 videos in session
+//             // ✅ Store top 10 videos
 //             const latestVideos = (videoList || []).slice(0, 10);
 //             setVideos(latestVideos);
 //             sessionStorage.setItem("yt_videos", JSON.stringify(latestVideos));
@@ -73,7 +78,7 @@
 
 //   useEffect(() => {
 //     loadLiveMode();
-//   }, []);
+//   }, [socialLinks]); // re-run when social links are updated
 
 //   const formatDate = (dateString) => {
 //     const date = new Date(dateString);
@@ -222,20 +227,13 @@
 
 // export default React.memo(LiveTv);
 
-
-
 import React, { useContext, useEffect, useState } from "react";
 import { GetLiveYouTube } from "../../../api";
-import {
-  BsYoutube,
-  BsBroadcast,
-  BsCalendar,
-} from "react-icons/bs";
+import { BsYoutube, BsBroadcast, BsCalendar } from "react-icons/bs";
 import { FiArrowRight } from "react-icons/fi";
 import { extractChannelIdOrUsername } from "../../utils/youtubeHelper";
 import { getChannelInfo, getVideosFromPlaylist } from "../../../api/youtubeApi";
 import { useWebThemeContext } from "../../context/WebThemeContext";
-import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { SocialMediaContext } from "../../context/SocialMediaContext";
 
 function LiveTv() {
@@ -243,16 +241,15 @@ function LiveTv() {
   const [isLive, setIsLive] = useState();
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState([]);
+  const [error,setError]=useState(false);
 
   const { webTheme } = useWebThemeContext();
-  const { socialLinks = [], isLoading, error } = useContext(SocialMediaContext);
+  const { socialLinks = [] } = useContext(SocialMediaContext);
 
-  // ✅ Get YouTube URL from backend social links
+  // ✅ YouTube Link
   const youtubeLink = socialLinks.find(
     (item) => item.name?.toLowerCase() === "youtube"
   )?.url;
-
-  // ✅ Fallback YouTube channel if not available
   const fallbackChannel = youtubeLink || "https://www.youtube.com/@NDTV";
 
   const loadLiveMode = async () => {
@@ -262,22 +259,22 @@ function LiveTv() {
       setIsLive(liveStatus);
 
       if (liveStatus === 1) {
-        // ✅ Show live stream
         const liveId = res?.data?.response?.live_url;
         setLiveUrl(`https://www.youtube.com/embed/${liveId}`);
       } else {
-        // ✅ Not live → check sessionStorage
         const cachedData = sessionStorage.getItem("yt_videos");
         const cachedTime = sessionStorage.getItem("yt_videos_time");
         const now = Date.now();
 
-        if (cachedData && cachedTime && now - cachedTime < 24 * 60 * 60 * 1000) {
+        if (
+          cachedData &&
+          cachedTime &&
+          now - cachedTime < 24 * 60 * 60 * 1000
+        ) {
           setVideos(JSON.parse(cachedData));
         } else {
-          // ✅ Use YouTube link from backend or fallback
           const youtubeUrl =
             res?.data?.response?.channel_url || fallbackChannel;
-
           const channelIdOrUsername = extractChannelIdOrUsername(youtubeUrl);
 
           if (channelIdOrUsername) {
@@ -286,8 +283,6 @@ function LiveTv() {
               channelIdOrUsername.value
             );
             const videoList = await getVideosFromPlaylist(playlistId);
-
-            // ✅ Store top 10 videos
             const latestVideos = (videoList || []).slice(0, 10);
             setVideos(latestVideos);
             sessionStorage.setItem("yt_videos", JSON.stringify(latestVideos));
@@ -297,6 +292,7 @@ function LiveTv() {
       }
     } catch (error) {
       console.error("Error loading live stream:", error);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -304,7 +300,7 @@ function LiveTv() {
 
   useEffect(() => {
     loadLiveMode();
-  }, [socialLinks]); // re-run when social links are updated
+  }, [socialLinks]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -317,7 +313,7 @@ function LiveTv() {
 
   return (
     <div className="font-sans xl:w-[335px] lg:w-[295px] w-full mx-auto">
-      <div className="bg-white shadow-xl rounded border-0 h-90">
+      <div className="  rounded border-0 h-90">
         {/* Header */}
         <div
           className="text-white py-2 px-5 relative"
@@ -374,75 +370,51 @@ function LiveTv() {
               </div>
             </div>
           ) : (
-            // ✅ Recent Videos with scroll buttons
-            <div className="w-[320px]">
-              <div className="relative">
-                {videos.length > 0 && (
-                  <button
-                    onClick={() =>
-                      document
-                        .getElementById("videoSlider")
-                        ?.scrollBy({ left: -330, behavior: "smooth" })
-                    }
-                    className="absolute -left-6 top-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-full w-8 h-8 hover:bg-gray-100 flex items-center justify-center"
-                  >
-                    <FaChevronLeft />
-                  </button>
-                )}
-
+            // ✅ Vertical scroll video cards (YouTube style)
+            <div className="max-h-[600px] overflow-y-auto space-y-3 scrollbar-hide">
+              {videos.map((video) => (
                 <div
-                  id="videoSlider"
-                  className="flex gap-2 overflow-x-scroll scrollbar-hide pb-2 scroll-smooth"
+                  key={video.id}
+                  className="min-w-[315px] max-w-[320px] bg-gray-50 rounded-lg shadow hover:shadow-md transition cursor-pointer relative overflow-hidden"
                 >
-                  {videos.map((video) => (
-                    <div
-                      key={video.id}
-                      className="min-w-[315px] max-w-[320px] bg-gray-50 rounded-lg shadow hover:shadow-md transition cursor-pointer"
-                    >
-                      <a
-                        href={`https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <div className="relative">
-                          <img
-                            src={video.snippet.thumbnails.medium.url}
-                            alt={video.snippet.title}
-                            className="rounded-lg w-full h-56 object-cover"
-                          />
-                        </div>
-                        <div className="p-2">
-                          <p className="text-sm font-medium line-clamp-2 h-10">
-                            {video.snippet.title}
-                          </p>
-                          <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
-                            <span className="flex items-center">
-                              <BsCalendar className="mr-1" />
-                              {formatDate(video.snippet.publishedAt)}
-                            </span>
-                            <span className="flex items-center text-red-600 hover:text-red-800 font-medium">
-                              Watch <FiArrowRight className="ml-1" />
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-
-                {videos.length > 0 && (
-                  <button
-                    onClick={() =>
-                      document
-                        .getElementById("videoSlider")
-                        ?.scrollBy({ left: 330, behavior: "smooth" })
-                    }
-                    className="absolute -right-6 top-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-full w-8 h-8 hover:bg-gray-100 flex items-center justify-center"
+                  <a
+                    href={`https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}`}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    <FaChevronRight />
-                  </button>
-                )}
-              </div>
+                    <div className="relative">
+                      <img
+                        src={video.snippet.thumbnails.medium.url}
+                        alt={video.snippet.title}
+                        className="rounded-lg w-full h-56 object-cover"
+                      />
+
+                      {/* ✅ YouTube logo overlay (top-right corner) */}
+                      <div className="absolute top-24 right-36 bg-white rounded-md h-[25px] ">
+                        <BsYoutube
+                          className="text-gray-500 text-xl"
+                          size={35}
+                        />
+                      </div>
+                    </div>
+
+                    {/* <div className="p-2">
+      <p className="text-sm font-medium line-clamp-2 h-10">
+        {video.snippet.title}
+      </p>
+      <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
+        <span className="flex items-center">
+          <BsCalendar className="mr-1" />
+          {formatDate(video.snippet.publishedAt)}
+        </span>
+        <span className="flex items-center text-red-600 hover:text-red-800 font-medium">
+          Watch <FiArrowRight className="ml-1" />
+        </span>
+      </div>
+    </div> */}
+                  </a>
+                </div>
+              ))}
             </div>
           )}
         </div>

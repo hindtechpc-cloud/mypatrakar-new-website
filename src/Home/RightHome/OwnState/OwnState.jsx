@@ -68,7 +68,7 @@ export default function OwnState() {
       }
     } catch (err) {
       console.error(err);
-      setError("Failed to load road maps");
+      // setError("Failed to load road maps");
     } finally {
       setloading(false);
     }

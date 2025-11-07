@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { encryptData } from "../../../utils/cryptoHelper";
 import HtmlToPlainText from "../../../utils/HtmlToPlainText";
 import { motion } from "framer-motion";
+import { makeSlug } from "../../../utils/makeSlug";
 
 const NewsItem = ({ news, onNewsClick, index, maxLength, headingLength }) => {
   return (
@@ -79,6 +80,7 @@ export default function TopNewsItems({
   maxLength,
   headingLength = 70,
   start = 0,
+  category_id
 }) {
   const navigate = useNavigate();
   const { setNews } = useContext(NewsContext);
@@ -87,10 +89,16 @@ export default function TopNewsItems({
     (news) => {
       setNews(news);
       navigate(
-        `/read-news/${news?.news_headline}/${encryptData(news.news_id)}`
+        `/read-news/${makeSlug(news?.news_headline)}/${encryptData(
+          news.news_id
+        )}`,{
+          state:{
+            category_id:category_id
+          }
+        }
       );
     },
-    [setNews, navigate]
+    [setNews, navigate, category_id]
   );
 
   return (

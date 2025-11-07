@@ -88,12 +88,12 @@ const SourceWidget = ({
         <div className="flex justify-center mb-4">
           <div className="relative">
             <img
-              src={image}
+              src={webTheme["web-logo"]}
               alt="Company logo"
-              className="w-20 h-20 rounded-full border-4 border-yellow-400/30 shadow-lg"
+              className="w-24 h-24 rounded-full ow-lg"
               loading="lazy"
             />
-            <div className="absolute -inset-2 bg-yellow-400/20 rounded-full -z-10 animate-pulse"></div>
+            {/* <div className="absolute -inset-2 bg-yellow-400/20 rounded-full -z-10 animate-pulse"></div> */}
           </div>
         </div>
         <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
@@ -141,7 +141,7 @@ const SourceWidget = ({
         </div>
       )}
 
-      <div className="mt-6 text-center">
+      <div className="mt-6 text-center md:px-0 px-4">
         <p className="text-blue-300 text-xs">
           By signing in, you agree to our{" "}
           <a

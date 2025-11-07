@@ -98,23 +98,23 @@ function Layout() {
     <>
       {!isShorts && <Header />}
       {!isCommonPage && !isShorts && (
-        <div >
-        <div className="flex items-center justify-between mx-0 md:mx-20">
-
-          <div>
-            {" "}
-            <img src={logo} alt="" className="w-28 h-28 md:flex hidden"/>
-          </div>
-          {ads?.ad_image_url?.length0 && (
-            <div className="flex items-center justify-center mx-auto">
-              <HeaderAd
-                className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 rounded sm:w-[728px]  w-[320px] "
-                adData={ads}
-                text="Loading Top nav top Banner Ads..."
-              />
+        <div>
+          <div className="flex items-center justify-between mx-0 md:mx-20">
+            <div>
+              {" "}
+              <img src={logo} alt="" className="w-28 h-28 md:flex hidden" />
             </div>
-          )}
+            {ads?.ad_image_url?.length < 0 && (
+              <div className="flex items-center justify-center mx-auto">
+                <HeaderAd
+                  className="my-4 flex justify-center items-center bg-gray-300 sm:mx-0 rounded sm:w-[728px]  w-[320px] "
+                  adData={ads}
+                  text="Loading Top nav top Banner Ads..."
+                />
+              </div>
+            )}
           </div>
+
           <Navbar />
         </div>
       )}

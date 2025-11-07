@@ -85,8 +85,8 @@ export default function Rashiphal() {
     <div className="mt-[9px] xl:w-[335px] lg:w-[295px] w-full mx-auto">
       <Header text="आज का राशिफल" className="relative text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600" />
 
-      {loading ? (
-        <Loader />
+      {!loading ? (
+       <div className="h-80 bg-gray-200 rounded animate-pulse"></div>
       ) : rashis.length > 0 ? (
         <RashiphalCarousel
           rashis={rashis}

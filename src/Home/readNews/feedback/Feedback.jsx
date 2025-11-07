@@ -103,18 +103,20 @@ export default function Feedback({ setIsComment, isComment }) {
   };
 
   return (
-    <div className="w-full mx-auto p-6 bg-white rounded-xl shadow-sm mt-10 border border-gray-100">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
-        Share Your Thoughts
+    <div className="w-full mx-auto  mt-5 ">
+      <h2 className="text-[20px] font-bold text-gray-900 mb-6" style={{
+        fontFamily:"Mukta"
+      }} >
+        Write your feedback?
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {!isAuthenticated && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1  gap-5">
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm  text-gray-700 mb-1"
               >
                 Your Name <span className="text-red-500">*</span>
               </label>
@@ -124,8 +126,8 @@ export default function Feedback({ setIsComment, isComment }) {
                 id="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="John Doe"
-                className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                placeholder="Full name"
+                className={`w-full px-4 py-2.5 text-sm border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.name ? "border-red-300 bg-red-50" : "border-gray-300"
                 }`}
               />
@@ -137,7 +139,7 @@ export default function Feedback({ setIsComment, isComment }) {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm  text-gray-700 mb-1"
               >
                 Email <span className="text-red-500">*</span>
               </label>
@@ -147,8 +149,8 @@ export default function Feedback({ setIsComment, isComment }) {
                 id="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="you@example.com"
-                className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                placeholder="Email address"
+                className={`w-full px-4 py-2.5 text-sm border  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   errors.email ? "border-red-300 bg-red-50" : "border-gray-300"
                 }`}
               />
@@ -163,9 +165,9 @@ export default function Feedback({ setIsComment, isComment }) {
           <div className="flex justify-between items-center mb-1">
             <label
               htmlFor="comment"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm  text-gray-700"
             >
-              Your Feedback <span className="text-red-500">*</span>
+             Comments <span className="text-red-500">*</span>
             </label>
             <span
               className={`text-xs ${
@@ -180,8 +182,8 @@ export default function Feedback({ setIsComment, isComment }) {
             name="comment"
             value={formData.comment}
             onChange={handleChange}
-            placeholder="What are your thoughts?"
-            className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+            placeholder="Write your feedback about this news..."
+            className={`w-full px-4 py-2.5 text-sm border  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
               errors.comment ? "border-red-300 bg-red-50" : "border-gray-300"
             }`}
             rows="5"
@@ -204,7 +206,7 @@ export default function Feedback({ setIsComment, isComment }) {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full md:w-auto px-6 py-3 text-sm font-medium rounded-lg transition-all ${
+            className={`w-full md:w-auto px-6 py-3 text-sm  transition-all ${
               loading
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
@@ -235,7 +237,7 @@ export default function Feedback({ setIsComment, isComment }) {
                 Posting...
               </>
             ) : (
-              "Post Feedback"
+              "Post Comments"
             )}
           </button>
         </div>

@@ -1,3 +1,4 @@
+
 // import React, { useEffect, useState } from "react";
 // import { useLocation } from "react-router-dom";
 
@@ -19,6 +20,8 @@
 //   GetRightBottomAds,
 // } from "../../../api";
 // import { useSettingsContext } from "../../context/SettingsContext";
+// import MobileFrame from "./shorts/MobileFrame";
+// import AppDownloadCard from "./AppDownloadCard";
 
 // function RightHome() {
 //   const { pathname } = useLocation();
@@ -28,6 +31,17 @@
 //     bottom: null,
 //   });
 
+//   const { getSettingStatus } = useSettingsContext();
+
+//   const isHoroscopeEnabled = getSettingStatus("Horoscope");
+//   const isLiveStreamingEnabled = getSettingStatus("Live Streaming");
+//   const isQuizEnabled = getSettingStatus("Quiz Polls");
+//   const isSportsEnabled = getSettingStatus("Sports");
+//   const isStockEnabled = getSettingStatus("Stock");
+//   const isAds = getSettingStatus("In Web Ads");
+//   const isWhatsAppTelegramEnabled = getSettingStatus(
+//     "Whats App & Telegram Button"
+//   );
 //   useEffect(() => {
 //     const loadAds = async () => {
 //       try {
@@ -38,9 +52,9 @@
 //         ]);
 
 //         setAds({
-//           top: topRes?.data?.response?.top_banner || null,
-//           main: mainRes?.data?.response?.top_banner || null,
-//           bottom: bottomRes?.data?.response?.top_banner || null,
+//           top: topRes?.data?.response?.top_banner ?? null,
+//           main: mainRes?.data?.response?.main_banner ?? null,
+//           bottom: bottomRes?.data?.response?.bottom_banner ?? null,
 //         });
 //       } catch (error) {
 //         console.error("Error loading ads:", error);
@@ -49,35 +63,49 @@
 
 //     loadAds();
 //   }, []);
-//   const { getSettingStatus } = useSettingsContext();
-//   const isHoroscopeEnabled = getSettingStatus("Hororscope");
-//   const isLiveStreamingEnabled = getSettingStatus("Live Streaming");
-//   const isQuizEnabled = getSettingStatus("Quiz Polls");
-//   const isSportsEnabled = getSettingStatus("Sports");
-//   const isStockEnabled = getSettingStatus("Stock");
-//   const isWhatsAppTelegramEnabled = getSettingStatus(
-//     "Whats App & Telegram Button"
-//   );
+
 //   return (
-//     <div>
-//       {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
-//       <OwnState />
-//       <AddRightHome1 adsData={ads.top} text="top" />
-//       <Trending />
-//       {isSportsEnabled && <LiveCricket />}
-//       <Shorts />
-//       <AddRightHome1 adsData={ads.main} text={"main"} />
-//       {isHoroscopeEnabled && <Rashiphal />}
-//       {isWhatsAppTelegramEnabled && <JoinChannels />}
-//       {isStockEnabled && <StockInfo />}
-//       {isQuizEnabled && <PollWidget />}
-//       <WeatherWidget />
-//       <AddRightHome1 adsData={ads.bottom} text="bottom" />
+//     <div className="">
+//       <div className="">
+//         {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
+
+//         <OwnState />
+
+//         {/* <span className="md:flex hidden">
+//         <AddRightHome1 adsData={ads.top} text="top" />
+
+// </span> */}
+//         <Trending />
+
+//         {!isSportsEnabled && <LiveCricket />}
+
+//         <Shorts />
+
+//         <span className="md:flex hidden">
+//           <AddRightHome1 adsData={ads.main} text="main" className="mt-[9px]" />
+//         </span>
+//         {isHoroscopeEnabled && <Rashiphal />}
+
+//         <span className="md:flex hidden">
+//           {!isWhatsAppTelegramEnabled && <JoinChannels />}
+//         </span>
+
+//         {!isStockEnabled && <StockInfo />}
+//         <AppDownloadCard />
+
+//         {!isQuizEnabled && <PollWidget />}
+
+//         <WeatherWidget />
+//         <MobileFrame />
+//         <AddRightHome1 adsData={ads.bottom} text="bottom" />
+//       </div>
 //     </div>
 //   );
 // }
 
-// export default React.Memo(RightHome);
+// export default React.memo(RightHome);
+
+
 
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -93,6 +121,8 @@ import { PollWidget } from "./poll/PollWidget";
 import { WeatherWidget } from "./weather/WeatherWidget";
 import StockInfo from "./stockmarcket/StockInfo";
 import Rashiphal from "./Rashiphal/Rashiphal";
+import MobileFrame from "./shorts/MobileFrame";
+import AppDownloadCard from "./AppDownloadCard";
 
 import {
   GetRightTopAds,
@@ -100,7 +130,6 @@ import {
   GetRightBottomAds,
 } from "../../../api";
 import { useSettingsContext } from "../../context/SettingsContext";
-import MobileFrame from "./shorts/MobileFrame";
 
 function RightHome() {
   const { pathname } = useLocation();
@@ -110,8 +139,27 @@ function RightHome() {
     bottom: null,
   });
 
+  const { getSettingStatus } = useSettingsContext();
+
+  const isHoroscopeEnabled = getSettingStatus("Horoscope");
+  const isLiveStreamingEnabled = getSettingStatus("Live Streaming");
+  const isQuizEnabled = getSettingStatus("Quiz Polls");
+  const isSportsEnabled = getSettingStatus("Sports");
+  const isStockEnabled = getSettingStatus("Stock");
+  const isAds = getSettingStatus("In Web Ads");
+  const isWhatsAppTelegramEnabled = getSettingStatus(
+    "Whats App & Telegram Button"
+  );
+
+  // ✅ Detect iPad
+
+ 
+
+  // ✅ Only call ads API if it's iPad
   useEffect(() => {
     const loadAds = async () => {
+      if (!isAds || !isAds) return; // skip ads if not iPad or ads disabled
+
       try {
         const [topRes, mainRes, bottomRes] = await Promise.all([
           GetRightTopAds(),
@@ -130,52 +178,35 @@ function RightHome() {
     };
 
     loadAds();
-  }, []);
-
-  const { getSettingStatus } = useSettingsContext();
-
-  const isHoroscopeEnabled = getSettingStatus("Horoscope");
-  const isLiveStreamingEnabled = getSettingStatus("Live Streaming");
-  const isQuizEnabled = getSettingStatus("Quiz Polls");
-  const isSportsEnabled = getSettingStatus("Sports");
-  const isStockEnabled = getSettingStatus("Stock");
-  const isWhatsAppTelegramEnabled = getSettingStatus(
-    "Whats App & Telegram Button"
-  );
+  }, [isAds, isAds]);
 
   return (
-    <div className="">
-      <div className="">
-        {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
+    <div>
+      {pathname === "/" && isLiveStreamingEnabled && <LiveTv />}
+      <OwnState />
 
-        <OwnState />
+      {/* ✅ Ads will only appear if iPad */}
+      {isAds && <AddRightHome1 adsData={ads.top} text="top" />}
 
-<span className="md:flex hidden">
-        <AddRightHome1 adsData={ads.top} text="top" />
+      <Trending />
 
-</span>
-        <Trending />
+      {!isSportsEnabled && <LiveCricket />}
+      <Shorts />
 
-        {!isSportsEnabled && <LiveCricket />}
+      {isAds && <AddRightHome1 adsData={ads.main} text="main" />}
+      {isHoroscopeEnabled && <Rashiphal />}
 
-        <Shorts />
+      {isAds && !isWhatsAppTelegramEnabled && <JoinChannels />}
 
-<span className="md:flex hidden">
-        <AddRightHome1 adsData={ads.main} text="main" className="mt-[9px]" />
+      {!isStockEnabled && <StockInfo />}
+      <AppDownloadCard />
 
-</span>
-        {isHoroscopeEnabled && <Rashiphal />}
+      {!isQuizEnabled && <PollWidget />}
 
-        <span className="md:flex hidden">{!isWhatsAppTelegramEnabled && <JoinChannels />}</span>
+      <WeatherWidget />
+      <MobileFrame />
 
-        {!isStockEnabled && <StockInfo />}
-
-        {!isQuizEnabled && <PollWidget />}
-
-        <WeatherWidget />
-        <MobileFrame />
-        <AddRightHome1 adsData={ads.bottom} text="bottom" />
-      </div>
+      {isAds && <AddRightHome1 adsData={ads.bottom} text="bottom" />}
     </div>
   );
 }

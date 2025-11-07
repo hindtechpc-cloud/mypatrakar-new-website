@@ -5,6 +5,7 @@ import SocialIcons from "./SocialIcons";
 import { useSettingsContext } from "../context/SettingsContext";
 import { useWebThemeContext } from "../context/WebThemeContext";
 import { loadGoogleTranslate, translatePageTo } from "../utils/loadGoogleTranslate";
+import LiveDateTime from "../navigation/LiveDateTime";
 
 const languages = [
   { code: "hi", label: "हिंदी" },
@@ -63,40 +64,41 @@ useEffect(() => {
 
   return (
     <header
-      className="w-full text-white py-2 px-4 shadow-lg sticky top-0 z-50 transition-all duration-300 mb-5"
+      className="md:block hidden w-full text-white py-2 px-4 shadow-lg sticky top-0 z-50 transition-all duration-300 "
       style={{ backgroundColor: headerBgColor }}
     >
-      <div className="max-w-7xl mx-auto">
-        {isInfoPage && (
-          <div className="flex justify-between items-center mb-3">
+      <div className="max-w-7xl mx-auto  ">
+    
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+              {isInfoPage && (
+          <div className="flex justify-between items-center">
             <Link
               to="/"
               className="transition-transform hover:scale-105 duration-200"
             >
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-md">
+              <div className="w-16 h-16  rounded-full flex items-center justify-centershadow-md">
                 <img
-                  src={logo1}
+                  src={webTheme["web-logo"]}
                   alt="Icon Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
             </Link>
-            <Link
+            {/* <Link
               to="/"
               className="transition-transform hover:scale-105 duration-200"
             >
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center p-2 shadow-md">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center  shadow-md">
                 <img
                   src={webTheme["web-logo"]}
                   alt="Main Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
-            </Link>
+            </Link> */}
           </div>
         )}
-
-        <div className="flex flex-col md:flex-row justify-between items-center gap-3">
           {/* 🌐 Language Selection */}
           <div className="relative w-full md:w-auto">
             <div className="md:hidden w-full">
@@ -173,6 +175,7 @@ useEffect(() => {
               ))}
             </div>
           </div>
+              <LiveDateTime />
 
           {/* 📱 Social Icons + Contact */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">

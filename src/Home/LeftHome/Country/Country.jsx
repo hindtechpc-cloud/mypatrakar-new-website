@@ -141,6 +141,7 @@ const Country = ({
                 category={article?.is_breaking === 1 ? "Breaking" : ""}
                 imageUrl={article?.news_img_url}
                 index={index}
+                category_id={category_id}
               />
             ))
           ) : (
@@ -162,7 +163,7 @@ const Country = ({
 };
 
 // Animated article card
-const ArticleCard = ({ article, category, imageUrl, index }) => {
+const ArticleCard = ({ article, category, imageUrl, index,category_id }) => {
   return (
     <motion.div
       className="flex w-full transition-transform rounded-xl"
@@ -181,6 +182,7 @@ const ArticleCard = ({ article, category, imageUrl, index }) => {
         description={article.news_description_html}
         newsId={article.news_id}
         maxLength={100}
+        category_id={category_id}
         news={{
           title: article.news_headline,
           urlToImage: imageUrl,

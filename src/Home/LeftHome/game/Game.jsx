@@ -133,6 +133,7 @@ const Game = ({
                   article={article}
                   category={article?.is_breaking == 1 ? "Breaking" : ""}
                   imageUrl={article?.news_img_url}
+                  category_id={category_id}
                 />
               ))
             : articles
@@ -144,6 +145,7 @@ const Game = ({
                     article={article}
                     category={article?.is_breaking == 1 ? "Breaking" : ""}
                     imageUrl={article?.news_img_url}
+                    category_id={category_id}
                   />
                 ))}
         </div>
@@ -152,7 +154,7 @@ const Game = ({
   );
 };
 
-const ArticleCard = ({ article, category, imageUrl, index }) => {
+const ArticleCard = ({ article, category, imageUrl, index,category_id }) => {
   return (
     <motion.div
       className="flex w-full transition-transform rounded-xl md:mb-2"
@@ -171,6 +173,7 @@ const ArticleCard = ({ article, category, imageUrl, index }) => {
         description={article.news_description_html}
         newsId={article.news_id}
         maxLength={100}
+        category_id={category_id}
         news={{
           title: article.news_headline,
           urlToImage: imageUrl,
