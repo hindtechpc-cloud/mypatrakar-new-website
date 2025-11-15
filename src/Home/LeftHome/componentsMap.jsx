@@ -9,13 +9,12 @@ import Country from "./Country/Country";
 import Election from "./election/Election";
 import Entertain from "./entertain/Entertain";
 
-
 export const componentsMap = {
-  "MYFS28052025001": TopNews,
-  "MYFS28052025002": OwnState,
-  3: State,
-  "MYFS28052025004": Game,
-  "MYFS28052025005": Entertain,
-  "MYFS28052025003": Country,
+  MYFS13112025002: TopNews,
+  MYFS28052025005: OwnState,
+  MYFS13112025010: OwnState,
+  MYFS13112025008: Game,
+  MYFS28052025004: Entertain,
+  MYFS28052025006: Country,
   7: Election,
 };

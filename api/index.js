@@ -97,215 +97,213 @@ Route::post('menu-with-sub-nav-list',[WebMenuManagementController::class, 'menuW
 });
 });
  */
-const PORTAL_ID="MYAWR241227001"
+const PORTAL_ID = "MYAWR241227001";
 
 const API = axios.create({
   // baseURL: "/api",  // Correct concatenation
-  baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}`
+  baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}`,
 });
 
 // get api// Base configuration
 const API_CONFIG = {
   headers: {
-    'X-Custom-Token': 'aaaaa'
-  }
+    "X-Custom-Token": "aaaaa",
+  },
 };
 
 // Helper functions
 const getRequest = (endpoint, params = {}) => {
   return API.get(endpoint, {
     params,
-    ...API_CONFIG
+    ...API_CONFIG,
   });
 };
 
 const postRequest = (endpoint, data = {}, params = {}) => {
   return API.post(endpoint, data, {
     params,
-    ...API_CONFIG
+    ...API_CONFIG,
   });
 };
-// featured section 
-export const GetFeaturedSection = (portal_id) =>
-  postRequest('/featured-section', { portal_id:PORTAL_ID });
-export const featuredmenulist = (portal_id) =>
-  postRequest('/featured-menu-list', { portal_id:PORTAL_ID });
+// featured section
+export const GetFeaturedSection = () =>
+  postRequest("/featured-section", { portal_id: PORTAL_ID });
+export const featuredmenulist = () =>
+  postRequest("/featured-menu-list", { portal_id: PORTAL_ID });
 
-export const GetFeaturedNews = (portal_id) =>
-  postRequest('/featured-news', { secttion_id:PORTAL_ID });
+export const GetFeaturedNews = () =>
+  postRequest("/featured-news", { secttion_id: PORTAL_ID });
 
 // Auth API
-export const GetUserAuthentication = (data) => postRequest('/auth-user', data);
+export const GetUserAuthentication = (data) => postRequest("/auth-user", data);
 
 // Utils APIs
-export const GetOwnerSocialLinks = (portal_id) =>
-  getRequest('/social-media', { portal_id:PORTAL_ID });
+export const GetOwnerSocialLinks = () =>
+  getRequest("/social-media", { portal_id: PORTAL_ID });
 
-export const GetWebTheme = (portal_id) =>
-  getRequest('/web-theme', { portal_id:PORTAL_ID });
+export const GetWebTheme = () =>
+  getRequest("/web-theme", { portal_id: PORTAL_ID });
 
 // Navigation Menu
-export const menuWithSubNavMenuList = (portal_id) =>
-  postRequest('/menu-with-sub-nav-list', { portal_id:PORTAL_ID });
+export const menuWithSubNavMenuList = () =>
+  postRequest("/menu-with-sub-nav-list", { portal_id: PORTAL_ID });
 
 // News Management
 
-export const getBreakingNews = (portal_id) =>
-  postRequest('/breaking-news', { portal_id:PORTAL_ID });
+export const getBreakingNews = () =>
+  postRequest("/breaking-news", { portal_id: PORTAL_ID });
 
 export const loadNewsByCategory = (category) =>
-  postRequest('/news-by-category', { category });
+  postRequest("/news-by-category", { category });
 
 export const loadNewsBySubCategory = (sub_category) =>
-  postRequest('/news-by-subcategory', { sub_category });
+  postRequest("/news-by-subcategory", { sub_category });
 
-export const newsRoadMapBottom = (portal_id) =>
-  API.get('/news-road-map', {
-    params: { portal_id:PORTAL_ID },
-    ...API_CONFIG
+export const newsRoadMapBottom = () =>
+  API.get("/news-road-map", {
+    params: { portal_id: PORTAL_ID },
+    ...API_CONFIG,
   });
 
-export const GetShortsNews = (portal_id) =>
-  postRequest('/short-news', {}, { portal_id:PORTAL_ID });
+export const GetShortsNews = () =>
+  postRequest("/short-news", {}, { portal_id: PORTAL_ID });
 
-export const GetShortsNewsDetails = (portal_id) =>
-  postRequest('/short-news-details', { short_id: portal_id });
+export const GetShortsNewsDetails = (short_id, ip) =>
+  postRequest("/short-news-details", { short_id: short_id, ip: ip });
 
 export const SubmitShortsClap = (short_id, user_id) =>
-  postRequest('/submit-clap', { shorts_id: short_id, user_id });
+  postRequest("/submit-clap", { shorts_id: short_id, user_id });
 
 export const CheckShortsClapped = (short_id, user_id) =>
-  postRequest('/check-clap-status', { shorts_id: short_id, user_id });
+  postRequest("/check-clap-status", { shorts_id: short_id, user_id });
 // check-clap-status
 
-
 // News Categories
-export const GetNewsCategories = (portal_id) =>
-  postRequest('/category-list', {}, { portal_id:PORTAL_ID });
+export const GetNewsCategories = () =>
+  postRequest("/category-list", {}, { portal_id: PORTAL_ID });
 
 export const GetNewsSubcategories = (portal_id, category_id) =>
-  postRequest('/sub-category-by-list', { category_id }, { portal_id:PORTAL_ID });
+  postRequest(
+    "/sub-category-by-list",
+    { category_id },
+    { portal_id: PORTAL_ID }
+  );
 
 export const GetNewsById = (newsId, ip) =>
-  postRequest('/news-by-id', { news_id: newsId, ip });
+  postRequest("/news-by-id", { news_id: newsId, ip });
 
-export const LocationList = () =>
-  postRequest('/location-list');
+export const LocationList = () => postRequest("/location-list");
 
 export const NewsSortBy = (portal_id, filter) =>
-  postRequest('/news-by-filter',
-    filter,
-    { portal_id:PORTAL_ID }
-  );
-// export const NewsSortBy = (portal_id, filter) => 
-// postRequest('/news-sort-by-filter', 
-//  filter, 
+  postRequest("/news-by-filter", filter, { portal_id: PORTAL_ID });
+// export const NewsSortBy = (portal_id, filter) =>
+// postRequest('/news-sort-by-filter',
+//  filter,
 //   { portal_id }
 // );
 
 // Comments
-export const SubmitComment = (data) => postRequest('/submit-comment', data);
+export const SubmitComment = (data) => postRequest("/submit-comment", data);
 export const GetCommentsOnNews = (newsId) =>
-  postRequest('/get-comments', { news_id: newsId });
+  postRequest("/get-comments", { news_id: newsId });
 
 export const SubmitCommentsReply = (data) =>
-  postRequest('/submit-comment-reply', data);
+  postRequest("/submit-comment-reply", data);
 
 export const GetCommentsreply = (comment_id) =>
-  postRequest('/get-comment-reply', { comment_id });
+  postRequest("/get-comment-reply", { comment_id });
 
 // Ads
-export const GetTopBannerAds = (portal_id) =>
-  getRequest('/top-banner-ads', { portal_id:PORTAL_ID });
+export const GetTopBannerAds = () =>
+  getRequest("/top-banner-ads", { portal_id: PORTAL_ID });
 
-export const GetMarketPlaceAds = (portal_id) =>
-  getRequest('/marketplace-ads', { portal_id:PORTAL_ID });
+export const GetMarketPlaceAds = () =>
+  getRequest("/marketplace-ads", { portal_id: PORTAL_ID });
 
-export const GetLeftBannerAds = (portal_id) =>
-  getRequest('/left-home-banner-ads', { portal_id:PORTAL_ID });
+export const GetLeftBannerAds = () =>
+  getRequest("/left-home-banner-ads", { portal_id: PORTAL_ID });
 
-export const GetLeftHomeMainAds = (portal_id) =>
-  getRequest('/left-home-main-ads', { portal_id:PORTAL_ID });
+export const GetLeftHomeMainAds = () =>
+  getRequest("/left-home-main-ads", { portal_id: PORTAL_ID });
 
-export const GetSearchPageTopAds = (portal_id) =>
-  getRequest('/search-page-ads', { portal_id:PORTAL_ID });
+export const GetSearchPageTopAds = () =>
+  getRequest("/search-page-ads", { portal_id: PORTAL_ID });
 
-export const GetReadNewsPageTopAds = (portal_id) =>
-  getRequest('/news-read-main-page-ads', { portal_id:PORTAL_ID });
+export const GetReadNewsPageTopAds = () =>
+  getRequest("/news-read-main-page-ads", { portal_id: PORTAL_ID });
 
-export const GetReadNewsPageBottomAds = (portal_id) =>
-  getRequest('/news-read-bottom-ads', { portal_id:PORTAL_ID });
+export const GetReadNewsPageBottomAds = () =>
+  getRequest("/news-read-bottom-ads", { portal_id: PORTAL_ID });
 
-export const GetBottomBannerAds = (portal_id) =>
-  getRequest('/bottom-banner-ads', { portal_id:PORTAL_ID });
+export const GetBottomBannerAds = () =>
+  getRequest("/bottom-banner-ads", { portal_id: PORTAL_ID });
 
-export const GetRightTopAds = (portal_id) =>
-  getRequest('/custom-right-home-main-ads', { portal_id:PORTAL_ID });
+export const GetRightTopAds = () =>
+  getRequest("/custom-right-home-main-ads", { portal_id: PORTAL_ID });
 
-export const GetRightMainAds = (portal_id) =>
-  getRequest('/custom-right-home-main-2-ads', { portal_id:PORTAL_ID });
+export const GetRightMainAds = () =>
+  getRequest("/custom-right-home-main-2-ads", { portal_id: PORTAL_ID });
 
-export const GetRightBottomAds = (portal_id) =>
-  getRequest('/custom-right-home-bottom-ads', { portal_id:PORTAL_ID });
+export const GetRightBottomAds = () =>
+  getRequest("/custom-right-home-bottom-ads", { portal_id: PORTAL_ID });
 
 // Election API
 export const GetElectionYear = (election_poll_id) =>
-  postRequest('/election-years', { election_poll_id });
+  postRequest("/election-years", { election_poll_id });
 
-export const GetElectionPolls = () => getRequest('/election-poll');
+export const GetElectionPolls = () => getRequest("/election-poll");
 //Roadmap
-export const Roadmaps = () => getRequest('/road-map')
+export const Roadmaps = () => getRequest("/road-map");
 export const loadNewsByRoadmapId = (roadmap_id) =>
   getRequest(`/news-road-map?roadmap_id=${roadmap_id}`);
 
 // Horoscope
 export const GetHoroscope = (sign) =>
-  postRequest('/get-daily-horoscope', { zodiac: sign });
+  postRequest("/get-daily-horoscope", { zodiac: sign });
 
 // Live Cricket
 export const GetLiveCrickeScore = (params) =>
-  postRequest('/app/live-cricket', { params });
+  postRequest("/app/live-cricket", { params });
 
 // Stock Market
 export const GetLiveStockMarcket = (params) =>
-  getRequest('/live-stock-marcket', params);
+  getRequest("/live-stock-marcket", params);
 
 // Live YouTube
-export const GetLiveYouTube = () => postRequest('/live-link', {});
+export const GetLiveYouTube = () => postRequest("/live-link", {});
 
 // Polls
-export const getPollsIds = () => postRequest('/poll-category', {});
+export const getPollsIds = () => postRequest("/poll-category", {});
 
 export const getPollByCategoryId = (categoryId) =>
-  postRequest('/poll-questions', { pollcategory_id: categoryId });
+  postRequest("/poll-questions", { pollcategory_id: categoryId });
 
 export const submitVote = (data) =>
-  postRequest('/submit-quiz', {
+  postRequest("/submit-quiz", {
     user_id: data.user_id,
     question_id: data.question_id,
-    option_id: data.option_id
+    option_id: data.option_id,
   });
 
 // Pages
-export const GetAboutUsData = (portal_id) =>
-  getRequest('/page/about-us', { portal_id:PORTAL_ID });
+export const GetAboutUsData = () =>
+  getRequest("/page/about-us", { portal_id: PORTAL_ID });
 
-export const GetPrivacyPolicyData = (portal_id) =>
-  getRequest('/page/privacy-and-policy', { portal_id:PORTAL_ID });
+export const GetPrivacyPolicyData = () =>
+  getRequest("/page/privacy-and-policy", { portal_id: PORTAL_ID });
 
-export const GetTermsAndConditionData = (portal_id) =>
-  getRequest('/page/terms-and-conditions', { portal_id:PORTAL_ID });
+export const GetTermsAndConditionData = () =>
+  getRequest("/page/terms-and-conditions", { portal_id: PORTAL_ID });
 
-export const GetContactData = (portal_id) =>
-  getRequest('/contact-us', { portal_id:PORTAL_ID });
+export const GetContactData = () =>
+  getRequest("/contact-us", { portal_id: PORTAL_ID });
 
-export const GetOurRepoterData = (portal_id) =>
-  getRequest('/contact-us', { portal_id:PORTAL_ID });
+export const GetOurRepoterData = () =>
+  getRequest("/contact-us", { portal_id: PORTAL_ID });
 
-export const AdvertiseWithUsApi = (data) =>
-  postRequest('/raise-query', data);
+export const AdvertiseWithUsApi = (data) => postRequest("/raise-query", data);
 
 // settings
 
-export const getSettings = (portal_id) =>
-  getRequest('/active-services', { portal_id:PORTAL_ID });
+export const getSettings = () =>
+  getRequest("/active-services", { portal_id: PORTAL_ID });

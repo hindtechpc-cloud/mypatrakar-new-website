@@ -8,6 +8,7 @@ import image from "../assets/Ellipse.svg";
 import PropTypes from "prop-types";
 import Loader from "../utils/Loader";
 import { useWebThemeContext } from "../context/WebThemeContext";
+import GoogleLoginCustom from "./GoogleLoginCustom";
 
 const SourceWidget = ({
   className = "",
@@ -83,8 +84,8 @@ const SourceWidget = ({
   };
 
   return (
-    <div className={`${className}`}>
-      <div className="text-center mb-8">
+    <div className={`${className} `}>
+      <div className="text-center mb-6">
         <div className="flex justify-center mb-4">
           <div className="relative">
             <img
@@ -106,16 +107,20 @@ const SourceWidget = ({
             <Loader message="Signing you in..." />
           </div>
         ) : (
-          <GoogleLogin
+                   <GoogleLogin
             onSuccess={handleSuccess}
             onError={handleGoogleError}
-            size="medium"
-            shape="pill"
+            theme="filled_white"
             text="continue_with"
-            theme="filled_red"
+            shape="rectangular"
             width="100%"
             useOneTap
           />
+
+          // <GoogleLoginCustom
+          //   onSuccess={handleSuccess}
+          //   onError={handleGoogleError}
+          // />
         )}
       </div>
 
@@ -141,7 +146,7 @@ const SourceWidget = ({
         </div>
       )}
 
-      <div className="mt-6 text-center md:px-0 px-4">
+      <div className="mt-2 text-center px-4">
         <p className="text-blue-300 text-xs">
           By signing in, you agree to our{" "}
           <a

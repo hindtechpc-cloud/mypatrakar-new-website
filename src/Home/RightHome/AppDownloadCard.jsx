@@ -4,9 +4,13 @@ import { useWebThemeContext } from "../../context/WebThemeContext";
 export default function AppDownloadCard() {
   const {webTheme}=useWebThemeContext();
   return (
-    <div className="mt-4 xl:w-[335px] lg:w-[295px]  flex flex-col items-center justify-center  text-white rounded-2xl p-8 shadow-lg w-full  mx-auto" style={{
-      background:webTheme['bg-color']
-    }}>
+    <div className="mt-4 xl:w-[335px] lg:w-[295px]  flex flex-col items-center justify-center bg-black  text-white rounded-2xl p-8 shadow-lg w-full  mx-auto"
+    //  style={{
+    //   background:webTheme['bg-color']
+    // }}
+
+
+    >
       {/* Logo */}
       <div className="mb-4">
         <img

@@ -13,13 +13,13 @@ export default function Shorts() {
     nextArticle,
     prevArticle,
   } = useShorts();
-
+console.log(articles)
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="text-center">
-            <ImSpinner2 className="animate-spin text-red-500" size={50} />
+          <div className="text-center bg-gray-400 h-[600px]">
+         
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function Shorts() {
   return (
     <>
       {articles.length > 0 && (
-        <div className="mt-[9px] xl:w-[335px] lg:w-[295px] w-[335px]  mx-auto">
+        <div className="mt-[px] xl:w-[335px] lg:w-[295px] w-[335px]  mx-auto ">
           <Header text="Shorts" />
 
           <div className="flex items-center justify-center mx-auto lg:ml-5 ml-2.5">

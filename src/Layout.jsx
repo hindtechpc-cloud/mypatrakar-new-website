@@ -137,7 +137,7 @@ function Layout() {
         )}
         <Route path="/our-reporters" element={<OurReporters />} />
         <Route path="/terms-and-conditions" element={<TermsAndCondition />} />
-        <Route path="/read-news/:type/:newsId" element={<ReadNews />} />
+        {/* <Route path="/read-news/:type/:newsId" element={<ReadNews />} /> */}
         <Route path="/shorts" element={<ShortsPages />} />
         <Route path="/search" element={<Search />} />
         <Route path="/market-place/:AdsId" element={<AdDetailPage />} />

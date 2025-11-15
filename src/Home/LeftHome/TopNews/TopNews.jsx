@@ -1,164 +1,94 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
-import PropTypes from "prop-types";
-import Menu from "../shared/MenuBar";
+
+import { useQuery } from "@tanstack/react-query";
+import { loadNewsByCategory } from "../../../../api";
+import TopnewsSkeleton from "./TopnewsSkeleton";
+import EmptyCard from "../shared/EmptyCard";
 import NewsCard from "../shared/NewsCard";
 import TopNewsItems from "./TopNewsItems";
-import { loadNewsByCategory } from "../../../../api";
-import { AdCardSkeleton } from "../../market/components/Skeleton";
-import EmptyCard from "../shared/EmptyCard";
-import TopnewsSkeleton from "./TopnewsSkeleton";
+import Menu from "../shared/MenuBar";
 import { motion } from "framer-motion";
 
-const TopNews = ({ category_id, section_title }) => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [articlList, setArticlList] = useState([]);
-
-  // ✅ Ref to avoid duplicate API calls
-  const fetchedRef = useRef(false);
-
-  const fetchNews = useCallback(async () => {
-    if (fetchedRef.current) return; // already fetched -> skip
-    fetchedRef.current = true;
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      // ✅ cache check
-      const cacheKey = `news_${category_id}`;
-      const cachedData = sessionStorage.getItem(cacheKey);
-      if (cachedData) {
-        setArticles(JSON.parse(cachedData));
-        setLoading(false);
-        return;
-      }
-
+export default function TopNews({ category_id, section_title }) {
+  const {
+    data: articles = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["news", category_id], // ✅ unique cache key
+    queryFn: async () => {
       const { data } = await loadNewsByCategory(category_id);
-      const news = data?.response || [];
-      setArticles(news);
+      return data?.response || [];
+    },
+    staleTime: 1000 * 60 * 10, // ✅ 10 mins cache (industry default)
+    cacheTime: 1000 * 60 * 30, // ✅ keep cache for 30 mins
+    refetchOnWindowFocus: false, // ✅ prevent unwanted reloads
+  });
+console.log(error)
+  const featuredArticle = articles[0];
 
-      // ✅ save to cache (sessionStorage)
-      sessionStorage.setItem(cacheKey, JSON.stringify(news));
-    } catch (err) {
-      console.log("News fetch error:", err);
-      setError(err.response?.message || "Failed to load news");
-    } finally {
-      setLoading(false);
-    }
-  }, [category_id]);
+  if (isLoading) return <TopnewsSkeleton />;
 
-  useEffect(() => {
-    fetchNews();
-  }, [fetchNews]);
-
-  const featuredArticle = articlList.length > 0 ? articlList[0] : articles[0];
-  if (loading) {
-    return <TopnewsSkeleton />;
-  }
-
-  if (error) {
+  if (isError)
     return (
-     <div>
-            <Menu
-            menuText={section_title }
-            menu={[]}
-            setArticlList={setArticlList}
-            articles={articles}
-            totalArticles={articles.length}
-          />
-           <div className="flex flex-col items-center justify-center mx-auto my-5">
-             <p className="text-red-600  text-center my-4">{error}  </p>
-            <button
-              onClick={() => fetchNews(true)}
-              className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
-            >
-              Retry
-            </button>
-           </div>
-          </div>
+      <div>
+        <Menu menuText={section_title} menu={[]} />
+        <div className="flex flex-col items-center justify-center mx-auto my-5">
+          {/* <p className="text-red-600 text-center my-4">{error.message}</p> */}
+          <button
+            onClick={() => refetch()}
+            className="px-5 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
     );
-  }
+
+  if (!articles.length)
+    return <EmptyCard>Nothing to show in {section_title}</EmptyCard>;
+
   return (
     <div>
       <Menu
         menuText={section_title || "Game"}
         menu={[]}
-        setArticlList={setArticlList}
         articles={articles}
         totalArticles={articles.length}
       />
-
-      {/* ✅ Reload Button if error */}
-      {/* {error && (
-        <div className="w-full flex items-center justify-center my-3">
-          <button
-            onClick={() => {
-              fetchedRef.current = false; // reset ref so fetch works again
-              fetchNews();
-            }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
-          >
-            Reload News
-          </button>
-        </div>
-      )} */}
-
-      {/* {loading && <TopnewsSkeleton />} */}
-
-      {!loading && !articles.length && !error && (
-        <EmptyCard> Nothing to show in {section_title}</EmptyCard>
-      )}
-
-      {!loading && articles.length > 0 && !error && (
-        <div className="w-full mt-[12px]">
-          {/* Featured Article */}
-          <motion.div
-            className="w-full flex items-start justify-start"
-            initial={{ x: 50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -50, opacity: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <NewsCard
-              className="md:flex flex-1 w-full items-start justify-start gap-[27px] mx-auto"
-              classNameToImage="md:w-[365px] md:h-[205px] w-full sm:h-[365px] h-[228px] h-[] items-end justify-end relative rounded"
-              image={featuredArticle?.news_img_url}
-              ctaText={featuredArticle?.is_breaking == 1 ? "Breaking" : ""}
-              classNameForContent="md:w-1/2 w-full md:mt-0 mt-[4px] flex-1 text-[20px] flex flex-col justify-between"
-              title={featuredArticle?.news_headline}
-              description={featuredArticle?.news_description_html}
-              newsId={featuredArticle?.news_id}
-              maxLength={140}
-              category_id={category_id}
-              news={{
-                title: featuredArticle?.news_headline,
-                urlToImage: featuredArticle?.news_img_url,
-                content: featuredArticle?.news_description_html,
-              }}
-            />
-          </motion.div>
-
-          {/* News List */}
-          <div className="w-full md:mt-[23px] mb-[4px]">
-            <TopNewsItems
-              topNewsItems={articlList.length > 0 ? articlList : articles}
-              className="grid grid-cols-1 sm:grid-cols-2 xl:gap-[35px] md:gap-[25px] gap-[17px]"
-              maxLength={60}
-              start={1}
-              category_id={category_id}
-            />
-          </div>
-        </div>
-      )}
+      <motion.div
+        className="w-full flex items-start justify-start my-2"
+        initial={{ x: 50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: -50, opacity: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <NewsCard
+          className="md:flex flex-1 w-full items-start justify-start gap-[27px] mx-auto"
+          classNameToImage="md:w-[365px] md:h-[205px] w-full sm:h-[365px] h-[228px] h-[] items-end justify-end relative rounded"
+          image={featuredArticle?.news_img_url}
+          ctaText={featuredArticle?.is_breaking == 1 ? "Breaking" : ""}
+          classNameForContent="md:w-1/2 w-full md:mt-0 mt-[4px] flex-1 text-[20px] flex flex-col justify-between"
+          title={featuredArticle?.news_headline}
+          description={featuredArticle?.news_description_html}
+          newsId={featuredArticle?.news_id}
+          maxLength={140}
+          category_id={category_id}
+          news={{
+            title: featuredArticle?.news_headline,
+            urlToImage: featuredArticle?.news_img_url,
+            content: featuredArticle?.news_description_html,
+          }}
+        />
+      </motion.div>
+      <TopNewsItems
+        topNewsItems={articles}
+        className="grid grid-cols-1 sm:grid-cols-2 xl:gap-[35px] md:gap-[25px] gap-[17px]"
+        maxLength={60}
+        start={1}
+        category_id={category_id}
+      />
     </div>
   );
-};
-
-TopNews.propTypes = {
-  category_id: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
-};
-
-export default React.memo(TopNews);
+}

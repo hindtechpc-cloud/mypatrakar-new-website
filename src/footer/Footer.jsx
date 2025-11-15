@@ -78,7 +78,7 @@ export default function Footer() {
             <div className="md:col-span-2 lg:col-span-1">
               <SourceWidget
                 setShowLoginOverlay={setShowLoginOverlay}
-                className="bg-white/10 backdrop-blur-sm rounded-xl py-6 w-full md:w-[300px]  h-[330px] shadow-lg"
+                className="bg-white/10 backdrop-blur-sm rounded-md py-6 w-full md:w-[300px]  h-[330px] shadow-lg"
               />
             </div>
           </div>

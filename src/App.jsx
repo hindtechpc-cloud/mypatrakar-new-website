@@ -85,7 +85,7 @@ useEffect(() => {
 }, []);
 
   useEffect(() => {
-    document.title = webTheme["web_title"];
+    document.title = webTheme["web_title"]||"Loading...";
 
     // ✅ Correct way to access keys with hyphen
     if (webTheme["web-logo"]) {

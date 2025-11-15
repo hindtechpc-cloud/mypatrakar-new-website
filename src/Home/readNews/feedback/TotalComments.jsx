@@ -170,13 +170,16 @@ import { useState, useEffect } from "react";
 import { GetCommentsOnNews } from "../../../../api";
 import ReplyOnComment from "./ReplyOnCommnet";
 import TotalreplyOnComment from "./TotalReplyOnComment";
-import { useParams } from "react-router-dom";
+import { useMatch, useParams } from "react-router-dom";
 import { decryptData } from "../../../utils/cryptoHelper";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
 export default function TotalCommnets({ isComment }) {
-  const { newsId } = useParams();
+  const match = useMatch("/read-news/:type/:newsId");
+  // const type = match?.params?.type;
+  const newsId = match?.params?.newsId;
+
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -253,13 +256,13 @@ export default function TotalCommnets({ isComment }) {
   }
 
   return (
-    <div className="space-y-2 mt-10">
+    <div className="space-y-2 mt-10 mb-5">
       <h3 className="text text-gray-800 border-b pb-2">
         Comments ({comments.length})
       </h3>
 
       {comments.length === 0 ? (
-        <p className="text-gray-500 text-center py-2">
+        <p className="text-gray-500 text-center py-2 border-b">
           No comments yet. Be the first to comment!
         </p>
       ) : (

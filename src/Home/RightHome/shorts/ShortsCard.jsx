@@ -16,7 +16,11 @@ const ShortsCard = ({ short, user }) => {
 
   const handleNewsContent = () => {
     setNews(short);
-    navigate(`/read-news/shorts/${encryptData(short.short_news_id)}`);
+    navigate(`/read-news/shorts/${encryptData(short.short_news_id)}`,{
+      state:{
+        category_id:"",
+      }
+    });
   };
 
   const handleShare = async () => {
@@ -58,7 +62,7 @@ const ShortsCard = ({ short, user }) => {
         <img
           src={webTheme["web-logo"]||defaultLogo}
           alt="Source"
-          className="w-10 h-10 rounded-full object-cover absolute m-3 z-10 border-2 border-white shadow-sm"
+          className="w-[65px] h-[65px] rounded-full object-cover absolute  z-10  border-white shadow-sm"
         />
         <img
           src={`${import.meta.env.VITE_REACT_APP_API_URL_Image}${short.news_img}`}

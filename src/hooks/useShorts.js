@@ -36,7 +36,7 @@ export const useShorts = () => {
 
       if (forceRefresh) setRefreshing(true);
 
-      const res = await GetShortsNews("MYAWR241227001");
+      const res = await GetShortsNews();
       const shortsData = res?.data?.response?.news || [];
 
       if (shortsData.length > 0) {

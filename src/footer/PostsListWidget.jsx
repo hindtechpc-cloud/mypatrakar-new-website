@@ -64,7 +64,7 @@ const {webTheme}=useWebThemeContext();
 
   if (loading) {
     return (
-      <div className="w-[300px] bg-gradient-to-br from-blue-900/70 to-blue-800/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-600/30 shadow-2xl min-h-[300px]">
+      <div className="w-[300px] bg-gradient-to-br from-blue-900/70 to-blue-800/50 backdrop-blur-sm rounded-md p-6 border border-blue-600/30 shadow-2xl min-h-[300px]">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold font-sans" style={{
             color:webTheme["bg-color"]
@@ -82,7 +82,7 @@ const {webTheme}=useWebThemeContext();
 
   if (error) {
     return (
-      <div className="w-[300px] bg-gradient-to-br from-red-900/20 to-blue-900/30 backdrop-blur-sm rounded-2xl p-6 border border-red-500/30 shadow-2xl h-auto">
+      <div className="w-[300px] bg-gradient-to-br from-red-900/20 to-blue-900/30 backdrop-blur-sm rounded-md p-6 border border-red-500/30 shadow-2xl h-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-yellow-400 font-sans">
             #BS_Exclusive
@@ -111,7 +111,7 @@ const {webTheme}=useWebThemeContext();
   }
 
   return (
-    <div className="w-[300px] bg-gradient-to-br from-blue-900/70 to-blue-800/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-600/30 shadow-2xl sm:w-[300px] h-[330px]">
+    <div className="w-[300px] bg-gradient-to-br from-blue-900/70 to-blue-800/50 backdrop-blur-sm rounded-md p-6 border border-blue-600/30 shadow-2xl sm:w-[300px] h-[330px]">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold  font-sans" style={{
             color:webTheme["bg-color"]

@@ -241,7 +241,7 @@ function LiveTv() {
   const [isLive, setIsLive] = useState();
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState([]);
-  const [error,setError]=useState(false);
+  const [error, setError] = useState(false);
 
   const { webTheme } = useWebThemeContext();
   const { socialLinks = [] } = useContext(SocialMediaContext);
@@ -313,92 +313,96 @@ function LiveTv() {
 
   return (
     <div className="font-sans xl:w-[335px] lg:w-[295px] w-full mx-auto">
-      <div className="  rounded border-0 h-90">
-        {/* Header */}
-        <div
-          className="text-white py-2 px-5 relative"
-          style={{
-            background:
-              webTheme["bg-color"] === "#fff" ? "#000" : webTheme["bg-color"],
-          }}
-        >
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center">
-              <div className="bg-white p-2 rounded-full mr-3">
-                <BsYoutube className="text-2xl text-red-600" />
+      {isLive == 1 ||
+        (videos.length > 0 && (
+          <div className="  rounded border-0 h-90">
+            {/* Header */}
+            <div
+              className="text-white py-2 px-5 relative"
+              style={{
+                background:
+                  webTheme["bg-color"] === "#fff"
+                    ? "#000"
+                    : webTheme["bg-color"],
+              }}
+            >
+              <div className="flex items-center justify-between relative z-10">
+                <div className="flex items-center">
+                  <div className="bg-white p-2 rounded-full mr-3">
+                    <BsYoutube className="text-2xl text-red-600" />
+                  </div>
+                  {isLive === 1 ? (
+                    <p className="text-[16px] font-semibold">Live Stream</p>
+                  ) : (
+                    <p className="text-[16px] font-semibold">Recent Videos</p>
+                  )}
+                </div>
+                {isLive === 1 && (
+                  <div className="flex items-center bg-red-800 px-3 py-1 rounded-full">
+                    <div className="h-2 w-2 bg-red-300 rounded-full animate-pulse mr-2"></div>
+                    <span className="text-xs font-semibold">LIVE</span>
+                  </div>
+                )}
               </div>
-              {isLive === 1 ? (
-                <p className="text-[16px] font-semibold">Live Stream</p>
+            </div>
+
+            {/* Content */}
+            <div className="p-2">
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-10">
+                  <div className="w-16 h-16 border-4 border-red-100 border-t-red-600 rounded-full animate-spin mb-4"></div>
+                  <p className="text-gray-500 font-medium">
+                    Checking live status...
+                  </p>
+                </div>
+              ) : isLive === 1 ? (
+                // ✅ Live iframe
+                <div className="rounded overflow-hidden shadow-lg relative">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={liveUrl}
+                    title="YouTube Live Stream"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="rounded h-72"
+                  />
+                  <div className="absolute top-3 right-3 bg-red-600 text-white text-xs px-2 py-1 rounded-full flex items-center">
+                    <BsBroadcast className="mr-1" />
+                    <span>Live</span>
+                  </div>
+                </div>
               ) : (
-                <p className="text-[16px] font-semibold">Recent Videos</p>
-              )}
-            </div>
-            {isLive === 1 && (
-              <div className="flex items-center bg-red-800 px-3 py-1 rounded-full">
-                <div className="h-2 w-2 bg-red-300 rounded-full animate-pulse mr-2"></div>
-                <span className="text-xs font-semibold">LIVE</span>
-              </div>
-            )}
-          </div>
-        </div>
+                // ✅ Vertical scroll video cards (YouTube style)
+                <div className="max-h-[600px] overflow-y-auto space-y-3 scrollbar-hide">
+                  {videos.map((video) => (
+                    <div
+                      key={video.id}
+                      className="min-w-[315px] max-w-[320px] bg-gray-50 rounded-lg shadow hover:shadow-md transition cursor-pointer relative overflow-hidden"
+                    >
+                      <a
+                        href={`https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <div className="relative">
+                          <img
+                            src={video.snippet.thumbnails.medium.url}
+                            alt={video.snippet.title}
+                            className="rounded-lg w-full h-56 object-cover"
+                          />
 
-        {/* Content */}
-        <div className="p-2">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-10">
-              <div className="w-16 h-16 border-4 border-red-100 border-t-red-600 rounded-full animate-spin mb-4"></div>
-              <p className="text-gray-500 font-medium">
-                Checking live status...
-              </p>
-            </div>
-          ) : isLive === 1 ? (
-            // ✅ Live iframe
-            <div className="rounded overflow-hidden shadow-lg relative">
-              <iframe
-                width="100%"
-                height="100%"
-                src={liveUrl}
-                title="YouTube Live Stream"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="rounded h-72"
-              />
-              <div className="absolute top-3 right-3 bg-red-600 text-white text-xs px-2 py-1 rounded-full flex items-center">
-                <BsBroadcast className="mr-1" />
-                <span>Live</span>
-              </div>
-            </div>
-          ) : (
-            // ✅ Vertical scroll video cards (YouTube style)
-            <div className="max-h-[600px] overflow-y-auto space-y-3 scrollbar-hide">
-              {videos.map((video) => (
-                <div
-                  key={video.id}
-                  className="min-w-[315px] max-w-[320px] bg-gray-50 rounded-lg shadow hover:shadow-md transition cursor-pointer relative overflow-hidden"
-                >
-                  <a
-                    href={`https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <div className="relative">
-                      <img
-                        src={video.snippet.thumbnails.medium.url}
-                        alt={video.snippet.title}
-                        className="rounded-lg w-full h-56 object-cover"
-                      />
+                          {/* ✅ YouTube logo overlay (top-right corner) */}
+                          <div className="absolute top-24 right-36 bg-white rounded-md h-[25px] ">
+                            <BsYoutube
+                              className="text-gray-500 text-xl"
+                              size={35}
+                            />
+                          </div>
+                        </div>
 
-                      {/* ✅ YouTube logo overlay (top-right corner) */}
-                      <div className="absolute top-24 right-36 bg-white rounded-md h-[25px] ">
-                        <BsYoutube
-                          className="text-gray-500 text-xl"
-                          size={35}
-                        />
-                      </div>
-                    </div>
-
-                    {/* <div className="p-2">
+                        {/* <div className="p-2">
       <p className="text-sm font-medium line-clamp-2 h-10">
         {video.snippet.title}
       </p>
@@ -412,13 +416,14 @@ function LiveTv() {
         </span>
       </div>
     </div> */}
-                  </a>
+                      </a>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        ))}
     </div>
   );
 }

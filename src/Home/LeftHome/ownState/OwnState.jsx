@@ -8,11 +8,11 @@ import EmptyCard from "../shared/EmptyCard";
 import OwnStateSkeleton from "./OwnStateSkeleton";
 
 export default function OwnState({
-  section_id,
+  // section_id,
   category_id,
-  category,
-  section_typetype,
-  web_section_id,
+  // category,
+  // section_typetype,
+  // web_section_id,
   section_title = "State",
 }) {
   const [subcategory, setSubcategory] = useState("");

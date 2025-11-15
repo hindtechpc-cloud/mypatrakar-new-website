@@ -29,7 +29,8 @@ const NewsCard = ({
     // const safeTitle = encodeURIComponent(title || "");
  navigate(`/read-news/${makeSlug(title)}/${encryptData(newsId)}`, {
   state: {
-    category_id: category_id
+    category_id: category_id,
+    newsId:newsId
   }
 });
 

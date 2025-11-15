@@ -79,13 +79,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { GetCommentsreply } from "../../../../api";
-import { useParams } from "react-router-dom";
 
 export default function TotalReplyOnComment({ id, isReply }) {
   const [replies, setReplies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { newsId } = useParams();
 
   const loadReplies = useCallback(async () => {
     setLoading(true);
@@ -115,7 +113,7 @@ export default function TotalReplyOnComment({ id, isReply }) {
   }
 
   if (replies.length === 0) {
-    return <div className="text-xs text-gray-400">No replies found.</div>;
+    return null;
   }
 
   return (

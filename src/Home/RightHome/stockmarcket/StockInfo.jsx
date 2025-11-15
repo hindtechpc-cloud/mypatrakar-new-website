@@ -139,7 +139,7 @@ const StockInfo = () => {
 
       {/* If no company selected → Show company list */}
       {!selectedCompany && (
-        <>
+        <div className="bg-gray-300 py-2 px-2 rounded shadow-xl">
           <div className="grid grid-cols-1 gap-2">
             {paginatedCompanies.map((company) => (
               <div
@@ -158,11 +158,11 @@ const StockInfo = () => {
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mt-2 ">
             <button
               onClick={() => setPage((p) => Math.max(p - 1, 0))}
               disabled={page === 0}
-              className="px-3 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
+              className="px-3 py-1 text-sm bg-black text-white rounded disabled:opacity-50"
             >
               Prev
             </button>
@@ -173,12 +173,12 @@ const StockInfo = () => {
                 )
               }
               disabled={(page + 1) * PAGE_SIZE >= companies.length}
-              className="px-3 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
+              className="px-3 py-1 text-sm bg-black text-white rounded disabled:opacity-50"
             >
               Next
             </button>
           </div>
-        </>
+        </div>
       )}
 
       {/* Loading */}

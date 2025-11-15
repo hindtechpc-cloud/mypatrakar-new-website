@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SubmitComment } from "../../../../api";
-import { useParams } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 import { checkAuth } from "../../../utils/checkAuth";
 import { decryptData } from "../../../utils/cryptoHelper";
 // import toast from "react-hot-toast";
@@ -22,8 +22,10 @@ export default function Feedback({ setIsComment, isComment }) {
   const [loading, setLoading] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
 
-  const { newsId } = useParams();
+  const match = useMatch("/read-news/:type/:newsId");
+  const newsId = match?.params?.newsId;
 
+// console.log(newsId)
   const handleChange = (e) => {
     setSuccessMessage("");
     setSubmitError("");
@@ -202,7 +204,7 @@ export default function Feedback({ setIsComment, isComment }) {
             <p className="text-sm text-green-700">{successMessage}</p>
           </div>
         )}
-        <div className="pt-2">
+        <div className="pt-">
           <button
             type="submit"
             disabled={loading}
